@@ -26,8 +26,9 @@ public final class Constants {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 0;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 0;
 
+    // Constants set for the _SDS MK4i_
     public static final double kdriveGearRatio = 1/6.75;
-    public static final double kturnGearRatio = 1/7; //TODO: Check steering ratio
+    public static final double kturnGearRatio = 150/7; //TODO: Check steering ratio //TODO: Double check ratio
     public static final double kwheelCircumference = Math.PI * 0.1524; //6" to meters
 
   }
