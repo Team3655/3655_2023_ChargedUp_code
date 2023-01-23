@@ -10,12 +10,13 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean constants. This class should not be used for any other
+ * purpose. All constants should be declared globally (i.e. public static). Do
+ * not put anything functional in this class.
  * <p>
- * It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
 	public static class ModuleConstants {
@@ -86,11 +87,44 @@ public final class Constants {
 		// TODO: Is gyro reversed?
 		public static final boolean kGyroReversed = false;
 
-
 	}
 
+	/**
+	 * The constants pertaining to the drive station
+	 */
 	public static class OperatorConstants {
 		public static final int kDriverControllerPort = 0;
 		public static final int kOperatorControllerPort = 1;
+	}
+
+	/**
+	 * The constants pertaining to Arm (and sub arms)
+	 */
+	public static class ArmConstants {
+
+		// TODO: confirm gearbox ratios for arms
+		public static final int kMajorArmGearBoxRatio = 100;
+		public static final int kMinorArmGearBoxRatio = 100;
+
+		// TODO: confirm belt ratios for arms
+		public static final int kMajorArmBeltRatio = 2 / 1;
+		public static final int kMinorArmBeltRatio = 1;
+
+		// TODO: confirm belt ratios for arms
+		/**
+		 * The radius of each arms rotation (from center of rotation to next arms center
+		 * of rotation)
+		 */
+		public static final int kMajorArmLength = 0;
+		public static final int kMinorArmLength = 0;
+
+	}
+
+	/**
+	 * The constants pertaining to the types of motors shared between subsystems
+	 */
+	public static class MotorConstants {
+		// TODO: verify neo ticks
+		public static final int kNeoTicks = 42;
 	}
 }
