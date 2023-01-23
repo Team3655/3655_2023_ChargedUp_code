@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
@@ -56,10 +54,10 @@ public final class Constants {
 		public static final int kRearRightTurningMotorPort = 0;
 
 		// CANcoder CAN ID's
-		public static final int kFrontLeftTurningEncoderPort = 0;
-		public static final int kRearLeftTurningEncoderPort = 0;
-		public static final int kFrontRightTurningEncoderPort = 0;
-		public static final int kRearRightTurningEncoderPort = 0;
+		public static final int kFrontLeftTurningEncoderPort = 3;
+		public static final int kRearLeftTurningEncoderPort = 6;
+		public static final int kFrontRightTurningEncoderPort = 9;
+		public static final int kRearRightTurningEncoderPort = 12;
 
 		// TODO: Set angle offset for CANcoders
 		// Offset angle for absolute encoders (find this using REV client)
@@ -102,21 +100,24 @@ public final class Constants {
 	 */
 	public static class ArmConstants {
 
-		// TODO: confirm gearbox ratios for arms
 		public static final int kMajorArmGearBoxRatio = 100;
 		public static final int kMinorArmGearBoxRatio = 100;
 
-		// TODO: confirm belt ratios for arms
 		public static final int kMajorArmBeltRatio = 2 / 1;
 		public static final int kMinorArmBeltRatio = 1;
 
-		// TODO: confirm belt ratios for arms
 		/**
-		 * The radius of each arms rotation (from center of rotation to next arms center
-		 * of rotation)
+		 * the total number of ticks for one 360 degree rotation of the arm
 		 */
-		public static final int kMajorArmLength = 0;
-		public static final int kMinorArmLength = 0;
+		public static final int kMajorArmTicks = MotorConstants.kNeoTicks * kMajorArmGearBoxRatio * kMajorArmBeltRatio;
+		public static final int kMinorArmTicks = MotorConstants.kNeoTicks * kMinorArmGearBoxRatio * kMinorArmBeltRatio;
+
+		/**
+		 * The radius of each arms rotation in inches (from center of rotation to next
+		 * arms center of rotation)
+		 */
+		public static final int kMajorArmLength = 38;
+		public static final int kMinorArmLength = 23;
 
 	}
 
@@ -124,7 +125,8 @@ public final class Constants {
 	 * The constants pertaining to the types of motors shared between subsystems
 	 */
 	public static class MotorConstants {
-		// TODO: verify neo ticks
+
 		public static final int kNeoTicks = 42;
+
 	}
 }
