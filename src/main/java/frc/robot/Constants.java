@@ -19,9 +19,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 public final class Constants {
 	public static class ModuleConstants {
 
-		public static final double kPModuleDriveController = 0; // TODO: Set PID constants
-		public static final double kPModuleTurningController = 0;
-		public static final double kDModuleTurningController = 0;
+		public static final double kModuleDriveControllerP = 0;
+		public static final double kModuleDriveControllerI = 0;
+		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
+		public static final double kModuleTurningControllerP = 0;
+		public static final double kModuleTurningControllerI = 0;
+		public static final double kModuleTurningControllerD = 0;
 		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 0;
 		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 0;
 
@@ -100,7 +103,6 @@ public final class Constants {
 	 */
 	public static class ArmConstants {
 
-<<<<<<< Updated upstream
 		public static final int kMajorArmGearBoxRatio = 100;
 		public static final int kMinorArmGearBoxRatio = 100;
 
@@ -119,26 +121,20 @@ public final class Constants {
 		 */
 		public static final int kMajorArmLength = 38;
 		public static final int kMinorArmLength = 23;
-=======
-		public static final int kUpperArmGearBoxRatio = 100;
-		public static final int kLowerArmGearBoxRatio = 100;
-
-		public static final int kUpperArmBeltRatio = 2 / 1;
-		public static final int kLowerArmBeltRatio = 1;
-
-		/**
-		 * The radius of each arms rotation in inches (from center of rotation to next
-		 * arms center of rotation)
-		 */
-		public static final int kUpperArmLength = 38;
-		public static final int kLowerArmLength = 23;
->>>>>>> Stashed changes
 
 		// NEO turning motor CAN ID's
 		public static final int kRightMajorArmPort = 0;
 		public static final int kLeftMajorArmPort = 0;
 		public static final int kRightMinorArmPort = 0;
 		public static final int kLeftMinorArmPort = 0;
+
+		// Arm PID constants
+		public static final int kMajorArmP = 0;
+		public static final int kMajorArmI = 0;
+		public static final int kMajorArmD = 0;
+		public static final int kMinorArmP = 0;
+		public static final int kMinorArmI = 0;
+		public static final int kMinorArmD = 0;
 
 	}
 
