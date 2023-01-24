@@ -18,8 +18,7 @@ import frc.robot.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
 	/** Creates a new DriveSubsystem. */
-	public DriveSubsystem() {
-	}
+	public DriveSubsystem() {}
 
 	private final SwerveModule m_frontLeft = new SwerveModule(
 			DriveConstants.kFrontLeftDriveMotorPort,
@@ -44,6 +43,7 @@ public class DriveSubsystem extends SubsystemBase {
 			DriveConstants.kRearRightTurningMotorPort,
 			DriveConstants.kRearRightTurningEncoderPort,
 			DriveConstants.kRearRightAngleZero);
+
 
 	// TODO: Use variable here instead of entries below?
 	private SwerveModulePosition[] m_swervePosition = new SwerveModulePosition[] {
@@ -92,7 +92,7 @@ public class DriveSubsystem extends SubsystemBase {
 						m_frontLeft.getPosition(),
 						m_rearLeft.getPosition(),
 						m_frontRight.getPosition(),
-						m_rearRight.getPosition() },
+						m_rearRight.getPosition()},
 				pose);
 	}
 
@@ -143,5 +143,6 @@ public class DriveSubsystem extends SubsystemBase {
 	public double getTurnRate() {
 		return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
 	}
+
 
 }

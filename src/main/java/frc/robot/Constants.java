@@ -48,10 +48,10 @@ public final class Constants {
 		public static final int kRearRightDriveMotorPort = 0;
 
 		// NEO turning motor CAN ID's
-		public static final int kFrontLeftTurningMotorPort = 3;
-		public static final int kRearLeftTurningMotorPort = 6;
-		public static final int kFrontRightTurningMotorPort = 9;
-		public static final int kRearRightTurningMotorPort = 12;
+		public static final int kFrontLeftTurningMotorPort = 0;
+		public static final int kRearLeftTurningMotorPort = 0;
+		public static final int kFrontRightTurningMotorPort = 0;
+		public static final int kRearRightTurningMotorPort = 0;
 
 		// CANcoder CAN ID's
 		public static final int kFrontLeftTurningEncoderPort = 3;
