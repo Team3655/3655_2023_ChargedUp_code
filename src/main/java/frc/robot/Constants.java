@@ -48,10 +48,10 @@ public final class Constants {
 		public static final int kRearRightDriveMotorPort = 0;
 
 		// NEO turning motor CAN ID's
-		public static final int kFrontLeftTurningMotorPort = 0;
-		public static final int kRearLeftTurningMotorPort = 0;
-		public static final int kFrontRightTurningMotorPort = 0;
-		public static final int kRearRightTurningMotorPort = 0;
+		public static final int kFrontLeftTurningMotorPort = 3;
+		public static final int kRearLeftTurningMotorPort = 6;
+		public static final int kFrontRightTurningMotorPort = 9;
+		public static final int kRearRightTurningMotorPort = 12;
 
 		// CANcoder CAN ID's
 		public static final int kFrontLeftTurningEncoderPort = 3;
@@ -100,6 +100,7 @@ public final class Constants {
 	 */
 	public static class ArmConstants {
 
+<<<<<<< Updated upstream
 		public static final int kMajorArmGearBoxRatio = 100;
 		public static final int kMinorArmGearBoxRatio = 100;
 
@@ -118,6 +119,20 @@ public final class Constants {
 		 */
 		public static final int kMajorArmLength = 38;
 		public static final int kMinorArmLength = 23;
+=======
+		public static final int kUpperArmGearBoxRatio = 100;
+		public static final int kLowerArmGearBoxRatio = 100;
+
+		public static final int kUpperArmBeltRatio = 2 / 1;
+		public static final int kLowerArmBeltRatio = 1;
+
+		/**
+		 * The radius of each arms rotation in inches (from center of rotation to next
+		 * arms center of rotation)
+		 */
+		public static final int kUpperArmLength = 38;
+		public static final int kLowerArmLength = 23;
+>>>>>>> Stashed changes
 
 	}
 
