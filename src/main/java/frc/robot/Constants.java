@@ -100,7 +100,6 @@ public final class Constants {
 	 */
 	public static class ArmConstants {
 
-<<<<<<< Updated upstream
 		public static final int kMajorArmGearBoxRatio = 100;
 		public static final int kMinorArmGearBoxRatio = 100;
 
@@ -119,20 +118,6 @@ public final class Constants {
 		 */
 		public static final int kMajorArmLength = 38;
 		public static final int kMinorArmLength = 23;
-=======
-		public static final int kUpperArmGearBoxRatio = 100;
-		public static final int kLowerArmGearBoxRatio = 100;
-
-		public static final int kUpperArmBeltRatio = 2 / 1;
-		public static final int kLowerArmBeltRatio = 1;
-
-		/**
-		 * The radius of each arms rotation in inches (from center of rotation to next
-		 * arms center of rotation)
-		 */
-		public static final int kUpperArmLength = 38;
-		public static final int kLowerArmLength = 23;
->>>>>>> Stashed changes
 
 	}
 
