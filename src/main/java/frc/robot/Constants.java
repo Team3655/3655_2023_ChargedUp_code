@@ -134,6 +134,12 @@ public final class Constants {
 		public static final int kLowerArmLength = 23;
 >>>>>>> Stashed changes
 
+		// NEO turning motor CAN ID's
+		public static final int kRightMajorArmPort = 0;
+		public static final int kLeftMajorArmPort = 0;
+		public static final int kRightMinorArmPort = 0;
+		public static final int kLeftMinorArmPort = 0;
+
 	}
 
 	/**

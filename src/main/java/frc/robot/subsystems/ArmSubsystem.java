@@ -7,26 +7,28 @@ import frc.robot.Constants.ArmConstants;
 public class ArmSubsystem extends SubsystemBase {
 
 	/** controls when the arm is tucked */
-	private boolean setTucked;
+	private boolean isTucked;
 
 	/** controls the side of the robot the arm is on */
-	private boolean setFront;
+	private boolean isFront;
 
 	/** the variable setting the height of the arm */
-	ArmPos armState;
+	ArmPoses armState;
 
 	/** used for controling the height of the arm */
-	private enum ArmPos {
-		INTAKE,
+	private enum ArmPoses {
 		LOW_SCORE,
 		MID_SCORE,
 		HIGH_SCORE,
-		LOW_COLLECT,
-		HIGH_COLLECT
+		LOW_INTAKE,
+		MID_INTAKE,
+		HIGH_INTAKE
 	}
 
 	public ArmSubsystem() {
-
+		isTucked = true;
+		isFront = true;
+		armState = ArmPoses.LOW_INTAKE;
 	}
 
 	public CommandBase exampleMethodCommand() {
@@ -42,5 +44,44 @@ public class ArmSubsystem extends SubsystemBase {
 	public void periodic() {
 		// This method will be called once per scheduler run
 	}
+
+	// region setters
+
+	/**
+	 * Sets the height of the arm
+	 * 
+	 * @param pos can be (LOW_SCORE, MID_SCORE, HIGH_SCORE, LOW_INTAKE, MID_INTAKE,
+	 *            HIGH_INTAKE)
+	 */
+	public void setArmState(ArmPoses pos) {
+		armState = pos;
+	}
+
+	/**
+	 * Sets the dominant side of te robot
+	 * 
+	 * @param side if true the front will be dominant
+	 */
+	public void setFront(boolean side) {
+		isFront = side;
+	}
+
+	/**
+	 * Toggles the dominant side of the robot
+	 */
+	public void setToggleSide() {
+		isFront = !isFront;
+	}
+
+	/**
+	 * sets the robot to be tucked
+	 * 
+	 * @param tuck if true the robot will tuck itself
+	 */
+	public void setTucked(boolean tuck) {
+		isTucked = tuck;
+	}
+
+	// endregion
 
 }
