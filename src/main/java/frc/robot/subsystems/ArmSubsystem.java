@@ -27,16 +27,15 @@ public class ArmSubsystem extends SubsystemBase {
 
 	/** used for controling the height of the arm */
 	private enum ArmPoses {
+		TUCKED,
 		LOW_SCORE,
 		MID_SCORE,
 		HIGH_SCORE,
 		LOW_INTAKE,
 		MID_INTAKE,
-		HIGH_INTAKE
+		HIGH_INTAKE,
+		DRIVER_CONTROL
 	}
-
-	/** controls when the arm is tucked */
-	private boolean isTucked;
 
 	/** controls the side of the robot the arm is on */
 	private boolean isFront;
@@ -44,20 +43,20 @@ public class ArmSubsystem extends SubsystemBase {
 	/** the variable setting the height of the arm */
 	ArmPoses armState;
 
-	/** sets the target angle for the major arm */
-	float majorArmTargetTheta;
-	/** sets the target angle for the minor arm */
-	float minorArmTargetTheta;
+	/** the target angle for the major arm in Degrees */
+	double majorArmTargetTheta;
+	/** the target angle for the minor arm in Degrees */
+	double minorArmTargetTheta;
 
 	// endregion
 
 	public ArmSubsystem() {
 
 		// the default state of the arms
-		isTucked = true;
 		isFront = true;
-		armState = ArmPoses.LOW_INTAKE;
+		armState = ArmPoses.TUCKED;
 
+		// region def motors
 		// creates the arms motors
 		rightMajorMotor = new CANSparkMax(ArmConstants.kRightMajorArmPort, MotorType.kBrushless);
 		leftMajorMotor = new CANSparkMax(ArmConstants.kLeftMajorArmPort, MotorType.kBrushless);
@@ -113,11 +112,57 @@ public class ArmSubsystem extends SubsystemBase {
 
 		leftMajorMotor.follow(rightMajorMotor);
 		leftMinorMotor.follow(rightMinorMotor);
+		// endregion
 	}
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+		switch (armState) {
+
+			// When the arms are tucked in the center of the robot (this is the only legal
+			// starting position)
+			case TUCKED:
+				majorArmTargetTheta = 0;
+				minorArmTargetTheta = 0;
+				break;
+
+			// Used for scoring in the lowest "hybrid" node
+			case LOW_SCORE:
+				majorArmTargetTheta = -45;
+				minorArmTargetTheta = 90;
+				break;
+
+			// Used for scoring in the middle node
+			case MID_SCORE:
+				majorArmTargetTheta = -75;
+				minorArmTargetTheta = 90;
+				break;
+
+			// Used for scoring in the highest node
+			case HIGH_SCORE:
+				majorArmTargetTheta = -90;
+				minorArmTargetTheta = 90;
+				break;
+
+			// Used for intaking off of the floor
+			case LOW_INTAKE:
+				break;
+
+			// Used for intaking from the human player chute
+			case MID_INTAKE:
+				break;
+
+			// Used for intaking from the sliding human player station
+			case HIGH_INTAKE:
+				break;
+
+			// goes to the pair of angles defined my the TSB driver
+			case DRIVER_CONTROL:
+				break;
+
+		}
+
 	}
 
 	// region setters
@@ -130,6 +175,10 @@ public class ArmSubsystem extends SubsystemBase {
 	 */
 	public void setArmState(ArmPoses pos) {
 		armState = pos;
+	}
+
+	public void setTargetTheta() {
+
 	}
 
 	/**
@@ -148,15 +197,6 @@ public class ArmSubsystem extends SubsystemBase {
 		isFront = !isFront;
 	}
 
-	/**
-	 * sets the robot to be tucked
-	 * 
-	 * @param tuck if true the robot will tuck itself
-	 */
-	public void setTucked(boolean tuck) {
-		isTucked = tuck;
-	}
-
 	// endregion
 
 	// region getters
@@ -173,14 +213,22 @@ public class ArmSubsystem extends SubsystemBase {
 		return armState;
 	}
 
-	/** ruturns true if the robots target state is tucked */
-	public boolean getIsTucked() {
-		return isTucked;
-	}
-
 	/** ruturns true if the target dominant side of the robot is front */
 	public boolean getIsFront() {
 		return isFront;
+	}
+
+	/**
+	 * This method is used to get the number of revolutions the arm motor has made
+	 * 
+	 * @param isMajor setting this to false will return the count of the minor arm
+	 * @return the number of revolutions as a double
+	 */
+	public double getRightEncoderTicks(boolean isMajor) {
+		if (isMajor) {
+			return rightMajorEncoder.getPosition();
+		}
+		return rightMinorEncoder.getPosition();
 	}
 
 	/**
