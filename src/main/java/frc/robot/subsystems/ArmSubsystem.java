@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -42,6 +43,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 	/** the variable setting the height of the arm */
 	ArmPoses armState;
+	ArmPoses prevArmState;
 
 	/** the target angle for the major arm in Degrees */
 	double majorArmTargetTheta;
@@ -55,6 +57,7 @@ public class ArmSubsystem extends SubsystemBase {
 		// the default state of the arms
 		isFront = true;
 		armState = ArmPoses.TUCKED;
+		prevArmState = armState;
 
 		// region def motors
 		// creates the arms motors
@@ -94,6 +97,12 @@ public class ArmSubsystem extends SubsystemBase {
 		rightMinorMotor.setSmartCurrentLimit(30);
 		leftMinorMotor.setSmartCurrentLimit(30);
 
+		// sets motor defaults to break
+		rightMajorMotor.setIdleMode(IdleMode.kBrake);
+		leftMajorMotor.setIdleMode(IdleMode.kBrake);
+		rightMinorMotor.setIdleMode(IdleMode.kBrake);
+		leftMinorMotor.setIdleMode(IdleMode.kBrake);
+
 		// set PID coefficients
 		majorPIDController.setP(ArmConstants.kMajorArmP);
 		majorPIDController.setI(ArmConstants.kMajorArmI);
@@ -118,50 +127,94 @@ public class ArmSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		switch (armState) {
 
-			// When the arms are tucked in the center of the robot (this is the only legal
-			// starting position)
-			case TUCKED:
-				majorArmTargetTheta = 0;
-				minorArmTargetTheta = 0;
-				break;
+		// skips math if state has not changed
+		if (prevArmState != armState) {
+			switch (armState) {
+				// When the arms are tucked in the center of the robot (this is the only legal
+				// starting position)
+				case TUCKED:
+					majorArmTargetTheta = 0;
+					minorArmTargetTheta = 0;
+					break;
 
-			// Used for scoring in the lowest "hybrid" node
-			case LOW_SCORE:
-				majorArmTargetTheta = -45;
-				minorArmTargetTheta = 90;
-				break;
+				// Used for scoring in the lowest "hybrid" node
+				case LOW_SCORE:
+					majorArmTargetTheta = 45;
+					minorArmTargetTheta = 90;
+					break;
 
-			// Used for scoring in the middle node
-			case MID_SCORE:
-				majorArmTargetTheta = -75;
-				minorArmTargetTheta = 90;
-				break;
+				// Used for scoring in the middle node
+				case MID_SCORE:
+					majorArmTargetTheta = 75;
+					minorArmTargetTheta = 90;
+					break;
 
-			// Used for scoring in the highest node
-			case HIGH_SCORE:
-				majorArmTargetTheta = -90;
-				minorArmTargetTheta = 90;
-				break;
+				// Used for scoring in the highest node
+				case HIGH_SCORE:
+					majorArmTargetTheta = 90;
+					minorArmTargetTheta = 90;
+					break;
 
-			// Used for intaking off of the floor
-			case LOW_INTAKE:
-				break;
+				// Used for intaking off of the floor
+				case LOW_INTAKE:
+					majorArmTargetTheta = 30;
+					minorArmTargetTheta = 100;
+					break;
 
-			// Used for intaking from the human player chute
-			case MID_INTAKE:
-				break;
+				// Used for intaking from the human player chute
+				case MID_INTAKE:
+					majorArmTargetTheta = 30;
+					minorArmTargetTheta = 100;
+					break;
 
-			// Used for intaking from the sliding human player station
-			case HIGH_INTAKE:
-				break;
+				// Used for intaking from the sliding human player station
+				case HIGH_INTAKE:
+					majorArmTargetTheta = 80;
+					minorArmTargetTheta = 80;
+					break;
 
-			// goes to the pair of angles defined my the TSB driver
-			case DRIVER_CONTROL:
-				break;
+				// goes to the pair of angles defined my the TSB driver
+				case DRIVER_CONTROL:
+					// Constrains the major arm to stay between 0 and 90 degrees
+					if (majorArmTargetTheta < 0) {
+						majorArmTargetTheta = 0;
+					} else if (majorArmTargetTheta > 90) {
+						majorArmTargetTheta = 90;
+					}
+
+					// Constrains the minor arm to stay between 0 and 90 degrees
+					if (minorArmTargetTheta < -90) {
+						minorArmTargetTheta = 0;
+					} else if (minorArmTargetTheta > 90) {
+						minorArmTargetTheta = 90;
+					}
+					break;
+			}
+
+			// Offset the minor arm based on the angle of the major arm (this makes the
+			// minor arm reletive to the robot)
+			minorArmTargetTheta += majorArmTargetTheta;
 
 		}
+
+		// Swaps the sign of the target angle if the dominant side of the robot is back
+		if (!isFront) {
+			majorArmTargetTheta = Math.copySign(majorArmTargetTheta, -1);
+			minorArmTargetTheta = Math.copySign(majorArmTargetTheta, -1);
+		}
+
+		// Address the major motors
+		majorPIDController.setReference(
+				getThetaToTicks(Math.toRadians(majorArmTargetTheta * ArmConstants.kMajorArmDir),
+						ArmConstants.kMajorArmTicks),
+				CANSparkMax.ControlType.kPosition);
+
+		// Address the minor motors
+		minorPIDController.setReference(
+				getThetaToTicks(Math.toRadians(minorArmTargetTheta * ArmConstants.kMinorArmDir),
+						ArmConstants.kMinorArmTicks),
+				CANSparkMax.ControlType.kPosition);
 
 	}
 
@@ -175,10 +228,6 @@ public class ArmSubsystem extends SubsystemBase {
 	 */
 	public void setArmState(ArmPoses pos) {
 		armState = pos;
-	}
-
-	public void setTargetTheta() {
-
 	}
 
 	/**
@@ -238,8 +287,8 @@ public class ArmSubsystem extends SubsystemBase {
 	 * @param ticks the number of ticks required to make one revolution
 	 * @return the number of motor ticks required to turn theta
 	 */
-	public int getThetaToTicks(float theta, int ticks) {
-		return (int) (theta * (float) ticks);
+	public int getThetaToTicks(double theta, int ticks) {
+		return (int) (theta * (double) ticks);
 	}
 
 	// endregion

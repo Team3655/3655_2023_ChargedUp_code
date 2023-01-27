@@ -103,6 +103,9 @@ public final class Constants {
 	 */
 	public static class ArmConstants {
 
+		public static final int kMajorArmDir = -1;
+		public static final int kMinorArmDir = 1;
+
 		public static final int kMajorArmGearBoxRatio = 100;
 		public static final int kMinorArmGearBoxRatio = 100;
 
@@ -112,8 +115,8 @@ public final class Constants {
 		/**
 		 * the total number of ticks for one 360 degree rotation of the arm
 		 */
-		public static final int kMajorArmTicks = MotorConstants.kNeoTicks * kMajorArmGearBoxRatio * kMajorArmBeltRatio;
-		public static final int kMinorArmTicks = MotorConstants.kNeoTicks * kMinorArmGearBoxRatio * kMinorArmBeltRatio;
+		public static final int kMajorArmTicks = kMajorArmGearBoxRatio * kMajorArmBeltRatio;
+		public static final int kMinorArmTicks = kMinorArmGearBoxRatio * kMinorArmBeltRatio;
 
 		/**
 		 * The radius of each arms rotation in inches (from center of rotation to next
@@ -123,10 +126,10 @@ public final class Constants {
 		public static final int kMinorArmLength = 23;
 
 		// NEO turning motor CAN ID's
-		public static final int kRightMajorArmPort = 0;
-		public static final int kLeftMajorArmPort = 0;
-		public static final int kRightMinorArmPort = 0;
-		public static final int kLeftMinorArmPort = 0;
+		public static final int kRightMajorArmPort = 1;
+		public static final int kLeftMajorArmPort = 2;
+		public static final int kRightMinorArmPort = 3;
+		public static final int kLeftMinorArmPort = 4;
 
 		// Arm PID constants
 		public static final int kMajorArmP = 0;
