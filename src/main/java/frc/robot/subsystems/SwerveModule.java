@@ -32,14 +32,14 @@ public class SwerveModule extends SubsystemBase {
 	private final CANCoder m_turnEncoder;
 
 	private final PIDController m_drivePIDController = new PIDController(
-			ModuleConstants.kModuleDriveControllerP,
+			DashboardSubsystem.PIDConstants.getDrive_kP(),
 			ModuleConstants.kModuleDriveControllerI,
-			ModuleConstants.kModuleDriveControllerD);
+			DashboardSubsystem.PIDConstants.getDrive_kD());
 
 	private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
-			ModuleConstants.kModuleTurningControllerP,
+			DashboardSubsystem.PIDConstants.getTurn_kP(),
 			ModuleConstants.kModuleTurningControllerI,
-			ModuleConstants.kModuleTurningControllerD,
+			DashboardSubsystem.PIDConstants.getTurn_kD(),
 			new TrapezoidProfile.Constraints(
 					ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
 					ModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
@@ -135,6 +135,10 @@ public class SwerveModule extends SubsystemBase {
 	public void resetEncoders() {
 		m_turnEncoder.setPosition(0);
 		m_driveMotor.getEncoder(Type.kHallSensor, 4096).setPosition(0);
+	}
+
+	public double getEncoderHeading(){
+		return this.m_turnEncoder.getAbsolutePosition();
 	}
 
 	@Override
