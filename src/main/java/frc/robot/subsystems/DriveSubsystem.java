@@ -4,17 +4,23 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 
 public class DriveSubsystem extends SubsystemBase {
 	/** Creates a new DriveSubsystem. */
@@ -54,7 +60,6 @@ public class DriveSubsystem extends SubsystemBase {
 	};
 
 	// Initalizing the gyro sensor
-	// private final Pigeon2 m_gyro = new Pigeon2(DriveConstants.kPigeonPort);
 	private final WPI_Pigeon2 m_gyro = new WPI_Pigeon2(DriveConstants.kPigeonPort);
 
 	// Odeometry class for tracking robot pose
@@ -143,5 +148,56 @@ public class DriveSubsystem extends SubsystemBase {
 	public double getTurnRate() {
 		return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
 	}
+
+	public double getFrontLeftHeading(){
+		return m_frontLeft.getEncoderHeading();
+	}
+
+	public double getRearLeftHeading(){
+		return m_rearLeft.getEncoderHeading();
+	}
+
+	public double getFrontRightHeading(){
+		return m_frontRight.getEncoderHeading();
+	}
+
+	public double getRearRightHeading(){
+		return m_rearRight.getEncoderHeading();
+	}
+
+	/************************************************************************* */
+
+
+
+	public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+		return new SequentialCommandGroup(
+			 new InstantCommand(() -> {
+			   // Reset odometry for the first path you run during auto
+			   if(isFirstPath){
+				   this.resetOdometry(traj.getInitialHolonomicPose());
+			   }
+			 }),
+			 new PPSwerveControllerCommand(
+				 traj, 
+				 this::getPose, // Pose supplier
+				 DriveConstants.kDriveKinematics, // SwerveDriveKinematics
+				 new PIDController(
+					DashboardSubsystem.PIDConstants.getPlanner_X_kP(), 
+				 	0, 
+					DashboardSubsystem.PIDConstants.getPlanner_X_kD()), // TODO: X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+				 new PIDController(
+					DashboardSubsystem.PIDConstants.getPlanner_Y_kP(), 
+					0, 
+					DashboardSubsystem.PIDConstants.getPlanner_Y_kD()), // TODO:  controller (usually the same values as X controller)
+				 new PIDController(
+					DashboardSubsystem.PIDConstants.getPlanner_Rot_kP(), 
+					0, 
+					DashboardSubsystem.PIDConstants.getPlanner_Rot_kD()), // TODO: Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+				 this::setModuleStates, // Module states consumer
+				 true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+				 this // Requires this drive subsystem
+			 )
+		 );
+	 }
 
 }

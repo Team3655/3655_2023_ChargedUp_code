@@ -30,7 +30,7 @@ public final class Constants {
 
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1 / 6.75;
-		public static final double kturnGearRatio = 150 / 7; // TODO: Check steering ratio //TODO: Double check ratio
+		public static final double kturnGearRatio = 150 / 7; //TODO: Double check ratio
 		public static final double kwheelCircumference = Math.PI * 0.1524; // 6" to meters
 
 	}
@@ -84,9 +84,11 @@ public final class Constants {
 
 		// TODO: Change max speed
 		public static final double kMaxSpeedMetersPerSecond = 3;
+		public static final double kMaxRPM = (ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond * 60) / (2*Math.PI); //Convert rad/s to RPM
 
 		// TODO: Is gyro reversed?
 		public static final boolean kGyroReversed = false;
+		
 
 	}
 
