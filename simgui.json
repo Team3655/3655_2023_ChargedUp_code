@@ -1,0 +1,14 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo"
+    }
+  },
+  "NetworkTables": {
+    "persistent": {
+      "Shuffleboard": {
+        "open": true
+      }
+    }
+  }
+}

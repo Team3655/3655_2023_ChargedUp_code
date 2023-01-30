@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DashboardSubsystem extends SubsystemBase {
 
-	private static DriveSubsystem m_driveSubsystem;
+	//private static DriveSubsystem m_driveSubsystem;
+
 	public DashboardSubsystem() {}
 
 	@Override
@@ -117,27 +118,31 @@ public class DashboardSubsystem extends SubsystemBase {
 		}
 	}
 	
-	public static class ModuleInfo{
-		private static ShuffleboardTab m_ModuleTab = Shuffleboard.getTab("Modules");
+	public class ModuleInfo{
+		private ShuffleboardTab m_ModuleTab = Shuffleboard.getTab("Modules");
 
-		private static GenericEntry m_FrontLeftHeading =
+		private GenericEntry m_FrontLeftHeading =
 			m_ModuleTab.add("FL Heading", 0).getEntry();
 
-		private static GenericEntry m_RearLeftHeading =
+		private GenericEntry m_RearLeftHeading =
 			m_ModuleTab.add("RL Heading", 0).getEntry();
 
-		private static GenericEntry m_FrontRightHeading =
+		private GenericEntry m_FrontRightHeading =
 			m_ModuleTab.add("FR Heading", 0).getEntry();
 
-		private static GenericEntry m_RearRightHeading =
+		private GenericEntry m_RearRightHeading =
 			m_ModuleTab.add("RR Heading", 0).getEntry();
 
-		public static void ModuleTelemetry(){
-			m_FrontLeftHeading.setDouble(m_driveSubsystem.getFrontLeftHeading());
+		public void ModuleTelemetry(){
+			m_FrontLeftHeading.setDouble(DriveSubsystem.getFrontLeftHeading());
 			m_RearLeftHeading.setDouble(m_driveSubsystem.getRearLeftHeading());
 			m_FrontRightHeading.setDouble(m_driveSubsystem.getFrontRightHeading());
 			m_RearRightHeading.setDouble(m_driveSubsystem.getRearRightHeading());
+		}
 
+		public double getFLHeading(){
+			double FLHeading = DriveSubsystem.getFrontLeftHeading();
+			return DriveSubsystem.getFrontLeftHeading();
 		}
 
 
