@@ -44,6 +44,7 @@ public class ArmSubsystem extends SubsystemBase {
 	/** the variable setting the height of the arm */
 	ArmPoses armState;
 	ArmPoses prevArmState;
+	Boolean isSwitching;
 
 	/** the target angle for the major arm in Degrees */
 	double majorArmTargetTheta;
@@ -194,7 +195,8 @@ public class ArmSubsystem extends SubsystemBase {
 
 			// Offset the minor arm based on the angle of the major arm (this makes the
 			// minor arm reletive to the robot)
-			minorArmTargetTheta += majorArmTargetTheta;
+			// TODO: change if arms are no longer virtual four bar
+			// minorArmTargetTheta += majorArmTargetTheta;
 
 		}
 
