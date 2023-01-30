@@ -19,42 +19,42 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 public final class Constants {
 	public static class ModuleConstants {
 
-		public static final double kModuleDriveControllerP = 0;
-		public static final double kModuleDriveControllerI = 0;
+		public static final double kModuleDriveControllerP = .1;
+		public static final double kModuleDriveControllerI = .0001;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
-		public static final double kModuleTurningControllerP = 0;
-		public static final double kModuleTurningControllerI = 0;
+		public static final double kModuleTurningControllerP = .1;
+		public static final double kModuleTurningControllerI = .0001;
 		public static final double kModuleTurningControllerD = 0;
 		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 0;
 		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 0;
 
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1 / 6.75;
-		public static final double kturnGearRatio = 150 / 7; //TODO: Double check ratio
+		public static final double kturnGearRatio = 150 / 7; // TODO: Double check ratio
 		public static final double kwheelCircumference = Math.PI * 0.1524; // 6" to meters
 
 	}
 
 	public static class DriveConstants {
 		// TODO: Set feedforward values for drive
-		public static final double ksVolts = 0;
-		public static final double kvVoltSecondsPerMeter = 0;
+		public static final double ksVolts = 1;
+		public static final double kvVoltSecondsPerMeter = 1;
 
-		public static final double ksTurning = 0;
-		public static final double kvTurning = 0;
+		public static final double ksTurning = 1;
+		public static final double kvTurning = 1;
 
 		// TODO: Set CAN ID's for motors and CANcoders
 		// NEO drive motor CAN ID's
-		public static final int kFrontLeftDriveMotorPort = 0;
-		public static final int kRearLeftDriveMotorPort = 0;
-		public static final int kFrontRightDriveMotorPort = 0;
-		public static final int kRearRightDriveMotorPort = 0;
+		public static final int kFrontLeftDriveMotorPort = 1;
+		public static final int kRearLeftDriveMotorPort = 7;
+		public static final int kFrontRightDriveMotorPort = 4;
+		public static final int kRearRightDriveMotorPort = 10;
 
 		// NEO turning motor CAN ID's
-		public static final int kFrontLeftTurningMotorPort = 0;
-		public static final int kRearLeftTurningMotorPort = 0;
-		public static final int kFrontRightTurningMotorPort = 0;
-		public static final int kRearRightTurningMotorPort = 0;
+		public static final int kFrontLeftTurningMotorPort = 2;
+		public static final int kRearLeftTurningMotorPort = 8;
+		public static final int kFrontRightTurningMotorPort = 5;
+		public static final int kRearRightTurningMotorPort = 11;
 
 		// CANcoder CAN ID's
 		public static final int kFrontLeftTurningEncoderPort = 3;
@@ -70,11 +70,11 @@ public final class Constants {
 		public static final double kRearRightAngleZero = 0;
 
 		// TODO: Set CAN ID for pigeon 2
-		public static final int kPigeonPort = 0;
+		public static final int kPigeonPort = 13;
 
 		// TODO: Set trackwidth and wheelbase in meters of physical robot
-		public static final double kTrackWidth = 0; // meters
-		public static final double kWheelBase = 0; // meters
+		public static final double kTrackWidth = 24 / 39.37; // meters
+		public static final double kWheelBase = 24 / 39.37; // meters
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
 				new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -84,11 +84,11 @@ public final class Constants {
 
 		// TODO: Change max speed
 		public static final double kMaxSpeedMetersPerSecond = 3;
-		public static final double kMaxRPM = (ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond * 60) / (2*Math.PI); //Convert rad/s to RPM
+		public static final double kMaxRPM = (ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond * 60)
+				/ (2 * Math.PI); // Convert rad/s to RPM
 
 		// TODO: Is gyro reversed?
 		public static final boolean kGyroReversed = false;
-		
 
 	}
 
@@ -128,10 +128,10 @@ public final class Constants {
 		public static final int kMinorArmLength = 23;
 
 		// NEO turning motor CAN ID's
-		public static final int kRightMajorArmPort = 1;
-		public static final int kLeftMajorArmPort = 2;
-		public static final int kRightMinorArmPort = 3;
-		public static final int kLeftMinorArmPort = 4;
+		public static final int kRightMajorArmPort = 101;
+		public static final int kLeftMajorArmPort = 102;
+		public static final int kRightMinorArmPort = 103;
+		public static final int kLeftMinorArmPort = 104;
 
 		// Arm PID constants
 		public static final int kMajorArmP = 0;

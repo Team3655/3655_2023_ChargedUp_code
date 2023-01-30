@@ -5,8 +5,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+//import com.pathplanner.lib.PathPlannerTrajectory;
+//import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
 
 public class DriveSubsystem extends SubsystemBase {
 	/** Creates a new DriveSubsystem. */
@@ -66,24 +65,14 @@ public class DriveSubsystem extends SubsystemBase {
 	SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
 			DriveConstants.kDriveKinematics,
 			m_gyro.getRotation2d(),
-			new SwerveModulePosition[] {
-					m_frontLeft.getPosition(),
-					m_rearLeft.getPosition(),
-					m_frontRight.getPosition(),
-					m_rearRight.getPosition()
-			});
+			m_swervePosition);
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
 		m_odometry.update(
 				m_gyro.getRotation2d(),
-				new SwerveModulePosition[] {
-						m_frontLeft.getPosition(),
-						m_rearLeft.getPosition(),
-						m_frontRight.getPosition(),
-						m_rearRight.getPosition()
-				});
+				m_swervePosition);
 	}
 
 	public Pose2d getPose() {
@@ -93,11 +82,7 @@ public class DriveSubsystem extends SubsystemBase {
 	public void resetOdometry(Pose2d pose) {
 		m_odometry.resetPosition(
 				m_gyro.getRotation2d(),
-				new SwerveModulePosition[] {
-						m_frontLeft.getPosition(),
-						m_rearLeft.getPosition(),
-						m_frontRight.getPosition(),
-						m_rearRight.getPosition() },
+				m_swervePosition,
 				pose);
 	}
 
@@ -149,55 +134,66 @@ public class DriveSubsystem extends SubsystemBase {
 		return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
 	}
 
-	public double getFrontLeftHeading(){
+	public double getFrontLeftHeading() {
 		return m_frontLeft.getEncoderHeading();
 	}
 
-	public double getRearLeftHeading(){
+	public double getRearLeftHeading() {
 		return m_rearLeft.getEncoderHeading();
 	}
 
-	public double getFrontRightHeading(){
+	public double getFrontRightHeading() {
 		return m_frontRight.getEncoderHeading();
 	}
 
-	public double getRearRightHeading(){
+	public double getRearRightHeading() {
 		return m_rearRight.getEncoderHeading();
 	}
 
 	/************************************************************************* */
-
-
-
-	public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-		return new SequentialCommandGroup(
-			 new InstantCommand(() -> {
-			   // Reset odometry for the first path you run during auto
-			   if(isFirstPath){
-				   this.resetOdometry(traj.getInitialHolonomicPose());
-			   }
-			 }),
-			 new PPSwerveControllerCommand(
-				 traj, 
-				 this::getPose, // Pose supplier
-				 DriveConstants.kDriveKinematics, // SwerveDriveKinematics
-				 new PIDController(
-					DashboardSubsystem.PIDConstants.getPlanner_X_kP(), 
-				 	0, 
-					DashboardSubsystem.PIDConstants.getPlanner_X_kD()), // TODO: X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-				 new PIDController(
-					DashboardSubsystem.PIDConstants.getPlanner_Y_kP(), 
-					0, 
-					DashboardSubsystem.PIDConstants.getPlanner_Y_kD()), // TODO:  controller (usually the same values as X controller)
-				 new PIDController(
-					DashboardSubsystem.PIDConstants.getPlanner_Rot_kP(), 
-					0, 
-					DashboardSubsystem.PIDConstants.getPlanner_Rot_kD()), // TODO: Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-				 this::setModuleStates, // Module states consumer
-				 true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-				 this // Requires this drive subsystem
-			 )
-		 );
-	 }
+	/**
+	 * public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean
+	 * isFirstPath) {
+	 * return new SequentialCommandGroup(
+	 * new InstantCommand(() -> {
+	 * // Reset odometry for the first path you run during auto
+	 * if (isFirstPath) {
+	 * this.resetOdometry(traj.getInitialHolonomicPose());
+	 * }
+	 * }),
+	 * new PPSwerveControllerCommand(
+	 * traj,
+	 * this::getPose, // Pose supplier
+	 * DriveConstants.kDriveKinematics, // SwerveDriveKinematics
+	 * new PIDController(
+	 * DashboardSubsystem.PIDConstants.getPlanner_X_kP(),
+	 * 0,
+	 * DashboardSubsystem.PIDConstants.getPlanner_X_kD()), // TODO: X controller.
+	 * Tune these
+	 * // values for your robot. Leaving
+	 * // them 0 will only use
+	 * // feedforwards.
+	 * new PIDController(
+	 * DashboardSubsystem.PIDConstants.getPlanner_Y_kP(),
+	 * 0,
+	 * DashboardSubsystem.PIDConstants.getPlanner_Y_kD()), // TODO: controller
+	 * (usually the
+	 * // same values as X controller)
+	 * new PIDController(
+	 * DashboardSubsystem.PIDConstants.getPlanner_Rot_kP(),
+	 * 0,
+	 * DashboardSubsystem.PIDConstants.getPlanner_Rot_kD()), // TODO: Rotation
+	 * controller. Tune
+	 * // these values for your robot.
+	 * // Leaving them 0 will only use
+	 * // feedforwards.
+	 * this::setModuleStates, // Module states consumer
+	 * true, // Should the path be automatically mirrored depending on alliance
+	 * color.
+	 * // Optional, defaults to true
+	 * this // Requires this drive subsystem
+	 * ));
+	 * }
+	 */
 
 }

@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+//import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import com.revrobotics.RelativeEncoder;
@@ -40,6 +40,8 @@ public class ArmSubsystem extends SubsystemBase {
 
 	/** controls the side of the robot the arm is on */
 	private boolean isFront;
+	private boolean prevIsFront;
+	private boolean switchingSides;
 
 	/** the variable setting the height of the arm */
 	ArmPoses armState;
@@ -57,6 +59,9 @@ public class ArmSubsystem extends SubsystemBase {
 
 		// the default state of the arms
 		isFront = true;
+		prevIsFront = isFront;
+		switchingSides = false;
+
 		armState = ArmPoses.TUCKED;
 		prevArmState = armState;
 
