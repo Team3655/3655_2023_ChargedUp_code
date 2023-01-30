@@ -46,7 +46,6 @@ public class ArmSubsystem extends SubsystemBase {
 	/** the variable setting the height of the arm */
 	ArmPoses armState;
 	ArmPoses prevArmState;
-	Boolean isSwitching;
 
 	/** the target angle for the major arm in Degrees */
 	double majorArmTargetTheta;
@@ -200,16 +199,16 @@ public class ArmSubsystem extends SubsystemBase {
 
 			// Offset the minor arm based on the angle of the major arm (this makes the
 			// minor arm reletive to the robot)
-			// TODO: change if arms are no longer virtual four bar
+			// TODO: Re-enable if arms are no longer virtual four bar
 			// minorArmTargetTheta += majorArmTargetTheta;
+		}
 
+		// Tells the robot to switch sides if the dominant side is a switch
+		if (isFront != prevIsFront) {
+			switchingSides = true;
 		}
 
 		// Swaps the sign of the target angle if the dominant side of the robot is back
-		if (!isFront) {
-			majorArmTargetTheta = Math.copySign(majorArmTargetTheta, -1);
-			minorArmTargetTheta = Math.copySign(majorArmTargetTheta, -1);
-		}
 
 		// Address the major motors
 		majorPIDController.setReference(
@@ -249,7 +248,7 @@ public class ArmSubsystem extends SubsystemBase {
 	/**
 	 * Toggles the dominant side of the robot
 	 */
-	public void setToggleSide() {
+	public void toggleSide() {
 		isFront = !isFront;
 	}
 
