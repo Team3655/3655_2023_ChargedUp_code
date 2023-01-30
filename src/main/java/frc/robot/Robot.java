@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DashboardSubsystem;;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,6 +24,8 @@ public class Robot extends TimedRobot {
 
 	private RobotContainer m_robotContainer;
 
+	private DashboardSubsystem m_DashboardSubsystem;
+
 	private ArmSubsystem m_ArmSubsystem;
 
 	/**
@@ -36,7 +39,8 @@ public class Robot extends TimedRobot {
 		// and put our
 		// autonomous chooser on the dashboard.
 		m_robotContainer = new RobotContainer();
-		m_ArmSubsystem = new ArmSubsystem();
+		// m_DashboardSubsystem = new DashboardSubsystem();
+		// m_ArmSubsystem = new ArmSubsystem();
 	}
 
 	/**
@@ -56,7 +60,8 @@ public class Robot extends TimedRobot {
 		// This must be called from the robot's periodic block in order for anything in
 		// the Command-based framework to work.
 		CommandScheduler.getInstance().run();
-		m_ArmSubsystem.periodic();
+		// m_ArmSubsystem.periodic();
+		// m_DashboardSubsystem.periodic();
 	}
 
 	/** This function is called once each time the robot enters Disabled mode. */

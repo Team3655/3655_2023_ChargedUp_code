@@ -96,7 +96,7 @@ public class SwerveModule extends SubsystemBase {
 
 		double m_moduleAngleRadians = Math.toRadians(m_turnEncoder.getAbsolutePosition());
 
-		double m_distanceMeters = m_driveMotor.getEncoder(Type.kHallSensor, 4096).getPosition()
+		double m_distanceMeters = m_driveMotor.getEncoder(Type.kHallSensor, 42).getPosition()
 				* ModuleConstants.kdriveGearRatio
 				* ModuleConstants.kwheelCircumference;
 
@@ -137,7 +137,7 @@ public class SwerveModule extends SubsystemBase {
 		m_driveMotor.getEncoder(Type.kHallSensor, 4096).setPosition(0);
 	}
 
-	public double getEncoderHeading(){
+	public double getEncoderHeading() {
 		return this.m_turnEncoder.getAbsolutePosition();
 	}
 

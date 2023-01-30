@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+//import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import com.revrobotics.RelativeEncoder;
@@ -40,10 +40,13 @@ public class ArmSubsystem extends SubsystemBase {
 
 	/** controls the side of the robot the arm is on */
 	private boolean isFront;
+	private boolean prevIsFront;
+	private boolean switchingSides;
 
 	/** the variable setting the height of the arm */
 	ArmPoses armState;
 	ArmPoses prevArmState;
+	Boolean isSwitching;
 
 	/** the target angle for the major arm in Degrees */
 	double majorArmTargetTheta;
@@ -56,6 +59,9 @@ public class ArmSubsystem extends SubsystemBase {
 
 		// the default state of the arms
 		isFront = true;
+		prevIsFront = isFront;
+		switchingSides = false;
+
 		armState = ArmPoses.TUCKED;
 		prevArmState = armState;
 
@@ -194,7 +200,8 @@ public class ArmSubsystem extends SubsystemBase {
 
 			// Offset the minor arm based on the angle of the major arm (this makes the
 			// minor arm reletive to the robot)
-			minorArmTargetTheta += majorArmTargetTheta;
+			// TODO: change if arms are no longer virtual four bar
+			// minorArmTargetTheta += majorArmTargetTheta;
 
 		}
 
