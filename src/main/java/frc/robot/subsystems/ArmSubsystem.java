@@ -146,16 +146,9 @@ public class ArmSubsystem extends SubsystemBase {
 		// Swaps the sign of the target angle if the dominant side of the robot is back
 
 		// Address the major motors
-		majorPIDController.setReference(
-				getThetaToTicks(Math.toRadians(majorArmTargetTheta * ArmConstants.kMajorArmDir),
-						ArmConstants.kMajorArmTicks),
-				CANSparkMax.ControlType.kPosition);
-
+		majorArm.setReference();
 		// Address the minor motors
-		minorPIDController.setReference(
-				getThetaToTicks(Math.toRadians(minorArmTargetTheta * ArmConstants.kMinorArmDir),
-						ArmConstants.kMinorArmTicks),
-				CANSparkMax.ControlType.kPosition);
+		minorArm.setReference();
 
 	}
 

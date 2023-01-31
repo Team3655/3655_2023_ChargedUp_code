@@ -87,13 +87,13 @@ public class ArmSegment {
 	}
 
 	/**
-	 * Sets the target angle of the arm
+	 * Sets the target angle of the arm IN RADIANS!
 	 * 
 	 * @param theta the target angle to be set
 	 */
 	public void setTagetTheta(double theta) {
 		m_targetTheta = Math.toRadians(theta);
-		
+
 	}
 
 	/**
