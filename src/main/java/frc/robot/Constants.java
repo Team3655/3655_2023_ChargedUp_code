@@ -25,7 +25,7 @@ public final class Constants {
 		public static final double kModuleTurningControllerP = .1;
 		public static final double kModuleTurningControllerI = .0001;
 		public static final double kModuleTurningControllerD = 0;
-		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 0;
+		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4*Math.PI;
 		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 0;
 
 		// Constants set for the _SDS MK4i_
@@ -40,8 +40,8 @@ public final class Constants {
 		public static final double ksVolts = 1;
 		public static final double kvVoltSecondsPerMeter = 1;
 
-		public static final double ksTurning = 1;
-		public static final double kvTurning = 1;
+		public static final double ksTurning = 0;
+		public static final double kvTurning = 0;
 
 		// TODO: Set CAN ID's for motors and CANcoders
 		// NEO drive motor CAN ID's
@@ -70,7 +70,7 @@ public final class Constants {
 		public static final double kRearRightAngleZero = 0;
 
 		// TODO: Set CAN ID for pigeon 2
-		public static final int kPigeonPort = 13;
+		public static final int kPigeonPort = 15;
 
 		// TODO: Set trackwidth and wheelbase in meters of physical robot
 		public static final double kTrackWidth = 24 / 39.37; // meters
