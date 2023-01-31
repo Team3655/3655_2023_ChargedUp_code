@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -53,8 +54,8 @@ public class DriveSubsystem extends SubsystemBase {
 	// TODO: Use variable here instead of entries below?
 	private SwerveModulePosition[] m_swervePosition = new SwerveModulePosition[] {
 			m_frontLeft.getPosition(),
-			m_rearLeft.getPosition(),
 			m_frontRight.getPosition(),
+			m_rearLeft.getPosition(),
 			m_rearRight.getPosition()
 	};
 
@@ -100,8 +101,12 @@ public class DriveSubsystem extends SubsystemBase {
 		m_rearLeft.setDesiredState(swerveModuleStates[2]);
 		m_rearRight.setDesiredState(swerveModuleStates[3]);
 
-		// Telemetry
-		// TODO: Add telemetry to read data
+		SmartDashboard.putNumber("FL Turn Output", m_frontLeft.getTurnOutput(swerveModuleStates[0]));
+		SmartDashboard.putNumber("FR Turn Output", m_frontRight.getTurnOutput(swerveModuleStates[1]));
+		SmartDashboard.putNumber("RL Turn Output", m_rearLeft.getTurnOutput(swerveModuleStates[2]));
+		SmartDashboard.putNumber("RR Turn Output", m_rearRight.getTurnOutput(swerveModuleStates[3]));
+
+
 
 	}
 
@@ -109,8 +114,8 @@ public class DriveSubsystem extends SubsystemBase {
 		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
 
 		m_frontLeft.setDesiredState(desiredStates[0]);
-		m_rearLeft.setDesiredState(desiredStates[1]);
-		m_frontRight.setDesiredState(desiredStates[2]);
+		m_frontRight.setDesiredState(desiredStates[1]);
+		m_rearLeft.setDesiredState(desiredStates[2]);
 		m_rearRight.setDesiredState(desiredStates[3]);
 
 	}
