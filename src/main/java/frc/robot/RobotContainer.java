@@ -64,16 +64,15 @@ public class RobotContainer {
 		// cancelling on release.
 		m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-		//Swerve Drive method is set as default for drive subsystem
+		// Swerve Drive method is set as default for drive subsystem
 		m_driveSubsystem.setDefaultCommand(
-			new RunCommand(
-			  () -> m_driveSubsystem.drive(
-				m_driverController.getLeftY() * DriveConstants.kMaxSpeedMetersPerSecond, //x axis
-				m_driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond, //y axis
-				m_driverController.getRightX() * DriveConstants.kMaxRPM, // z axis
-				true),
-				m_driveSubsystem)
-		  );
+				new RunCommand(
+						() -> m_driveSubsystem.drive(
+								m_driverController.getLeftY() * DriveConstants.kMaxSpeedMetersPerSecond, // x axis
+								m_driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond, // y axis
+								m_driverController.getRightX() * DriveConstants.kMaxRPM, // z axis
+								true),
+						m_driveSubsystem));
 	}
 
 	/**

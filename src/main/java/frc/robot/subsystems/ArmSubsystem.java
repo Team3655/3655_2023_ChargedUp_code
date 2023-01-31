@@ -3,11 +3,7 @@ package frc.robot.subsystems;
 //import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import java.util.ArrayList;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -26,50 +22,50 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	/** controls the side of the robot the arm is on */
-	private boolean isFront;
-	private boolean prevIsFront;
-	private boolean switchingSides;
+	private boolean m_isFront;
+	private boolean m_prevIsFront;
+	private boolean m_switchingSides;
 
 	/** the variable setting the height of the arm */
-	ArmPoses armState;
-	ArmPoses prevArmState;
+	ArmPoses m_armState;
+	ArmPoses m_prevArmState;
 
 	// create arms
-	ArmSegment majorArm;
-	ArmSegment minorArm;
+	ArmSegment m_majorArm;
+	ArmSegment m_minorArm;
 
 	// endregion
 
 	public ArmSubsystem() {
 
 		// the default state of the arms
-		isFront = true;
-		prevIsFront = isFront;
-		switchingSides = false;
+		m_isFront = true;
+		m_prevIsFront = m_isFront;
+		m_switchingSides = false;
 
-		armState = ArmPoses.TUCKED;
-		prevArmState = armState;
+		m_armState = ArmPoses.TUCKED;
+		m_prevArmState = m_armState;
 
 		// region: def arms
 
 		// major arm defs
-		majorArm = new ArmSegment(
+		m_majorArm = new ArmSegment(
 				ArmConstants.kRightMajorArmPort,
 				ArmConstants.kLeftMajorArmPort,
 				ArmConstants.kMajorArmTicks);
 
-		majorArm.setPID(
+		m_majorArm.setPID(
 				ArmConstants.kMajorArmP,
 				ArmConstants.kMajorArmI,
 				ArmConstants.kMajorArmD);
 
 		// minor arm defs
-		minorArm = new ArmSegment(
+		m_minorArm = new ArmSegment(
 				ArmConstants.kRightMinorArmPort,
 				ArmConstants.kLeftMinorArmPort,
 				ArmConstants.kMinorArmTicks);
 
-		minorArm.setPID(
+		m_minorArm.setPID(
 				ArmConstants.kMinorArmP,
 				ArmConstants.kMinorArmI,
 				ArmConstants.kMinorArmD);
@@ -81,49 +77,49 @@ public class ArmSubsystem extends SubsystemBase {
 		// This method will be called once per scheduler run
 
 		// skips math if state has not changed
-		if (prevArmState != armState) {
-			switch (armState) {
+		if (m_prevArmState != m_armState) {
+			switch (m_armState) {
 				// When the arms are tucked in the center of the robot (this is the only legal
 				// starting position)
 				case TUCKED:
-					majorArm.setTagetTheta(0);
-					minorArm.setTagetTheta(0);
+					m_majorArm.setTagetTheta(0);
+					m_minorArm.setTagetTheta(0);
 					break;
 
 				// Used for scoring in the lowest "hybrid" node
 				case LOW_SCORE:
-					majorArm.setTagetTheta(45);
-					minorArm.setTagetTheta(90);
+					m_majorArm.setTagetTheta(45);
+					m_minorArm.setTagetTheta(90);
 					break;
 
 				// Used for scoring in the middle node
 				case MID_SCORE:
-					majorArm.setTagetTheta(75);
-					minorArm.setTagetTheta(90);
+					m_majorArm.setTagetTheta(75);
+					m_minorArm.setTagetTheta(90);
 					break;
 
 				// Used for scoring in the highest node
 				case HIGH_SCORE:
-					majorArm.setTagetTheta(90);
-					minorArm.setTagetTheta(90);
+					m_majorArm.setTagetTheta(90);
+					m_minorArm.setTagetTheta(90);
 					break;
 
 				// Used for intaking off of the floor
 				case LOW_INTAKE:
-					majorArm.setTagetTheta(30);
-					minorArm.setTagetTheta(100);
+					m_majorArm.setTagetTheta(30);
+					m_minorArm.setTagetTheta(100);
 					break;
 
 				// Used for intaking from the human player chute
 				case MID_INTAKE:
-					majorArm.setTagetTheta(30);
-					minorArm.setTagetTheta(45);
+					m_majorArm.setTagetTheta(30);
+					m_minorArm.setTagetTheta(45);
 					break;
 
 				// Used for intaking from the sliding human player station
 				case HIGH_INTAKE:
-					majorArm.setTagetTheta(80);
-					minorArm.setTagetTheta(80);
+					m_majorArm.setTagetTheta(80);
+					m_minorArm.setTagetTheta(80);
 					break;
 
 				// goes to the pair of angles defined my the TSB driver
@@ -138,19 +134,12 @@ public class ArmSubsystem extends SubsystemBase {
 			// minorArmTargetTheta += majorArmTargetTheta;
 		}
 
-		// Tells the robot to switch sides if the dominant side is a switch
-		if (isFront != prevIsFront) {
-			switchingSides = true;
-		}
-
 		// Swaps the sign of the target angle if the dominant side of the robot is back
 
 		// Address the major motors
-		majorArm.setReference();
+		m_majorArm.setReference();
 		// Address the minor motors
-		minorArm.setReference();
-
-		// region:
+		m_minorArm.setReference();
 
 	}
 
@@ -163,7 +152,7 @@ public class ArmSubsystem extends SubsystemBase {
 	 *            HIGH_INTAKE)
 	 */
 	public void setArmState(ArmPoses pos) {
-		armState = pos;
+		m_armState = pos;
 	}
 
 	/**
@@ -171,13 +160,13 @@ public class ArmSubsystem extends SubsystemBase {
 	 * 
 	 * @param side if true the front will be dominant
 	 */
-	public void setFront(boolean side) {
-		isFront = side;
+	public void setIsFront(boolean side) {
+		m_isFront = side;
 	}
 
 	/** Toggles the dominant side of the robot */
 	public void toggleSide() {
-		isFront = !isFront;
+		m_isFront = !m_isFront;
 	}
 
 	// endregion
@@ -193,12 +182,12 @@ public class ArmSubsystem extends SubsystemBase {
 	 *         MID_INTAKE, HIGH_INTAKE)
 	 */
 	public ArmPoses getArmState() {
-		return armState;
+		return m_armState;
 	}
 
 	/** ruturns true if the target dominant side of the robot is front */
 	public boolean getIsFront() {
-		return isFront;
+		return m_isFront;
 	}
 
 	// endregion
