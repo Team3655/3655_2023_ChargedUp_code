@@ -13,19 +13,6 @@ public class ArmSubsystem extends SubsystemBase {
 
 	// region properties
 
-	// the motor objects for the motors controling the arms
-	private CANSparkMax rightMajorMotor;
-	private CANSparkMax leftMajorMotor;
-	private CANSparkMax rightMinorMotor;
-	private CANSparkMax leftMinorMotor;
-
-	// the pid controlers for the major and minor arms
-	private SparkMaxPIDController majorPIDController;
-	private SparkMaxPIDController minorPIDController;
-
-	private RelativeEncoder rightMajorEncoder;
-	private RelativeEncoder rightMinorEncoder;
-
 	/** used for controling the height of the arm */
 	private enum ArmPoses {
 		TUCKED,
@@ -47,10 +34,9 @@ public class ArmSubsystem extends SubsystemBase {
 	ArmPoses armState;
 	ArmPoses prevArmState;
 
-	/** the target angle for the major arm in Degrees */
-	double majorArmTargetTheta;
-	/** the target angle for the minor arm in Degrees */
-	double minorArmTargetTheta;
+	// create arms
+	ArmSegment majorArm;
+	ArmSegment minorArm;
 
 	// endregion
 
@@ -64,68 +50,29 @@ public class ArmSubsystem extends SubsystemBase {
 		armState = ArmPoses.TUCKED;
 		prevArmState = armState;
 
-		// region def motors
-		// creates the arms motors
-		rightMajorMotor = new CANSparkMax(ArmConstants.kRightMajorArmPort, MotorType.kBrushless);
-		leftMajorMotor = new CANSparkMax(ArmConstants.kLeftMajorArmPort, MotorType.kBrushless);
-		rightMinorMotor = new CANSparkMax(ArmConstants.kRightMinorArmPort, MotorType.kBrushless);
-		leftMinorMotor = new CANSparkMax(ArmConstants.kLeftMinorArmPort, MotorType.kBrushless);
+		// region: def arms
 
-		/**
-		 * The restoreFactoryDefaults method can be used to reset the configuration
-		 * parameters in the SPARK MAX to their factory default state. If no argument is
-		 * passed, these parameters will not persist between power cycles
-		 */
-		rightMajorMotor.restoreFactoryDefaults();
-		leftMajorMotor.restoreFactoryDefaults();
-		rightMinorMotor.restoreFactoryDefaults();
-		leftMinorMotor.restoreFactoryDefaults();
+		// major arm defs
+		majorArm = new ArmSegment(
+				ArmConstants.kRightMajorArmPort,
+				ArmConstants.kLeftMajorArmPort,
+				ArmConstants.kMajorArmTicks);
 
-		/**
-		 * In order to use PID functionality for a controller, a SparkMaxPIDController
-		 * object is constructed by calling the getPIDController() method on an existing
-		 * CANSparkMax object
-		 */
-		majorPIDController = rightMajorMotor.getPIDController();
-		minorPIDController = rightMajorMotor.getPIDController();
+		majorArm.setPID(
+				ArmConstants.kMajorArmP,
+				ArmConstants.kMajorArmI,
+				ArmConstants.kMajorArmD);
 
-		// Encoder object created to display position values
-		rightMajorEncoder = rightMajorMotor.getEncoder();
-		rightMinorEncoder = rightMinorMotor.getEncoder();
+		// minor arm defs
+		minorArm = new ArmSegment(
+				ArmConstants.kRightMinorArmPort,
+				ArmConstants.kLeftMinorArmPort,
+				ArmConstants.kMinorArmTicks);
 
-		// motors to invert
-		leftMajorMotor.setInverted(true);
-
-		// set current limits
-		rightMajorMotor.setSmartCurrentLimit(30);
-		leftMajorMotor.setSmartCurrentLimit(30);
-		rightMinorMotor.setSmartCurrentLimit(30);
-		leftMinorMotor.setSmartCurrentLimit(30);
-
-		// sets motor defaults to break
-		rightMajorMotor.setIdleMode(IdleMode.kBrake);
-		leftMajorMotor.setIdleMode(IdleMode.kBrake);
-		rightMinorMotor.setIdleMode(IdleMode.kBrake);
-		leftMinorMotor.setIdleMode(IdleMode.kBrake);
-
-		// set PID coefficients
-		majorPIDController.setP(ArmConstants.kMajorArmP);
-		majorPIDController.setI(ArmConstants.kMajorArmI);
-		majorPIDController.setD(ArmConstants.kMajorArmD);
-		majorPIDController.setIZone(0);
-		majorPIDController.setFF(0);
-		majorPIDController.setOutputRange(-1, 1);
-
-		// set PID coefficients
-		minorPIDController.setP(ArmConstants.kMinorArmP);
-		minorPIDController.setI(ArmConstants.kMinorArmI);
-		minorPIDController.setD(ArmConstants.kMinorArmD);
-		minorPIDController.setIZone(0);
-		minorPIDController.setFF(0);
-		minorPIDController.setOutputRange(-1, 1);
-
-		leftMajorMotor.follow(rightMajorMotor);
-		leftMinorMotor.follow(rightMinorMotor);
+		majorArm.setPID(
+				ArmConstants.kMinorArmP,
+				ArmConstants.kMinorArmI,
+				ArmConstants.kMinorArmD);
 		// endregion
 	}
 
@@ -139,61 +86,49 @@ public class ArmSubsystem extends SubsystemBase {
 				// When the arms are tucked in the center of the robot (this is the only legal
 				// starting position)
 				case TUCKED:
-					majorArmTargetTheta = 0;
-					minorArmTargetTheta = 0;
+					majorArm.setTagetTheta(0);
+					minorArm.setTagetTheta(0);
 					break;
 
 				// Used for scoring in the lowest "hybrid" node
 				case LOW_SCORE:
-					majorArmTargetTheta = 45;
-					minorArmTargetTheta = 90;
+					majorArm.setTagetTheta(45);
+					minorArm.setTagetTheta(90);
 					break;
 
 				// Used for scoring in the middle node
 				case MID_SCORE:
-					majorArmTargetTheta = 75;
-					minorArmTargetTheta = 90;
+					majorArm.setTagetTheta(75);
+					minorArm.setTagetTheta(90);
 					break;
 
 				// Used for scoring in the highest node
 				case HIGH_SCORE:
-					majorArmTargetTheta = 90;
-					minorArmTargetTheta = 90;
+					majorArm.setTagetTheta(90);
+					minorArm.setTagetTheta(90);
 					break;
 
 				// Used for intaking off of the floor
 				case LOW_INTAKE:
-					majorArmTargetTheta = 30;
-					minorArmTargetTheta = 100;
+					majorArm.setTagetTheta(30);
+					minorArm.setTagetTheta(100);
 					break;
 
 				// Used for intaking from the human player chute
 				case MID_INTAKE:
-					majorArmTargetTheta = 30;
-					minorArmTargetTheta = 100;
+					majorArm.setTagetTheta(30);
+					minorArm.setTagetTheta(45);
 					break;
 
 				// Used for intaking from the sliding human player station
 				case HIGH_INTAKE:
-					majorArmTargetTheta = 80;
-					minorArmTargetTheta = 80;
+					majorArm.setTagetTheta(80);
+					minorArm.setTagetTheta(80);
 					break;
 
 				// goes to the pair of angles defined my the TSB driver
 				case DRIVER_CONTROL:
-					// Constrains the major arm to stay between 0 and 90 degrees
-					if (majorArmTargetTheta < 0) {
-						majorArmTargetTheta = 0;
-					} else if (majorArmTargetTheta > 90) {
-						majorArmTargetTheta = 90;
-					}
 
-					// Constrains the minor arm to stay between 0 and 90 degrees
-					if (minorArmTargetTheta < -90) {
-						minorArmTargetTheta = 0;
-					} else if (minorArmTargetTheta > 90) {
-						minorArmTargetTheta = 90;
-					}
 					break;
 			}
 
@@ -287,14 +222,16 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	/**
-	 * Used for getting the number of ticks required to turn an angle
+	 * converts encoder count of a motor into and angle value
 	 * 
-	 * @param theta the angke you want to turn (in radians)
-	 * @param ticks the number of ticks required to make one revolution
-	 * @return the number of motor ticks required to turn theta
+	 * @param totalTicks the number of rotations required to make one rotation
+	 * @param encoder    the encoder to get the rotations from
+	 * @return the real angle of the arm
 	 */
-	public int getThetaToTicks(double theta, int ticks) {
-		return (int) (theta * (double) ticks);
+	public double getRotationsToAngle(double totalTicks, RelativeEncoder encoder) {
+		double percentage = totalTicks / encoder.getPosition();
+		double theta = percentage * (2 * Math.PI);
+		return theta;
 	}
 
 	// endregion
