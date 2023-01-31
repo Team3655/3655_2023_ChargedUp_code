@@ -24,7 +24,6 @@ public class Robot extends TimedRobot {
 
 	private RobotContainer m_robotContainer;
 
-	private DashboardSubsystem m_DashboardSubsystem;
 
 	private ArmSubsystem m_ArmSubsystem;
 
@@ -39,7 +38,6 @@ public class Robot extends TimedRobot {
 		// and put our
 		// autonomous chooser on the dashboard.
 		m_robotContainer = new RobotContainer();
-		// m_DashboardSubsystem = new DashboardSubsystem();
 		// m_ArmSubsystem = new ArmSubsystem();
 	}
 

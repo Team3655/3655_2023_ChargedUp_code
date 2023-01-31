@@ -37,8 +37,8 @@ public final class Constants {
 
 	public static class DriveConstants {
 		// TODO: Set feedforward values for drive
-		public static final double ksVolts = 1;
-		public static final double kvVoltSecondsPerMeter = 1;
+		public static final double ksVolts = .5;
+		public static final double kvVoltSecondsPerMeter = 2.73;
 
 		public static final double ksTurning = 0;
 		public static final double kvTurning = 0;
@@ -63,11 +63,11 @@ public final class Constants {
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// TODO: Set angle offset for CANcoders
-		// Offset angle for absolute encoders (find this using REV client)
-		public static final double kFrontLeftAngleZero = 0;
-		public static final double kRearLeftAngleZero = 0;
-		public static final double kFrontRightAngleZero = 0;
-		public static final double kRearRightAngleZero = 0;
+		// Offset angle for absolute encoders (find this using Phoenix client)
+		public static final double kFrontLeftAngleZero = 60.6;
+		public static final double kRearLeftAngleZero = -34.9;
+		public static final double kFrontRightAngleZero = -112.7;
+		public static final double kRearRightAngleZero = -7.4;
 
 		// TODO: Set CAN ID for pigeon 2
 		public static final int kPigeonPort = 15;

@@ -18,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.ArmSubsystem.ArmPoses;
-import frc.robot.subsystems.ArmSubsystem.ArmPoses.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -82,7 +80,7 @@ public class RobotContainer {
 				m_driverController.getLeftY() * DriveConstants.kMaxSpeedMetersPerSecond, //x axis
 				m_driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond, //y axis
 				m_driverController.getRightX() * DriveConstants.kMaxRPM, // z axis
-				true),
+				false),
 				m_driveSubsystem)
 		  );
 
