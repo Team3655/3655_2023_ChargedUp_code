@@ -181,7 +181,7 @@ public class SwerveModule extends SubsystemBase {
 
 	public void resetEncoders() {
 		m_turnEncoder.setPosition(0);
-		m_driveMotor.getEncoder(Type.kHallSensor, 42).setPosition(0);
+		m_driveMotor.getEncoder().setPosition(0);
 	}
 
 	public double getEncoderHeading() {

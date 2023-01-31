@@ -24,9 +24,6 @@ public class Robot extends TimedRobot {
 
 	private RobotContainer m_robotContainer;
 
-
-	private ArmSubsystem m_ArmSubsystem;
-
 	/**
 	 * This function is run when the robot is first started up and should be used
 	 * for any
@@ -38,7 +35,6 @@ public class Robot extends TimedRobot {
 		// and put our
 		// autonomous chooser on the dashboard.
 		m_robotContainer = new RobotContainer();
-		// m_ArmSubsystem = new ArmSubsystem();
 	}
 
 	/**
@@ -58,8 +54,6 @@ public class Robot extends TimedRobot {
 		// This must be called from the robot's periodic block in order for anything in
 		// the Command-based framework to work.
 		CommandScheduler.getInstance().run();
-		// m_ArmSubsystem.periodic();
-		// m_DashboardSubsystem.periodic();
 	}
 
 	/** This function is called once each time the robot enters Disabled mode. */
