@@ -11,18 +11,25 @@ public class ArmSegment {
 
 	// region properties
 
-	private CANSparkMax m_rightMotor;
-	private CANSparkMax m_leftMotor;
+	/** Motor controllers for the segment */
+	private CANSparkMax m_rightMotor, m_leftMotor;
 
+	/** PID controllers for the segment */
 	private SparkMaxPIDController m_PIDController;
 
-	private RelativeEncoder m_rightEncoder;
-	private RelativeEncoder m_leftEncoder;
+	/** Encoders for the segment */
+	private RelativeEncoder m_rightEncoder, m_leftEncoder;
 
-	private double m_targetTheta;
-	private double m_realTheta;
+	/** Real and target Angles for the arms */
+	private double m_targetTheta, m_realTheta;
 
+	/** The number of motor rotations per revolution of the arm (360°) */
 	private double m_gearRatio;
+
+	/** the angle constraints on the arm */
+	private double m_minTheta, m_maxTheta;
+
+	/**  */
 
 	// endregion
 
@@ -93,7 +100,6 @@ public class ArmSegment {
 	 */
 	public void setTagetTheta(double theta) {
 		m_targetTheta = Math.toRadians(theta);
-
 	}
 
 	/**
@@ -120,8 +126,16 @@ public class ArmSegment {
 	 * @param totalTicks the number of ticks required to make one revolution
 	 * @return the number of motor ticks required to turn theta
 	 */
-	public int getThetaToTicks(double theta) {
-		return (int) (theta * (double) m_gearRatio);
+	public double getThetaToTicks(double theta) {
+		// return theta * (double) m_gearRatio;
+		return theta * (double) m_gearRatio / (2 * Math.PI);
+	}
+
+	/** Returns the actual angle of the real arm (not the same as the target) */
+	public double getRealTheta() {
+		double rotations = (m_rightEncoder.getPosition() + m_leftEncoder.getPosition()) / 2;
+		m_realTheta = (2 * Math.PI * rotations) / m_gearRatio;
+		return m_realTheta;
 	}
 
 	// endregion

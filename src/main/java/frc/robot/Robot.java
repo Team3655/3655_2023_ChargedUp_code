@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.ArmsSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DashboardSubsystem;;
 
 /**
@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
 
 	private DashboardSubsystem m_DashboardSubsystem;
 
-	private ArmsSubsystem m_ArmSubsystem;
+	private ArmSubsystem m_ArmSubsystem;
 
 	/**
 	 * This function is run when the robot is first started up and should be used

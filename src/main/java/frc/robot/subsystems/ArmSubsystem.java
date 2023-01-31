@@ -69,7 +69,7 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kLeftMinorArmPort,
 				ArmConstants.kMinorArmTicks);
 
-		majorArm.setPID(
+		minorArm.setPID(
 				ArmConstants.kMinorArmP,
 				ArmConstants.kMinorArmI,
 				ArmConstants.kMinorArmD);
@@ -150,6 +150,8 @@ public class ArmSubsystem extends SubsystemBase {
 		// Address the minor motors
 		minorArm.setReference();
 
+		// region:
+
 	}
 
 	// region setters
@@ -173,9 +175,7 @@ public class ArmSubsystem extends SubsystemBase {
 		isFront = side;
 	}
 
-	/**
-	 * Toggles the dominant side of the robot
-	 */
+	/** Toggles the dominant side of the robot */
 	public void toggleSide() {
 		isFront = !isFront;
 	}
@@ -199,32 +199,6 @@ public class ArmSubsystem extends SubsystemBase {
 	/** ruturns true if the target dominant side of the robot is front */
 	public boolean getIsFront() {
 		return isFront;
-	}
-
-	/**
-	 * This method is used to get the number of revolutions the arm motor has made
-	 * 
-	 * @param isMajor setting this to false will return the count of the minor arm
-	 * @return the number of revolutions as a double
-	 */
-	public double getRightEncoderTicks(boolean isMajor) {
-		if (isMajor) {
-			return rightMajorEncoder.getPosition();
-		}
-		return rightMinorEncoder.getPosition();
-	}
-
-	/**
-	 * converts encoder count of a motor into and angle value
-	 * 
-	 * @param totalTicks the number of rotations required to make one rotation
-	 * @param encoder    the encoder to get the rotations from
-	 * @return the real angle of the arm
-	 */
-	public double getRotationsToAngle(double totalTicks, RelativeEncoder encoder) {
-		double percentage = totalTicks / encoder.getPosition();
-		double theta = percentage * (2 * Math.PI);
-		return theta;
 	}
 
 	// endregion
