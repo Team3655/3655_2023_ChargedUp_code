@@ -10,6 +10,7 @@ import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxRelativeEncoder.Type;
@@ -58,7 +59,9 @@ public class SwerveModule extends SubsystemBase {
 			int driveMotorChannel,
 			int turningMotorChannel,
 			int turningEncoderPorts,
-			double angleZero) {
+			double angleZero,
+			double[] angularPID,
+			double[] drivePID) {
 
 		// Initialize the motors
 		m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
@@ -67,6 +70,14 @@ public class SwerveModule extends SubsystemBase {
 		m_turningMotor.restoreFactoryDefaults();
 		m_driveMotor.restoreFactoryDefaults();
 
+		m_turningMotor.getPIDController().setP(angularPID[0]);
+		m_turningMotor.getPIDController().setI(angularPID[1]);
+		m_turningMotor.getPIDController().setD(angularPID[2]);
+
+		m_driveMotor.getPIDController().setP(drivePID[0]);
+		m_driveMotor.getPIDController().setI(drivePID[1]);
+		m_driveMotor.getPIDController().setD(drivePID[2]);
+		
 		// Configure current limits for motors - prevents disabling/brownouts
 		m_driveMotor.setSecondaryCurrentLimit(30);
 		m_driveMotor.setSmartCurrentLimit(30);

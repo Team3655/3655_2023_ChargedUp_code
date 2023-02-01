@@ -31,25 +31,33 @@ public class DriveSubsystem extends SubsystemBase {
 			ModuleConstants.kFrontLeftDriveMotorPort,
 			ModuleConstants.kFrontLeftTurningMotorPort,
 			ModuleConstants.kFrontLeftTurningEncoderPort,
-			ModuleConstants.kFrontLeftAngleZero);
-
-	private final SwerveModule m_rearLeft = new SwerveModule(
-			ModuleConstants.kRearLeftDriveMotorPort,
-			ModuleConstants.kRearLeftTurningMotorPort,
-			ModuleConstants.kRearLeftTurningEncoderPort,
-			ModuleConstants.kRearLeftAngleZero);
+			ModuleConstants.kFrontLeftAngleZero,
+			ModuleConstants.kFrontLeftAngularPID,
+			ModuleConstants.kFrontLeftDrivePID);
 
 	private final SwerveModule m_frontRight = new SwerveModule(
 			ModuleConstants.kFrontRightDriveMotorPort,
 			ModuleConstants.kFrontRightTurningMotorPort,
 			ModuleConstants.kFrontRightTurningEncoderPort,
-			ModuleConstants.kFrontRightAngleZero);
+			ModuleConstants.kFrontRightAngleZero,
+			ModuleConstants.kFrontRightAngularPID,
+			ModuleConstants.kFrontRightDrivePID);
+
+	private final SwerveModule m_rearLeft = new SwerveModule(
+			ModuleConstants.kRearLeftDriveMotorPort,
+			ModuleConstants.kRearLeftTurningMotorPort,
+			ModuleConstants.kRearLeftTurningEncoderPort,
+			ModuleConstants.kRearLeftAngleZero,
+			ModuleConstants.kRearLeftAngularPID,
+			ModuleConstants.kRearLeftDrivePID);
 
 	private final SwerveModule m_rearRight = new SwerveModule(
 			ModuleConstants.kRearRightDriveMotorPort,
 			ModuleConstants.kRearRightTurningMotorPort,
 			ModuleConstants.kRearRightTurningEncoderPort,
-			ModuleConstants.kRearRightAngleZero);
+			ModuleConstants.kRearRightAngleZero,
+			ModuleConstants.kRearRightAngularPID,
+			ModuleConstants.kRearRightDrivePID);
 
 	// TODO: Use variable here instead of entries below?
 	private SwerveModulePosition[] m_swervePosition = new SwerveModulePosition[] {

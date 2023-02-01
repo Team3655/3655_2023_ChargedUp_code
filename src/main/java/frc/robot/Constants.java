@@ -26,40 +26,47 @@ public final class Constants {
 		public static final double kModuleTurningControllerI = .0001;
 		public static final double kModuleTurningControllerD = 0;
 
-
-
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1 / 6.75;
 		public static final double kturnGearRatio = 150 / 7; 
 		public static final double kwheelCircumference = Math.PI * 0.1016; // 4" to meters
 
-
-
 						// NEO drive motor CAN ID's
 		public static final int kFrontLeftDriveMotorPort = 1;
-		public static final int kRearLeftDriveMotorPort = 7;
 		public static final int kFrontRightDriveMotorPort = 4;
+		public static final int kRearLeftDriveMotorPort = 7;
 		public static final int kRearRightDriveMotorPort = 10;
 
 		// NEO turning motor CAN ID's
 		public static final int kFrontLeftTurningMotorPort = 2;
-		public static final int kRearLeftTurningMotorPort = 8;
 		public static final int kFrontRightTurningMotorPort = 5;
+		public static final int kRearLeftTurningMotorPort = 8;
 		public static final int kRearRightTurningMotorPort = 11;
 
 		// CANcoder CAN ID's
 		public static final int kFrontLeftTurningEncoderPort = 3;
-		public static final int kRearLeftTurningEncoderPort = 6;
 		public static final int kFrontRightTurningEncoderPort = 9;
+		public static final int kRearLeftTurningEncoderPort = 6;
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// TODO: Set angle offset for CANcoders
 		// Offset angle for absolute encoders (find this using REV client)
 		public static final double kFrontLeftAngleZero = 0;
-		public static final double kRearLeftAngleZero = 0;
 		public static final double kFrontRightAngleZero = 0;
+		public static final double kRearLeftAngleZero = 0;
 		public static final double kRearRightAngleZero = 0;
 
+		//SPARK MAX Angular PID values
+		public static double[] kFrontLeftAngularPID = {.1, 0, .1};
+		public static double[] kFrontRightAngularPID = {.1, 0, .1};
+		public static double[] kRearLeftAngularPID = {.1, 0, .1};
+		public static double[] kRearRightAngularPID = {.1, 0, .1};
+
+		//SPARK MAX Drive PID values
+		public static double[] kFrontLeftDrivePID = {.1, 0, .1};
+		public static double[] kFrontRightDrivePID = {.1, 0, .1};
+		public static double[] kRearLeftDrivePID = {.1, 0, .1};
+		public static double[] kRearRightDrivePID = {.1, 0, .1};
 	}
 
 	public static class DriveConstants {
