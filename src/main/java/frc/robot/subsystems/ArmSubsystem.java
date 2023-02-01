@@ -23,8 +23,6 @@ public class ArmSubsystem extends SubsystemBase {
 
 	/** controls the side of the robot the arm is on */
 	private boolean m_isFront;
-	private boolean m_prevIsFront;
-	private boolean m_switchingSides;
 
 	/** the variable setting the height of the arm */
 	ArmPoses m_armState;
@@ -40,8 +38,6 @@ public class ArmSubsystem extends SubsystemBase {
 
 		// the default state of the arms
 		m_isFront = true;
-		m_prevIsFront = m_isFront;
-		m_switchingSides = false;
 
 		m_armState = ArmPoses.TUCKED;
 		m_prevArmState = m_armState;
@@ -124,7 +120,6 @@ public class ArmSubsystem extends SubsystemBase {
 
 				// goes to the pair of angles defined my the TSB driver
 				case DRIVER_CONTROL:
-
 					break;
 			}
 
@@ -154,14 +149,21 @@ public class ArmSubsystem extends SubsystemBase {
 	 * 
 	 * @param isFront if true the front will be dominant
 	 */
-	public void setIsFront(boolean isFront) {
-		m_isFront = isFront;
+	public void setDominantSide(boolean isFront) {
+		if (isFront) {
+			m_majorArm.setSign(1);
+			m_minorArm.setSign(1);
+		} else {
+			m_majorArm.setSign(1);
+			m_minorArm.setSign(1);
+		}
 	}
 
 	/** Toggles the dominant side of the robot */
 	public CommandBase toggleSide() {
+		m_isFront = !m_isFront;
 		return runOnce(() -> {
-			setIsFront(!m_isFront);
+			setDominantSide(m_isFront);
 		});
 	}
 

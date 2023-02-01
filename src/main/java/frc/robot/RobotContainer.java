@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ArmPoseCommand;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -72,17 +73,14 @@ public class RobotContainer {
 
 		// Swerve Drive method is set as default for drive subsystem
 		m_driveSubsystem.setDefaultCommand(
-			new RunCommand(
-			  () -> m_driveSubsystem.drive(
-				m_driverController.getLeftY() * DriveConstants.kMaxSpeedMetersPerSecond, //x axis
-				m_driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond, //y axis
-				m_driverController.getRightX() * DriveConstants.kMaxRPM, // z axis
-				false),
-				m_driveSubsystem)
-		  );
+				new RunCommand(
+						() -> m_driveSubsystem.drive(
+								m_driverController.getLeftY() * DriveConstants.kMaxSpeedMetersPerSecond, // x axis
+								m_driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond, // y axis
+								m_driverController.getRightX() * DriveConstants.kMaxRPM, // z axis
+								false),
+						m_driveSubsystem));
 
-
-		  
 	}
 
 	/**
