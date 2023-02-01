@@ -17,6 +17,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+	public static final double kInchesToMeters = 0.0254;
+
 	public static class ModuleConstants {
 
 		public static final double kModuleDriveControllerP = .1;
@@ -26,16 +29,12 @@ public final class Constants {
 		public static final double kModuleTurningControllerI = .0001;
 		public static final double kModuleTurningControllerD = 0;
 
-
-
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1 / 6.75;
-		public static final double kturnGearRatio = 150 / 7; 
-		public static final double kwheelCircumference = Math.PI * 0.1016; // 4" to meters
+		public static final double kturnGearRatio = 150 / 7;
+		public static final double kwheelCircumference = 4 * Math.PI * kInchesToMeters; // 4" to meters (0.1016 meters)
 
-
-
-						// NEO drive motor CAN ID's
+		// NEO drive motor CAN ID's
 		public static final int kFrontLeftDriveMotorPort = 1;
 		public static final int kRearLeftDriveMotorPort = 7;
 		public static final int kFrontRightDriveMotorPort = 4;
@@ -64,18 +63,13 @@ public final class Constants {
 
 	public static class DriveConstants {
 		// TODO: Set feedforward values for drive
-		public static final double ksVolts = .1; 
+		public static final double ksVolts = .1;
 		public static final double kvVoltSecondsPerMeter = .1;
 
-		public static final double ksTurning = .17161;//Tuned February 2, 2023
+		public static final double ksTurning = .17161;// Tuned February 2, 2023
 		public static final double kvTurning = .43205;
 
-		// Constants set for the _SDS MK4i_
-		public static final double kdriveGearRatio = 1 / 6.75;
-		public static final double kturnGearRatio = 150 / 7; // TODO: Double check ratio
-		public static final double kwheelCircumference = Math.PI * 0.1524; // 6" to meters
-
-		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4*Math.PI;
+		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
 		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
 
 		// TODO: Change max speed
@@ -96,14 +90,10 @@ public final class Constants {
 				new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
 				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-
 		// TODO: Is gyro reversed?
-		public static final boolean kGyroReversed = false;		
-
+		public static final boolean kGyroReversed = false;
 
 	}
-
-
 
 	/**
 	 * The constants pertaining to the drive station
@@ -156,12 +146,4 @@ public final class Constants {
 
 	}
 
-	/**
-	 * The constants pertaining to the types of motors shared between subsystems
-	 */
-	public static class MotorConstants {
-
-		public static final int kNeoTicks = 42;
-
-	}
 }

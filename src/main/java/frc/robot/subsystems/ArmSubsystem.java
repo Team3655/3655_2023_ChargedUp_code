@@ -25,8 +25,7 @@ public class ArmSubsystem extends SubsystemBase {
 	private boolean m_isFront;
 
 	/** the variable setting the height of the arm */
-	ArmPoses m_armState;
-	ArmPoses m_prevArmState;
+	ArmPoses m_armState, m_prevArmState;
 
 	// create arms
 	ArmSegment m_majorArm;
