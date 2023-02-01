@@ -33,6 +33,7 @@ public class RobotContainer {
 	private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 	private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
 	private final DashboardSubsystem m_dashboardSubsystem = new DashboardSubsystem(m_driveSubsystem);
+	private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
 	// Replace with CommandPS4Controller or CommandJoystick if needed
 	private final CommandXboxController m_driverController = new CommandXboxController(
