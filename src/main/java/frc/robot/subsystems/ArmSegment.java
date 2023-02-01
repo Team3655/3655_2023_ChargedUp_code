@@ -23,13 +23,11 @@ public class ArmSegment {
 	/** Real and target Angles for the arms */
 	private double m_targetTheta, m_realTheta;
 
-	/** The number of motor rotations per revolution of the arm (360°) */
+	/** Defined by the number of motor rotations per revolution of the arm (360°) */
 	private double m_gearRatio, m_gearRatioRadius;
 
 	/** the angle constraints on the arm */
 	private double m_minTheta, m_maxTheta;
-
-	/**  */
 
 	// endregion
 
@@ -82,10 +80,31 @@ public class ArmSegment {
 		// sets left motor to follow right
 		m_leftMotor.follow(m_rightMotor);
 		// endregion
-
 	}
 
 	// region: setters
+
+	/** sets the min and max target angle of */
+	public void setConstraints(int min, int max) {
+		m_maxTheta = max;
+		m_minTheta = min;
+	}
+
+	/**
+	 * Forces a given angle to be between thw min and max constraints
+	 * 
+	 * @param theta the angle to be constrained
+	 * @return the limited value of theta
+	 */
+	public double constrain(double theta) {
+		if (theta >= m_maxTheta) {
+			return m_maxTheta;
+
+		} else if (theta <= m_minTheta) {
+			return m_minTheta;
+		}
+		return theta;
+	}
 
 	/** Sets the pid referance point to the arc length of the target angle */
 	public void setReference() {
@@ -100,6 +119,7 @@ public class ArmSegment {
 	 * @param theta the target angle to be set
 	 */
 	public void setTagetTheta(double theta) {
+		theta = constrain(theta);
 		m_targetTheta = Math.toRadians(theta);
 	}
 
@@ -128,15 +148,35 @@ public class ArmSegment {
 	 * @return the number of motor ticks required to turn theta
 	 */
 	public double getThetaToTicks(double theta) {
-		return theta * m_gearRatioRadius;
+		// return theta * (double) m_gearRatio;
+		return theta * (double) m_gearRatio / (2 * Math.PI);
 	}
 
 	/** Returns the actual angle of the real arm (not the same as the target) */
 	public double getRealTheta() {
 		double rotations = (m_rightEncoder.getPosition() + m_leftEncoder.getPosition()) / 2;
-		m_realTheta = (2 * Math.PI * rotations) / m_gearRatio;
+		m_realTheta = rotations / m_gearRatioRadius;
 		return m_realTheta;
 	}
 
+	/**
+	 * Checks of the arm is at its target position
+	 * 
+	 * @param deadBand the number of degrees of error that is acceptable
+	 * @return True if the Real angle is within the deadband of the target
+	 */
+	public boolean getAtTarget(double deadBand) {
+		// get absolute value of the difference
+		double error = Math.abs(getRealTheta() - m_targetTheta);
+		// convert deadband to radians
+		deadBand = Math.toRadians(deadBand);
+
+		if (error < deadBand) {
+			return true;
+		}
+		return false;
+	}
+
 	// endregion
+
 }

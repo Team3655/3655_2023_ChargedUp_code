@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ModuleConstants;
+
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -29,28 +31,28 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	private final SwerveModule m_frontLeft = new SwerveModule(
-			DriveConstants.kFrontLeftDriveMotorPort,
-			DriveConstants.kFrontLeftTurningMotorPort,
-			DriveConstants.kFrontLeftTurningEncoderPort,
-			DriveConstants.kFrontLeftAngleZero);
+			ModuleConstants.kFrontLeftDriveMotorPort,
+			ModuleConstants.kFrontLeftTurningMotorPort,
+			ModuleConstants.kFrontLeftTurningEncoderPort,
+			ModuleConstants.kFrontLeftAngleZero);
 
 	private final SwerveModule m_rearLeft = new SwerveModule(
-			DriveConstants.kRearLeftDriveMotorPort,
-			DriveConstants.kRearLeftTurningMotorPort,
-			DriveConstants.kRearLeftTurningEncoderPort,
-			DriveConstants.kRearLeftAngleZero);
+			ModuleConstants.kRearLeftDriveMotorPort,
+			ModuleConstants.kRearLeftTurningMotorPort,
+			ModuleConstants.kRearLeftTurningEncoderPort,
+			ModuleConstants.kRearLeftAngleZero);
 
 	private final SwerveModule m_frontRight = new SwerveModule(
-			DriveConstants.kFrontRightDriveMotorPort,
-			DriveConstants.kFrontRightTurningMotorPort,
-			DriveConstants.kFrontRightTurningEncoderPort,
-			DriveConstants.kFrontRightAngleZero);
+			ModuleConstants.kFrontRightDriveMotorPort,
+			ModuleConstants.kFrontRightTurningMotorPort,
+			ModuleConstants.kFrontRightTurningEncoderPort,
+			ModuleConstants.kFrontRightAngleZero);
 
 	private final SwerveModule m_rearRight = new SwerveModule(
-			DriveConstants.kRearRightDriveMotorPort,
-			DriveConstants.kRearRightTurningMotorPort,
-			DriveConstants.kRearRightTurningEncoderPort,
-			DriveConstants.kRearRightAngleZero);
+			ModuleConstants.kRearRightDriveMotorPort,
+			ModuleConstants.kRearRightTurningMotorPort,
+			ModuleConstants.kRearRightTurningEncoderPort,
+			ModuleConstants.kRearRightAngleZero);
 
 	// TODO: Use variable here instead of entries below?
 	private SwerveModulePosition[] m_swervePosition = new SwerveModulePosition[] {
@@ -159,48 +161,47 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	/************************************************************************* */
-	
-	 public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-	 	return new SequentialCommandGroup(
-	 		new InstantCommand(() -> {
-	 // Reset odometry for the first path you run during auto
-	 			if (isFirstPath) {
-	 this.resetOdometry(traj.getInitialHolonomicPose());
-	 }
-	 }),
-	 new PPSwerveControllerCommand(
-	 traj,
-	 this::getPose, // Pose supplier
-	 DriveConstants.kDriveKinematics, // SwerveDriveKinematics
-	 new PIDController(
-	 DashboardSubsystem.PIDConstants.getPlanner_X_kP(),
-	 0,
-	 DashboardSubsystem.PIDConstants.getPlanner_X_kD()), // TODO: X controller.
-	 //Tune these
-	 // values for your robot. Leaving
-	 // them 0 will only use
-	 // feedforwards.
-	 new PIDController(
-	 DashboardSubsystem.PIDConstants.getPlanner_Y_kP(),
-	 0,
-	 DashboardSubsystem.PIDConstants.getPlanner_Y_kD()), // TODO: controller
-	 //(usually the
-	 // same values as X controller)
-	 new PIDController(
-	 DashboardSubsystem.PIDConstants.getPlanner_Rot_kP(),
-	 0,
-	 DashboardSubsystem.PIDConstants.getPlanner_Rot_kD()), // TODO: Rotation controller. 
-	 // Tune
-	 // these values for your robot.
-	 // Leaving them 0 will only use
-	 // feedforwards.
-	 this::setModuleStates, // Module states consumer
-	 true, // Sho uld the path be automatically mirrored depending on alliance
-	 //color.
-	 // Optional, defaults to true
-	 this // Requires this drive subsystem
-	 ));
-	 }
-	 
+
+	public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+		return new SequentialCommandGroup(
+				new InstantCommand(() -> {
+					// Reset odometry for the first path you run during auto
+					if (isFirstPath) {
+						this.resetOdometry(traj.getInitialHolonomicPose());
+					}
+				}),
+				new PPSwerveControllerCommand(
+						traj,
+						this::getPose, // Pose supplier
+						DriveConstants.kDriveKinematics, // SwerveDriveKinematics
+						new PIDController(
+								DashboardSubsystem.PIDConstants.getPlanner_X_kP(),
+								0,
+								DashboardSubsystem.PIDConstants.getPlanner_X_kD()), // TODO: X controller.
+						// Tune these
+						// values for your robot. Leaving
+						// them 0 will only use
+						// feedforwards.
+						new PIDController(
+								DashboardSubsystem.PIDConstants.getPlanner_Y_kP(),
+								0,
+								DashboardSubsystem.PIDConstants.getPlanner_Y_kD()), // TODO: controller
+						// (usually the
+						// same values as X controller)
+						new PIDController(
+								DashboardSubsystem.PIDConstants.getPlanner_Rot_kP(),
+								0,
+								DashboardSubsystem.PIDConstants.getPlanner_Rot_kD()), // TODO: Rotation controller.
+						// Tune
+						// these values for your robot.
+						// Leaving them 0 will only use
+						// feedforwards.
+						this::setModuleStates, // Module states consumer
+						true, // Sho uld the path be automatically mirrored depending on alliance
+						// color.
+						// Optional, defaults to true
+						this // Requires this drive subsystem
+				));
+	}
 
 }

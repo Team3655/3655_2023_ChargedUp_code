@@ -46,8 +46,8 @@ public class SwerveModule extends SubsystemBase {
 			ModuleConstants.kModuleTurningControllerI,
 			ModuleConstants.kModuleTurningControllerD,
 			new TrapezoidProfile.Constraints(
-					ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
-					ModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
+					DriveConstants.kMaxModuleAngularSpeedRadiansPerSecond,
+					DriveConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
 
 	SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(
 			DriveConstants.ksVolts, DriveConstants.kvVoltSecondsPerMeter);
@@ -191,7 +191,6 @@ public class SwerveModule extends SubsystemBase {
 	public double getEncoderHeading() {
 		return this.m_turnEncoder.getAbsolutePosition();
 	}
-
 
 	@Override
 	public void periodic() {

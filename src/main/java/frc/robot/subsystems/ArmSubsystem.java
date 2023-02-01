@@ -1,16 +1,16 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 //import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
-import java.util.ArrayList;
 
 public class ArmSubsystem extends SubsystemBase {
 
 	// region properties
 
 	/** used for controling the height of the arm */
-	private enum ArmPoses {
+	public enum ArmPoses {
 		TUCKED,
 		LOW_SCORE,
 		MID_SCORE,
@@ -128,13 +128,7 @@ public class ArmSubsystem extends SubsystemBase {
 					break;
 			}
 
-			// Offset the minor arm based on the angle of the major arm (this makes the
-			// minor arm reletive to the robot)
-			// TODO: Re-enable if arms are no longer virtual four bar
-			// minorArmTargetTheta += majorArmTargetTheta;
 		}
-
-		// Swaps the sign of the target angle if the dominant side of the robot is back
 
 		// Address the major motors
 		m_majorArm.setReference();
@@ -148,25 +142,27 @@ public class ArmSubsystem extends SubsystemBase {
 	/**
 	 * Sets the height of the arm
 	 * 
-	 * @param pos can be (LOW_SCORE, MID_SCORE, HIGH_SCORE, LOW_INTAKE, MID_INTAKE,
-	 *            HIGH_INTAKE)
+	 * @param pose can be (LOW_SCORE, MID_SCORE, HIGH_SCORE, LOW_INTAKE, MID_INTAKE,
+	 *             HIGH_INTAKE)
 	 */
-	public void setArmState(ArmPoses pos) {
-		m_armState = pos;
+	public void setArmState(ArmPoses pose) {
+		m_armState = pose;
 	}
 
 	/**
 	 * Sets the dominant side of te robot
 	 * 
-	 * @param side if true the front will be dominant
+	 * @param isFront if true the front will be dominant
 	 */
-	public void setIsFront(boolean side) {
-		m_isFront = side;
+	public void setIsFront(boolean isFront) {
+		m_isFront = isFront;
 	}
 
 	/** Toggles the dominant side of the robot */
-	public void toggleSide() {
-		m_isFront = !m_isFront;
+	public CommandBase toggleSide() {
+		return runOnce(() -> {
+			setIsFront(!m_isFront);
+		});
 	}
 
 	// endregion
@@ -188,6 +184,13 @@ public class ArmSubsystem extends SubsystemBase {
 	/** ruturns true if the target dominant side of the robot is front */
 	public boolean getIsFront() {
 		return m_isFront;
+	}
+
+	public boolean getAtTarget(double deadBand) {
+		if (m_majorArm.getAtTarget(deadBand) && m_minorArm.getAtTarget(deadBand)) {
+			return true;
+		}
+		return false;
 	}
 
 	// endregion
