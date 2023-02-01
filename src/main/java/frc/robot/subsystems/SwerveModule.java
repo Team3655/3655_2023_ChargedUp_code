@@ -35,16 +35,16 @@ public class SwerveModule extends SubsystemBase {
 
 	private final PIDController m_drivePIDController = new PIDController(
 			DashboardSubsystem.PIDConstants.getDrive_kP(),
-			ModuleConstants.kModuleDriveControllerI,
+			DriveConstants.kModuleDriveControllerI,
 			DashboardSubsystem.PIDConstants.getDrive_kD());
 
 	private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
 			DashboardSubsystem.PIDConstants.getTurn_kP(),
-			ModuleConstants.kModuleTurningControllerI,
+			DriveConstants.kModuleTurningControllerI,
 			DashboardSubsystem.PIDConstants.getTurn_kD(),
 			new TrapezoidProfile.Constraints(
-					ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
-					ModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
+					DriveConstants.kMaxModuleAngularSpeedRadiansPerSecond,
+					DriveConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
 
 	SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(
 			DriveConstants.ksVolts, DriveConstants.kvVoltSecondsPerMeter);
@@ -187,7 +187,6 @@ public class SwerveModule extends SubsystemBase {
 	public double getEncoderHeading() {
 		return this.m_turnEncoder.getAbsolutePosition();
 	}
-
 
 	@Override
 	public void periodic() {

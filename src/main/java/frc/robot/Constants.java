@@ -19,30 +19,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 public final class Constants {
 	public static class ModuleConstants {
 
-		public static final double kModuleDriveControllerP = .1;
-		public static final double kModuleDriveControllerI = .0001;
-		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
-		public static final double kModuleTurningControllerP = .1;
-		public static final double kModuleTurningControllerI = .0001;
-		public static final double kModuleTurningControllerD = 0;
-		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4*Math.PI;
-		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 0;
-
-		// Constants set for the _SDS MK4i_
-		public static final double kdriveGearRatio = 1 / 6.75;
-		public static final double kturnGearRatio = 150 / 7; // TODO: Double check ratio
-		public static final double kwheelCircumference = Math.PI * 0.1524; // 6" to meters
-
-	}
-
-	public static class DriveConstants {
-		// TODO: Set feedforward values for drive
-		public static final double ksVolts = .5;
-		public static final double kvVoltSecondsPerMeter = 2.73;
-
-		public static final double ksTurning = 0;
-		public static final double kvTurning = 0;
-
 		// TODO: Set CAN ID's for motors and CANcoders
 		// NEO drive motor CAN ID's
 		public static final int kFrontLeftDriveMotorPort = 1;
@@ -63,14 +39,38 @@ public final class Constants {
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// TODO: Set angle offset for CANcoders
-		// Offset angle for absolute encoders (find this using Phoenix client)
-		public static final double kFrontLeftAngleZero = 60.6;
-		public static final double kRearLeftAngleZero = -34.9;
-		public static final double kFrontRightAngleZero = -112.7;
-		public static final double kRearRightAngleZero = -7.4;
+		// Offset angle for absolute encoders (find this using REV client)
+		public static final double kFrontLeftAngleZero = 0;
+		public static final double kRearLeftAngleZero = 0;
+		public static final double kFrontRightAngleZero = 0;
+		public static final double kRearRightAngleZero = 0;
+
+		// Constants set for the _SDS MK4i_
+		public static final double kdriveGearRatio = 1 / 6.75;
+		public static final double kturnGearRatio = 150 / 7; // TODO: Double check ratio
+		public static final double kwheelCircumference = Math.PI * 0.1524; // 6" to meters
+
+	}
+
+	public static class DriveConstants {
+		// TODO: Set feedforward values for drive
+		public static final double ksVolts = 1;
+		public static final double kvVoltSecondsPerMeter = 1;
+
+		public static final double ksTurning = 1;
+		public static final double kvTurning = 1;
+
+		public static final double kModuleDriveControllerP = .1;
+		public static final double kModuleDriveControllerI = .0001;
+		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
+		public static final double kModuleTurningControllerP = .1;
+		public static final double kModuleTurningControllerI = .0001;
+		public static final double kModuleTurningControllerD = 0;
+		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 0;
+		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 0;
 
 		// TODO: Set CAN ID for pigeon 2
-		public static final int kPigeonPort = 15;
+		public static final int kPigeonPort = 13;
 
 		// TODO: Set trackwidth and wheelbase in meters of physical robot
 		public static final double kTrackWidth = 24 / 39.37; // meters
@@ -84,7 +84,7 @@ public final class Constants {
 
 		// TODO: Change max speed
 		public static final double kMaxSpeedMetersPerSecond = 3;
-		public static final double kMaxRPM = (ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond * 60)
+		public static final double kMaxRPM = (kMaxModuleAngularSpeedRadiansPerSecond * 60)
 				/ (2 * Math.PI); // Convert rad/s to RPM
 
 		// TODO: Is gyro reversed?

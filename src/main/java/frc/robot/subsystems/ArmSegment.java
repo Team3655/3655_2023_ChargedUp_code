@@ -23,13 +23,11 @@ public class ArmSegment {
 	/** Real and target Angles for the arms */
 	private double m_targetTheta, m_realTheta;
 
-	/** The number of motor rotations per revolution of the arm (360°) */
+	/** Defined by the number of motor rotations per revolution of the arm (360°) */
 	private double m_gearRatio, m_gearRatioRadius;
 
 	/** the angle constraints on the arm */
 	private double m_minTheta, m_maxTheta;
-
-	/**  */
 
 	// endregion
 
@@ -150,7 +148,8 @@ public class ArmSegment {
 	 * @return the number of motor ticks required to turn theta
 	 */
 	public double getThetaToTicks(double theta) {
-		return theta * m_gearRatioRadius;
+		// return theta * (double) m_gearRatio;
+		return theta * (double) m_gearRatio / (2 * Math.PI);
 	}
 
 	/** Returns the actual angle of the real arm (not the same as the target) */

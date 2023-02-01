@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 //import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -129,8 +130,6 @@ public class ArmSubsystem extends SubsystemBase {
 
 		}
 
-		// Swaps the sign of the target angle if the dominant side of the robot is back
-
 		// Address the major motors
 		m_majorArm.setReference();
 		// Address the minor motors
@@ -153,15 +152,17 @@ public class ArmSubsystem extends SubsystemBase {
 	/**
 	 * Sets the dominant side of te robot
 	 * 
-	 * @param side if true the front will be dominant
+	 * @param isFront if true the front will be dominant
 	 */
-	public void setIsFront(boolean side) {
-		m_isFront = side;
+	public void setIsFront(boolean isFront) {
+		m_isFront = isFront;
 	}
 
 	/** Toggles the dominant side of the robot */
-	public void toggleSide() {
-		m_isFront = !m_isFront;
+	public CommandBase toggleSide() {
+		return runOnce(() -> {
+			setIsFront(!m_isFront);
+		});
 	}
 
 	// endregion
