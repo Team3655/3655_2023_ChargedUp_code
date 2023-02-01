@@ -29,10 +29,14 @@ public class ArmSegment {
 	/** the angle constraints on the arm */
 	private double m_minTheta, m_maxTheta;
 
+	/** Controls the direction of the arm */
+	private int m_sign;
+
 	// endregion
 
 	public ArmSegment(int rightPort, int leftPort, double gearRatio) {
 
+		m_sign = 1;
 		this.m_gearRatio = gearRatio;
 		this.m_gearRatioRadius = m_gearRatio / (2 * Math.PI);
 
@@ -60,9 +64,6 @@ public class ArmSegment {
 		m_rightEncoder = m_rightMotor.getEncoder();
 		m_rightEncoder = m_rightMotor.getEncoder();
 
-		// motors to invert
-		m_leftMotor.setInverted(true);
-
 		// set current limits
 		m_rightMotor.setSmartCurrentLimit(30);
 		m_leftMotor.setSmartCurrentLimit(30);
@@ -77,12 +78,21 @@ public class ArmSegment {
 		m_PIDController.setD(0);
 		m_PIDController.setOutputRange(-1, 1);
 
-		// sets left motor to follow right
-		m_leftMotor.follow(m_rightMotor);
+		// sets left motor to follow right and sets the left to inverted
+		m_leftMotor.follow(m_rightMotor, true);
 		// endregion
 	}
 
 	// region: setters
+
+	/**
+	 * Sets the sign that controls the dominant side of the robot
+	 * 
+	 * @param sign the Sign to set
+	 */
+	public void setSign(int sign) {
+		m_sign = sign;
+	}
 
 	/** sets the min and max target angle of */
 	public void setConstraints(int min, int max) {
@@ -109,7 +119,7 @@ public class ArmSegment {
 	/** Sets the pid referance point to the arc length of the target angle */
 	public void setReference() {
 		m_PIDController.setReference(
-				getThetaToTicks(m_targetTheta),
+				getThetaToTicks(m_targetTheta * m_sign),
 				CANSparkMax.ControlType.kPosition);
 	}
 
