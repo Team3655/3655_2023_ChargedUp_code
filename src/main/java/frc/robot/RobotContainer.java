@@ -6,7 +6,6 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ArmPose;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -33,6 +32,7 @@ public class RobotContainer {
 	private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 	private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
 	private final DashboardSubsystem m_dashboardSubsystem = new DashboardSubsystem(m_driveSubsystem);
+	private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
 	// Replace with CommandPS4Controller or CommandJoystick if needed
 	private final CommandXboxController m_driverController = new CommandXboxController(

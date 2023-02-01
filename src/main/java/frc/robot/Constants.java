@@ -26,24 +26,16 @@ public final class Constants {
 		public static final double kModuleTurningControllerI = .0001;
 		public static final double kModuleTurningControllerD = 0;
 
-		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4*Math.PI;
-		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
+
 
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1 / 6.75;
 		public static final double kturnGearRatio = 150 / 7; 
 		public static final double kwheelCircumference = Math.PI * 0.1016; // 4" to meters
-	}
 
-	public static class DriveConstants {
-		// TODO: Set feedforward values for drive
-		public static final double ksVolts = .1; 
-		public static final double kvVoltSecondsPerMeter = .1;
 
-		public static final double ksTurning = .17161;//Tuned February 2, 2023
-		public static final double kvTurning = .43205;
 
-		// NEO drive motor CAN ID's
+						// NEO drive motor CAN ID's
 		public static final int kFrontLeftDriveMotorPort = 1;
 		public static final int kRearLeftDriveMotorPort = 7;
 		public static final int kFrontRightDriveMotorPort = 4;
@@ -68,29 +60,28 @@ public final class Constants {
 		public static final double kFrontRightAngleZero = 0;
 		public static final double kRearRightAngleZero = 0;
 
+	}
+
+	public static class DriveConstants {
+		// TODO: Set feedforward values for drive
+		public static final double ksVolts = .1; 
+		public static final double kvVoltSecondsPerMeter = .1;
+
+		public static final double ksTurning = .17161;//Tuned February 2, 2023
+		public static final double kvTurning = .43205;
+
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1 / 6.75;
 		public static final double kturnGearRatio = 150 / 7; // TODO: Double check ratio
 		public static final double kwheelCircumference = Math.PI * 0.1524; // 6" to meters
 
-	}
+		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4*Math.PI;
+		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
 
-	public static class DriveConstants {
-		// TODO: Set feedforward values for drive
-		public static final double ksVolts = 1;
-		public static final double kvVoltSecondsPerMeter = 1;
-
-		public static final double ksTurning = 1;
-		public static final double kvTurning = 1;
-
-		public static final double kModuleDriveControllerP = .1;
-		public static final double kModuleDriveControllerI = .0001;
-		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
-		public static final double kModuleTurningControllerP = .1;
-		public static final double kModuleTurningControllerI = .0001;
-		public static final double kModuleTurningControllerD = 0;
-		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 0;
-		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 0;
+		// TODO: Change max speed
+		public static final double kMaxSpeedMetersPerSecond = 3;
+		public static final double kMaxRPM = (kMaxModuleAngularSpeedRadiansPerSecond * 60)
+				/ (2 * Math.PI); // Convert rad/s to RPM
 
 		// TODO: Set CAN ID for pigeon 2
 		public static final int kPigeonPort = 13;
@@ -105,15 +96,14 @@ public final class Constants {
 				new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
 				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-		// TODO: Change max speed
-		public static final double kMaxSpeedMetersPerSecond = 3;
-		public static final double kMaxRPM = (kMaxModuleAngularSpeedRadiansPerSecond * 60)
-				/ (2 * Math.PI); // Convert rad/s to RPM
 
 		// TODO: Is gyro reversed?
-		public static final boolean kGyroReversed = false;
+		public static final boolean kGyroReversed = false;		
+
 
 	}
+
+
 
 	/**
 	 * The constants pertaining to the drive station
