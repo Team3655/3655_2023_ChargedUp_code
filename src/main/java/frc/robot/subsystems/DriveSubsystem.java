@@ -5,8 +5,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
-//import com.pathplanner.lib.PathPlannerTrajectory;
-//import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -53,8 +55,8 @@ public class DriveSubsystem extends SubsystemBase {
 	// TODO: Use variable here instead of entries below?
 	private SwerveModulePosition[] m_swervePosition = new SwerveModulePosition[] {
 			m_frontLeft.getPosition(),
-			m_rearLeft.getPosition(),
 			m_frontRight.getPosition(),
+			m_rearLeft.getPosition(),
 			m_rearRight.getPosition()
 	};
 
@@ -100,8 +102,17 @@ public class DriveSubsystem extends SubsystemBase {
 		m_rearLeft.setDesiredState(swerveModuleStates[2]);
 		m_rearRight.setDesiredState(swerveModuleStates[3]);
 
-		// Telemetry
-		// TODO: Add telemetry to read data
+		SmartDashboard.putNumber("FL Turn Output", m_frontLeft.getTurnOutput(swerveModuleStates[0]));
+		SmartDashboard.putNumber("FR Turn Output", m_frontRight.getTurnOutput(swerveModuleStates[1]));
+		SmartDashboard.putNumber("RL Turn Output", m_rearLeft.getTurnOutput(swerveModuleStates[2]));
+		SmartDashboard.putNumber("RR Turn Output", m_rearRight.getTurnOutput(swerveModuleStates[3]));
+
+		SmartDashboard.putNumber("FL Drive Output", m_frontLeft.getDriveOutput(swerveModuleStates[0]));
+		SmartDashboard.putNumber("FR Drive Output", m_frontRight.getDriveOutput(swerveModuleStates[1]));
+		SmartDashboard.putNumber("RL Drive Output", m_rearLeft.getDriveOutput(swerveModuleStates[2]));
+		SmartDashboard.putNumber("RR Drive Output", m_rearRight.getDriveOutput(swerveModuleStates[3]));
+
+
 
 	}
 
@@ -109,8 +120,8 @@ public class DriveSubsystem extends SubsystemBase {
 		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
 
 		m_frontLeft.setDesiredState(desiredStates[0]);
-		m_rearLeft.setDesiredState(desiredStates[1]);
-		m_frontRight.setDesiredState(desiredStates[2]);
+		m_frontRight.setDesiredState(desiredStates[1]);
+		m_rearLeft.setDesiredState(desiredStates[2]);
 		m_rearRight.setDesiredState(desiredStates[3]);
 
 	}
@@ -151,49 +162,48 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	/************************************************************************* */
-	/**
-	 * public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean
-	 * isFirstPath) {
-	 * return new SequentialCommandGroup(
-	 * new InstantCommand(() -> {
-	 * // Reset odometry for the first path you run during auto
-	 * if (isFirstPath) {
-	 * this.resetOdometry(traj.getInitialHolonomicPose());
-	 * }
-	 * }),
-	 * new PPSwerveControllerCommand(
-	 * traj,
-	 * this::getPose, // Pose supplier
-	 * DriveConstants.kDriveKinematics, // SwerveDriveKinematics
-	 * new PIDController(
-	 * DashboardSubsystem.PIDConstants.getPlanner_X_kP(),
-	 * 0,
-	 * DashboardSubsystem.PIDConstants.getPlanner_X_kD()), // TODO: X controller.
-	 * Tune these
-	 * // values for your robot. Leaving
-	 * // them 0 will only use
-	 * // feedforwards.
-	 * new PIDController(
-	 * DashboardSubsystem.PIDConstants.getPlanner_Y_kP(),
-	 * 0,
-	 * DashboardSubsystem.PIDConstants.getPlanner_Y_kD()), // TODO: controller
-	 * (usually the
-	 * // same values as X controller)
-	 * new PIDController(
-	 * DashboardSubsystem.PIDConstants.getPlanner_Rot_kP(),
-	 * 0,
-	 * DashboardSubsystem.PIDConstants.getPlanner_Rot_kD()), // TODO: Rotation
-	 * controller. Tune
-	 * // these values for your robot.
-	 * // Leaving them 0 will only use
-	 * // feedforwards.
-	 * this::setModuleStates, // Module states consumer
-	 * true, // Should the path be automatically mirrored depending on alliance
-	 * color.
-	 * // Optional, defaults to true
-	 * this // Requires this drive subsystem
-	 * ));
-	 * }
-	 */
+	
+	 public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+	 	return new SequentialCommandGroup(
+	 		new InstantCommand(() -> {
+	 // Reset odometry for the first path you run during auto
+	 			if (isFirstPath) {
+	 this.resetOdometry(traj.getInitialHolonomicPose());
+	 }
+	 }),
+	 new PPSwerveControllerCommand(
+	 traj,
+	 this::getPose, // Pose supplier
+	 DriveConstants.kDriveKinematics, // SwerveDriveKinematics
+	 new PIDController(
+	 DashboardSubsystem.PIDConstants.getPlanner_X_kP(),
+	 0,
+	 DashboardSubsystem.PIDConstants.getPlanner_X_kD()), // TODO: X controller.
+	 //Tune these
+	 // values for your robot. Leaving
+	 // them 0 will only use
+	 // feedforwards.
+	 new PIDController(
+	 DashboardSubsystem.PIDConstants.getPlanner_Y_kP(),
+	 0,
+	 DashboardSubsystem.PIDConstants.getPlanner_Y_kD()), // TODO: controller
+	 //(usually the
+	 // same values as X controller)
+	 new PIDController(
+	 DashboardSubsystem.PIDConstants.getPlanner_Rot_kP(),
+	 0,
+	 DashboardSubsystem.PIDConstants.getPlanner_Rot_kD()), // TODO: Rotation controller. 
+	 // Tune
+	 // these values for your robot.
+	 // Leaving them 0 will only use
+	 // feedforwards.
+	 this::setModuleStates, // Module states consumer
+	 true, // Sho uld the path be automatically mirrored depending on alliance
+	 //color.
+	 // Optional, defaults to true
+	 this // Requires this drive subsystem
+	 ));
+	 }
+	 
 
 }

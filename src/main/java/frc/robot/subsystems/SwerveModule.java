@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -19,6 +20,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
@@ -60,11 +62,16 @@ public class SwerveModule extends SubsystemBase {
 		m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
 		m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
+		m_turningMotor.restoreFactoryDefaults();
+		m_driveMotor.restoreFactoryDefaults();
+
 		// Configure current limits for motors - prevents disabling/brownouts
 		// TODO: Check if current limit works/is necessary
-		m_driveMotor.setSecondaryCurrentLimit(40);
+		m_driveMotor.setSecondaryCurrentLimit(30);
+		m_driveMotor.setSmartCurrentLimit(30);
 		m_driveMotor.setIdleMode(IdleMode.kBrake);
 		m_turningMotor.setIdleMode(IdleMode.kBrake);
+		m_turningMotor.setSmartCurrentLimit(30);
 
 		// Configure the encoders for both motors
 		// CANcoder defaults range 0 to 360. WPILib swerve module has angles from -180
@@ -72,8 +79,11 @@ public class SwerveModule extends SubsystemBase {
 		// Changed range to accomodate this issue
 
 		this.m_turnEncoder = new CANCoder(turningEncoderPorts);
-		this.m_turnEncoder.configMagnetOffset(angleZero);
+		this.m_turnEncoder.configFactoryDefault();
+		this.m_turnEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+		this.m_turnEncoder.configMagnetOffset(-1 * angleZero);
 		this.m_turnEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+
 		this.m_turnEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
 
 		// Set turning PID output to allow the swerve modules to treat the min/max as
@@ -109,9 +119,9 @@ public class SwerveModule extends SubsystemBase {
 
 	public void setDesiredState(SwerveModuleState desiredState) {
 
-		double m_speedMetersPerSecond = m_driveMotor.getEncoder(Type.kHallSensor, 4096).getVelocity()
+		double m_speedMetersPerSecond = m_driveMotor.getEncoder().getVelocity()
 				* ModuleConstants.kdriveGearRatio
-				* ModuleConstants.kdriveGearRatio
+				* ModuleConstants.kwheelCircumference
 				* (1 / 60); // 1/Minutes to 1/seconds
 
 		double m_moduleAngleRadians = Math.toRadians(m_turnEncoder.getAbsolutePosition());
@@ -130,6 +140,43 @@ public class SwerveModule extends SubsystemBase {
 		// Set the motor voltages
 		m_driveMotor.setVoltage(driveOutput);
 		m_turningMotor.setVoltage(turnOutput);
+
+	}
+
+	public double getTurnOutput(SwerveModuleState desiredState) {
+
+		double m_moduleAngleRadians = Math.toRadians(m_turnEncoder.getAbsolutePosition());
+
+		// Optimize the reference state to avoid spinning further than 90 degrees
+		// to desired state
+		SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_moduleAngleRadians));
+
+		final var turnOutput = m_turningPIDController.calculate(m_moduleAngleRadians, state.angle.getRadians())
+				+ turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
+
+		return turnOutput;
+
+	}
+
+	public double getDriveOutput(SwerveModuleState desiredState) {
+
+		double m_speedMetersPerSecond = m_driveMotor.getEncoder(Type.kHallSensor, 42).getVelocity()
+				* ModuleConstants.kdriveGearRatio
+				* ModuleConstants.kwheelCircumference
+				* (1 / 60); // 1/Minutes to 1/seconds
+
+		double m_moduleAngleRadians = Math.toRadians(m_turnEncoder.getAbsolutePosition());
+
+		// Optimize the reference state to avoid spinning further than 90 degrees
+		// to desired state
+		SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_moduleAngleRadians));
+
+		// Calculate the drive and turn motor outputs using PID and feedforward
+		final double driveOutput = m_drivePIDController.calculate(m_speedMetersPerSecond, state.speedMetersPerSecond)
+				+ driveFeedForward.calculate(state.speedMetersPerSecond);
+
+		return driveOutput;
+
 	}
 
 	public void resetEncoders() {
@@ -141,8 +188,10 @@ public class SwerveModule extends SubsystemBase {
 		return this.m_turnEncoder.getAbsolutePosition();
 	}
 
+
 	@Override
 	public void periodic() {
+		SmartDashboard.putNumber("Turn kP???", DashboardSubsystem.PIDConstants.getTurn_kP());
 		// This method will be called once per scheduler run
 	}
 }

@@ -50,7 +50,7 @@
   {
     "name": "/Shuffleboard/PID/Drive kP",
     "type": "double",
-    "value": 5.2,
+    "value": 9.0,
     "properties": {
       "persistent": true
     }

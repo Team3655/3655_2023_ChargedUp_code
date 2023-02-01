@@ -7,6 +7,9 @@
   "NetworkTables": {
     "persistent": {
       "Shuffleboard": {
+        "PID": {
+          "open": true
+        },
         "open": true
       }
     }
