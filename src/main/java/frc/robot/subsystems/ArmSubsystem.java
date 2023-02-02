@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-//import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 
@@ -22,7 +21,7 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	/** controls the side of the robot the arm is on */
-	private boolean m_isFront, m_isSwitching;
+	private boolean m_isFront;
 
 	/** the variable setting the height of the arm */
 	ArmPoses m_armState, m_prevArmState;
@@ -37,7 +36,6 @@ public class ArmSubsystem extends SubsystemBase {
 
 		// the default state of the arms
 		m_isFront = true;
-		m_isSwitching = false;
 
 		setArmState(ArmPoses.TUCKED);
 		m_armState = getArmState();
@@ -169,7 +167,6 @@ public class ArmSubsystem extends SubsystemBase {
 
 	/** Toggles the dominant side of the robot */
 	public CommandBase toggleSide() {
-		m_isSwitching = true;
 		m_isFront = !m_isFront;
 		return runOnce(() -> {
 			setDominantSide(m_isFront);

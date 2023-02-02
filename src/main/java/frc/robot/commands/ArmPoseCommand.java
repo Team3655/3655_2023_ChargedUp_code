@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ArmPoseCommand extends CommandBase {
 	@SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 	private ArmSubsystem m_armSubsystem;
-	private ArmSubsystem.ArmPoses m_armState;
-	private ArmSubsystem.ArmPoses m_prevArmState;
 
 	/**
 	 * Creates a new ArmPoseCommand.
@@ -28,7 +26,6 @@ public class ArmPoseCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		m_prevArmState = m_armSubsystem.getArmState();
 		m_armSubsystem.setArmState(ArmSubsystem.ArmPoses.TUCKED);
 	}
 

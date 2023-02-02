@@ -137,12 +137,20 @@ public final class Constants {
 		public static final int kLeftMinorArmPort = 104;
 
 		// Arm PID constants
-		public static final int kMajorArmP = 0;
-		public static final int kMajorArmI = 0;
-		public static final int kMajorArmD = 0;
-		public static final int kMinorArmP = 0;
-		public static final int kMinorArmI = 0;
-		public static final int kMinorArmD = 0;
+		public static final double kMajorArmP = 0;
+		public static final double kMajorArmI = 0;
+		public static final double kMajorArmD = 0;
+		public static final double kMinorArmP = 0;
+		public static final double kMinorArmI = 0;
+		public static final double kMinorArmD = 0;
+
+	}
+
+	public static class IntakeConstants {
+
+		public static final int kRightSuckerPort = 0;
+		public static final int kCenterSuckerPort = 0;
+		public static final int kLeftSuckerPort = 0;
 
 	}
 
