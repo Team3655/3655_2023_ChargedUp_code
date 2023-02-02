@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants.ArmConstants;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -30,13 +29,13 @@ public class ArmSegment {
 	private double m_minTheta, m_maxTheta;
 
 	/** Controls the direction of the arm */
-	private int m_sign;
+	private int m_targetSign;
 
 	// endregion
 
 	public ArmSegment(int rightPort, int leftPort, double gearRatio) {
 
-		m_sign = 1;
+		m_targetSign = 1;
 		this.m_gearRatio = gearRatio;
 		this.m_gearRatioRadius = m_gearRatio / (2 * Math.PI);
 
@@ -80,6 +79,7 @@ public class ArmSegment {
 
 		// sets left motor to follow right and sets the left to inverted
 		m_leftMotor.follow(m_rightMotor, true);
+
 		// endregion
 	}
 
@@ -91,7 +91,7 @@ public class ArmSegment {
 	 * @param sign the Sign to set
 	 */
 	public void setSign(int sign) {
-		m_sign = sign;
+		m_targetSign = sign;
 	}
 
 	/** sets the min and max target angle of */
@@ -119,7 +119,7 @@ public class ArmSegment {
 	/** Sets the pid referance point to the arc length of the target angle */
 	public void setReference() {
 		m_PIDController.setReference(
-				getThetaToTicks(m_targetTheta * m_sign),
+				getThetaToTicks(m_targetTheta * m_targetSign),
 				CANSparkMax.ControlType.kPosition);
 	}
 

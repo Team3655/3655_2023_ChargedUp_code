@@ -7,12 +7,14 @@ package frc.robot;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmPoseCommand;
+import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DashboardSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ArmSubsystem.ArmPoses;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
@@ -50,13 +52,10 @@ public class RobotContainer {
 
 	/**
 	 * Use this method to define your trigger->command mappings. Triggers can be
-	 * created via the
-	 * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-	 * an arbitrary
-	 * predicate, or via the named factories in {@link
+	 * created via the {@link Trigger#Trigger(java.util.function.BooleanSupplier)}
+	 * constructor with an arbitrary predicate, or via the named factories in {@link
 	 * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-	 * {@link
-	 * CommandXboxController
+	 * {@link CommandXboxController
 	 * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
 	 * PS4} controllers or
 	 * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
@@ -69,7 +68,8 @@ public class RobotContainer {
 		// Schedule `exampleMethodCommand` when the Xbox controller's B button is
 		// pressed,
 		// cancelling on release.
-		m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+		m_driverController.a().onTrue(new ArmPoseCommand(m_armSubsystem, ArmPoses.MID_SCORE));
+		m_driverController.b().onTrue(new ArmPoseCommand(m_armSubsystem, ArmPoses.MID_INTAKE));
 
 		// Swerve Drive method is set as default for drive subsystem
 		m_driveSubsystem.setDefaultCommand(
