@@ -41,15 +41,28 @@ public class IntakeSubsystem extends SubsystemBase {
 		m_centerSuckerMotor.restoreFactoryDefaults();
 		m_leftSuckerMotor.restoreFactoryDefaults();
 
-		// set current limits
-		m_rightSuckerMotor.setSmartCurrentLimit(IntakeConstants.kSideSuckerCurrentLimit);
-		m_centerSuckerMotor.setSmartCurrentLimit(IntakeConstants.kCenterSuckerCurrentLimit);
-		m_leftSuckerMotor.setSmartCurrentLimit(IntakeConstants.kSideSuckerCurrentLimit);
+		// set current limits TODO: use stallimit with an rpm
+		// m_rightSuckerMotor.setSmartCurrentLimit(IntakeConstants.kSideSuckerCurrentLimit);
+		// m_centerSuckerMotor.setSmartCurrentLimit(IntakeConstants.kCenterSuckerCurrentLimit);
+		// m_leftSuckerMotor.setSmartCurrentLimit(IntakeConstants.kSideSuckerCurrentLimit);
 
 		// sets motor defaults to break
 		m_rightSuckerMotor.setIdleMode(IdleMode.kCoast);
 		m_centerSuckerMotor.setIdleMode(IdleMode.kCoast);
 		m_leftSuckerMotor.setIdleMode(IdleMode.kCoast);
+
+		/**
+		 * In order to use PID functionality for a controller, a SparkMaxPIDController
+		 * object is constructed by calling the getPIDController() method on an existing
+		 * CANSparkMax object
+		 */
+		m_centerPIDController = m_centerSuckerMotor.getPIDController();
+		m_sidePIDController = m_rightSuckerMotor.getPIDController();
+
+		// Encoder object created to display velocity values
+		m_rightSuckerEncoder = m_rightSuckerMotor.getEncoder();
+		m_centerSuckerEncoder = m_centerSuckerMotor.getEncoder();
+		m_leftSuckerEncoder = m_leftSuckerMotor.getEncoder();
 
 	}
 
@@ -65,17 +78,6 @@ public class IntakeSubsystem extends SubsystemBase {
 				() -> {
 					/* one-time action goes here */
 				});
-	}
-
-	/**
-	 * An example method querying a boolean state of the subsystem (for example, a
-	 * digital sensor).
-	 *
-	 * @return value of some boolean subsystem state, such as a digital sensor.
-	 */
-	public boolean exampleCondition() {
-		// Query some boolean state, such as a digital sensor.
-		return false;
 	}
 
 	@Override

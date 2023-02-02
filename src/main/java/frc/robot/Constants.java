@@ -136,6 +136,10 @@ public final class Constants {
 		public static final int kRightMinorArmPort = 103;
 		public static final int kLeftMinorArmPort = 104;
 
+		// current limits of the arms
+		public static final int kMajorArmCurrentLimit = 30;
+		public static final int kMinorArmCurrentLimit = 30;
+
 		// Arm PID constants
 		public static final double kMajorArmP = 0;
 		public static final double kMajorArmI = 0;
@@ -148,9 +152,13 @@ public final class Constants {
 
 	public static class IntakeConstants {
 
+		// NEO 550 Sucker motor CAN ID's
 		public static final int kRightSuckerPort = 0;
 		public static final int kCenterSuckerPort = 0;
 		public static final int kLeftSuckerPort = 0;
+
+		public static final int kCenterSuckerCurrentLimit = 30;
+		public static final int kSideSuckerCurrentLimit = 20;
 
 	}
 

@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.Objects;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.subsystems.DashboardSubsystem;
+//import frc.robot.subsystems.DashboardSubsystem.PIDConstants;
 
 public class SwerveModule extends SubsystemBase {
 	/** Creates a new SwerveModule. */
@@ -75,7 +77,8 @@ public class SwerveModule extends SubsystemBase {
 		m_turningMotor.setSmartCurrentLimit(30);
 
 		// Configure the encoders for both motors
-		// CANcoder defaults range 0 to 360. WPILib swerve module has angles from -180 to 180
+		// CANcoder defaults range 0 to 360. WPILib swerve module has angles from -180
+		// to 180
 		// Changed range to accomodate this issue
 
 		m_turnEncoder = new CANCoder(turningEncoderPorts);
@@ -90,7 +93,8 @@ public class SwerveModule extends SubsystemBase {
 		m_angularEncoder = m_turningMotor.getEncoder();
 		m_angularEncoder.setPosition(m_turnEncoder.getAbsolutePosition());
 
-		// Set turning PID output to allow the swerve modules to treat the min/max as continuous
+		// Set turning PID output to allow the swerve modules to treat the min/max as
+		// continuous
 		// Optimizes how the modules chooses to go to a desired position
 		m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -148,37 +152,45 @@ public class SwerveModule extends SubsystemBase {
 
 	// public double getTurnOutput(SwerveModuleState desiredState) {
 
-	// 	double m_moduleAngleRadians = Math.toRadians(m_turnEncoder.getAbsolutePosition());
+	// double m_moduleAngleRadians =
+	// Math.toRadians(m_turnEncoder.getAbsolutePosition());
 
-	// 	// Optimize the reference state to avoid spinning further than 90 degrees
-	// 	// to desired state
-	// 	SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_moduleAngleRadians));
+	// // Optimize the reference state to avoid spinning further than 90 degrees
+	// // to desired state
+	// SwerveModuleState state = SwerveModuleState.optimize(desiredState, new
+	// Rotation2d(m_moduleAngleRadians));
 
-	// 	final var turnOutput = m_turningPIDController.calculate(m_moduleAngleRadians, state.angle.getRadians())
-	// 			+ turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
+	// final var turnOutput = m_turningPIDController.calculate(m_moduleAngleRadians,
+	// state.angle.getRadians())
+	// + turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-	// 	return turnOutput;
+	// return turnOutput;
 
 	// }
 
 	// public double getDriveOutput(SwerveModuleState desiredState) {
 
-	// 	double m_speedMetersPerSecond = m_driveMotor.getEncoder(Type.kHallSensor, 42).getVelocity()
-	// 			* ModuleConstants.kdriveGearRatio
-	// 			* ModuleConstants.kwheelCircumference
-	// 			* (1 / 60); // 1/Minutes to 1/seconds
+	// double m_speedMetersPerSecond = m_driveMotor.getEncoder(Type.kHallSensor,
+	// 42).getVelocity()
+	// * ModuleConstants.kdriveGearRatio
+	// * ModuleConstants.kwheelCircumference
+	// * (1 / 60); // 1/Minutes to 1/seconds
 
-	// 	double m_moduleAngleRadians = Math.toRadians(m_turnEncoder.getAbsolutePosition());
+	// double m_moduleAngleRadians =
+	// Math.toRadians(m_turnEncoder.getAbsolutePosition());
 
-	// 	// Optimize the reference state to avoid spinning further than 90 degrees
-	// 	// to desired state
-	// 	SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_moduleAngleRadians));
+	// // Optimize the reference state to avoid spinning further than 90 degrees
+	// // to desired state
+	// SwerveModuleState state = SwerveModuleState.optimize(desiredState, new
+	// Rotation2d(m_moduleAngleRadians));
 
-	// 	// Calculate the drive and turn motor outputs using PID and feedforward
-	// 	final double driveOutput = m_drivePIDController.calculate(m_speedMetersPerSecond, state.speedMetersPerSecond)
-	// 			+ driveFeedForward.calculate(state.speedMetersPerSecond);
+	// // Calculate the drive and turn motor outputs using PID and feedforward
+	// final double driveOutput =
+	// m_drivePIDController.calculate(m_speedMetersPerSecond,
+	// state.speedMetersPerSecond)
+	// + driveFeedForward.calculate(state.speedMetersPerSecond);
 
-	// 	return driveOutput;
+	// return driveOutput;
 
 	// }
 

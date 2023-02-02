@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.Objects;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -62,10 +62,6 @@ public class ArmSegment {
 		// Encoder object created to display position values
 		m_rightEncoder = m_rightMotor.getEncoder();
 		m_rightEncoder = m_rightMotor.getEncoder();
-
-		// set current limits
-		m_rightMotor.setSmartCurrentLimit(30);
-		m_leftMotor.setSmartCurrentLimit(30);
 
 		// sets motor defaults to break
 		m_rightMotor.setIdleMode(IdleMode.kBrake);
@@ -144,6 +140,16 @@ public class ArmSegment {
 		m_PIDController.setP(P);
 		m_PIDController.setI(I);
 		m_PIDController.setD(D);
+	}
+
+	/**
+	 * Used to set the maximum power draw of the arm
+	 * 
+	 * @param limit the maximum allowed power draw
+	 */
+	public void setSmartCurrentLimit(int limit) {
+		m_rightMotor.setSmartCurrentLimit(limit);
+		m_leftMotor.setSmartCurrentLimit(limit);
 	}
 
 	// endregion
