@@ -67,10 +67,10 @@ public class RobotContainer {
 		new Trigger(m_exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
 
 		// Schedule `exampleMethodCommand` when the Xbox controller's B button is
-		// pressed,
-		// cancelling on release.
+		// pressed, cancelling on release.
 		m_driverController.a().onTrue(new ArmPoseCommand(m_armSubsystem, ArmPoses.MID_SCORE));
 		m_driverController.b().onTrue(new ArmPoseCommand(m_armSubsystem, ArmPoses.MID_INTAKE));
+		m_driverController.y().onTrue(new ArmPoseCommand(m_armSubsystem, ArmPoses.LOW_SCORE));
 
 		// Swerve Drive method is set as default for drive subsystem
 		m_driveSubsystem.setDefaultCommand(

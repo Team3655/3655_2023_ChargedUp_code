@@ -131,22 +131,22 @@ public final class Constants {
 		public static final int kMinorArmLength = 23;
 
 		// NEO turning motor CAN ID's
-		public static final int kRightMajorArmPort = 101;
-		public static final int kLeftMajorArmPort = 102;
-		public static final int kRightMinorArmPort = 103;
-		public static final int kLeftMinorArmPort = 104;
+		public static final int kRightMajorArmPort = 14;
+		public static final int kLeftMajorArmPort = 15;
+		public static final int kRightMinorArmPort = 16;
+		public static final int kLeftMinorArmPort = 17;
 
 		// current limits of the arms
 		public static final int kMajorArmCurrentLimit = 30;
 		public static final int kMinorArmCurrentLimit = 30;
 
 		// Arm PID constants
-		public static final double kMajorArmP = 0;
-		public static final double kMajorArmI = 0;
-		public static final double kMajorArmD = 0;
-		public static final double kMinorArmP = 0;
-		public static final double kMinorArmI = 0;
-		public static final double kMinorArmD = 0;
+		public static final double kMajorArmP = .1;
+		public static final double kMajorArmI = 1e-4;
+		public static final double kMajorArmD = .5;
+		public static final double kMinorArmP = 1;
+		public static final double kMinorArmI = 1;
+		public static final double kMinorArmD = .5;
 
 	}
 
@@ -157,8 +157,11 @@ public final class Constants {
 		public static final int kCenterSuckerPort = 0;
 		public static final int kLeftSuckerPort = 0;
 
-		public static final int kCenterSuckerCurrentLimit = 30;
-		public static final int kSideSuckerCurrentLimit = 20;
+		public static final int kCenterSuckerStallCurrentLimit = 30;
+		public static final int kSideSuckerStallCurrentLimit = 20;
+
+		public static final int kCenterSuckerFreeCurrentLimit = 30;
+		public static final int kSideSuckerFreeCurrentLimit = 20;
 
 	}
 

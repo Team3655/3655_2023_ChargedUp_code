@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -28,43 +30,47 @@ public class ArmSubsystem extends SubsystemBase {
 	ArmPoses m_armState, m_prevArmState;
 
 	// create arms
-	ArmSegment m_majorArm;
-	ArmSegment m_minorArm;
+	public ArmSegment m_majorArm;
+	public ArmSegment m_minorArm;
 
 	// endregion
 
 	public ArmSubsystem() {
-
-		// the default state of the arms
-		m_isFront = true;
-
-		setArmState(ArmPoses.TUCKED);
-		m_armState = getArmState();
-
 		// region: def arms
 
 		// major arm defs
 		m_majorArm = new ArmSegment(
 				ArmConstants.kRightMajorArmPort,
 				ArmConstants.kLeftMajorArmPort,
-				ArmConstants.kMajorArmTicks);
+				ArmConstants.kMajorArmTicks,
+				true);
 
 		m_majorArm.setPID(
 				ArmConstants.kMajorArmP,
 				ArmConstants.kMajorArmI,
 				ArmConstants.kMajorArmD);
 
+		m_majorArm.setConstraints(-90, 90);
+
 		// minor arm defs
 		m_minorArm = new ArmSegment(
 				ArmConstants.kRightMinorArmPort,
 				ArmConstants.kLeftMinorArmPort,
-				ArmConstants.kMinorArmTicks);
+				ArmConstants.kMinorArmTicks,
+				false);
 
 		m_minorArm.setPID(
 				ArmConstants.kMinorArmP,
 				ArmConstants.kMinorArmI,
 				ArmConstants.kMinorArmD);
+
+		m_minorArm.setConstraints(-90, 90);
 		// endregion
+
+		// the default state of the arms
+		m_isFront = true;
+
+		// setArmState(ArmPoses.TUCKED);
 	}
 
 	@Override
@@ -94,50 +100,55 @@ public class ArmSubsystem extends SubsystemBase {
 			// When the arms are tucked in the center of the robot (this is the only legal
 			// starting position)
 			case TUCKED:
-				m_majorArm.setTagetTheta(0);
-				m_minorArm.setTagetTheta(0);
+				m_majorArm.setTargetTheta(0);
+				m_minorArm.setTargetTheta(0);
 				break;
 
 			// Used for scoring in the lowest "hybrid" node
 			case LOW_SCORE:
-				m_majorArm.setTagetTheta(45);
-				m_minorArm.setTagetTheta(90);
+				m_majorArm.setTargetTheta(45);
+				m_minorArm.setTargetTheta(90);
 				break;
 
 			// Used for scoring in the middle node
 			case MID_SCORE:
-				m_majorArm.setTagetTheta(75);
-				m_minorArm.setTagetTheta(90);
+				m_majorArm.setTargetTheta(75);
+				m_minorArm.setTargetTheta(90);
 				break;
 
 			// Used for scoring in the highest node
 			case HIGH_SCORE:
-				m_majorArm.setTagetTheta(90);
-				m_minorArm.setTagetTheta(90);
+				m_majorArm.setTargetTheta(90);
+				m_minorArm.setTargetTheta(90);
 				break;
 
 			// Used for intaking off of the floor
 			case LOW_INTAKE:
-				m_majorArm.setTagetTheta(30);
-				m_minorArm.setTagetTheta(100);
+				m_majorArm.setTargetTheta(30);
+				m_minorArm.setTargetTheta(30);
 				break;
 
 			// Used for intaking from the human player chute
 			case MID_INTAKE:
-				m_majorArm.setTagetTheta(30);
-				m_minorArm.setTagetTheta(45);
+				m_majorArm.setTargetTheta(30);
+				m_minorArm.setTargetTheta(45);
 				break;
 
 			// Used for intaking from the sliding human player station
 			case HIGH_INTAKE:
-				m_majorArm.setTagetTheta(80);
-				m_minorArm.setTagetTheta(80);
+				m_majorArm.setTargetTheta(80);
+				m_minorArm.setTargetTheta(80);
 				break;
 
 			// goes to the pair of angles defined my the TSB driver
 			case DRIVER_CONTROL:
 				break;
 		}
+
+		// Address the major motors
+		m_majorArm.setReference();
+		// Address the minor motors
+		m_minorArm.setReference();
 
 	}
 
