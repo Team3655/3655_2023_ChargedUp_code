@@ -176,7 +176,7 @@ public class ArmSegment {
 
 	/** Returns the actual angle of the real arm (not the same as the target) */
 	public double getRealTheta() {
-		double rotations = (m_rightEncoder.getPosition() + m_leftEncoder.getPosition()) / 2;
+		double rotations = m_rightEncoder.getPosition()/* + m_leftEncoder.getPosition()) / 2*/;
 		m_realTheta = rotations / m_gearRatioRadius;
 		return m_realTheta;
 	}
