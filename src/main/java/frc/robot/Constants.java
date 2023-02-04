@@ -26,7 +26,7 @@ public final class Constants {
 		public static final double kModuleDriveControllerI = .0001;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
 		public static final double kModuleTurningControllerP = .1;
-		public static final double kModuleTurningControllerI = .0001;
+		public static final double kModuleTurningControllerI = 0;
 		public static final double kModuleTurningControllerD = 0;
 
 		// Constants set for the _SDS MK4i_
@@ -144,8 +144,8 @@ public final class Constants {
 		public static final double kMajorArmP = .1;
 		public static final double kMajorArmI = 1e-4;
 		public static final double kMajorArmD = .5;
-		public static final double kMinorArmP = 1;
-		public static final double kMinorArmI = 1;
+		public static final double kMinorArmP = .1;
+		public static final double kMinorArmI = 1e-4;
 		public static final double kMinorArmD = .5;
 
 	}
