@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Objects.SwerveModule;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -108,15 +109,23 @@ public class DriveSubsystem extends SubsystemBase {
 		m_rearLeft.setDesiredState(swerveModuleStates[2]);
 		m_rearRight.setDesiredState(swerveModuleStates[3]);
 
-		// SmartDashboard.putNumber("FL Turn Output", m_frontLeft.getTurnOutput(swerveModuleStates[0]));
-		// SmartDashboard.putNumber("FR Turn Output", m_frontRight.getTurnOutput(swerveModuleStates[1]));
-		// SmartDashboard.putNumber("RL Turn Output", m_rearLeft.getTurnOutput(swerveModuleStates[2]));
-		// SmartDashboard.putNumber("RR Turn Output", m_rearRight.getTurnOutput(swerveModuleStates[3]));
+		// SmartDashboard.putNumber("FL Turn Output",
+		// m_frontLeft.getTurnOutput(swerveModuleStates[0]));
+		// SmartDashboard.putNumber("FR Turn Output",
+		// m_frontRight.getTurnOutput(swerveModuleStates[1]));
+		// SmartDashboard.putNumber("RL Turn Output",
+		// m_rearLeft.getTurnOutput(swerveModuleStates[2]));
+		// SmartDashboard.putNumber("RR Turn Output",
+		// m_rearRight.getTurnOutput(swerveModuleStates[3]));
 
-		// SmartDashboard.putNumber("FL Drive Output", m_frontLeft.getDriveOutput(swerveModuleStates[0]));
-		// SmartDashboard.putNumber("FR Drive Output", m_frontRight.getDriveOutput(swerveModuleStates[1]));
-		// SmartDashboard.putNumber("RL Drive Output", m_rearLeft.getDriveOutput(swerveModuleStates[2]));
-		// SmartDashboard.putNumber("RR Drive Output", m_rearRight.getDriveOutput(swerveModuleStates[3]));
+		// SmartDashboard.putNumber("FL Drive Output",
+		// m_frontLeft.getDriveOutput(swerveModuleStates[0]));
+		// SmartDashboard.putNumber("FR Drive Output",
+		// m_frontRight.getDriveOutput(swerveModuleStates[1]));
+		// SmartDashboard.putNumber("RL Drive Output",
+		// m_rearLeft.getDriveOutput(swerveModuleStates[2]));
+		// SmartDashboard.putNumber("RR Drive Output",
+		// m_rearRight.getDriveOutput(swerveModuleStates[3]));
 	}
 
 	public void setModuleStates(SwerveModuleState[] desiredStates) {

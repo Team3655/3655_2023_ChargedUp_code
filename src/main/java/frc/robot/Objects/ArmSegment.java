@@ -1,6 +1,5 @@
-package frc.robot.subsystems;
+package frc.robot.Objects;
 
-import frc.robot.Constants.ArmConstants;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -15,7 +14,7 @@ public class ArmSegment {
 	private CANSparkMax m_rightMotor, m_leftMotor;
 
 	/** PID controllers for the segment */
-	private SparkMaxPIDController m_PIDController;
+	public SparkMaxPIDController m_PIDController;
 
 	/** Encoders for the segment */
 	private RelativeEncoder m_rightEncoder, m_leftEncoder;
@@ -30,15 +29,15 @@ public class ArmSegment {
 	private double m_minTheta, m_maxTheta;
 
 	/** Controls the direction of the arm */
-	private int m_sign;
+	private int m_targetSign;
 
 	// endregion
 
-	public ArmSegment(int rightPort, int leftPort, double gearRatio) {
+	public ArmSegment(int rightPort, int leftPort, double gearRatio, Boolean invertLeft) {
 
-		m_sign = 1;
+		m_targetSign = 1;
 		this.m_gearRatio = gearRatio;
-		this.m_gearRatioRadius = m_gearRatio / (2 * Math.PI);
+		this.m_gearRatioRadius = gearRatio / (2 * Math.PI);
 
 		// region def_motors
 		// creates left and right arm motors
@@ -53,6 +52,10 @@ public class ArmSegment {
 		m_rightMotor.restoreFactoryDefaults();
 		m_leftMotor.restoreFactoryDefaults();
 
+		// sets motor defaults to break
+		m_rightMotor.setIdleMode(IdleMode.kBrake);
+		m_leftMotor.setIdleMode(IdleMode.kBrake);
+
 		/**
 		 * In order to use PID functionality for a controller, a SparkMaxPIDController
 		 * object is constructed by calling the getPIDController() method on an existing
@@ -62,24 +65,17 @@ public class ArmSegment {
 
 		// Encoder object created to display position values
 		m_rightEncoder = m_rightMotor.getEncoder();
-		m_rightEncoder = m_rightMotor.getEncoder();
-
-		// set current limits
-		m_rightMotor.setSmartCurrentLimit(30);
-		m_leftMotor.setSmartCurrentLimit(30);
-
-		// sets motor defaults to break
-		m_rightMotor.setIdleMode(IdleMode.kBrake);
-		m_leftMotor.setIdleMode(IdleMode.kBrake);
+		m_leftEncoder = m_leftMotor.getEncoder();
 
 		// set PID coefficients
 		m_PIDController.setP(0);
 		m_PIDController.setI(0);
 		m_PIDController.setD(0);
-		m_PIDController.setOutputRange(-1, 1);
+		m_PIDController.setOutputRange(-0.5, 0.5);
 
 		// sets left motor to follow right and sets the left to inverted
-		m_leftMotor.follow(m_rightMotor, true);
+		m_leftMotor.follow(m_rightMotor, invertLeft);
+
 		// endregion
 	}
 
@@ -91,7 +87,7 @@ public class ArmSegment {
 	 * @param sign the Sign to set
 	 */
 	public void setSign(int sign) {
-		m_sign = sign;
+		m_targetSign = sign;
 	}
 
 	/** sets the min and max target angle of */
@@ -107,20 +103,20 @@ public class ArmSegment {
 	 * @return the limited value of theta
 	 */
 	public double constrain(double theta) {
+
 		if (theta >= m_maxTheta) {
 			return m_maxTheta;
 
 		} else if (theta <= m_minTheta) {
 			return m_minTheta;
 		}
+
 		return theta;
 	}
 
 	/** Sets the pid referance point to the arc length of the target angle */
 	public void setReference() {
-		m_PIDController.setReference(
-				getThetaToTicks(m_targetTheta * m_sign),
-				CANSparkMax.ControlType.kPosition);
+		m_PIDController.setReference(getThetaToTicks(), CANSparkMax.ControlType.kPosition);
 	}
 
 	/**
@@ -128,7 +124,7 @@ public class ArmSegment {
 	 * 
 	 * @param theta the target angle to be set
 	 */
-	public void setTagetTheta(double theta) {
+	public void setTargetTheta(double theta) {
 		theta = constrain(theta);
 		m_targetTheta = Math.toRadians(theta);
 	}
@@ -146,9 +142,26 @@ public class ArmSegment {
 		m_PIDController.setD(D);
 	}
 
+	/**
+	 * Used to set the maximum power draw of the arm
+	 * 
+	 * @param limit the maximum allowed power draw
+	 */
+	public void setSmartCurrentLimit(int limit) {
+		m_rightMotor.setSmartCurrentLimit(limit);
+		m_leftMotor.setSmartCurrentLimit(limit);
+	}
+
 	// endregion
 
 	// region: getters
+
+	/**
+	 * @return the m_targetTheta
+	 */
+	public double getTargetTheta() {
+		return m_targetTheta;
+	}
 
 	/**
 	 * Used for getting the number of ticks required to turn an angle
@@ -157,14 +170,13 @@ public class ArmSegment {
 	 * @param totalTicks the number of ticks required to make one revolution
 	 * @return the number of motor ticks required to turn theta
 	 */
-	public double getThetaToTicks(double theta) {
-		// return theta * (double) m_gearRatio;
-		return theta * (double) m_gearRatio / (2 * Math.PI);
+	public double getThetaToTicks() {
+		return m_targetTheta * m_gearRatioRadius;
 	}
 
 	/** Returns the actual angle of the real arm (not the same as the target) */
 	public double getRealTheta() {
-		double rotations = (m_rightEncoder.getPosition() + m_leftEncoder.getPosition()) / 2;
+		double rotations = m_rightEncoder.getPosition()/* + m_leftEncoder.getPosition()) / 2*/;
 		m_realTheta = rotations / m_gearRatioRadius;
 		return m_realTheta;
 	}
