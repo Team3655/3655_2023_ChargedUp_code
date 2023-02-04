@@ -28,7 +28,7 @@ public final class Constants {
 
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1 / 6.75;
-		public static final double kturnGearRatio = 150 / 7; 
+		public static final double kturnGearRatio = 1/(150 / 7); 
 		public static final double kwheelCircumference = Math.PI * 0.1016; // 4" to meters
 
 						// NEO drive motor CAN ID's
@@ -76,11 +76,6 @@ public final class Constants {
 
 		public static final double ksTurning = .17161;//Tuned February 2, 2023
 		public static final double kvTurning = .43205;
-
-		// Constants set for the _SDS MK4i_
-		public static final double kdriveGearRatio = 1 / 6.75;
-		public static final double kturnGearRatio = 150 / 7; // TODO: Double check ratio
-		public static final double kwheelCircumference = Math.PI * 0.1524; // 6" to meters
 
 		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4*Math.PI;
 		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
