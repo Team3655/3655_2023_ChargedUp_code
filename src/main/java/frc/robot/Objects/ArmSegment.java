@@ -125,7 +125,7 @@ public class ArmSegment {
 	 * @param theta the target angle to be set
 	 */
 	public void setTargetTheta(double theta) {
-		theta = constrain(theta);
+		// theta = constrain(theta);
 		m_targetTheta = Math.toRadians(theta);
 	}
 
@@ -176,9 +176,9 @@ public class ArmSegment {
 
 	/** Returns the actual angle of the real arm (not the same as the target) */
 	public double getRealTheta() {
-		double rotations = m_rightEncoder.getPosition()/* + m_leftEncoder.getPosition()) / 2*/;
+		double rotations = (m_rightEncoder.getPosition()/* + m_leftEncoder.getPosition() */); // 2;
 		m_realTheta = rotations / m_gearRatioRadius;
-		return m_realTheta;
+		return Math.toDegrees(m_realTheta);
 	}
 
 	/**

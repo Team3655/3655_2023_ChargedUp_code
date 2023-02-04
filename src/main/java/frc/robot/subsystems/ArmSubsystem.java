@@ -76,7 +76,8 @@ public class ArmSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-
+		SmartDashboard.putNumber("major real theta: ", m_majorArm.getRealTheta());
+		SmartDashboard.putNumber("minor real theta: ", m_minorArm.getRealTheta());
 		// Address the major motors
 		m_majorArm.setReference();
 		// Address the minor motors

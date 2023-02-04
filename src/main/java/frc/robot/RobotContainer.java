@@ -35,8 +35,9 @@ public class RobotContainer {
 	// The robot's subsystems and commands are defined here...
 	private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 	private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-	private final DashboardSubsystem m_dashboardSubsystem = new DashboardSubsystem(m_driveSubsystem);
-	private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+	// private final DashboardSubsystem m_dashboardSubsystem = new
+	// DashboardSubsystem(m_driveSubsystem);
+	// private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
 	// Replace with CommandPS4Controller or CommandJoystick if needed
 	private final CommandXboxController m_driverController = new CommandXboxController(
@@ -68,9 +69,14 @@ public class RobotContainer {
 
 		// Schedule `exampleMethodCommand` when the Xbox controller's B button is
 		// pressed, cancelling on release.
-		m_driverController.a().onTrue(new ArmPoseCommand(m_armSubsystem, ArmPoses.MID_SCORE));
-		m_driverController.b().onTrue(new ArmPoseCommand(m_armSubsystem, ArmPoses.MID_INTAKE));
-		m_driverController.y().onTrue(new ArmPoseCommand(m_armSubsystem, ArmPoses.LOW_SCORE));
+		// m_driverController.a().onTrue(new ArmPoseCommand(m_armSubsystem,
+		// ArmPoses.MID_SCORE));
+		// m_driverController.b().onTrue(new ArmPoseCommand(m_armSubsystem,
+		// ArmPoses.MID_INTAKE));
+		// m_driverController.y().onTrue(new ArmPoseCommand(m_armSubsystem,
+		// ArmPoses.LOW_SCORE));
+		// m_driverController.x().onTrue(new ArmPoseCommand(m_armSubsystem,
+		// ArmPoses.TUCKED));
 
 		// Swerve Drive method is set as default for drive subsystem
 		m_driveSubsystem.setDefaultCommand(
