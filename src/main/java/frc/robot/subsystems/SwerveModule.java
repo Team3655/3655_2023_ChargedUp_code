@@ -79,7 +79,7 @@ public class SwerveModule extends SubsystemBase {
 		m_driveMotor.getPIDController().setI(drivePID[1]);
 		m_driveMotor.getPIDController().setD(drivePID[2]);
 
-		m_turningMotor.getPIDController().setFF(DriveConstants.ksTurning);
+		m_turningMotor.getPIDController().setFF(DriveConstants.kvTurning);
 
 		// Configure current limits for motors - prevents disabling/brownouts
 		m_driveMotor.setSecondaryCurrentLimit(30);
@@ -93,6 +93,11 @@ public class SwerveModule extends SubsystemBase {
 		// to 180
 		// Changed range to accomodate this issue
 
+		m_driveMotor.getEncoder().setVelocityConversionFactor(
+			ModuleConstants.kdriveGearRatio
+			* ModuleConstants.kwheelCircumference
+			* (1 / 60));
+
 		m_turnEncoder = new CANCoder(turningEncoderPorts);
 		m_turnEncoder.configFactoryDefault();
 		m_turnEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
@@ -103,7 +108,8 @@ public class SwerveModule extends SubsystemBase {
 		// Attempting to use SPARK MAX Encoders instead
 
 		m_angularEncoder = m_turningMotor.getEncoder();
-		m_angularEncoder.setPositionConversionFactor(ModuleConstants.kturnGearRatio * 2 * Math.PI);
+		//Position normally measured in rotations; convert to radians
+		m_angularEncoder.setPositionConversionFactor((1/ModuleConstants.kturnGearRatio) * 2 * Math.PI);
 		m_angularEncoder.setPosition(m_turnEncoder.getAbsolutePosition());
 
 		// Set turning PID output to allow the swerve modules to treat the min/max as
@@ -124,45 +130,36 @@ public class SwerveModule extends SubsystemBase {
 	// Returns current position of the modules
 	public SwerveModulePosition getPosition() {
 
-		double m_moduleAngleRadians = Math.toRadians(m_turnEncoder.getAbsolutePosition());
+		double m_moduleAngleRadians = m_angularEncoder.getPosition();
 
-		double m_distanceMeters = m_driveMotor.getEncoder(Type.kHallSensor, 42).getPosition()
-				* ModuleConstants.kdriveGearRatio
-				* ModuleConstants.kwheelCircumference;
-
-		// TODO: Use this instead of CANcoder
-		double m_angle = m_angularEncoder.getPosition();
-
-		// Return SwerveModulePosition
+		double m_distanceMeters = m_driveMotor.getEncoder().getPosition();
 
 		return new SwerveModulePosition(m_distanceMeters, new Rotation2d(m_moduleAngleRadians));
 	}
 
 	public void setDesiredState(SwerveModuleState desiredState) {
 
-		double m_speedMetersPerSecond = m_driveMotor.getEncoder().getVelocity()
-				* ModuleConstants.kdriveGearRatio
-				* ModuleConstants.kwheelCircumference
-				* (1 / 60); // 1/Minutes to 1/seconds
+		double m_speedMetersPerSecond = m_driveMotor.getEncoder().getVelocity(); 
 
-		double m_moduleAngleRadians = Math.toRadians(m_turnEncoder.getAbsolutePosition());
-
+		double m_moduleAngleRadians = m_angularEncoder.getPosition();
 		// Optimize the reference state to avoid spinning further than 90 degreesto
 		// desired state
 		SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_moduleAngleRadians));
 
 		m_turningMotor.getPIDController().setReference(
-				// multiply the target angle my the radius of the gear ratio to get the number
-				// of rotations the motor must make
-				state.angle.getRadians() * (ModuleConstants.kturnGearRatio / (2 * Math.PI)),
+				state.angle.getRadians(),
 				ControlType.kPosition);
 
-		// Calculate the drive and turn motor outputs using PID and feedforward
-		final double driveOutput = m_drivePIDController.calculate(m_speedMetersPerSecond, state.speedMetersPerSecond)
-				+ driveFeedForward.calculate(state.speedMetersPerSecond);
+		m_driveMotor.getPIDController().setReference(
+			state.speedMetersPerSecond,
+			ControlType.kVelocity);
 
-		final double turnOutput = m_turningPIDController.calculate(m_moduleAngleRadians, state.angle.getRadians())
-				+ turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
+		// Calculate the drive and turn motor outputs using PID and feedforward
+		// final double driveOutput = m_drivePIDController.calculate(m_speedMetersPerSecond, state.speedMetersPerSecond)
+		// 		+ driveFeedForward.calculate(state.speedMetersPerSecond);
+
+		// final double turnOutput = m_turningPIDController.calculate(m_moduleAngleRadians, state.angle.getRadians())
+		// 		+ turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
 
 		// Set the motor voltages
 		// m_driveMotor.setVoltage(driveOutput);
@@ -171,7 +168,8 @@ public class SwerveModule extends SubsystemBase {
 	}
 
 	public void resetEncoders() {
-		m_turnEncoder.setPosition(0);
+		//m_turnEncoder.setPosition(0);
+		m_angularEncoder.setPosition(0);
 		m_driveMotor.getEncoder().setPosition(0);
 	}
 
@@ -181,7 +179,6 @@ public class SwerveModule extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		SmartDashboard.putNumber("Turn kP???", DashboardSubsystem.PIDConstants.getTurn_kP());
 		// This method will be called once per scheduler run
 	}
 }
