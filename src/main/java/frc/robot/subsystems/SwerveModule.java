@@ -89,7 +89,8 @@ public class SwerveModule extends SubsystemBase {
 		m_turningMotor.setSmartCurrentLimit(30);
 
 		// Configure the encoders for both motors
-		// CANcoder defaults range 0 to 360. WPILib swerve module has angles from -180 to 180
+		// CANcoder defaults range 0 to 360. WPILib swerve module has angles from -180
+		// to 180
 		// Changed range to accomodate this issue
 
 		m_turnEncoder = new CANCoder(turningEncoderPorts);
@@ -105,8 +106,8 @@ public class SwerveModule extends SubsystemBase {
 		m_angularEncoder.setPositionConversionFactor(ModuleConstants.kturnGearRatio * 2 * Math.PI);
 		m_angularEncoder.setPosition(m_turnEncoder.getAbsolutePosition());
 
-
-		// Set turning PID output to allow the swerve modules to treat the min/max as continuous
+		// Set turning PID output to allow the swerve modules to treat the min/max as
+		// continuous
 		// Optimizes how the modules chooses to go to a desired position
 		m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -128,8 +129,8 @@ public class SwerveModule extends SubsystemBase {
 		double m_distanceMeters = m_driveMotor.getEncoder(Type.kHallSensor, 42).getPosition()
 				* ModuleConstants.kdriveGearRatio
 				* ModuleConstants.kwheelCircumference;
-		
-		//TODO: Use this instead of CANcoder
+
+		// TODO: Use this instead of CANcoder
 		double m_angle = m_angularEncoder.getPosition();
 
 		// Return SwerveModulePosition
@@ -145,8 +146,9 @@ public class SwerveModule extends SubsystemBase {
 				* (1 / 60); // 1/Minutes to 1/seconds
 
 		double m_moduleAngleRadians = Math.toRadians(m_turnEncoder.getAbsolutePosition());
-		
-		// Optimize the reference state to avoid spinning further than 90 degreesto desired state
+
+		// Optimize the reference state to avoid spinning further than 90 degreesto
+		// desired state
 		SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_moduleAngleRadians));
 
 		m_turningMotor.getPIDController().setReference(state.angle.getRadians(), ControlType.kPosition);
@@ -159,8 +161,8 @@ public class SwerveModule extends SubsystemBase {
 				+ turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
 
 		// Set the motor voltages
-		m_driveMotor.setVoltage(driveOutput);
-		m_turningMotor.setVoltage(turnOutput);
+		// m_driveMotor.setVoltage(driveOutput);
+		// m_turningMotor.setVoltage(turnOutput);
 
 	}
 

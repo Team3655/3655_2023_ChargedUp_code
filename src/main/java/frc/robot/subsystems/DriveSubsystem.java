@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.Objects.SwerveModule;
+import frc.robot.subsystems.SwerveModule;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class DriveSubsystem extends SubsystemBase {
