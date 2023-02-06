@@ -6,10 +6,12 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants.IntakeConstants;
 
@@ -17,6 +19,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	/** Creates the motors for the Suckers */
 	private CANSparkMax m_rightSuckerMotor, m_centerSuckerMotor, m_leftSuckerMotor;
+
+	private ColorSensorV3 m_colorSense;
 
 	/** Creates pid controlers for Suckers */
 	private SparkMaxPIDController m_centerPIDController, m_sidePIDController;
@@ -66,27 +70,26 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	}
 
-	/**
-	 * Example command factory method.
-	 *
-	 * @return a command
-	 */
-	public CommandBase exampleMethodCommand() {
-		// Inline construction of command goes here.
-		// Subsystem::RunOnce implicitly requires `this` subsystem.
-		return runOnce(
-				() -> {
-					/* one-time action goes here */
-				});
-	}
-
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
 	}
 
-	@Override
-	public void simulationPeriodic() {
-		// This method will be called once per scheduler run during simulation
+	// region getters
+
+	public boolean getHasPiece() {
+		if (m_centerSuckerMotor.getOutputCurrent() > IntakeConstants.kHasPieceCurrentThreshold) {
+			return true;
+		}
+		return false;
 	}
+
+	public boolean getHasCone() {
+		if (getHasPiece() && m_colorSense.getColor() == Color.kYellow) {
+			return true;
+		}
+		return false;
+	}
+
+	// endregion
 }

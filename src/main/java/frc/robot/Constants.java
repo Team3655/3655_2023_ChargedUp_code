@@ -56,7 +56,7 @@ public final class Constants {
 		public static final double kModuleDriveControllerI = .0001;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
 		public static final double kModuleTurningControllerP = .01;
-		public static final double kModuleTurningControllerI = 0;
+		public static final double kModuleTurningControllerI = .0001;
 		public static final double kModuleTurningControllerD = 0;
 
 		// SPARK MAX Angular PID values
@@ -183,11 +183,10 @@ public final class Constants {
 		public static final int kCenterSuckerPort = 0;
 		public static final int kLeftSuckerPort = 0;
 
-		public static final int kCenterSuckerStallCurrentLimit = 30;
-		public static final int kSideSuckerStallCurrentLimit = 20;
+		public static final int kCenterSuckerCurrentLimit = 30;
+		public static final int kSideSuckerCurrentLimit = 20;
 
-		public static final int kCenterSuckerFreeCurrentLimit = 30;
-		public static final int kSideSuckerFreeCurrentLimit = 20;
+		public static final int kHasPieceCurrentThreshold = 15;
 
 	}
 
