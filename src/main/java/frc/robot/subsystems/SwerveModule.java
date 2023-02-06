@@ -151,7 +151,11 @@ public class SwerveModule extends SubsystemBase {
 		// desired state
 		SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_moduleAngleRadians));
 
-		m_turningMotor.getPIDController().setReference(state.angle.getRadians(), ControlType.kPosition);
+		m_turningMotor.getPIDController().setReference(
+				// multiply the target angle my the radius of the gear ratio to get the number
+				// of rotations the motor must make
+				state.angle.getRadians() * (ModuleConstants.kturnGearRatio / (2 * Math.PI)),
+				ControlType.kPosition);
 
 		// Calculate the drive and turn motor outputs using PID and feedforward
 		final double driveOutput = m_drivePIDController.calculate(m_speedMetersPerSecond, state.speedMetersPerSecond)
