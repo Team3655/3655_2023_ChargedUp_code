@@ -52,45 +52,31 @@ public final class Constants {
 		public static final double kRearLeftAngleZero = 146.865;
 		public static final double kRearRightAngleZero = -7.295;
 
-		public static final double kModuleDriveControllerP = .1;
-		public static final double kModuleDriveControllerI = .0001;
+		public static final double kModuleDriveControllerP = .00001;
+		public static final double kModuleDriveControllerI = 0;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
-		public static final double kModuleTurningControllerP = .01;
-		public static final double kModuleTurningControllerI = .0001;
+
+		public static final double kModuleTurningControllerP = .000000001;
+		public static final double kModuleTurningControllerI = 0;
 		public static final double kModuleTurningControllerD = 0;
 
 		// SPARK MAX Angular PID values
-		public static double[] kFrontLeftAngularPID = {
-				kModuleTurningControllerP,
-				kModuleTurningControllerI,
-				kModuleTurningControllerD };
-
-		public static double[] kFrontRightAngularPID = {
-				kModuleTurningControllerP,
-				kModuleTurningControllerI,
-				kModuleTurningControllerD };
-
-		public static double[] kRearLeftAngularPID = {
-				kModuleTurningControllerP,
-				kModuleTurningControllerI,
-				kModuleTurningControllerD };
-
-		public static double[] kRearRightAngularPID = {
-				kModuleTurningControllerP,
-				kModuleTurningControllerI,
-				kModuleTurningControllerD };
+		public static double[] kAngularPID = {
+			kModuleTurningControllerP,
+			kModuleTurningControllerI,
+			kModuleTurningControllerD };
 
 		// SPARK MAX Drive PID values
-		public static double[] kFrontLeftDrivePID = { .1, 0, .1 };
-		public static double[] kFrontRightDrivePID = { .1, 0, .1 };
-		public static double[] kRearLeftDrivePID = { .1, 0, .1 };
-		public static double[] kRearRightDrivePID = { .1, 0, .1 };
+		public static double[] kDrivePID = {
+			kModuleDriveControllerP,
+			kModuleDriveControllerI,
+			kModuleDriveControllerD};
 	}
 
 	public static class DriveConstants {
 		// TODO: Set feedforward values for drive
 		public static final double ksVolts = .1;
-		public static final double kvVoltSecondsPerMeter = .1;
+		public static final double kvVoltSecondsPerMeter = .2;
 
 		public static final double ksTurning = .17161;// Tuned February 2, 2023
 		public static final double kvTurning = .43205;

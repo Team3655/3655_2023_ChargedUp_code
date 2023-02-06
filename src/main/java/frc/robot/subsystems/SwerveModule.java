@@ -79,7 +79,15 @@ public class SwerveModule extends SubsystemBase {
 		m_driveMotor.getPIDController().setI(drivePID[1]);
 		m_driveMotor.getPIDController().setD(drivePID[2]);
 
-		m_turningMotor.getPIDController().setFF(DriveConstants.kvTurning);
+		m_turningMotor.getPIDController().setFF(DriveConstants.ksTurning);
+		m_driveMotor.getPIDController().setFF(DriveConstants.kvVoltSecondsPerMeter);
+
+		m_turningMotor.getPIDController().setFeedbackDevice(m_turningMotor.getEncoder());
+		m_driveMotor.getPIDController().setFeedbackDevice(m_driveMotor.getEncoder());
+
+		m_turningMotor.getPIDController().setPositionPIDWrappingEnabled(true);
+		m_turningMotor.getPIDController().setPositionPIDWrappingMinInput(Math.toRadians(-180));
+		m_turningMotor.getPIDController().setPositionPIDWrappingMaxInput(Math.toRadians(180));
 
 		// Configure current limits for motors - prevents disabling/brownouts
 		m_driveMotor.setSecondaryCurrentLimit(30);
@@ -107,25 +115,25 @@ public class SwerveModule extends SubsystemBase {
 
 		// Attempting to use SPARK MAX Encoders instead
 
-		m_angularEncoder = m_turningMotor.getEncoder();
+		m_angularEncoder = m_turningMotor.getAbsoluteEncoder(Type.kDutyCycle);
 		//Position normally measured in rotations; convert to radians
 		m_angularEncoder.setPositionConversionFactor((1/ModuleConstants.kturnGearRatio) * 2 * Math.PI);
-		m_angularEncoder.setPosition(m_turnEncoder.getAbsolutePosition());
+		
+		
+		m_angularEncoder.setPosition(Math.toRadians(m_turnEncoder.getAbsolutePosition()));
+		
 
 		// Set turning PID output to allow the swerve modules to treat the min/max as
 		// continuous
 		// Optimizes how the modules chooses to go to a desired position
 		m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-
 	}
 
 	// Returns headings of the module
 	public double getModuleHeading() {
-		double m_turning = this.m_turnEncoder.getAbsolutePosition();
+		double m_turning = m_angularEncoder.getPosition();
 		return m_turning;
 	}
-
-	// Returns the current state of the module
 
 	// Returns current position of the modules
 	public SwerveModulePosition getPosition() {
@@ -154,16 +162,6 @@ public class SwerveModule extends SubsystemBase {
 			state.speedMetersPerSecond,
 			ControlType.kVelocity);
 
-		// Calculate the drive and turn motor outputs using PID and feedforward
-		// final double driveOutput = m_drivePIDController.calculate(m_speedMetersPerSecond, state.speedMetersPerSecond)
-		// 		+ driveFeedForward.calculate(state.speedMetersPerSecond);
-
-		// final double turnOutput = m_turningPIDController.calculate(m_moduleAngleRadians, state.angle.getRadians())
-		// 		+ turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
-
-		// Set the motor voltages
-		// m_driveMotor.setVoltage(driveOutput);
-		// m_turningMotor.setVoltage(turnOutput);
 
 	}
 
@@ -174,7 +172,7 @@ public class SwerveModule extends SubsystemBase {
 	}
 
 	public double getEncoderHeading() {
-		return this.m_turnEncoder.getAbsolutePosition();
+		return Math.toDegrees(m_angularEncoder.getPosition());
 	}
 
 	@Override
