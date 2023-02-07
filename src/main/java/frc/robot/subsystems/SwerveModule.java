@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxRelativeEncoder.Type;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -37,7 +38,7 @@ public class SwerveModule extends SubsystemBase {
 	private final CANSparkMax m_turningMotor;
 
 	private final CANCoder m_turnEncoder;
-	private final RelativeEncoder m_angularEncoder;
+	private final AbsoluteEncoder m_angularEncoder;
 
 	private final PIDController m_drivePIDController = new PIDController(
 			ModuleConstants.kModuleDriveControllerP,
@@ -116,12 +117,12 @@ public class SwerveModule extends SubsystemBase {
 		m_turnEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
 
 		// Attempting to use SPARK MAX Encoders instead
-		m_angularEncoder = m_turningMotor.getAbsoluteEncoder(Type.kDutyCycle);
+		m_angularEncoder = m_turningMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
 
 		// Position normally measured in rotations; convert to radians
 		m_angularEncoder.setPositionConversionFactor((1 / ModuleConstants.kturnGearRatio) * 2 * Math.PI);
 
-		m_angularEncoder.setPosition(Math.toRadians(m_turnEncoder.getAbsolutePosition()));
+		m_angularEncoder.setZeroOffset(Math.toRadians(m_turnEncoder.getAbsolutePosition()));
 
 		// Set turning PID output to allow the swerve modules to treat the min/max as
 		// continuous
@@ -166,7 +167,7 @@ public class SwerveModule extends SubsystemBase {
 
 	public void resetEncoders() {
 		// m_turnEncoder.setPosition(0);
-		m_angularEncoder.setPosition(0);
+		m_angularEncoder.setZeroOffset(Math.toRadians(m_turnEncoder.getAbsolutePosition()));
 		m_driveMotor.getEncoder().setPosition(0);
 	}
 
