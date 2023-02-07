@@ -11,6 +11,7 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -37,27 +38,12 @@ public class SwerveModule extends SubsystemBase {
 	private final CANSparkMax m_driveMotor;
 	private final CANSparkMax m_turningMotor;
 
-	private final CANCoder m_turnEncoder;
-	private final AbsoluteEncoder m_angularEncoder;
+	private final CANCoder m_absoluteEncoder;
+	private final RelativeEncoder m_angularEncoder;
+	private final RelativeEncoder m_driveEncoder;
 
-	private final PIDController m_drivePIDController = new PIDController(
-			ModuleConstants.kModuleDriveControllerP,
-			ModuleConstants.kModuleDriveControllerI,
-			ModuleConstants.kModuleDriveControllerD);
-
-	private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
-			ModuleConstants.kModuleTurningControllerP,
-			ModuleConstants.kModuleTurningControllerI,
-			ModuleConstants.kModuleTurningControllerD,
-			new TrapezoidProfile.Constraints(
-					DriveConstants.kMaxModuleAngularSpeedRadiansPerSecond,
-					DriveConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
-
-	SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(
-			DriveConstants.ksVolts, DriveConstants.kvVoltSecondsPerMeter);
-
-	SimpleMotorFeedforward turnFeedForward = new SimpleMotorFeedforward(
-			DriveConstants.ksTurning, DriveConstants.kvTurning);
+	private final SparkMaxPIDController m_angularPID;
+	private final SparkMaxPIDController m_drivePID;
 
 	public SwerveModule(
 			int driveMotorChannel,
@@ -74,60 +60,62 @@ public class SwerveModule extends SubsystemBase {
 		m_turningMotor.restoreFactoryDefaults();
 		m_driveMotor.restoreFactoryDefaults();
 
-		m_turningMotor.getPIDController().setP(angularPID[0]);
-		m_turningMotor.getPIDController().setI(angularPID[1]);
-		m_turningMotor.getPIDController().setD(angularPID[2]);
+		// Initalize CANcoder
+		m_absoluteEncoder = new CANCoder(turningEncoderPorts);
 
-		m_driveMotor.getPIDController().setP(drivePID[0]);
-		m_driveMotor.getPIDController().setI(drivePID[1]);
-		m_driveMotor.getPIDController().setD(drivePID[2]);
+		m_absoluteEncoder.configFactoryDefault();
 
-		m_turningMotor.getPIDController().setFF(DriveConstants.ksTurning);
-		m_driveMotor.getPIDController().setFF(DriveConstants.kvVoltSecondsPerMeter);
+		m_absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+		m_absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+		m_absoluteEncoder.configMagnetOffset(-1 * angleZero);
+		m_absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
 
-		m_turningMotor.getPIDController().setFeedbackDevice(m_turningMotor.getEncoder());
-		m_driveMotor.getPIDController().setFeedbackDevice(m_driveMotor.getEncoder());
+		// Initialize Spark MAX encoders
+		m_angularEncoder = m_turningMotor.getEncoder();
+		m_angularEncoder.setPositionConversionFactor((ModuleConstants.kturnGearRatio) * 2 * Math.PI); //radians
+		m_angularEncoder.setVelocityConversionFactor(
+			ModuleConstants.kturnGearRatio
+			* 2 * Math.PI
+			*(1/60)); //radians per second
+		m_angularEncoder.setPosition(Math.toRadians(m_absoluteEncoder.getAbsolutePosition()));
 
-		m_turningMotor.getPIDController().setPositionPIDWrappingEnabled(true);
-		m_turningMotor.getPIDController().setPositionPIDWrappingMinInput(Math.toRadians(-180));
-		m_turningMotor.getPIDController().setPositionPIDWrappingMaxInput(Math.toRadians(180));
+		m_driveEncoder = m_driveMotor.getEncoder();
+		m_driveEncoder.setPositionConversionFactor(ModuleConstants.kdriveGearRatio * 2 * Math.PI); //meters
+		m_driveMotor.getEncoder().setVelocityConversionFactor(
+			ModuleConstants.kdriveGearRatio
+			* ModuleConstants.kwheelCircumference
+			* (1 / 60)); // meters per second
+
+		// Initialize PID's
+		m_angularPID = m_turningMotor.getPIDController();
+		m_angularPID.setP(angularPID[0]);
+		m_angularPID.setI(angularPID[1]);
+		m_angularPID.setD(angularPID[2]);
+
+		m_drivePID = m_driveMotor.getPIDController();
+		m_drivePID.setP(drivePID[0]);
+		m_drivePID.setI(drivePID[1]);
+		m_drivePID.setD(drivePID[2]);
+
+		m_angularPID.setFF(DriveConstants.ksTurning);
+		m_drivePID.setFF(DriveConstants.kvVoltSecondsPerMeter);
+
+		m_angularPID.setFeedbackDevice(m_turningMotor.getEncoder());
+		m_drivePID.setFeedbackDevice(m_driveMotor.getEncoder());
+
+		m_angularPID.setPositionPIDWrappingEnabled(true);
+		m_angularPID.setPositionPIDWrappingMinInput(Math.toRadians(-180));
+		m_angularPID.setPositionPIDWrappingMaxInput(Math.toRadians(180));
+
+		m_angularPID.setOutputRange(-1, 1);
+		m_drivePID.setOutputRange(-1, 1);
 
 		// Configure current limits for motors - prevents disabling/brownouts
-		m_driveMotor.setSecondaryCurrentLimit(30);
-		m_driveMotor.setSmartCurrentLimit(30);
 		m_driveMotor.setIdleMode(IdleMode.kBrake);
 		m_turningMotor.setIdleMode(IdleMode.kBrake);
 		m_turningMotor.setSmartCurrentLimit(30);
+		m_driveMotor.setSmartCurrentLimit(30);
 
-		// Configure the encoders for both motors
-		// CANcoder defaults range 0 to 360. WPILib swerve module has angles from -180
-		// to 180
-		// Changed range to accomodate this issue
-
-		m_driveMotor.getEncoder().setVelocityConversionFactor(
-				ModuleConstants.kdriveGearRatio
-						* ModuleConstants.kwheelCircumference
-						* (1 / 60));
-
-		m_turnEncoder = new CANCoder(turningEncoderPorts);
-		m_turnEncoder.configFactoryDefault();
-		m_turnEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
-		m_turnEncoder.configMagnetOffset(-1 * angleZero);
-		m_turnEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-		m_turnEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
-
-		// Attempting to use SPARK MAX Encoders instead
-		m_angularEncoder = m_turningMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
-
-		// Position normally measured in rotations; convert to radians
-		m_angularEncoder.setPositionConversionFactor((1 / ModuleConstants.kturnGearRatio) * 2 * Math.PI);
-
-		m_angularEncoder.setZeroOffset(Math.toRadians(m_turnEncoder.getAbsolutePosition()));
-
-		// Set turning PID output to allow the swerve modules to treat the min/max as
-		// continuous
-		// Optimizes how the modules chooses to go to a desired position
-		m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 	}
 
 	// Returns headings of the module
@@ -141,33 +129,30 @@ public class SwerveModule extends SubsystemBase {
 
 		double m_moduleAngleRadians = m_angularEncoder.getPosition();
 
-		double m_distanceMeters = m_driveMotor.getEncoder().getPosition();
+		double m_distanceMeters = m_driveEncoder.getPosition();
 
 		return new SwerveModulePosition(m_distanceMeters, new Rotation2d(m_moduleAngleRadians));
 	}
 
 	public void setDesiredState(SwerveModuleState desiredState) {
 
-		double m_speedMetersPerSecond = m_driveMotor.getEncoder().getVelocity();
-
 		double m_moduleAngleRadians = m_angularEncoder.getPosition();
-		// Optimize the reference state to avoid spinning further than 90 degreesto
-		// desired state
-		SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_moduleAngleRadians));
+		// Optimize the reference state to avoid spinning further than 90 degrees to desired state
+		SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, new Rotation2d(m_moduleAngleRadians));
 
-		m_turningMotor.getPIDController().setReference(
-				state.angle.getRadians(),
+		m_angularPID.setReference(
+				optimizedState.angle.getRadians(),
 				ControlType.kPosition);
 
-		m_driveMotor.getPIDController().setReference(
-				state.speedMetersPerSecond,
+		m_drivePID.setReference(
+				optimizedState.speedMetersPerSecond,
 				ControlType.kVelocity);
 
 	}
 
 	public void resetEncoders() {
-		// m_turnEncoder.setPosition(0);
-		m_angularEncoder.setZeroOffset(Math.toRadians(m_turnEncoder.getAbsolutePosition()));
+		m_angularEncoder.setPosition(0);
+		//m_angularEncoder.setZeroOffset(Math.toRadians(m_turnEncoder.getAbsolutePosition()));
 		m_driveMotor.getEncoder().setPosition(0);
 	}
 

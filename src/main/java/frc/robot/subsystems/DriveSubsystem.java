@@ -119,14 +119,7 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("RL Turn Output", m_rearLeft.getModuleHeading());
 		SmartDashboard.putNumber("RR Turn Output", m_rearRight.getModuleHeading());
 
-		// SmartDashboard.putNumber("FL Drive Output",
-		// m_frontLeft.getDriveOutput(swerveModuleStates[0]));
-		// SmartDashboard.putNumber("FR Drive Output",
-		// m_frontRight.getDriveOutput(swerveModuleStates[1]));
-		// SmartDashboard.putNumber("RL Drive Output",
-		// m_rearLeft.getDriveOutput(swerveModuleStates[2]));
-		// SmartDashboard.putNumber("RR Drive Output",
-		// m_rearRight.getDriveOutput(swerveModuleStates[3]));
+
 	}
 
 	public void setModuleStates(SwerveModuleState[] desiredStates) {

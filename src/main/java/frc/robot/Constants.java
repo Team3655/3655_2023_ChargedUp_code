@@ -23,8 +23,8 @@ public final class Constants {
 
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1 / 6.75;
-		public static final double kturnGearRatio = 150 / 7;
-		// 4" to meters (0.1016 meters)
+		public static final double kturnGearRatio = 1/ (150 / 7);
+		
 		public static final double kwheelCircumference = Units.inchesToMeters(4) * Math.PI;
 
 		// NEO drive motor CAN ID's
