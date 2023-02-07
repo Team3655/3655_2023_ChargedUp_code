@@ -113,8 +113,6 @@ public class DriveSubsystem extends SubsystemBase {
 		m_frontRight.setDesiredState(swerveModuleStates[1]);
 		m_rearLeft.setDesiredState(swerveModuleStates[2]);
 		m_rearRight.setDesiredState(swerveModuleStates[3]);
-<<<<<<< Updated upstream
-=======
 
 		SmartDashboard.putNumber("FL Turn Output", m_frontLeft.getModuleHeading());
 		SmartDashboard.putNumber("FR Turn Output", m_frontRight.getModuleHeading());
@@ -129,7 +127,6 @@ public class DriveSubsystem extends SubsystemBase {
 		// m_rearLeft.getDriveOutput(swerveModuleStates[2]));
 		// SmartDashboard.putNumber("RR Drive Output",
 		// m_rearRight.getDriveOutput(swerveModuleStates[3]));
->>>>>>> Stashed changes
 	}
 
 	public void setModuleStates(SwerveModuleState[] desiredStates) {

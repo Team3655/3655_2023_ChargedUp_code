@@ -45,10 +45,10 @@ public class IntakeSubsystem extends SubsystemBase {
 		m_centerSuckerMotor.restoreFactoryDefaults();
 		m_leftSuckerMotor.restoreFactoryDefaults();
 
-		// set current limits TODO: use stallimit with an rpm
-		// m_rightSuckerMotor.setSmartCurrentLimit(IntakeConstants.kSideSuckerCurrentLimit);
-		// m_centerSuckerMotor.setSmartCurrentLimit(IntakeConstants.kCenterSuckerCurrentLimit);
-		// m_leftSuckerMotor.setSmartCurrentLimit(IntakeConstants.kSideSuckerCurrentLimit);
+		// set current limits
+		m_rightSuckerMotor.setSmartCurrentLimit(IntakeConstants.kSideSuckerCurrentLimit);
+		m_centerSuckerMotor.setSmartCurrentLimit(IntakeConstants.kCenterSuckerCurrentLimit);
+		m_leftSuckerMotor.setSmartCurrentLimit(IntakeConstants.kSideSuckerCurrentLimit);
 
 		// sets motor defaults to break
 		m_rightSuckerMotor.setIdleMode(IdleMode.kCoast);
@@ -68,6 +68,8 @@ public class IntakeSubsystem extends SubsystemBase {
 		m_centerSuckerEncoder = m_centerSuckerMotor.getEncoder();
 		m_leftSuckerEncoder = m_leftSuckerMotor.getEncoder();
 
+		m_leftSuckerMotor.follow(m_rightSuckerMotor);
+
 	}
 
 	@Override
@@ -78,7 +80,10 @@ public class IntakeSubsystem extends SubsystemBase {
 	// region getters
 
 	/**
-	 * @return
+	 * Checks if the robot is holding a game piece by using the current draw of the
+	 * center sucker
+	 *
+	 * @return True if the robot is holding a piece
 	 */
 	public boolean getHasPiece() {
 		if (m_centerSuckerMotor.getOutputCurrent() > IntakeConstants.kHasPieceCurrentThreshold) {
@@ -88,7 +93,10 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	/**
-	 * @return
+	 * Checks if the robot is holding a Cone by using the color sensor and
+	 * getHasPiece()
+	 * 
+	 * @return True if the robot is holding a cone
 	 */
 	public boolean getHasCone() {
 		if (getHasPiece() && m_colorSense.getColor() == Color.kYellow) {
@@ -98,7 +106,10 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	/**
-	 * @return
+	 * Checks if the robot is holding a Cube by using the color sensor and
+	 * getHasPiece()
+	 * 
+	 * @return True if the robot is holding a Cube
 	 */
 	public boolean getHasCube() {
 		if (getHasPiece() && m_colorSense.getColor() == Color.kPurple) {

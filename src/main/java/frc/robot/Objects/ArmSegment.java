@@ -67,6 +67,9 @@ public class ArmSegment {
 		m_rightEncoder = m_rightMotor.getEncoder();
 		m_leftEncoder = m_leftMotor.getEncoder();
 
+		m_rightEncoder.setPositionConversionFactor((2 * Math.PI) / m_gearRatio);
+		m_leftEncoder.setPositionConversionFactor((2 * Math.PI) / m_gearRatio);
+
 		// set PID coefficients
 		m_PIDController.setP(0);
 		m_PIDController.setI(0);
@@ -80,6 +83,11 @@ public class ArmSegment {
 	}
 
 	// region: setters
+
+	/** Sets the pid referance point to the target theta of the segment */
+	public void setReference() {
+		m_PIDController.setReference(m_targetTheta, CANSparkMax.ControlType.kPosition);
+	}
 
 	/**
 	 * Sets the sign that controls the dominant side of the robot
@@ -114,18 +122,13 @@ public class ArmSegment {
 		return theta;
 	}
 
-	/** Sets the pid referance point to the arc length of the target angle */
-	public void setReference() {
-		m_PIDController.setReference(getThetaToTicks(), CANSparkMax.ControlType.kPosition);
-	}
-
 	/**
 	 * Sets the target angle of the arm IN RADIANS!
 	 * 
 	 * @param theta the target angle to be set
 	 */
 	public void setTargetTheta(double theta) {
-		// theta = constrain(theta);
+		theta = constrain(theta);
 		m_targetTheta = Math.toRadians(theta);
 	}
 
@@ -164,7 +167,7 @@ public class ArmSegment {
 	}
 
 	/**
-	 * Used for getting the number of ticks required to turn an angle
+	 * (Depreciated) Used for getting the number of ticks required to turn an angle
 	 * 
 	 * @param theta      the angke you want to turn (in radians)
 	 * @param totalTicks the number of ticks required to make one revolution
@@ -176,9 +179,7 @@ public class ArmSegment {
 
 	/** Returns the actual angle of the real arm (not the same as the target) */
 	public double getRealTheta() {
-		double rotations = (m_rightEncoder.getPosition()/* + m_leftEncoder.getPosition() */); // 2;
-		m_realTheta = rotations / m_gearRatioRadius;
-		return Math.toDegrees(m_realTheta);
+		return Math.toDegrees((m_rightEncoder.getPosition() + m_leftEncoder.getPosition()) / 2);
 	}
 
 	/**

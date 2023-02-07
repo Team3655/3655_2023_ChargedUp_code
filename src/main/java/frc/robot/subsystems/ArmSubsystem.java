@@ -1,9 +1,9 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Objects.ArmSegment;
 
@@ -179,10 +179,9 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	/** Toggles the dominant side of the robot */
-	public CommandBase toggleSide() {
-		m_isFront = !m_isFront;
+	public CommandBase ToggleSide() {
 		return runOnce(() -> {
-			setDominantSide(m_isFront);
+			setDominantSide(!m_isFront);
 		});
 	}
 
