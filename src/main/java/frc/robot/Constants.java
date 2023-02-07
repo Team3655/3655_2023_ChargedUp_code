@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -18,14 +19,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  */
 public final class Constants {
 
-	public static final double kInchesToMeters = 0.0254;
-
 	public static class ModuleConstants {
 
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1 / 6.75;
 		public static final double kturnGearRatio = 150 / 7;
-		public static final double kwheelCircumference = 4 * Math.PI * kInchesToMeters; // 4" to meters (0.1016 meters)
+		// 4" to meters (0.1016 meters)
+		public static final double kwheelCircumference = Units.inchesToMeters(4) * Math.PI;
 
 		// NEO drive motor CAN ID's
 		public static final int kFrontLeftDriveMotorPort = 1;
@@ -62,15 +62,15 @@ public final class Constants {
 
 		// SPARK MAX Angular PID values
 		public static double[] kAngularPID = {
-			kModuleTurningControllerP,
-			kModuleTurningControllerI,
-			kModuleTurningControllerD };
+				kModuleTurningControllerP,
+				kModuleTurningControllerI,
+				kModuleTurningControllerD };
 
 		// SPARK MAX Drive PID values
 		public static double[] kDrivePID = {
-			kModuleDriveControllerP,
-			kModuleDriveControllerI,
-			kModuleDriveControllerD};
+				kModuleDriveControllerP,
+				kModuleDriveControllerI,
+				kModuleDriveControllerD };
 	}
 
 	public static class DriveConstants {

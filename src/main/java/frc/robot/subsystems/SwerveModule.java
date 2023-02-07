@@ -28,6 +28,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 
+import com.revrobotics.AbsoluteEncoder;
+
 public class SwerveModule extends SubsystemBase {
 	/** Creates a new SwerveModule. */
 
@@ -102,9 +104,9 @@ public class SwerveModule extends SubsystemBase {
 		// Changed range to accomodate this issue
 
 		m_driveMotor.getEncoder().setVelocityConversionFactor(
-			ModuleConstants.kdriveGearRatio
-			* ModuleConstants.kwheelCircumference
-			* (1 / 60));
+				ModuleConstants.kdriveGearRatio
+						* ModuleConstants.kwheelCircumference
+						* (1 / 60));
 
 		m_turnEncoder = new CANCoder(turningEncoderPorts);
 		m_turnEncoder.configFactoryDefault();
@@ -114,14 +116,12 @@ public class SwerveModule extends SubsystemBase {
 		m_turnEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
 
 		// Attempting to use SPARK MAX Encoders instead
-
 		m_angularEncoder = m_turningMotor.getAbsoluteEncoder(Type.kDutyCycle);
-		//Position normally measured in rotations; convert to radians
-		m_angularEncoder.setPositionConversionFactor((1/ModuleConstants.kturnGearRatio) * 2 * Math.PI);
-		
-		
+
+		// Position normally measured in rotations; convert to radians
+		m_angularEncoder.setPositionConversionFactor((1 / ModuleConstants.kturnGearRatio) * 2 * Math.PI);
+
 		m_angularEncoder.setPosition(Math.toRadians(m_turnEncoder.getAbsolutePosition()));
-		
 
 		// Set turning PID output to allow the swerve modules to treat the min/max as
 		// continuous
@@ -147,7 +147,7 @@ public class SwerveModule extends SubsystemBase {
 
 	public void setDesiredState(SwerveModuleState desiredState) {
 
-		double m_speedMetersPerSecond = m_driveMotor.getEncoder().getVelocity(); 
+		double m_speedMetersPerSecond = m_driveMotor.getEncoder().getVelocity();
 
 		double m_moduleAngleRadians = m_angularEncoder.getPosition();
 		// Optimize the reference state to avoid spinning further than 90 degreesto
@@ -159,14 +159,13 @@ public class SwerveModule extends SubsystemBase {
 				ControlType.kPosition);
 
 		m_driveMotor.getPIDController().setReference(
-			state.speedMetersPerSecond,
-			ControlType.kVelocity);
-
+				state.speedMetersPerSecond,
+				ControlType.kVelocity);
 
 	}
 
 	public void resetEncoders() {
-		//m_turnEncoder.setPosition(0);
+		// m_turnEncoder.setPosition(0);
 		m_angularEncoder.setPosition(0);
 		m_driveMotor.getEncoder().setPosition(0);
 	}
