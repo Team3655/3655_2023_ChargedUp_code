@@ -77,6 +77,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	// region getters
 
+	/**
+	 * @return
+	 */
 	public boolean getHasPiece() {
 		if (m_centerSuckerMotor.getOutputCurrent() > IntakeConstants.kHasPieceCurrentThreshold) {
 			return true;
@@ -84,8 +87,21 @@ public class IntakeSubsystem extends SubsystemBase {
 		return false;
 	}
 
+	/**
+	 * @return
+	 */
 	public boolean getHasCone() {
 		if (getHasPiece() && m_colorSense.getColor() == Color.kYellow) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean getHasCube() {
+		if (getHasPiece() && m_colorSense.getColor() == Color.kPurple) {
 			return true;
 		}
 		return false;
