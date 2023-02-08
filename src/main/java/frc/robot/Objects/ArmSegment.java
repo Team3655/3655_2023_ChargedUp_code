@@ -92,8 +92,8 @@ public class ArmSegment {
 
 	/** Sets the pid referance point to the target theta of the segment */
 	public void setReference() {
-		m_rightPIDController.setReference(m_targetTheta, CANSparkMax.ControlType.kPosition);
-		m_leftPIDController.setReference(m_targetTheta, CANSparkMax.ControlType.kPosition);
+		m_rightPIDController.setReference(m_targetTheta * m_targetSign, CANSparkMax.ControlType.kPosition);
+		m_leftPIDController.setReference(m_targetTheta * m_targetSign, CANSparkMax.ControlType.kPosition);
 	}
 
 	/**
@@ -150,6 +150,9 @@ public class ArmSegment {
 		m_rightPIDController.setP(P);
 		m_rightPIDController.setI(I);
 		m_rightPIDController.setD(D);
+		m_leftPIDController.setP(P);
+		m_leftPIDController.setI(I);
+		m_leftPIDController.setD(D);
 	}
 
 	/**
