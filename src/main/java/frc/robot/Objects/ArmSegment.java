@@ -14,7 +14,7 @@ public class ArmSegment {
 	private CANSparkMax m_rightMotor, m_leftMotor;
 
 	/** PID controllers for the segment */
-	public SparkMaxPIDController m_PIDController;
+	public SparkMaxPIDController m_rightPIDController, m_leftPIDController;
 
 	/** Encoders for the segment */
 	private RelativeEncoder m_rightEncoder, m_leftEncoder;
@@ -61,7 +61,8 @@ public class ArmSegment {
 		 * object is constructed by calling the getPIDController() method on an existing
 		 * CANSparkMax object
 		 */
-		m_PIDController = m_rightMotor.getPIDController();
+		m_rightPIDController = m_rightMotor.getPIDController();
+		m_leftPIDController = m_leftMotor.getPIDController();
 
 		// Encoder object created to display position values
 		m_rightEncoder = m_rightMotor.getEncoder();
@@ -71,13 +72,18 @@ public class ArmSegment {
 		m_leftEncoder.setPositionConversionFactor((2 * Math.PI) / m_gearRatio);
 
 		// set PID coefficients
-		m_PIDController.setP(0);
-		m_PIDController.setI(0);
-		m_PIDController.setD(0);
-		m_PIDController.setOutputRange(-0.5, 0.5);
+		m_rightPIDController.setP(0);
+		m_rightPIDController.setI(0);
+		m_rightPIDController.setD(0);
+		m_rightPIDController.setOutputRange(-0.5, 0.5);
 
-		// sets left motor to follow right and sets the left to inverted
-		m_leftMotor.follow(m_rightMotor, invertLeft);
+		m_leftPIDController.setP(0);
+		m_leftPIDController.setI(0);
+		m_leftPIDController.setD(0);
+		m_leftPIDController.setOutputRange(-0.5, 0.5);
+
+		// Sets the left motor to be inverted if it needs to be
+		m_leftMotor.setInverted(invertLeft);
 
 		// endregion
 	}
@@ -86,7 +92,8 @@ public class ArmSegment {
 
 	/** Sets the pid referance point to the target theta of the segment */
 	public void setReference() {
-		m_PIDController.setReference(m_targetTheta, CANSparkMax.ControlType.kPosition);
+		m_rightPIDController.setReference(m_targetTheta, CANSparkMax.ControlType.kPosition);
+		m_leftPIDController.setReference(m_targetTheta, CANSparkMax.ControlType.kPosition);
 	}
 
 	/**
@@ -140,9 +147,9 @@ public class ArmSegment {
 	 * @param D Don't make me wait on behalf of your ignorance
 	 */
 	public void setPID(double P, double I, double D) {
-		m_PIDController.setP(P);
-		m_PIDController.setI(I);
-		m_PIDController.setD(D);
+		m_rightPIDController.setP(P);
+		m_rightPIDController.setI(I);
+		m_rightPIDController.setD(D);
 	}
 
 	/**
