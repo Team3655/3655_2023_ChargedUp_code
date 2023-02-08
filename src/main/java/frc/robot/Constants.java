@@ -23,7 +23,7 @@ public final class Constants {
 
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1 / 6.75;
-		public static final double kturnGearRatio = 1/ 21.4286;
+		public static final double kturnGearRatio = 1 / 21.4286;
 
 		public static final double kwheelCircumference = Units.inchesToMeters(4) * Math.PI;
 
@@ -47,17 +47,17 @@ public final class Constants {
 
 		// TODO: Set angle offset for CANcoders
 		// Offset angle for absolute encoders (find this using REV client)
-		public static final double kFrontLeftAngleZero = -118.818;
-		public static final double kFrontRightAngleZero = 112.676;
-		public static final double kRearLeftAngleZero = 146.865;
-		public static final double kRearRightAngleZero = -7.295;
+		public static final double kFrontLeftAngleZero = 50.185546875;
+		public static final double kFrontRightAngleZero = 219.990234375;
+		public static final double kRearLeftAngleZero = 179.47265625;
+		public static final double kRearRightAngleZero = 209.35546875;
 
 		public static final double kModuleDriveControllerP = .00001;
 		public static final double kModuleDriveControllerI = 0;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
 
-		public static final double kModuleTurningControllerP = .000000001;
-		public static final double kModuleTurningControllerI = 0;
+		public static final double kModuleTurningControllerP = 1;
+		public static final double kModuleTurningControllerI = 5e-5;
 		public static final double kModuleTurningControllerD = 0;
 
 		// SPARK MAX Angular PID values

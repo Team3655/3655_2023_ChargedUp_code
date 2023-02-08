@@ -56,7 +56,7 @@ public class SwerveModule extends SubsystemBase {
 			double[] drivePID) {
 
 		// Initialize the motors
-		m_angleZero = angleZero; 
+		m_angleZero = angleZero;
 
 		m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
 		m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
@@ -69,25 +69,26 @@ public class SwerveModule extends SubsystemBase {
 
 		m_absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		m_absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
-		//m_absoluteEncoder.configMagnetOffset(-1 * angleZero);
+		// m_absoluteEncoder.configMagnetOffset(-1 * angleZero);
 		m_absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
 
 		// Initialize Spark MAX encoders
 		m_angularEncoder = m_turningMotor.getEncoder();
-		m_angularEncoder.setPositionConversionFactor((ModuleConstants.kturnGearRatio) * 2 * Math.PI); //radians
+		m_angularEncoder.setPositionConversionFactor((ModuleConstants.kturnGearRatio) * 2 * Math.PI); // radians
 		m_angularEncoder.setVelocityConversionFactor(
-			ModuleConstants.kturnGearRatio
-			* 2 * Math.PI
-			*(1/60)); //radians per second
+				ModuleConstants.kturnGearRatio
+						* 2 * Math.PI
+						* (1 / 60)); // radians per second
 
-		//m_angularEncoder.setPosition(Math.toRadians(m_absoluteEncoder.getAbsolutePosition()) - Math.toRadians(angleZero));
+		// m_angularEncoder.setPosition(Math.toRadians(m_absoluteEncoder.getAbsolutePosition())
+		// - Math.toRadians(angleZero));
 
 		m_driveEncoder = m_driveMotor.getEncoder();
-		m_driveEncoder.setPositionConversionFactor(ModuleConstants.kdriveGearRatio * 2 * Math.PI); //meters
+		m_driveEncoder.setPositionConversionFactor(ModuleConstants.kdriveGearRatio * 2 * Math.PI); // meters
 		m_driveMotor.getEncoder().setVelocityConversionFactor(
-			ModuleConstants.kdriveGearRatio
-			* ModuleConstants.kwheelCircumference
-			* (1 / 60)); // meters per second
+				ModuleConstants.kdriveGearRatio
+						* ModuleConstants.kwheelCircumference
+						* (1 / 60)); // meters per second
 
 		// Initialize PID's
 		m_angularPID = m_turningMotor.getPIDController();
@@ -123,14 +124,14 @@ public class SwerveModule extends SubsystemBase {
 
 	}
 
-	public void resetAngleToAbsolute(){
+	public void resetAngleToAbsolute() {
 		double angle = m_absoluteEncoder.getAbsolutePosition() - m_angleZero;
 		m_angularEncoder.setPosition(angle);
 	}
 
 	// Returns headings of the module
 	public double getModuleHeading() {
-		double m_turning = m_angularEncoder.getPosition();
+		double m_turning = m_absoluteEncoder.getAbsolutePosition();
 		return m_turning;
 	}
 
@@ -147,8 +148,11 @@ public class SwerveModule extends SubsystemBase {
 	public void setDesiredState(SwerveModuleState desiredState) {
 
 		double m_moduleAngleRadians = m_angularEncoder.getPosition();
-		// Optimize the reference state to avoid spinning further than 90 degrees to desired state
-		SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, new Rotation2d(m_moduleAngleRadians));
+		// Optimize the reference state to avoid spinning further than 90 degrees to
+		// desired state
+		SwerveModuleState optimizedState = SwerveModuleState.optimize(
+				desiredState,
+				new Rotation2d(m_moduleAngleRadians));
 
 		m_angularPID.setReference(
 				optimizedState.angle.getRadians(),
@@ -172,7 +176,7 @@ public class SwerveModule extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		//SmartDashboard.putNumber("Angular Position Conversion", m_angularEncoder.getPositionConversionFactor());
-		//SmartDashboard.putNumber("Drive Velocity Conversion", m_driveEncoder.getVelocityConversionFactor());
+		SmartDashboard.putNumber("Angular Position Conversion", m_angularEncoder.getPositionConversionFactor());
+		SmartDashboard.putNumber("Drive Velocity Conversion", m_driveEncoder.getVelocityConversionFactor());
 	}
 }
