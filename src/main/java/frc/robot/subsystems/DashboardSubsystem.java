@@ -132,10 +132,10 @@ public class DashboardSubsystem extends SubsystemBase {
 	private GenericEntry m_gyro = m_ModuleTab.add("Gyro", 0).getEntry();
 
 	public void ModuleTelemetry() {
-		m_FrontLeftHeading.setDouble(m_drive.getFrontLeftHeading());
-		m_RearLeftHeading.setDouble(m_drive.getRearLeftHeading());
-		m_FrontRightHeading.setDouble(m_drive.getFrontRightHeading());
-		m_RearRightHeading.setDouble(m_drive.getRearRightHeading());
+		// m_FrontLeftHeading.setDouble(m_drive.getFrontLeftHeading());
+		// m_RearLeftHeading.setDouble(m_drive.getRearLeftHeading());
+		// m_FrontRightHeading.setDouble(m_drive.getFrontRightHeading());
+		// m_RearRightHeading.setDouble(m_drive.getRearRightHeading());
 
 		m_gyro.setDouble(m_drive.getHeading());
 	}

@@ -33,6 +33,7 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	private final SwerveModule m_frontLeft = new SwerveModule(
+			"FL",
 			ModuleConstants.kFrontLeftDriveMotorPort,
 			ModuleConstants.kFrontLeftTurningMotorPort,
 			ModuleConstants.kFrontLeftTurningEncoderPort,
@@ -41,6 +42,7 @@ public class DriveSubsystem extends SubsystemBase {
 			ModuleConstants.kDrivePID);
 
 	private final SwerveModule m_frontRight = new SwerveModule(
+			"FR",
 			ModuleConstants.kFrontRightDriveMotorPort,
 			ModuleConstants.kFrontRightTurningMotorPort,
 			ModuleConstants.kFrontRightTurningEncoderPort,
@@ -49,6 +51,7 @@ public class DriveSubsystem extends SubsystemBase {
 			ModuleConstants.kDrivePID);
 
 	private final SwerveModule m_rearLeft = new SwerveModule(
+			"RL",
 			ModuleConstants.kRearLeftDriveMotorPort,
 			ModuleConstants.kRearLeftTurningMotorPort,
 			ModuleConstants.kRearLeftTurningEncoderPort,
@@ -57,6 +60,7 @@ public class DriveSubsystem extends SubsystemBase {
 			ModuleConstants.kDrivePID);
 
 	private final SwerveModule m_rearRight = new SwerveModule(
+			"RR",
 			ModuleConstants.kRearRightDriveMotorPort,
 			ModuleConstants.kRearRightTurningMotorPort,
 			ModuleConstants.kRearRightTurningEncoderPort,
@@ -87,6 +91,12 @@ public class DriveSubsystem extends SubsystemBase {
 		m_odometry.update(
 				m_gyro.getRotation2d(),
 				m_swervePosition);
+
+		m_frontLeft.putConversionFactors();
+		m_frontRight.putConversionFactors();
+		m_rearRight.putConversionFactors();
+		m_rearLeft.putConversionFactors();
+		
 	}
 
 	public Pose2d getPose() {
@@ -114,10 +124,15 @@ public class DriveSubsystem extends SubsystemBase {
 		m_rearLeft.setDesiredState(swerveModuleStates[2]);
 		m_rearRight.setDesiredState(swerveModuleStates[3]);
 
-		SmartDashboard.putNumber("FL Turn Output", m_frontLeft.getModuleHeading());
-		SmartDashboard.putNumber("FR Turn Output", m_frontRight.getModuleHeading());
-		SmartDashboard.putNumber("RL Turn Output", m_rearLeft.getModuleHeading());
-		SmartDashboard.putNumber("RR Turn Output", m_rearRight.getModuleHeading());
+		SmartDashboard.putNumber("FL Absolute", m_frontLeft.getAbsoluteHeading());
+		SmartDashboard.putNumber("FR Absolute", m_frontRight.getAbsoluteHeading());
+		SmartDashboard.putNumber("RL Absolute", m_rearLeft.getAbsoluteHeading());
+		SmartDashboard.putNumber("RR Absolute", m_rearRight.getAbsoluteHeading());
+
+		SmartDashboard.putNumber("FL Relative", m_frontLeft.getRelativeHeading());
+		SmartDashboard.putNumber("FR Relative", m_frontRight.getRelativeHeading());
+		SmartDashboard.putNumber("RL Relative", m_rearLeft.getRelativeHeading());
+		SmartDashboard.putNumber("RR Relative", m_rearRight.getRelativeHeading());
 
 
 	}
@@ -151,21 +166,14 @@ public class DriveSubsystem extends SubsystemBase {
 		return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
 	}
 
-	public double getFrontLeftHeading() {
-		return m_frontLeft.getEncoderHeading();
+	public void resetRelativeEncoders(){
+		m_frontLeft.resetAngleToAbsolute();
+		m_frontRight.resetAngleToAbsolute();
+		m_rearRight.resetAngleToAbsolute();
+		m_rearLeft.resetAngleToAbsolute();
 	}
 
-	public double getRearLeftHeading() {
-		return m_rearLeft.getEncoderHeading();
-	}
 
-	public double getFrontRightHeading() {
-		return m_frontRight.getEncoderHeading();
-	}
-
-	public double getRearRightHeading() {
-		return m_rearRight.getEncoderHeading();
-	}
 
 	/************************************************************************* */
 

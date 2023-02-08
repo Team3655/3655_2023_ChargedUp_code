@@ -47,7 +47,10 @@ public class SwerveModule extends SubsystemBase {
 
 	private final double m_angleZero;
 
+	private final String m_moduleName;
+
 	public SwerveModule(
+			String moduleName,
 			int driveMotorChannel,
 			int turningMotorChannel,
 			int turningEncoderPorts,
@@ -55,6 +58,8 @@ public class SwerveModule extends SubsystemBase {
 			double[] angularPID,
 			double[] drivePID) {
 
+		m_moduleName = moduleName;
+		
 		// Initialize the motors
 		m_angleZero = angleZero;
 
@@ -66,14 +71,17 @@ public class SwerveModule extends SubsystemBase {
 
 		// Initalize CANcoder
 		m_absoluteEncoder = new CANCoder(turningEncoderPorts);
-
+		
 		m_absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		m_absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
-		// m_absoluteEncoder.configMagnetOffset(-1 * angleZero);
+		m_absoluteEncoder.configMagnetOffset(0);
 		m_absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
 
 		// Initialize Spark MAX encoders
 		m_angularEncoder = m_turningMotor.getEncoder();
+
+		m_turningMotor.setInverted(true);
+
 		m_angularEncoder.setPositionConversionFactor((ModuleConstants.kturnGearRatio) * 2 * Math.PI); // radians
 		m_angularEncoder.setVelocityConversionFactor(
 				ModuleConstants.kturnGearRatio
@@ -122,17 +130,25 @@ public class SwerveModule extends SubsystemBase {
 
 		resetAngleToAbsolute();
 
+
+		SmartDashboard.putNumber(this.m_moduleName + " Init Spark Enc", resetAngleToAbsolute());
+		
+
 	}
 
-	public void resetAngleToAbsolute() {
-		double angle = m_absoluteEncoder.getAbsolutePosition() - m_angleZero;
-		m_angularEncoder.setPosition(angle);
+	public double resetAngleToAbsolute() {
+		double angle = Math.toRadians(this.m_absoluteEncoder.getAbsolutePosition() - this.m_angleZero);
+		this.m_angularEncoder.setPosition(angle);
+		return this.m_angularEncoder.getPosition();
 	}
 
 	// Returns headings of the module
-	public double getModuleHeading() {
-		double m_turning = m_absoluteEncoder.getAbsolutePosition();
-		return m_turning;
+	public double getAbsoluteHeading() {
+		return m_absoluteEncoder.getAbsolutePosition();
+	}
+
+	public double getRelativeHeading() {
+		return Math.toDegrees(m_angularEncoder.getPosition());
 	}
 
 	// Returns current position of the modules
@@ -169,14 +185,16 @@ public class SwerveModule extends SubsystemBase {
 		m_driveMotor.getEncoder().setPosition(0);
 	}
 
-	public double getEncoderHeading() {
-		return Math.toDegrees(m_angularEncoder.getPosition());
+	public void putConversionFactors(){
+		SmartDashboard.putNumber(m_moduleName + " A P Conversion", m_angularEncoder.getPositionConversionFactor());
+		SmartDashboard.putNumber(m_moduleName + " A V Conversion", m_angularEncoder.getVelocityConversionFactor());
+		SmartDashboard.putNumber(m_moduleName + " D V Conversion", m_driveEncoder.getVelocityConversionFactor());
 	}
 
 	@Override
 	public void periodic() {
+
 		// This method will be called once per scheduler run
-		SmartDashboard.putNumber("Angular Position Conversion", m_angularEncoder.getPositionConversionFactor());
-		SmartDashboard.putNumber("Drive Velocity Conversion", m_driveEncoder.getVelocityConversionFactor());
+
 	}
 }
