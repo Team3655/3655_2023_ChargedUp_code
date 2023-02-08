@@ -47,10 +47,10 @@ public final class Constants {
 
 		// TODO: Set angle offset for CANcoders
 		// Offset angle for absolute encoders (find this using REV client)
-		public static final double kFrontLeftAngleZero = 50.185546875;
-		public static final double kFrontRightAngleZero = 219.990234375;
-		public static final double kRearLeftAngleZero = 179.47265625;
-		public static final double kRearRightAngleZero = 209.35546875;
+		public static final double kFrontLeftAngleZero = -118.818;
+		public static final double kFrontRightAngleZero = 112.676;
+		public static final double kRearLeftAngleZero = 146.865;
+		public static final double kRearRightAngleZero = -7.295;
 
 		public static final double kModuleDriveControllerP = .00001;
 		public static final double kModuleDriveControllerI = 0;
