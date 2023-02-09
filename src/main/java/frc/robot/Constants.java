@@ -23,8 +23,8 @@ public final class Constants {
 
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1 / 6.75;
-		public static final double kturnGearRatio = 150 / 7;
-		// 4" to meters (0.1016 meters)
+		public static final double kturnGearRatio = 1 / 21.4286;
+
 		public static final double kwheelCircumference = Units.inchesToMeters(4) * Math.PI;
 
 		// NEO drive motor CAN ID's
@@ -47,16 +47,16 @@ public final class Constants {
 
 		// TODO: Set angle offset for CANcoders
 		// Offset angle for absolute encoders (find this using REV client)
-		public static final double kFrontLeftAngleZero = -118.818;
-		public static final double kFrontRightAngleZero = 112.676;
-		public static final double kRearLeftAngleZero = 146.865;
-		public static final double kRearRightAngleZero = -7.295;
+		public static final double kFrontLeftAngleZero = 63.105; 
+		public static final double kFrontRightAngleZero = 321.240; 
+		public static final double kRearLeftAngleZero = 327.041;
+		public static final double kRearRightAngleZero = 354.727;
 
 		public static final double kModuleDriveControllerP = .00001;
 		public static final double kModuleDriveControllerI = 0;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
 
-		public static final double kModuleTurningControllerP = .000000001;
+		public static final double kModuleTurningControllerP = 1;
 		public static final double kModuleTurningControllerI = 0;
 		public static final double kModuleTurningControllerD = 0;
 
@@ -104,6 +104,22 @@ public final class Constants {
 
 		// TODO: Is gyro reversed?
 		public static final boolean kGyroReversed = false;
+
+	}
+
+	/**
+	 * The constants pertaining to Autonoumus
+	 */
+	public static class AutoConstants {
+
+		// PID constants for path planner (these control drive direction not reaching target wheel speeds)
+		public static final double PathPlannerP = .01;
+		public static final double PathPlannerI = 0;
+		public static final double PathPlannerD = 0;
+
+		public static final double PathPlannerTurnP = .01;
+		public static final double PathPlannerTurnI = 0;
+		public static final double PathPlannerTurnD = 0;
 
 	}
 
