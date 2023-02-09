@@ -22,12 +22,6 @@ public class ArmSegment {
 	/** Real and target Angles for the arms */
 	private double targetTheta;
 
-	/**
-	 * (Depreciated) Defined by the number of motor rotations per revolution
-	 * of the arm (360°)
-	 */
-	private double gearRatio, gearRatioRadius;
-
 	/** the angle constraints on the arm */
 	private double minTheta, maxTheta;
 
@@ -39,8 +33,6 @@ public class ArmSegment {
 	public ArmSegment(int rightPort, int leftPort, double gearRatio, Boolean invertLeft) {
 
 		targetSign = 1;
-		this.gearRatio = gearRatio;
-		this.gearRatioRadius = gearRatio / (2 * Math.PI);
 
 		// region def_motors
 		// creates left and right arm motors
@@ -178,17 +170,6 @@ public class ArmSegment {
 	 */
 	public double getTargetTheta() {
 		return targetTheta;
-	}
-
-	/**
-	 * (Depreciated) Used for getting the number of ticks required to turn an angle
-	 * 
-	 * @param theta      the angke you want to turn (in radians)
-	 * @param totalTicks the number of ticks required to make one revolution
-	 * @return the number of motor ticks required to turn theta
-	 */
-	public double getThetaToTicks() {
-		return targetTheta * gearRatioRadius;
 	}
 
 	/** Returns the actual angle of the real arm (not the same as the target) */
