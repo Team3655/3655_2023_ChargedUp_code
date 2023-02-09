@@ -24,14 +24,14 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	/** controls the side of the robot the arm is on */
-	private boolean m_isFront;
+	private boolean isFront;
 
 	/** the variable setting the height of the arm */
-	ArmPoses m_armState, m_prevArmState;
+	ArmPoses armState, prevArmState;
 
 	// create arms
-	public ArmSegment m_majorArm;
-	public ArmSegment m_minorArm;
+	public ArmSegment majorArm;
+	public ArmSegment minorArm;
 
 	// endregion
 
@@ -39,36 +39,36 @@ public class ArmSubsystem extends SubsystemBase {
 		// region: def arms
 
 		// major arm defs
-		m_majorArm = new ArmSegment(
+		majorArm = new ArmSegment(
 				ArmConstants.kRightMajorArmPort,
 				ArmConstants.kLeftMajorArmPort,
 				ArmConstants.kMajorArmTicks,
 				true);
 
-		m_majorArm.setPID(
+		majorArm.setPID(
 				ArmConstants.kMajorArmP,
 				ArmConstants.kMajorArmI,
 				ArmConstants.kMajorArmD);
 
-		m_majorArm.setConstraints(-90, 90);
+		majorArm.setConstraints(-90, 90);
 
 		// minor arm defs
-		m_minorArm = new ArmSegment(
+		minorArm = new ArmSegment(
 				ArmConstants.kRightMinorArmPort,
 				ArmConstants.kLeftMinorArmPort,
 				ArmConstants.kMinorArmTicks,
 				false);
 
-		m_minorArm.setPID(
+		minorArm.setPID(
 				ArmConstants.kMinorArmP,
 				ArmConstants.kMinorArmI,
 				ArmConstants.kMinorArmD);
 
-		m_minorArm.setConstraints(-90, 90);
+		minorArm.setConstraints(-90, 90);
 		// endregion
 
 		// the default state of the arms
-		m_isFront = true;
+		isFront = true;
 
 		// setArmState(ArmPoses.TUCKED);
 	}
@@ -76,12 +76,12 @@ public class ArmSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		SmartDashboard.putNumber("major real theta: ", m_majorArm.getRealTheta());
-		SmartDashboard.putNumber("minor real theta: ", m_minorArm.getRealTheta());
+		SmartDashboard.putNumber("major real theta: ", majorArm.getRealTheta());
+		SmartDashboard.putNumber("minor real theta: ", minorArm.getRealTheta());
 		// Address the major motors
-		m_majorArm.setReference();
+		majorArm.setReference();
 		// Address the minor motors
-		m_minorArm.setReference();
+		minorArm.setReference();
 
 	}
 
@@ -95,50 +95,50 @@ public class ArmSubsystem extends SubsystemBase {
 	 */
 	public void setArmState(ArmPoses pose) {
 
-		m_armState = pose;
+		armState = pose;
 
-		switch (m_armState) {
+		switch (armState) {
 			// When the arms are tucked in the center of the robot (this is the only legal
 			// starting position)
 			case TUCKED:
-				m_majorArm.setTargetTheta(0);
-				m_minorArm.setTargetTheta(0);
+				majorArm.setTargetTheta(0);
+				minorArm.setTargetTheta(0);
 				break;
 
 			// Used for scoring in the lowest "hybrid" node
 			case LOW_SCORE:
-				m_majorArm.setTargetTheta(45);
-				m_minorArm.setTargetTheta(90);
+				majorArm.setTargetTheta(45);
+				minorArm.setTargetTheta(90);
 				break;
 
 			// Used for scoring in the middle node
 			case MID_SCORE:
-				m_majorArm.setTargetTheta(75);
-				m_minorArm.setTargetTheta(90);
+				majorArm.setTargetTheta(75);
+				minorArm.setTargetTheta(90);
 				break;
 
 			// Used for scoring in the highest node
 			case HIGH_SCORE:
-				m_majorArm.setTargetTheta(90);
-				m_minorArm.setTargetTheta(90);
+				majorArm.setTargetTheta(90);
+				minorArm.setTargetTheta(90);
 				break;
 
 			// Used for intaking off of the floor
 			case LOW_INTAKE:
-				m_majorArm.setTargetTheta(30);
-				m_minorArm.setTargetTheta(30);
+				majorArm.setTargetTheta(30);
+				minorArm.setTargetTheta(30);
 				break;
 
 			// Used for intaking from the human player chute
 			case MID_INTAKE:
-				m_majorArm.setTargetTheta(30);
-				m_minorArm.setTargetTheta(45);
+				majorArm.setTargetTheta(30);
+				minorArm.setTargetTheta(45);
 				break;
 
 			// Used for intaking from the sliding human player station
 			case HIGH_INTAKE:
-				m_majorArm.setTargetTheta(80);
-				m_minorArm.setTargetTheta(80);
+				majorArm.setTargetTheta(80);
+				minorArm.setTargetTheta(80);
 				break;
 
 			// goes to the pair of angles defined my the TSB driver
@@ -147,9 +147,9 @@ public class ArmSubsystem extends SubsystemBase {
 		}
 
 		// Address the major motors
-		m_majorArm.setReference();
+		majorArm.setReference();
 		// Address the minor motors
-		m_minorArm.setReference();
+		minorArm.setReference();
 
 	}
 
@@ -160,7 +160,7 @@ public class ArmSubsystem extends SubsystemBase {
 	 *             HIGH_INTAKE)
 	 */
 	public void setPrevArmState(ArmPoses pose) {
-		m_prevArmState = pose;
+		prevArmState = pose;
 	}
 
 	/**
@@ -170,18 +170,18 @@ public class ArmSubsystem extends SubsystemBase {
 	 */
 	public void setDominantSide(boolean isFront) {
 		if (isFront) {
-			m_majorArm.setSign(1);
-			m_minorArm.setSign(1);
+			majorArm.setSign(1);
+			minorArm.setSign(1);
 		} else {
-			m_majorArm.setSign(-1);
-			m_minorArm.setSign(-1);
+			majorArm.setSign(-1);
+			minorArm.setSign(-1);
 		}
 	}
 
 	/** Toggles the dominant side of the robot */
 	public CommandBase ToggleSide() {
 		return runOnce(() -> {
-			setDominantSide(!m_isFront);
+			setDominantSide(!isFront);
 		});
 	}
 
@@ -196,7 +196,7 @@ public class ArmSubsystem extends SubsystemBase {
 	 *         MID_INTAKE, HIGH_INTAKE)
 	 */
 	public ArmPoses getArmState() {
-		return m_armState;
+		return armState;
 	}
 
 	/**
@@ -206,16 +206,16 @@ public class ArmSubsystem extends SubsystemBase {
 	 *         MID_INTAKE, HIGH_INTAKE)
 	 */
 	public ArmPoses getPrevArmState() {
-		return m_prevArmState;
+		return prevArmState;
 	}
 
 	/** ruturns true if the target dominant side of the robot is front */
 	public boolean getIsFront() {
-		return m_isFront;
+		return isFront;
 	}
 
 	public boolean getAtTarget(double deadBand) {
-		if (m_majorArm.getAtTarget(deadBand) && m_minorArm.getAtTarget(deadBand)) {
+		if (majorArm.getAtTarget(deadBand) && minorArm.getAtTarget(deadBand)) {
 			return true;
 		}
 		return false;
