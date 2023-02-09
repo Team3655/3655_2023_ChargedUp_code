@@ -96,7 +96,7 @@ public class DriveSubsystem extends SubsystemBase {
 		m_frontRight.putConversionFactors();
 		m_rearRight.putConversionFactors();
 		m_rearLeft.putConversionFactors();
-		
+
 	}
 
 	public Pose2d getPose() {
@@ -134,7 +134,6 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("RL Relative", m_rearLeft.getRelativeHeading());
 		SmartDashboard.putNumber("RR Relative", m_rearRight.getRelativeHeading());
 
-
 	}
 
 	public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -166,14 +165,12 @@ public class DriveSubsystem extends SubsystemBase {
 		return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
 	}
 
-	public void resetRelativeEncoders(){
+	public void resetRelativeEncoders() {
 		m_frontLeft.resetAngleToAbsolute();
 		m_frontRight.resetAngleToAbsolute();
 		m_rearRight.resetAngleToAbsolute();
 		m_rearLeft.resetAngleToAbsolute();
 	}
-
-
 
 	/************************************************************************* */
 
