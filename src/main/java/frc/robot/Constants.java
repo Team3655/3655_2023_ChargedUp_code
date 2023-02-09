@@ -47,17 +47,17 @@ public final class Constants {
 
 		// TODO: Set angle offset for CANcoders
 		// Offset angle for absolute encoders (find this using REV client)
-		public static final double kFrontLeftAngleZero = -118.818;
-		public static final double kFrontRightAngleZero = 112.676;
-		public static final double kRearLeftAngleZero = 146.865;
-		public static final double kRearRightAngleZero = -7.295;
+		public static final double kFrontLeftAngleZero = 63.105; 
+		public static final double kFrontRightAngleZero = 321.240; 
+		public static final double kRearLeftAngleZero = 327.041;
+		public static final double kRearRightAngleZero = 354.727;
 
 		public static final double kModuleDriveControllerP = .00001;
 		public static final double kModuleDriveControllerI = 0;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
 
 		public static final double kModuleTurningControllerP = 1;
-		public static final double kModuleTurningControllerI = 5e-5;
+		public static final double kModuleTurningControllerI = 0;
 		public static final double kModuleTurningControllerD = 0;
 
 		// SPARK MAX Angular PID values

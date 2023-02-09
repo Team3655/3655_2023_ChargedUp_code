@@ -137,8 +137,10 @@ public class SwerveModule extends SubsystemBase {
 	}
 
 	public double resetAngleToAbsolute() {
-		double angle = Math.toRadians(this.m_absoluteEncoder.getAbsolutePosition() - this.m_angleZero);
-		this.m_angularEncoder.setPosition(angle);
+		double angle = Math.toRadians(m_absoluteEncoder.getAbsolutePosition() - this.m_angleZero);
+		SmartDashboard.putString(m_moduleName + " Abs. Error", m_absoluteEncoder.getLastError().toString());
+		m_angularEncoder.setPosition(angle);
+
 		return this.m_angularEncoder.getPosition();
 	}
 
