@@ -4,20 +4,22 @@
 
 package frc.robot;
 
+
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
+
+import frc.robot.commands.ExampleCommand;
+
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.commands.ArmPoseCommand;
 import frc.robot.commands.ArmSwitchCommand;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem.ArmPoses;
+import frc.robot.subsystems.IntakeSubsystem;
+
 import frc.robot.subsystems.DashboardSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ArmSubsystem.ArmPoses;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -25,6 +27,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import frc.robot.commands.Autos;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since

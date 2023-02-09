@@ -121,13 +121,6 @@ public class DashboardSubsystem extends SubsystemBase {
 	
 	private ShuffleboardTab m_ModuleTab = Shuffleboard.getTab("Modules");
 
-	private GenericEntry m_FrontLeftHeading = m_ModuleTab.add("FL Heading", 0).getEntry();
-
-	private GenericEntry m_RearLeftHeading = m_ModuleTab.add("RL Heading", 0).getEntry();
-
-	private GenericEntry m_FrontRightHeading = m_ModuleTab.add("FR Heading", 0).getEntry();
-
-	private GenericEntry m_RearRightHeading = m_ModuleTab.add("RR Heading", 0).getEntry();
 
 	private GenericEntry m_gyro = m_ModuleTab.add("Gyro", 0).getEntry();
 

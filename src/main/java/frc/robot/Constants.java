@@ -108,6 +108,22 @@ public final class Constants {
 	}
 
 	/**
+	 * The constants pertaining to Autonoumus
+	 */
+	public static class AutoConstants {
+
+		// PID constants for path planner (these control drive direction not reaching target wheel speeds)
+		public static final double PathPlannerP = .01;
+		public static final double PathPlannerI = 0;
+		public static final double PathPlannerD = 0;
+
+		public static final double PathPlannerTurnP = .01;
+		public static final double PathPlannerTurnI = 0;
+		public static final double PathPlannerTurnD = 0;
+
+	}
+
+	/**
 	 * The constants pertaining to the drive station
 	 */
 	public static class OperatorConstants {
