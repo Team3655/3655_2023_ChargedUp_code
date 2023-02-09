@@ -11,79 +11,83 @@ public class ArmSegment {
 	// region properties
 
 	/** Motor controllers for the segment */
-	private CANSparkMax m_rightMotor, m_leftMotor;
+	private CANSparkMax rightMotor, leftMotor;
 
 	/** PID controllers for the segment */
-	public SparkMaxPIDController m_rightPIDController, m_leftPIDController;
+	public SparkMaxPIDController rightPIDController, leftPIDController;
 
 	/** Encoders for the segment */
-	private RelativeEncoder m_rightEncoder, m_leftEncoder;
+	private RelativeEncoder rightEncoder, leftEncoder;
 
 	/** Real and target Angles for the arms */
-	private double m_targetTheta, m_realTheta;
+	private double targetTheta;
 
-	/** Defined by the number of motor rotations per revolution of the arm (360°) */
-	private double m_gearRatio, m_gearRatioRadius;
+	/**
+	 * (Depreciated) Defined by the number of motor rotations per revolution
+	 * of the arm (360°)
+	 */
+	private double gearRatio, gearRatioRadius;
 
 	/** the angle constraints on the arm */
-	private double m_minTheta, m_maxTheta;
+	private double minTheta, maxTheta;
 
 	/** Controls the direction of the arm */
-	private int m_targetSign;
+	private int targetSign;
 
 	// endregion
 
 	public ArmSegment(int rightPort, int leftPort, double gearRatio, Boolean invertLeft) {
 
-		m_targetSign = 1;
-		this.m_gearRatio = gearRatio;
-		this.m_gearRatioRadius = gearRatio / (2 * Math.PI);
+		targetSign = 1;
+		this.gearRatio = gearRatio;
+		this.gearRatioRadius = gearRatio / (2 * Math.PI);
 
 		// region def_motors
 		// creates left and right arm motors
-		m_rightMotor = new CANSparkMax(leftPort, MotorType.kBrushless);
-		m_leftMotor = new CANSparkMax(rightPort, MotorType.kBrushless);
+		rightMotor = new CANSparkMax(leftPort, MotorType.kBrushless);
+		leftMotor = new CANSparkMax(rightPort, MotorType.kBrushless);
 
 		/**
 		 * The restoreFactoryDefaults method can be used to reset the configuration
 		 * parameters in the SPARK MAX to their factory default state. If no argument is
 		 * passed, these parameters will not persist between power cycles
 		 */
-		m_rightMotor.restoreFactoryDefaults();
-		m_leftMotor.restoreFactoryDefaults();
+		rightMotor.restoreFactoryDefaults();
+		leftMotor.restoreFactoryDefaults();
 
 		// sets motor defaults to break
-		m_rightMotor.setIdleMode(IdleMode.kBrake);
-		m_leftMotor.setIdleMode(IdleMode.kBrake);
+		rightMotor.setIdleMode(IdleMode.kBrake);
+		leftMotor.setIdleMode(IdleMode.kBrake);
 
 		/**
 		 * In order to use PID functionality for a controller, a SparkMaxPIDController
 		 * object is constructed by calling the getPIDController() method on an existing
 		 * CANSparkMax object
 		 */
-		m_rightPIDController = m_rightMotor.getPIDController();
-		m_leftPIDController = m_leftMotor.getPIDController();
+		rightPIDController = rightMotor.getPIDController();
+		leftPIDController = leftMotor.getPIDController();
 
 		// Encoder object created to display position values
-		m_rightEncoder = m_rightMotor.getEncoder();
-		m_leftEncoder = m_leftMotor.getEncoder();
+		rightEncoder = rightMotor.getEncoder();
+		leftEncoder = leftMotor.getEncoder();
 
-		m_rightEncoder.setPositionConversionFactor((2 * Math.PI) / m_gearRatio);
-		m_leftEncoder.setPositionConversionFactor((2 * Math.PI) / m_gearRatio);
+		// Tells the motors to automatically convert degrees to rotations
+		rightEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
+		leftEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
 
 		// set PID coefficients
-		m_rightPIDController.setP(0);
-		m_rightPIDController.setI(0);
-		m_rightPIDController.setD(0);
-		m_rightPIDController.setOutputRange(-0.5, 0.5);
+		rightPIDController.setP(0);
+		rightPIDController.setI(0);
+		rightPIDController.setD(0);
+		rightPIDController.setOutputRange(-0.5, 0.5);
 
-		m_leftPIDController.setP(0);
-		m_leftPIDController.setI(0);
-		m_leftPIDController.setD(0);
-		m_leftPIDController.setOutputRange(-0.5, 0.5);
+		leftPIDController.setP(0);
+		leftPIDController.setI(0);
+		leftPIDController.setD(0);
+		leftPIDController.setOutputRange(-0.5, 0.5);
 
 		// Sets the left motor to be inverted if it needs to be
-		m_leftMotor.setInverted(invertLeft);
+		leftMotor.setInverted(invertLeft);
 
 		// endregion
 	}
@@ -92,8 +96,8 @@ public class ArmSegment {
 
 	/** Sets the pid referance point to the target theta of the segment */
 	public void setReference() {
-		m_rightPIDController.setReference(m_targetTheta * m_targetSign, CANSparkMax.ControlType.kPosition);
-		m_leftPIDController.setReference(m_targetTheta * m_targetSign, CANSparkMax.ControlType.kPosition);
+		rightPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
+		leftPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
 	}
 
 	/**
@@ -102,13 +106,13 @@ public class ArmSegment {
 	 * @param sign the Sign to set
 	 */
 	public void setSign(int sign) {
-		m_targetSign = sign;
+		targetSign = sign;
 	}
 
 	/** sets the min and max target angle of */
 	public void setConstraints(int min, int max) {
-		m_maxTheta = max;
-		m_minTheta = min;
+		maxTheta = max;
+		minTheta = min;
 	}
 
 	/**
@@ -119,11 +123,11 @@ public class ArmSegment {
 	 */
 	public double constrain(double theta) {
 
-		if (theta >= m_maxTheta) {
-			return m_maxTheta;
+		if (theta >= maxTheta) {
+			return maxTheta;
 
-		} else if (theta <= m_minTheta) {
-			return m_minTheta;
+		} else if (theta <= minTheta) {
+			return minTheta;
 		}
 
 		return theta;
@@ -136,7 +140,7 @@ public class ArmSegment {
 	 */
 	public void setTargetTheta(double theta) {
 		theta = constrain(theta);
-		m_targetTheta = Math.toRadians(theta);
+		targetTheta = Math.toRadians(theta);
 	}
 
 	/**
@@ -147,12 +151,12 @@ public class ArmSegment {
 	 * @param D Don't make me wait on behalf of your ignorance
 	 */
 	public void setPID(double P, double I, double D) {
-		m_rightPIDController.setP(P);
-		m_rightPIDController.setI(I);
-		m_rightPIDController.setD(D);
-		m_leftPIDController.setP(P);
-		m_leftPIDController.setI(I);
-		m_leftPIDController.setD(D);
+		rightPIDController.setP(P);
+		rightPIDController.setI(I);
+		rightPIDController.setD(D);
+		leftPIDController.setP(P);
+		leftPIDController.setI(I);
+		leftPIDController.setD(D);
 	}
 
 	/**
@@ -161,8 +165,8 @@ public class ArmSegment {
 	 * @param limit the maximum allowed power draw
 	 */
 	public void setSmartCurrentLimit(int limit) {
-		m_rightMotor.setSmartCurrentLimit(limit);
-		m_leftMotor.setSmartCurrentLimit(limit);
+		rightMotor.setSmartCurrentLimit(limit);
+		leftMotor.setSmartCurrentLimit(limit);
 	}
 
 	// endregion
@@ -173,7 +177,7 @@ public class ArmSegment {
 	 * @return the m_targetTheta
 	 */
 	public double getTargetTheta() {
-		return m_targetTheta;
+		return targetTheta;
 	}
 
 	/**
@@ -184,12 +188,12 @@ public class ArmSegment {
 	 * @return the number of motor ticks required to turn theta
 	 */
 	public double getThetaToTicks() {
-		return m_targetTheta * m_gearRatioRadius;
+		return targetTheta * gearRatioRadius;
 	}
 
 	/** Returns the actual angle of the real arm (not the same as the target) */
 	public double getRealTheta() {
-		return Math.toDegrees((m_rightEncoder.getPosition() + m_leftEncoder.getPosition()) / 2);
+		return Math.toDegrees((rightEncoder.getPosition() + leftEncoder.getPosition()) / 2);
 	}
 
 	/**
@@ -200,7 +204,7 @@ public class ArmSegment {
 	 */
 	public boolean getAtTarget(double deadBand) {
 		// get absolute value of the difference
-		double error = Math.abs(getRealTheta() - m_targetTheta);
+		double error = Math.abs(getRealTheta() - targetTheta);
 		// convert deadband to radians
 		deadBand = Math.toRadians(deadBand);
 
