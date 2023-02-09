@@ -19,16 +19,16 @@ import frc.robot.Constants.IntakeConstants;
 public class IntakeSubsystem extends SubsystemBase {
 
 	/** Motors for the Suckers */
-	private CANSparkMax m_mainSucker;
+	private CANSparkMax mainSucker;
 
 	/** PID controlers for Suckers */
-	private SparkMaxPIDController m_mainPIDController;
+	private SparkMaxPIDController mainPIDController;
 
 	/** Encoders for Sucker motors */
-	private RelativeEncoder m_mainEncoder;
+	private RelativeEncoder mainEncoder;
 
 	/** Color sensor for detectng which type of piece is held */
-	private ColorSensorV3 m_colorSense;
+	private ColorSensorV3 colorSense;
 
 	/** Used to tell if the suckers are running */
 	private boolean isSucking;
@@ -37,34 +37,32 @@ public class IntakeSubsystem extends SubsystemBase {
 	public IntakeSubsystem() {
 
 		// Give Sucker motors their id's
-		m_mainSucker = new CANSparkMax(IntakeConstants.kMainSuckerPort, MotorType.kBrushless);
+		mainSucker = new CANSparkMax(IntakeConstants.kMainSuckerPort, MotorType.kBrushless);
 
 		/**
 		 * The restoreFactoryDefaults method can be used to reset the configuration
 		 * parameters in the SPARK MAX to their factory default state. If no argument is
 		 * passed, these parameters will not persist between power cycles
 		 */
-		m_mainSucker.restoreFactoryDefaults();
+		mainSucker.restoreFactoryDefaults();
 
 		// set current limits
-		m_mainSucker.setSmartCurrentLimit(IntakeConstants.kMainSuckerCurrentTarget);
+		mainSucker.setSmartCurrentLimit(IntakeConstants.kMainSuckerCurrentTarget);
 
 		// sets motor defaults to break
-		m_mainSucker.setIdleMode(IdleMode.kCoast);
-
-		m_mainSucker.stopMotor();
+		mainSucker.setIdleMode(IdleMode.kCoast);
 
 		/**
 		 * In order to use PID functionality for a controller, a SparkMaxPIDController
 		 * object is constructed by calling the getPIDController() method on an existing
 		 * CANSparkMax object
 		 */
-		m_mainPIDController = m_mainSucker.getPIDController();
-		m_mainPIDController.setP(IntakeConstants.kMainSuckerP);
-		m_mainPIDController.setOutputRange(0, IntakeConstants.kMainSuckerMaxOutput);
+		mainPIDController = mainSucker.getPIDController();
+		mainPIDController.setP(IntakeConstants.kMainSuckerP);
+		mainPIDController.setOutputRange(0, IntakeConstants.kMainSuckerMaxOutput);
 
 		// Encoder object created to display velocity values
-		m_mainEncoder = m_mainSucker.getEncoder();
+		mainEncoder = mainSucker.getEncoder();
 
 	}
 
@@ -84,11 +82,11 @@ public class IntakeSubsystem extends SubsystemBase {
 				() -> {
 
 					if (isSucking) {
-						m_mainPIDController.setReference(
+						mainPIDController.setReference(
 								IntakeConstants.kMainSuckerCurrentTarget,
 								ControlType.kCurrent);
 					} else {
-						m_mainSucker.stopMotor();
+						mainSucker.stopMotor();
 					}
 
 				});
@@ -106,7 +104,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	 */
 	public boolean getHasPiece() {
 
-		if (m_mainEncoder.getVelocity() < IntakeConstants.kHasPieceRPMThreshold) {
+		if (mainEncoder.getVelocity() < IntakeConstants.kHasPieceRPMThreshold && isSucking) {
 			return true;
 		}
 
@@ -120,7 +118,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	 * @return True if the robot is holding a cone
 	 */
 	public boolean getHasCone() {
-		if (getHasPiece() && m_colorSense.getColor() == Color.kYellow) {
+		if (getHasPiece() && colorSense.getColor() == Color.kYellow) {
 			return true;
 		}
 		return false;
@@ -133,7 +131,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	 * @return True if the robot is holding a Cube
 	 */
 	public boolean getHasCube() {
-		if (getHasPiece() && m_colorSense.getColor() == Color.kPurple) {
+		if (getHasPiece() && colorSense.getColor() == Color.kPurple) {
 			return true;
 		}
 		return false;
