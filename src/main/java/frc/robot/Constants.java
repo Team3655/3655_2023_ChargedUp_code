@@ -45,7 +45,6 @@ public final class Constants {
 		public static final int kRearLeftTurningEncoderPort = 6;
 		public static final int kRearRightTurningEncoderPort = 12;
 
-		// TODO: Set angle offset for CANcoders
 		// Offset angle for absolute encoders (find this using REV client)
 		public static final double kFrontLeftAngleZero = 63.105; 
 		public static final double kFrontRightAngleZero = 321.240; 
@@ -89,10 +88,8 @@ public final class Constants {
 		public static final double kMaxRPM = (kMaxModuleAngularSpeedRadiansPerSecond * 60)
 				/ (2 * Math.PI); // Convert rad/s to RPM
 
-		// TODO: Set CAN ID for pigeon 2
 		public static final int kPigeonPort = 13;
 
-		// TODO: Set trackwidth and wheelbase in meters of physical robot
 		public static final double kTrackWidth = 24 / 39.37; // meters
 		public static final double kWheelBase = 24 / 39.37; // meters
 
@@ -102,7 +99,6 @@ public final class Constants {
 				new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
 				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-		// TODO: Is gyro reversed?
 		public static final boolean kGyroReversed = false;
 
 	}

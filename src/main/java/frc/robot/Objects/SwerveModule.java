@@ -79,9 +79,6 @@ public class SwerveModule extends SubsystemBase {
 						* 2 * Math.PI
 						* (1 / 60)); // radians per second
 
-		// m_angularEncoder.setPosition(Math.toRadians(m_absoluteEncoder.getAbsolutePosition())
-		// - Math.toRadians(angleZero));
-
 		driveEncoder = driveMotor.getEncoder();
 		driveEncoder.setPositionConversionFactor(ModuleConstants.kdriveGearRatio * 2 * Math.PI); // meters
 		driveMotor.getEncoder().setVelocityConversionFactor(

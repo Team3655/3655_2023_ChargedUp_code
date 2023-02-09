@@ -68,7 +68,6 @@ public class DriveSubsystem extends SubsystemBase {
 			ModuleConstants.kAngularPID,
 			ModuleConstants.kDrivePID);
 
-	// TODO: Use variable here instead of entries below?
 	private SwerveModulePosition[] swervePosition = new SwerveModulePosition[] {
 			frontLeft.getPosition(),
 			frontRight.getPosition(),
