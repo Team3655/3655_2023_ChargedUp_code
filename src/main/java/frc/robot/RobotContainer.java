@@ -16,10 +16,14 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPoses;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -43,6 +47,7 @@ public class RobotContainer {
 			OperatorConstants.kDriverControllerPort);
 	private final CommandGenericHID m_operatorController = new CommandGenericHID(1);
 
+	Trigger select = m_driverController.back();
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
@@ -66,6 +71,10 @@ public class RobotContainer {
 		// Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 		new Trigger(m_exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
 
+		select.onTrue(new InstantCommand(
+			() -> m_driveSubsystem.zeroHeading()
+		));
+
 		// Schedule `exampleMethodCommand` when the Xbox controller's B button is
 		// pressed, cancelling on release.
 		// m_driverController.a().onTrue(new ArmPoseCommand(m_armSubsystem,
@@ -81,10 +90,10 @@ public class RobotContainer {
 		m_driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> m_driveSubsystem.drive(
-								m_driverController.getLeftY() * DriveConstants.kMaxSpeedMetersPerSecond, // x axis
-								m_driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond, // y axis
+								Math.pow(m_driverController.getLeftY() * DriveConstants.kMaxSpeedMetersPerSecond, 3), // x axis
+								Math.pow(m_driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond, 3), // y axis
 								m_driverController.getRightX() * DriveConstants.kMaxRPM, // z axis
-								false),
+								true),
 						m_driveSubsystem));
 
 	}

@@ -97,6 +97,8 @@ public class DriveSubsystem extends SubsystemBase {
 		m_rearRight.putConversionFactors();
 		m_rearLeft.putConversionFactors();
 
+		SmartDashboard.putNumber("Gyro", m_gyro.getAngle());
+
 	}
 
 	public Pose2d getPose() {

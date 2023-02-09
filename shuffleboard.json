@@ -271,8 +271,8 @@
           },
           "0,5": {
             "size": [
-              1,
-              1
+              2,
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -282,10 +282,10 @@
               "_showGlyph": false
             }
           },
-          "1,5": {
+          "2,5": {
             "size": [
-              1,
-              1
+              2,
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -295,10 +295,10 @@
               "_showGlyph": false
             }
           },
-          "2,5": {
+          "4,5": {
             "size": [
-              1,
-              1
+              2,
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -349,6 +349,19 @@
                   "_showGlyph": false
                 }
               ]
+            }
+          },
+          "14,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Gyro",
+              "_title": "Gyro",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           }
         }
