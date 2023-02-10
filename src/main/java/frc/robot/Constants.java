@@ -22,10 +22,17 @@ public final class Constants {
 	public static class ModuleConstants {
 
 		// Constants set for the _SDS MK4i_
-		public static final double kdriveGearRatio = 1 / 6.75;
-		public static final double kturnGearRatio = 1 / 21.4286;
+		public static final double kdriveGearRatio = 1d / 6.75;
+		public static final double kturnGearRatio = 1d / (150d / 7d);
 
 		public static final double kwheelCircumference = Units.inchesToMeters(4) * Math.PI;
+
+		// TODO: Set feedforward values for drive
+		public static final double ksVolts = .1;
+		public static final double kDriveFeedForward = .2;
+
+		public static final double kvTurning = .43205;
+		public static final double kTurnFeedForward = .17161; // Tuned February 2, 2023
 
 		// NEO drive motor CAN ID's
 		public static final int kFrontLeftDriveMotorPort = 1;
@@ -47,17 +54,17 @@ public final class Constants {
 
 		// TODO: Set angle offset for CANcoders
 		// Offset angle for absolute encoders (find this using REV client)
-		public static final double kFrontLeftAngleZero = 63.105; 
-		public static final double kFrontRightAngleZero = 321.240; 
-		public static final double kRearLeftAngleZero = 327.041;
-		public static final double kRearRightAngleZero = 354.727;
+		public static final double kFrontLeftAngleZero = 62.666015;
+		public static final double kFrontRightAngleZero = 333.544921;
+		public static final double kRearLeftAngleZero = 326.513671;
+		public static final double kRearRightAngleZero = 352.617187;
 
-		public static final double kModuleDriveControllerP = .00001;
+		public static final double kModuleDriveControllerP = .001;
 		public static final double kModuleDriveControllerI = 0;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
 
-		public static final double kModuleTurningControllerP = 1;
-		public static final double kModuleTurningControllerI = 0;
+		public static final double kModuleTurningControllerP = 3;
+		public static final double kModuleTurningControllerI = 5e-10;
 		public static final double kModuleTurningControllerD = 0;
 
 		// SPARK MAX Angular PID values
@@ -74,18 +81,14 @@ public final class Constants {
 	}
 
 	public static class DriveConstants {
-		// TODO: Set feedforward values for drive
-		public static final double ksVolts = .1;
-		public static final double kvVoltSecondsPerMeter = .2;
 
-		public static final double ksTurning = .17161;// Tuned February 2, 2023
-		public static final double kvTurning = .43205;
+		public static final double KDeadBand = .05;
 
 		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
 		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
 
 		// TODO: Change max speed
-		public static final double kMaxSpeedMetersPerSecond = 3;
+		public static final double kMaxSpeedMetersPerSecond = 6;
 		public static final double kMaxRPM = (kMaxModuleAngularSpeedRadiansPerSecond * 60)
 				/ (2 * Math.PI); // Convert rad/s to RPM
 
@@ -112,7 +115,8 @@ public final class Constants {
 	 */
 	public static class AutoConstants {
 
-		// PID constants for path planner (these control drive direction not reaching target wheel speeds)
+		// PID constants for path planner (these control drive direction not reaching
+		// target wheel speeds)
 		public static final double PathPlannerP = .01;
 		public static final double PathPlannerI = 0;
 		public static final double PathPlannerD = 0;

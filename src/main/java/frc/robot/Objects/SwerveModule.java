@@ -20,7 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DriveConstants;
+//import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule extends SubsystemBase {
@@ -73,21 +73,21 @@ public class SwerveModule extends SubsystemBase {
 
 		turningMotor.setInverted(true);
 
-		angularEncoder.setPositionConversionFactor((ModuleConstants.kturnGearRatio) * 2 * Math.PI); // radians
+		angularEncoder.setPositionConversionFactor(ModuleConstants.kturnGearRatio * 2d * Math.PI); // radians
 		angularEncoder.setVelocityConversionFactor(
 				ModuleConstants.kturnGearRatio
-						* 2 * Math.PI
-						* (1 / 60)); // radians per second
+						* 2d * Math.PI
+						* (1d / 60d)); // radians per second
 
 		// m_angularEncoder.setPosition(Math.toRadians(m_absoluteEncoder.getAbsolutePosition())
 		// - Math.toRadians(angleZero));
 
 		driveEncoder = driveMotor.getEncoder();
-		driveEncoder.setPositionConversionFactor(ModuleConstants.kdriveGearRatio * 2 * Math.PI); // meters
+		driveEncoder.setPositionConversionFactor(ModuleConstants.kdriveGearRatio * 2d * Math.PI); // meters
 		driveMotor.getEncoder().setVelocityConversionFactor(
 				ModuleConstants.kdriveGearRatio
 						* ModuleConstants.kwheelCircumference
-						* (1 / 60)); // meters per second
+						* (1d / 60d)); // meters per second
 
 		// Initialize PID's
 		this.angularPID = turningMotor.getPIDController();
@@ -100,8 +100,8 @@ public class SwerveModule extends SubsystemBase {
 		this.drivePID.setI(drivePID[1]);
 		this.drivePID.setD(drivePID[2]);
 
-		this.angularPID.setFF(DriveConstants.ksTurning);
-		this.drivePID.setFF(DriveConstants.kvVoltSecondsPerMeter);
+		this.angularPID.setFF(ModuleConstants.kTurnFeedForward);
+		this.drivePID.setFF(ModuleConstants.kDriveFeedForward);
 
 		this.angularPID.setFeedbackDevice(turningMotor.getEncoder());
 		this.drivePID.setFeedbackDevice(driveMotor.getEncoder());
@@ -114,8 +114,8 @@ public class SwerveModule extends SubsystemBase {
 		this.drivePID.setOutputRange(-1, 1);
 
 		// Configure current limits for motors - prevents disabling/brownouts
-		driveMotor.setIdleMode(IdleMode.kBrake);
-		turningMotor.setIdleMode(IdleMode.kBrake);
+		driveMotor.setIdleMode(IdleMode.kCoast);
+		turningMotor.setIdleMode(IdleMode.kCoast);
 		turningMotor.setSmartCurrentLimit(30);
 		driveMotor.setSmartCurrentLimit(30);
 

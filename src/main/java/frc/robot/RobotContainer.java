@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 
@@ -27,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.Autos;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -85,13 +83,16 @@ public class RobotContainer {
 		// ArmPoses.TUCKED));
 
 		// Swerve Drive method is set as default for drive subsystem
+		new Trigger (m_driverController.back()).onTrue(m_driveSubsystem.toggleFieldCentric());
+		new Trigger (m_driverController.start()).onTrue(m_driveSubsystem.zeroHeading());
+
 		m_driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> m_driveSubsystem.drive(
 								m_driverController.getLeftY() * DriveConstants.kMaxSpeedMetersPerSecond, // x axis
 								m_driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond, // y axis
-								m_driverController.getRightX() * DriveConstants.kMaxRPM, // z axis
-								false),
+								m_driverController.getRightX() * DriveConstants.kMaxRPM // z axis
+						),
 						m_driveSubsystem));
 
 	}
