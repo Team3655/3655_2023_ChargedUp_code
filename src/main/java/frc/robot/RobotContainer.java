@@ -11,9 +11,9 @@ import frc.robot.commands.ExampleCommand;
 
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.commands.ArmPoseCommand;
-import frc.robot.commands.ArmSwitchCommand;
+//import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.subsystems.ArmSubsystem.ArmPoses;
-import frc.robot.subsystems.IntakeSubsystem;
+//import frc.robot.subsystems.IntakeSubsystem;
 
 import frc.robot.subsystems.DashboardSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -41,7 +41,7 @@ public class RobotContainer {
 	private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 	private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
 	private final DashboardSubsystem m_dashboardSubsystem = new DashboardSubsystem(m_driveSubsystem);
-	// private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+	private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
 	// Replace with CommandPS4Controller or CommandJoystick if needed
 	private final CommandXboxController m_driverController = new CommandXboxController(
@@ -73,19 +73,16 @@ public class RobotContainer {
 
 		// Schedule `exampleMethodCommand` when the Xbox controller's B button is
 		// pressed, cancelling on release.
-		// m_driverController.a().onTrue(new ArmPoseCommand(m_armSubsystem,
-		// ArmPoses.MID_SCORE));
-		// m_driverController.b().onTrue(new ArmPoseCommand(m_armSubsystem,
-		// ArmPoses.MID_INTAKE));
-		// m_driverController.y().onTrue(new ArmPoseCommand(m_armSubsystem,
-		// ArmPoses.LOW_SCORE));
-		// m_driverController.x().onTrue(new ArmPoseCommand(m_armSubsystem,
-		// ArmPoses.TUCKED));
+		m_driverController.a().onTrue(new ArmPoseCommand(m_armSubsystem, ArmPoses.MID_SCORE));
+		m_driverController.b().onTrue(new ArmPoseCommand(m_armSubsystem, ArmPoses.MID_INTAKE));
+		m_driverController.y().onTrue(new ArmPoseCommand(m_armSubsystem, ArmPoses.LOW_SCORE));
+		m_driverController.x().onTrue(new ArmPoseCommand(m_armSubsystem, ArmPoses.TUCKED));
+
+		
+		new Trigger(m_driverController.back()).onTrue(m_driveSubsystem.toggleFieldCentric());
+		new Trigger(m_driverController.start()).onTrue(m_driveSubsystem.zeroHeading());
 
 		// Swerve Drive method is set as default for drive subsystem
-		new Trigger (m_driverController.back()).onTrue(m_driveSubsystem.toggleFieldCentric());
-		new Trigger (m_driverController.start()).onTrue(m_driveSubsystem.zeroHeading());
-
 		m_driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> m_driveSubsystem.drive(
