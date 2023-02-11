@@ -1,15 +1,12 @@
 package frc.robot.Objects;
 
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.*;
 
 public class Limelight {
 
 	private boolean useVision;
 	private boolean useTape;
-	private boolean hasValidTarget;
 
 	private NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
 	private double tx = limelight.getEntry("tx").getDouble(0);
@@ -19,10 +16,9 @@ public class Limelight {
 	public Limelight() {
 		useVision = true;
 		useTape = true;
-		hasValidTarget = false;
 	}
 
-	public void updateLimelight() {
+	public void updateAll() {
 
 		// skips updating vision if the limelight is set to DriverCam
 		if (useVision) {
@@ -34,24 +30,24 @@ public class Limelight {
 				updateAprilTags();
 			}
 
+			tx = limelight.getEntry("tx").getDouble(0);
+			ty = limelight.getEntry("ty").getDouble(0);
+			ta = limelight.getEntry("ta").getDouble(0);
+
 		} else {
-			setDisabled();
+			disableTracking();
 		}
 
 	}
 
+	/** Performs any reflective tape specific updates */
 	public void updateReflectiveTape() {
-
-		tx = limelight.getEntry("tx").getDouble(0);
-		ty = limelight.getEntry("ty").getDouble(0);
-		ta = limelight.getEntry("ta").getDouble(0);
-
-		hasValidTarget = (limelight.getEntry("tv").getDouble(0) < 1) ? false : true;
-
+		setPipeline(0);
 	}
 
+	/** Performs any AprilTag specific updates */
 	public void updateAprilTags() {
-
+		setPipeline(1);
 	}
 
 	/** takes a snapshot for later use */
@@ -61,7 +57,9 @@ public class Limelight {
 
 	// region getters
 
-	
+	public boolean getHasValidTarget() {
+		return (limelight.getEntry("tv").getDouble(0) < 1) ? false : true;
+	}
 
 	/**
 	 * Gets the target x offset of the limelight
@@ -100,13 +98,13 @@ public class Limelight {
 	 * sets cam mode to Driver Camera (Increases exposure, disables vision
 	 * processing)
 	 */
-	public void setDisabled() {
+	public void disableTracking() {
 		useVision = false;
 		limelight.getEntry("camMode").setNumber(1);
 	}
 
 	/** sets cam mode to Vision processor */
-	public void setEnabled() {
+	public void enableTracking() {
 		useVision = true;
 		limelight.getEntry("camMode").setNumber(0);
 	}
