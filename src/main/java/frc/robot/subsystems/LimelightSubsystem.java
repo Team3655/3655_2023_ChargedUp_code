@@ -39,4 +39,18 @@ public class LimelightSubsystem extends SubsystemBase {
 	public void periodic() {
 	}
 
+	/** Points the robots heading at the target by rotating the bot */
+	public void aimAtTarget() {
+		// TODO: finish method
+	}
+
+	/**
+	 * points the robot at the target by locking the heading and translating the bot
+	 * 
+	 * @param angle The heading to lock the robot to
+	 */
+	public void alignWithTarget(double angle) {
+		// TODO: finish method
+	}
+
 }
