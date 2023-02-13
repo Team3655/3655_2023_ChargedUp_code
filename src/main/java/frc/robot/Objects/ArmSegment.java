@@ -48,8 +48,8 @@ public class ArmSegment {
 		leftMotor.restoreFactoryDefaults();
 
 		// sets motor defaults to break
-		rightMotor.setIdleMode(IdleMode.kBrake);
-		leftMotor.setIdleMode(IdleMode.kBrake);
+		rightMotor.setIdleMode(IdleMode.kCoast);
+		leftMotor.setIdleMode(IdleMode.kCoast);
 
 		/**
 		 * In order to use PID functionality for a controller, a SparkMaxPIDController
