@@ -112,6 +112,14 @@ public final class Constants {
 		public static final double kMaxTurningAcceleratonDegrees = 10;
 		public static final double kGyroTurnTolerance = 2;
 
+		// PID constants for TurnCommand
+		public static double kTurnP = .1;
+		public static double kTurnI = 0;
+		public static double kTurnD = 0;
+
+		public static double kTurnToleranceDeg = 5;
+		public static double kTurnRateToleranceDegPerS = 0;
+
 	}
 
 	/**

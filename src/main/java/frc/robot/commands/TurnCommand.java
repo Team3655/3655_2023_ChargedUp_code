@@ -4,67 +4,47 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.Constants.AutoConstants;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
+
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.Constants.DriveConstants;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TurnCommand extends CommandBase {
+/** A command that will turn the robot to the specified angle. */
+public class TurnCommand extends PIDCommand {
+	
+	/**
+	 * Turns to robot to the specified angle.
+	 *
+	 * @param targetAngleDegrees The angle to turn to
+	 * @param driveSubsystem     The drive subsystem to use
+	 */
+	public TurnCommand(double targetAngleDegrees, DriveSubsystem driveSubsystem) {
+		super(
+				new PIDController(
+						DriveConstants.kTurnP,
+						DriveConstants.kTurnI,
+						DriveConstants.kTurnD),
+				// Close loop on heading
+				driveSubsystem::getHeading,
+				// Set reference to target
+				targetAngleDegrees,
+				// Pipe output to turn robot
+				output -> driveSubsystem.drive(0, 0, output), driveSubsystem);
 
-	private static DriveSubsystem driveSubsystem;
-	private static ProfiledPIDController turnPIDController;
-
-	/** Creates a new ProfiledTurnCommand. */
-	public TurnCommand(double targetAngleDegrees) {
-
-		driveSubsystem = RobotContainer.driveSubsystem;
-
-		turnPIDController = new ProfiledPIDController(
-				// The PID gains
-				AutoConstants.kTurnCommandGains.kP,
-				AutoConstants.kTurnCommandGains.kI,
-				AutoConstants.kTurnCommandGains.kD,
-				// The motion profile constraints
-				new TrapezoidProfile.Constraints(360, 75));
-
-		turnPIDController.enableContinuousInput(-180, 180);
-
-		turnPIDController.setTolerance(
-				AutoConstants.kTurnCommandToleranceDeg,
-				AutoConstants.kTurnCommandRateToleranceDegPerS);
-
-		turnPIDController.setGoal(targetAngleDegrees);
-
-		addRequirements(driveSubsystem);
+		// Set the controller to be continuous (because it is an angle controller)
+		getController().enableContinuousInput(-180, 180);
+		// Set the controller tolerance - the delta tolerance ensures the robot is
+		// stationary at the
+		// setpoint before it is considered as having reached the reference
+		getController().setTolerance(
+				DriveConstants.kTurnToleranceDeg,
+				DriveConstants.kTurnRateToleranceDegPerS);
 	}
 
-	// Called when the command is initially scheduled.
-	@Override
-	public void initialize() {
-	}
-
-	// Called every time the scheduler runs while the command is scheduled.
-	@Override
-	public void execute() {
-		double turnOutput = turnPIDController.calculate(driveSubsystem.getHeading360());
-		driveSubsystem.drive(0, 0, turnOutput);
-	}
-
-	// Called once the command ends or is interrupted.
-	@Override
-	public void end(boolean interrupted) {
-		// sets motors speeds back to zero when event is complete
-		driveSubsystem.drive(0, 0, 0);
-	}
-
-	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return turnPIDController.atGoal();
+		// End when the controller is at the reference.
+		return getController().atSetpoint();
 	}
 }
