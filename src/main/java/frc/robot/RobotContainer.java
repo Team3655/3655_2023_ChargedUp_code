@@ -98,9 +98,9 @@ public class RobotContainer {
 		m_driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> m_driveSubsystem.drive(
-								Math.pow(m_driverController.getLeftY() * DriveConstants.kMaxSpeedMetersPerSecond, 3), // x axis
-								Math.pow(m_driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond, 3), // y axis
-								m_driverController.getRightX() * DriveConstants.kMaxRPM, // z axis
+								Math.pow(m_driverController.getLeftY(), 3) * DriveConstants.kMaxSpeedMetersPerSecond, // x axis
+								Math.pow(m_driverController.getLeftX(), 3) * DriveConstants.kMaxSpeedMetersPerSecond, // y axis
+								Math.pow(m_driverController.getRightX(), 3) * DriveConstants.kMaxRPM, // z axis
 								true),
 						m_driveSubsystem));
 
@@ -115,6 +115,6 @@ public class RobotContainer {
 		// An example command will be run in autonomous
 		PathPlannerTrajectory traj = PathPlanner.loadPath("TestPath", new PathConstraints(2, 3));
 
-		return m_driveSubsystem.followTrajectoryCommand(traj, false);
+		return m_driveSubsystem.followTrajectoryCommand(traj, true);
 	}
 }

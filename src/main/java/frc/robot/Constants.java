@@ -85,8 +85,7 @@ public final class Constants {
 
 		// TODO: Change max speed
 		public static final double kMaxSpeedMetersPerSecond = 4.5;
-		public static final double kMaxRPM = (kMaxModuleAngularSpeedRadiansPerSecond * 60)
-				/ (2 * Math.PI); // Convert rad/s to RPM
+		public static final double kMaxRPM = 60;
 
 		public static final int kPigeonPort = 13;
 
