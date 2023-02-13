@@ -22,12 +22,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
-import frc.robot.Objects.Utils.JoystickUtils;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Objects.SwerveModule;
+import frc.robot.Utils.JoystickUtils;
 
 public class DriveSubsystem extends SubsystemBase {
 
