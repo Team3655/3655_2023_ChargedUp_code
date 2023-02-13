@@ -226,7 +226,7 @@
               ]
             }
           },
-          "10,0": {
+          "12,0": {
             "size": [
               2,
               4
@@ -308,14 +308,14 @@
               "_showGlyph": false
             }
           },
-          "12,0": {
+          "16,0": {
             "size": [
               2,
               4
             ],
             "content": {
               "_type": "List Layout",
-              "_title": "List Layout",
+              "_title": "Errors",
               "_glyph": 149,
               "_showGlyph": false,
               "Layout/Label position": "BOTTOM",
@@ -351,7 +351,7 @@
               ]
             }
           },
-          "14,0": {
+          "7,5": {
             "size": [
               2,
               2
@@ -362,6 +362,92 @@
               "_title": "Gyro",
               "_glyph": 148,
               "_showGlyph": false
+            }
+          },
+          "14,0": {
+            "size": [
+              2,
+              4
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Offsets",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/FL Offset",
+                  "_title": "FL Offset",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/FR Offset",
+                  "_title": "FR Offset",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RR Offset",
+                  "_title": "RR Offset",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RL Offset",
+                  "_title": "RL Offset",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          },
+          "10,0": {
+            "size": [
+              2,
+              4
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Optimized Angle",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/FL Optimized Angle",
+                  "_title": "FL Optimized Angle",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/FR Optimized Angle",
+                  "_title": "FR Optimized Angle",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RR Optimized Angle",
+                  "_title": "RR Optimized Angle",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RL Optimized Angle",
+                  "_title": "RL Optimized Angle",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
             }
           }
         }

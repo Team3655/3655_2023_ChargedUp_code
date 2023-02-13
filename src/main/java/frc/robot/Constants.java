@@ -46,16 +46,16 @@ public final class Constants {
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// Offset angle for absolute encoders (find this using REV client)
-		public static final double kFrontLeftAngleZero = 63.105; 
-		public static final double kFrontRightAngleZero = 321.240; 
-		public static final double kRearLeftAngleZero = 327.041;
-		public static final double kRearRightAngleZero = 354.727;
+		public static final double kFrontLeftAngleZero = 62.578; //-118.828; //63.105; 
+		public static final double kFrontRightAngleZero = -39.111; //-112.676; //321.240; 
+		public static final double kRearLeftAngleZero = -32.520; //146.865; //327.041;
+		public static final double kRearRightAngleZero = -8.262; //-7.295; //354.727;
 
 		public static final double kModuleDriveControllerP = .00001;
 		public static final double kModuleDriveControllerI = 0;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
 
-		public static final double kModuleTurningControllerP = 1;
+		public static final double kModuleTurningControllerP = 4.75;
 		public static final double kModuleTurningControllerI = 0;
 		public static final double kModuleTurningControllerD = 0;
 
@@ -84,7 +84,7 @@ public final class Constants {
 		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
 
 		// TODO: Change max speed
-		public static final double kMaxSpeedMetersPerSecond = 3;
+		public static final double kMaxSpeedMetersPerSecond = 4.5;
 		public static final double kMaxRPM = (kMaxModuleAngularSpeedRadiansPerSecond * 60)
 				/ (2 * Math.PI); // Convert rad/s to RPM
 
