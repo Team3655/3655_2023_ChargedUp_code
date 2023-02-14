@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 
@@ -33,7 +32,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.Autos;
 
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -56,6 +54,7 @@ public class RobotContainer {
 	private final CommandGenericHID m_operatorController = new CommandGenericHID(1);
 
 	Trigger select = m_driverController.back();
+
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
@@ -79,9 +78,8 @@ public class RobotContainer {
 		// Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 		new Trigger(m_exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
 
-		select.onTrue(new InstantCommand(
-			() -> m_driveSubsystem.zeroHeading()
-		));
+		new Trigger(m_driverController.start()).onTrue(new InstantCommand(
+				() -> m_driveSubsystem.zeroHeading()));
 
 		// Schedule `exampleMethodCommand` when the Xbox controller's B button is
 		// pressed, cancelling on release.
@@ -98,8 +96,10 @@ public class RobotContainer {
 		m_driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> m_driveSubsystem.drive(
-								Math.pow(m_driverController.getLeftY(), 3) * DriveConstants.kMaxSpeedMetersPerSecond, // x axis
-								Math.pow(m_driverController.getLeftX(), 3) * DriveConstants.kMaxSpeedMetersPerSecond, // y axis
+								Math.pow(m_driverController.getLeftY(), 3) * DriveConstants.kMaxSpeedMetersPerSecond, // x
+																														// axis
+								Math.pow(m_driverController.getLeftX(), 3) * DriveConstants.kMaxSpeedMetersPerSecond, // y
+																														// axis
 								Math.pow(m_driverController.getRightX(), 3) * DriveConstants.kMaxRPM, // z axis
 								true),
 						m_driveSubsystem));

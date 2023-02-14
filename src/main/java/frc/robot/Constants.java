@@ -29,33 +29,33 @@ public final class Constants {
 
 		// NEO drive motor CAN ID's
 		public static final int kFrontLeftDriveMotorPort = 1;
-		public static final int kFrontRightDriveMotorPort = 4;
-		public static final int kRearLeftDriveMotorPort = 7;
-		public static final int kRearRightDriveMotorPort = 10;
+		public static final int kFrontRightDriveMotorPort = 2;
+		public static final int kRearLeftDriveMotorPort = 3;
+		public static final int kRearRightDriveMotorPort = 4;
 
 		// NEO turning motor CAN ID's
-		public static final int kFrontLeftTurningMotorPort = 2;
-		public static final int kFrontRightTurningMotorPort = 5;
-		public static final int kRearLeftTurningMotorPort = 8;
-		public static final int kRearRightTurningMotorPort = 11;
+		public static final int kFrontLeftTurningMotorPort = 5;
+		public static final int kFrontRightTurningMotorPort = 6;
+		public static final int kRearLeftTurningMotorPort = 7;
+		public static final int kRearRightTurningMotorPort = 8;
 
 		// CANcoder CAN ID's
-		public static final int kFrontLeftTurningEncoderPort = 3;
-		public static final int kFrontRightTurningEncoderPort = 9;
-		public static final int kRearLeftTurningEncoderPort = 6;
+		public static final int kFrontLeftTurningEncoderPort = 9;
+		public static final int kFrontRightTurningEncoderPort = 10;
+		public static final int kRearLeftTurningEncoderPort = 11;
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// Offset angle for absolute encoders (find this using REV client)
-		public static final double kFrontLeftAngleZero = 62.578; //-118.828; //63.105; 
-		public static final double kFrontRightAngleZero = -39.111; //-112.676; //321.240; 
-		public static final double kRearLeftAngleZero = -32.520; //146.865; //327.041;
-		public static final double kRearRightAngleZero = -8.262; //-7.295; //354.727;
+		public static final double kFrontLeftAngleZero = 157.412; 
+		public static final double kFrontRightAngleZero = 76.025; 
+		public static final double kRearLeftAngleZero = -30.761; 
+		public static final double kRearRightAngleZero = -23.642;
 
 		public static final double kModuleDriveControllerP = .00001;
 		public static final double kModuleDriveControllerI = 0;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
 
-		public static final double kModuleTurningControllerP = 4.75;
+		public static final double kModuleTurningControllerP = 6;
 		public static final double kModuleTurningControllerI = 0;
 		public static final double kModuleTurningControllerD = 0;
 
@@ -84,13 +84,13 @@ public final class Constants {
 		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
 
 		// TODO: Change max speed
-		public static final double kMaxSpeedMetersPerSecond = 4.5;
+		public static final double kMaxSpeedMetersPerSecond = 1.5;
 		public static final double kMaxRPM = 60;
 
-		public static final int kPigeonPort = 13;
+		public static final int kPigeonPort = 20;
 
-		public static final double kTrackWidth = 24 / 39.37; // meters
-		public static final double kWheelBase = 24 / 39.37; // meters
+		public static final double kTrackWidth = 19 / 39.37; // meters
+		public static final double kWheelBase = 19 / 39.37; // meters
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
 				new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -98,7 +98,7 @@ public final class Constants {
 				new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
 				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-		public static final boolean kGyroReversed = false;
+		public static final boolean kGyroReversed = true;
 
 	}
 

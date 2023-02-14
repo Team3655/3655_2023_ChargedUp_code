@@ -76,7 +76,7 @@ public class DriveSubsystem extends SubsystemBase {
 	};
 
 	// Initalizing the gyro sensor
-	private final WPI_Pigeon2 gyro = new WPI_Pigeon2(DriveConstants.kPigeonPort);
+	private final WPI_Pigeon2 gyro = new WPI_Pigeon2(DriveConstants.kPigeonPort, "canivore");
 
 	// Odeometry class for tracking robot pose
 	SwerveDriveOdometry odometry = new SwerveDriveOdometry(
@@ -96,6 +96,15 @@ public class DriveSubsystem extends SubsystemBase {
 		rearRight.putConversionFactors();
 		rearLeft.putConversionFactors();
 
+		SmartDashboard.putNumber("FL Absolute", frontLeft.getAbsoluteHeading());
+		SmartDashboard.putNumber("FR Absolute", frontRight.getAbsoluteHeading());
+		SmartDashboard.putNumber("RL Absolute", rearLeft.getAbsoluteHeading());
+		SmartDashboard.putNumber("RR Absolute", rearRight.getAbsoluteHeading());
+
+		SmartDashboard.putNumber("FL Relative", frontLeft.getRelativeHeading());
+		SmartDashboard.putNumber("FR Relative", frontRight.getRelativeHeading());
+		SmartDashboard.putNumber("RL Relative", rearLeft.getRelativeHeading());
+		SmartDashboard.putNumber("RR Relative", rearRight.getRelativeHeading());
 
 		SmartDashboard.putNumber("Gyro", gyro.getAngle());
 
@@ -125,16 +134,6 @@ public class DriveSubsystem extends SubsystemBase {
 		frontRight.setDesiredState(swerveModuleStates[1]);
 		rearLeft.setDesiredState(swerveModuleStates[2]);
 		rearRight.setDesiredState(swerveModuleStates[3]);
-
-		SmartDashboard.putNumber("FL Absolute", frontLeft.getAbsoluteHeading());
-		SmartDashboard.putNumber("FR Absolute", frontRight.getAbsoluteHeading());
-		SmartDashboard.putNumber("RL Absolute", rearLeft.getAbsoluteHeading());
-		SmartDashboard.putNumber("RR Absolute", rearRight.getAbsoluteHeading());
-
-		SmartDashboard.putNumber("FL Relative", frontLeft.getRelativeHeading());
-		SmartDashboard.putNumber("FR Relative", frontRight.getRelativeHeading());
-		SmartDashboard.putNumber("RL Relative", rearLeft.getRelativeHeading());
-		SmartDashboard.putNumber("RR Relative", rearRight.getRelativeHeading());
 
 	}
 
