@@ -113,7 +113,7 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		// An example command will be run in autonomous
-		PathPlannerTrajectory traj = PathPlanner.loadPath("TestPath", new PathConstraints(2, 3));
+		PathPlannerTrajectory traj = PathPlanner.loadPath("Rotate", new PathConstraints(2, 3));
 
 		return m_driveSubsystem.followTrajectoryCommand(traj, true);
 	}

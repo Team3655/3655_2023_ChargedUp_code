@@ -47,7 +47,7 @@ public final class Constants {
 
 		// Offset angle for absolute encoders (find this using REV client)
 		public static final double kFrontLeftAngleZero = 62.578; //-118.828; //63.105; 
-		public static final double kFrontRightAngleZero = -39.111; //-112.676; //321.240; 
+		public static final double kFrontRightAngleZero = -46.406; //-112.676; //321.240; 
 		public static final double kRearLeftAngleZero = -32.520; //146.865; //327.041;
 		public static final double kRearRightAngleZero = -8.262; //-7.295; //354.727;
 
@@ -84,7 +84,7 @@ public final class Constants {
 		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
 
 		// TODO: Change max speed
-		public static final double kMaxSpeedMetersPerSecond = 4.5;
+		public static final double kMaxSpeedMetersPerSecond = 3;
 		public static final double kMaxRPM = 60;
 
 		public static final int kPigeonPort = 13;
@@ -93,10 +93,10 @@ public final class Constants {
 		public static final double kWheelBase = 24 / 39.37; // meters
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-				new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-				new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-				new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+				new Translation2d(kWheelBase / 2, kTrackWidth / 2), //FL
+				new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //FR
+				new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //RL
+				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //RR
 
 		public static final boolean kGyroReversed = false;
 
@@ -108,11 +108,11 @@ public final class Constants {
 	public static class AutoConstants {
 
 		// PID constants for path planner (these control drive direction not reaching target wheel speeds)
-		public static final double PathPlannerP = .01;
+		public static final double PathPlannerP = .6;
 		public static final double PathPlannerI = 0;
 		public static final double PathPlannerD = 0;
 
-		public static final double PathPlannerTurnP = .01;
+		public static final double PathPlannerTurnP = .5;
 		public static final double PathPlannerTurnI = 0;
 		public static final double PathPlannerTurnD = 0;
 

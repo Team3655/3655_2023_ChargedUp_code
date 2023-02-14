@@ -94,7 +94,7 @@ public class SwerveModule extends SubsystemBase {
 						* (1 / 60)); // radians per second
 
 		driveEncoder = driveMotor.getEncoder();
-		driveEncoder.setPositionConversionFactor(ModuleConstants.kdriveGearRatio * 2 * Math.PI); // meters
+		driveEncoder.setPositionConversionFactor(ModuleConstants.kdriveGearRatio * ModuleConstants.kwheelCircumference); // meters
 		driveMotor.getEncoder().setVelocityConversionFactor(
 				ModuleConstants.kdriveGearRatio
 						* ModuleConstants.kwheelCircumference
@@ -125,8 +125,8 @@ public class SwerveModule extends SubsystemBase {
 		this.drivePID.setOutputRange(-1, 1);
 
 		// Configure current limits for motors - prevents disabling/brownouts
-		driveMotor.setIdleMode(IdleMode.kCoast);
-		turningMotor.setIdleMode(IdleMode.kCoast);
+		driveMotor.setIdleMode(IdleMode.kBrake);
+		turningMotor.setIdleMode(IdleMode.kBrake);
 		turningMotor.setSmartCurrentLimit(30);
 		driveMotor.setSmartCurrentLimit(30);
 
@@ -154,6 +154,10 @@ public class SwerveModule extends SubsystemBase {
 
 	public double getRelativeHeading() {
 		return Math.toDegrees(angularEncoder.getPosition());
+	}
+
+	public double getDistanceMeters(){
+		return driveEncoder.getPosition();
 	}
 
 	// Returns current position of the modules
