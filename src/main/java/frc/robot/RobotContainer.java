@@ -6,8 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.DriveConstants;
-
+import frc.robot.Utils.JoystickUtils;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPoses;
 import frc.robot.subsystems.DriveSubsystem;
@@ -17,7 +16,6 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.DashboardSubsystem;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -34,9 +32,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-
-import frc.robot.commands.Autos;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -102,29 +97,16 @@ public class RobotContainer {
 				() -> driveSubsystem.zeroHeading()));
 
 		new Trigger(driverController.start()).onTrue(new InstantCommand(
-				() -> driveSubsystem.zeroHeading()));
-
-		// Schedule `exampleMethodCommand` when the Xbox controller's B button is
-		// pressed, cancelling on release.
-		// m_driverController.a().onTrue(new ArmPoseCommand(m_armSubsystem,
-		// ArmPoses.MID_SCORE));
-		// m_driverController.b().onTrue(new ArmPoseCommand(m_armSubsystem,
-		// ArmPoses.MID_INTAKE));
-		// m_driverController.y().onTrue(new ArmPoseCommand(m_armSubsystem,
-		// ArmPoses.LOW_SCORE));
-		// m_driverController.x().onTrue(new ArmPoseCommand(m_armSubsystem,
-		// ArmPoses.TUCKED));
+				() -> driveSubsystem.toggleFieldCentric()));
 
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								Math.pow(driverController.getLeftY(), 3) * DriveConstants.kMaxSpeedMetersPerSecond, // x
-																														// axis
-								Math.pow(driverController.getLeftX(), 3) * DriveConstants.kMaxSpeedMetersPerSecond, // y
-																														// axis
-								Math.pow(driverController.getRightX(), 3) * DriveConstants.kMaxRPM // z axis
-								),
+								JoystickUtils.processJoystickInput(driverController.getLeftY()), // x axis
+								JoystickUtils.processJoystickInput(driverController.getLeftX()), // y axis
+								JoystickUtils.processJoystickInput(driverController.getLeftX()) // z axis
+						),
 						driveSubsystem));
 
 	}

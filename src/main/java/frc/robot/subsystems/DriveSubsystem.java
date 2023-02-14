@@ -26,7 +26,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Objects.SwerveModule;
-import frc.robot.Utils.JoystickUtils;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -143,9 +142,9 @@ public class DriveSubsystem extends SubsystemBase {
 	public void drive(double xSpeed, double ySpeed, double rot) {
 
 		// Apply deadbands to inputs
-		xSpeed = JoystickUtils.deadBand(xSpeed);
-		ySpeed = JoystickUtils.deadBand(ySpeed);
-		rot = JoystickUtils.deadBand(rot);
+		xSpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
+		ySpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
+		rot *= DriveConstants.kMaxRPM;
 
 		var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
 				fieldRelative
@@ -220,7 +219,7 @@ public class DriveSubsystem extends SubsystemBase {
 						new PIDController(
 								AutoConstants.PathPlannerP,
 								AutoConstants.PathPlannerI,
-								AutoConstants.PathPlannerD), // TODO: controller
+								AutoConstants.PathPlannerD), // TODO: Y controller
 						new PIDController(
 								AutoConstants.PathPlannerTurnP,
 								AutoConstants.PathPlannerTurnI,
