@@ -59,25 +59,25 @@ public class SwerveModule extends SubsystemBase {
 			String moduleName,
 			int driveMotorChannel,
 			int turningMotorChannel,
-			int turningEncoderPort,
+			int absoluteEncoderPort,
 			double angleZero,
 			double[] angularPID,
 			double[] drivePID) {
 
 		this.moduleName = moduleName;
-
-		// Initialize the motors
 		this.angleZero = angleZero;
 
+		// Initialize the motors
 		driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
 		turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
+
+		turningMotor.setInverted(true);
 
 		turningMotor.restoreFactoryDefaults();
 		driveMotor.restoreFactoryDefaults();
 
 		// Initalize CANcoder
-		absoluteEncoder = new CANCoder(turningEncoderPort, "canivore");
-
+		absoluteEncoder = new CANCoder(absoluteEncoderPort);
 		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
 		absoluteEncoder.configMagnetOffset(-angleZero);
@@ -85,9 +85,6 @@ public class SwerveModule extends SubsystemBase {
 
 		// Initialize Spark MAX encoders
 		angularEncoder = turningMotor.getEncoder();
-
-		turningMotor.setInverted(true);
-
 		angularEncoder.setPositionConversionFactor(ModuleConstants.kturnGearRatio * 2d * Math.PI); // radians
 		angularEncoder.setVelocityConversionFactor(
 				ModuleConstants.kturnGearRatio
@@ -118,34 +115,20 @@ public class SwerveModule extends SubsystemBase {
 		this.angularPID.setFeedbackDevice(turningMotor.getEncoder());
 		this.drivePID.setFeedbackDevice(driveMotor.getEncoder());
 
-		this.angularPID.setPositionPIDWrappingEnabled(true);
-		this.angularPID.setPositionPIDWrappingMinInput(Math.toRadians(0));
-		this.angularPID.setPositionPIDWrappingMaxInput(Math.toRadians(360));
+		// this.angularPID.setPositionPIDWrappingEnabled(true);
+		// this.angularPID.setPositionPIDWrappingMinInput(Math.toRadians(0));
+		// this.angularPID.setPositionPIDWrappingMaxInput(Math.toRadians(360));
 
-		this.angularPID.setOutputRange(-1, 1);
+		// this.angularPID.setOutputRange(-1, 1);
 		this.drivePID.setOutputRange(-1, 1);
 
-		// Configure current limits for motors - prevents disabling/brownouts
+		// Configure current limits for motors
 		driveMotor.setIdleMode(IdleMode.kCoast);
 		turningMotor.setIdleMode(IdleMode.kCoast);
 		turningMotor.setSmartCurrentLimit(30);
 		driveMotor.setSmartCurrentLimit(30);
 
-		resetAngleToAbsolute();
-
 		m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-
-		SmartDashboard.putNumber(this.moduleName + " Init Spark Enc", resetAngleToAbsolute());
-		SmartDashboard.putNumber(this.moduleName + " Offset", angleZero);
-
-	}
-
-	public double resetAngleToAbsolute() {
-		double angle = Math.toRadians(absoluteEncoder.getAbsolutePosition() - this.angleZero);
-		SmartDashboard.putString(moduleName + " Abs. Error", absoluteEncoder.getLastError().toString());
-		angularEncoder.setPosition(angle);
-
-		return this.angularEncoder.getPosition();
 	}
 
 	// Returns headings of the module
@@ -186,11 +169,6 @@ public class SwerveModule extends SubsystemBase {
 		final var turnOutput = m_turningPIDController.calculate(m_moduleAngleRadians, optimizedState.angle.getRadians())
 				+ turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-		// angularPID.setReference(
-		// 		optimizedState.angle.getRadians(),
-		// 		ControlType.kPosition);
-
-
 		turningMotor.setVoltage(turnOutput);
 		drivePID.setReference(
 				optimizedState.speedMetersPerSecond,
@@ -204,8 +182,6 @@ public class SwerveModule extends SubsystemBase {
 	}
 
 	public void putConversionFactors() {
-		SmartDashboard.putNumber(moduleName + " A P Conversion", angularEncoder.getPositionConversionFactor());
-		SmartDashboard.putNumber(moduleName + " A V Conversion", angularEncoder.getVelocityConversionFactor());
 		SmartDashboard.putNumber(moduleName + " D V Conversion", driveEncoder.getVelocityConversionFactor());
 	}
 

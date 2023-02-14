@@ -190,12 +190,6 @@ public class DriveSubsystem extends SubsystemBase {
 		});
 	}
 
-	public void resetRelativeEncoders() {
-		frontLeft.resetAngleToAbsolute();
-		frontRight.resetAngleToAbsolute();
-		rearRight.resetAngleToAbsolute();
-		rearLeft.resetAngleToAbsolute();
-	}
 	// endregion
 
 	/**************************************************************************/

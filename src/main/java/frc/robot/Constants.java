@@ -53,16 +53,16 @@ public final class Constants {
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// Offset angle for absolute encoders (find this using REV client)
-		public static final double kFrontLeftAngleZero = 157.412; 
-		public static final double kFrontRightAngleZero = 76.025; 
-		public static final double kRearLeftAngleZero = -30.761; 
-		public static final double kRearRightAngleZero = -23.642;
+		public static final double kFrontLeftAngleZero = 62.578; 
+		public static final double kFrontRightAngleZero = -47.197; 
+		public static final double kRearLeftAngleZero = -32.520; 
+		public static final double kRearRightAngleZero = -8.262;
 
 		public static final double kModuleDriveControllerP = .001;
 		public static final double kModuleDriveControllerI = 0;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
 
-		public static final double kModuleTurningControllerP = 6;
+		public static final double kModuleTurningControllerP = 4.75;
 		public static final double kModuleTurningControllerI = 0;
 		public static final double kModuleTurningControllerD = 0;
 
@@ -90,8 +90,8 @@ public final class Constants {
 
 		public static final int kPigeonPort = 20;
 
-		public static final double kTrackWidth = 19 / 39.37; // meters
-		public static final double kWheelBase = 19 / 39.37; // meters
+		public static final double kTrackWidth = .61; // meters
+		public static final double kWheelBase = .61; // meters
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
 				new Translation2d(kWheelBase / 2, kTrackWidth / 2), //FL
