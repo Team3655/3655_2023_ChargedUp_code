@@ -93,10 +93,10 @@ public final class Constants {
 		public static final double kWheelBase = 19 / 39.37; // meters
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-				new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-				new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-				new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+				new Translation2d(kWheelBase / 2, kTrackWidth / 2), //FL
+				new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //FR
+				new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //RL
+				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //RR
 
 		public static final boolean kGyroReversed = true;
 
@@ -108,11 +108,11 @@ public final class Constants {
 	public static class AutoConstants {
 
 		// PID constants for path planner (these control drive direction not reaching target wheel speeds)
-		public static final double PathPlannerP = .01;
+		public static final double PathPlannerP = .6;
 		public static final double PathPlannerI = 0;
 		public static final double PathPlannerD = 0;
 
-		public static final double PathPlannerTurnP = .01;
+		public static final double PathPlannerTurnP = .5;
 		public static final double PathPlannerTurnI = 0;
 		public static final double PathPlannerTurnD = 0;
 

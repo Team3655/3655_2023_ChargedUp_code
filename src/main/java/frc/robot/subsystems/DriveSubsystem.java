@@ -108,6 +108,9 @@ public class DriveSubsystem extends SubsystemBase {
 
 		SmartDashboard.putNumber("Gyro", gyro.getAngle());
 
+		SmartDashboard.putNumber(frontLeft.getName() + " Meters", frontLeft.getDistanceMeters());
+		
+
 	}
 
 	public Pose2d getPose() {
@@ -191,28 +194,16 @@ public class DriveSubsystem extends SubsystemBase {
 								AutoConstants.PathPlannerP,
 								AutoConstants.PathPlannerI,
 								AutoConstants.PathPlannerD), // TODO: X controller.
-						// Tune these
-						// values for your robot. Leaving
-						// them 0 will only use
-						// feedforwards.
 						new PIDController(
 								AutoConstants.PathPlannerP,
 								AutoConstants.PathPlannerI,
 								AutoConstants.PathPlannerD), // TODO: controller
-						// (usually the
-						// same values as X controller)
 						new PIDController(
 								AutoConstants.PathPlannerTurnP,
 								AutoConstants.PathPlannerTurnI,
 								AutoConstants.PathPlannerTurnD), // TODO: Rotation controller.
-						// Tune
-						// these values for your robot.
-						// Leaving them 0 will only use
-						// feedforwards.
 						this::setModuleStates, // Module states consumer
-						true, // Sho uld the path be automatically mirrored depending on alliance
-						// color.
-						// Optional, defaults to true
+						false, 
 						this // Requires this drive subsystem
 				));
 	}
