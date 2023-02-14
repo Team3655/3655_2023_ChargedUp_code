@@ -26,15 +26,18 @@ public class JoystickUtils {
 	 */
 	public static double processJoystickInput(double input) {
 
+		// returns zero if input is less than deadband
 		if (deadBand(input) == 0)
 			return 0;
 
 		double correctedValue = input;
 
+		// does funky math to force linear input between deanband and 1
 		correctedValue = (correctedValue - (OperatorConstants.KDeadBand * Math.signum(correctedValue)))
 				/ (1 - OperatorConstants.KDeadBand);
 
-		correctedValue = Math.copySign(Math.pow(correctedValue, 3), input);
+		// raises input to a specified power for a smoother feel
+		correctedValue = Math.copySign(Math.pow(Math.abs(correctedValue), OperatorConstants.kJoystickPow), input);
 
 		return correctedValue;
 	}

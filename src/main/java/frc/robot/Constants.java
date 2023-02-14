@@ -127,6 +127,7 @@ public final class Constants {
 		public static final int kOperatorControllerPort = 1;
 
 		public static final double KDeadBand = .1;
+		public static final double kJoystickPow = 2.5;
 	}
 
 	/**
