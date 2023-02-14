@@ -22,10 +22,17 @@ public final class Constants {
 	public static class ModuleConstants {
 
 		// Constants set for the _SDS MK4i_
-		public static final double kdriveGearRatio = 1 / 6.75;
-		public static final double kturnGearRatio = 1 / 21.4286;
+		public static final double kdriveGearRatio = 1d / 6.75;
+		public static final double kturnGearRatio = 1d / (150d / 7d);
 
 		public static final double kwheelCircumference = Units.inchesToMeters(4) * Math.PI;
+
+		// TODO: Set feedforward values for drive
+		public static final double ksVolts = .1;
+		public static final double kDriveFeedForward = .2;
+
+		public static final double kvTurning = .43205;
+		public static final double kTurnFeedForward = .17161; // Tuned February 2, 2023
 
 		// NEO drive motor CAN ID's
 		public static final int kFrontLeftDriveMotorPort = 1;
@@ -51,7 +58,7 @@ public final class Constants {
 		public static final double kRearLeftAngleZero = -30.761; 
 		public static final double kRearRightAngleZero = -23.642;
 
-		public static final double kModuleDriveControllerP = .00001;
+		public static final double kModuleDriveControllerP = .001;
 		public static final double kModuleDriveControllerI = 0;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
 
@@ -73,12 +80,6 @@ public final class Constants {
 	}
 
 	public static class DriveConstants {
-		// TODO: Set feedforward values for drive
-		public static final double ksVolts = .1;
-		public static final double kvVoltSecondsPerMeter = .2;
-
-		public static final double ksTurning = .17161;// Tuned February 2, 2023
-		public static final double kvTurning = .43205;
 
 		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
 		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
@@ -124,6 +125,8 @@ public final class Constants {
 	public static class OperatorConstants {
 		public static final int kDriverControllerPort = 0;
 		public static final int kOperatorControllerPort = 1;
+
+		public static final double KDeadBand = .1;
 	}
 
 	/**
@@ -176,14 +179,15 @@ public final class Constants {
 	public static class IntakeConstants {
 
 		// NEO 550 Sucker motor CAN ID's
-		public static final int kRightSuckerPort = 0;
-		public static final int kCenterSuckerPort = 0;
-		public static final int kLeftSuckerPort = 0;
+		public static final int kMainSuckerPort = 0;
 
-		public static final int kCenterSuckerCurrentLimit = 30;
-		public static final int kSideSuckerCurrentLimit = 20;
+		public static final int kMainSuckerCurrentTarget = 15;
 
-		public static final int kHasPieceCurrentThreshold = 15;
+		public static final int kHasPieceRPMThreshold = 1000;
+
+		public static final double kMainSuckerP = .00001;
+
+		public static final double kMainSuckerMaxOutput = 1d / 3d;
 
 	}
 

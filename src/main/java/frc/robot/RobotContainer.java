@@ -6,26 +6,32 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
-
-import frc.robot.commands.ExampleCommand;
+import frc.robot.Constants.DriveConstants;
 
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.commands.ArmPoseCommand;
-import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.subsystems.ArmSubsystem.ArmPoses;
-import frc.robot.subsystems.IntakeSubsystem;
-
-import frc.robot.subsystems.DashboardSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.DashboardSubsystem;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
+import frc.robot.commands.Autos;
+import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ArmPoseCommand;
+import frc.robot.commands.ArmSwitchCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -43,17 +49,17 @@ import frc.robot.commands.Autos;
  */
 public class RobotContainer {
 	// The robot's subsystems and commands are defined here...
-	private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-	private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-	private final DashboardSubsystem m_dashboardSubsystem = new DashboardSubsystem(m_driveSubsystem);
-	// private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+	private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+	private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+	private final ArmSubsystem armSubsystem = new ArmSubsystem();
+	private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
 	// Replace with CommandPS4Controller or CommandJoystick if needed
-	private final CommandXboxController m_driverController = new CommandXboxController(
+	private final CommandXboxController driverController = new CommandXboxController(
 			OperatorConstants.kDriverControllerPort);
-	private final CommandGenericHID m_operatorController = new CommandGenericHID(1);
+	private final CommandGenericHID operatorController = new CommandGenericHID(1);
 
-	Trigger select = m_driverController.back();
+	Trigger select = driverController.back();
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -76,10 +82,27 @@ public class RobotContainer {
 	 */
 	private void configureBindings() {
 		// Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-		new Trigger(m_exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
+		new Trigger(exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(exampleSubsystem));
 
-		new Trigger(m_driverController.start()).onTrue(new InstantCommand(
-				() -> m_driveSubsystem.zeroHeading()));
+		// Schedule ArmPoseCommand when operator presses coresponding button.
+		operatorController.button(1).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.LOW_SCORE));
+		operatorController.button(2).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.MID_SCORE));
+		operatorController.button(3).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.HIGH_SCORE));
+
+		operatorController.button(6).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.LOW_INTAKE));
+		operatorController.button(7).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.MID_INTAKE));
+		operatorController.button(8).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.HIGH_INTAKE));
+
+		operatorController.button(4).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.TUCKED));
+
+		// Switches sides of the robot, VERY DANGEROUS! HAS NOT BEEN TESTED!
+		operatorController.button(9).onTrue(new ArmSwitchCommand(armSubsystem, intakeSubsystem));
+
+		new Trigger(driverController.start()).onTrue(new InstantCommand(
+				() -> driveSubsystem.zeroHeading()));
+
+		new Trigger(driverController.start()).onTrue(new InstantCommand(
+				() -> driveSubsystem.zeroHeading()));
 
 		// Schedule `exampleMethodCommand` when the Xbox controller's B button is
 		// pressed, cancelling on release.
@@ -93,16 +116,16 @@ public class RobotContainer {
 		// ArmPoses.TUCKED));
 
 		// Swerve Drive method is set as default for drive subsystem
-		m_driveSubsystem.setDefaultCommand(
+		driveSubsystem.setDefaultCommand(
 				new RunCommand(
-						() -> m_driveSubsystem.drive(
-								Math.pow(m_driverController.getLeftY(), 3) * DriveConstants.kMaxSpeedMetersPerSecond, // x
+						() -> driveSubsystem.drive(
+								Math.pow(driverController.getLeftY(), 3) * DriveConstants.kMaxSpeedMetersPerSecond, // x
 																														// axis
-								Math.pow(m_driverController.getLeftX(), 3) * DriveConstants.kMaxSpeedMetersPerSecond, // y
+								Math.pow(driverController.getLeftX(), 3) * DriveConstants.kMaxSpeedMetersPerSecond, // y
 																														// axis
-								Math.pow(m_driverController.getRightX(), 3) * DriveConstants.kMaxRPM, // z axis
-								true),
-						m_driveSubsystem));
+								Math.pow(driverController.getRightX(), 3) * DriveConstants.kMaxRPM // z axis
+								),
+						driveSubsystem));
 
 	}
 
@@ -115,6 +138,6 @@ public class RobotContainer {
 		// An example command will be run in autonomous
 		PathPlannerTrajectory traj = PathPlanner.loadPath("Rotate", new PathConstraints(2, 3));
 
-		return m_driveSubsystem.followTrajectoryCommand(traj, true);
+		return driveSubsystem.followTrajectoryCommand(traj, true);
 	}
 }

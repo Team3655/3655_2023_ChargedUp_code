@@ -19,17 +19,22 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Objects.SwerveModule;
+import frc.robot.Utils.JoystickUtils;
 
 public class DriveSubsystem extends SubsystemBase {
+
+	private boolean fieldRelative;
+
 	/** Creates a new DriveSubsystem. */
 	public DriveSubsystem() {
+
 	}
 
 	private final SwerveModule frontLeft = new SwerveModule(
@@ -113,6 +118,15 @@ public class DriveSubsystem extends SubsystemBase {
 
 	}
 
+	// region getters
+	public double getHeading() {
+		return gyro.getRotation2d().getDegrees();
+	}
+
+	public double getTurnRate() {
+		return gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+	}
+
 	public Pose2d getPose() {
 		return odometry.getPoseMeters();
 	}
@@ -123,8 +137,16 @@ public class DriveSubsystem extends SubsystemBase {
 				swervePosition,
 				pose);
 	}
+	// endregion
 
-	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+	// region setter
+	public void drive(double xSpeed, double ySpeed, double rot) {
+
+		// Apply deadbands to inputs
+		xSpeed = JoystickUtils.deadBand(xSpeed);
+		ySpeed = JoystickUtils.deadBand(ySpeed);
+		rot = JoystickUtils.deadBand(rot);
+
 		var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
 				fieldRelative
 						? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
@@ -157,16 +179,16 @@ public class DriveSubsystem extends SubsystemBase {
 		rearRight.resetEncoders();
 	}
 
-	public void zeroHeading() {
-		gyro.reset();
+	public CommandBase zeroHeading() {
+		return runOnce(() -> {
+			gyro.reset();
+		});
 	}
 
-	public double getHeading() {
-		return gyro.getRotation2d().getDegrees();
-	}
-
-	public double getTurnRate() {
-		return gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+	public CommandBase toggleFieldCentric() {
+		return runOnce(() -> {
+			fieldRelative = !fieldRelative;
+		});
 	}
 
 	public void resetRelativeEncoders() {
@@ -175,6 +197,7 @@ public class DriveSubsystem extends SubsystemBase {
 		rearRight.resetAngleToAbsolute();
 		rearLeft.resetAngleToAbsolute();
 	}
+	// endregion
 
 	/**************************************************************************/
 

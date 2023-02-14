@@ -60,7 +60,7 @@ public class SwerveModule extends SubsystemBase {
 			String moduleName,
 			int driveMotorChannel,
 			int turningMotorChannel,
-			int turningEncoderPorts,
+			int turningEncoderPort,
 			double angleZero,
 			double[] angularPID,
 			double[] drivePID) {
@@ -77,7 +77,7 @@ public class SwerveModule extends SubsystemBase {
 		driveMotor.restoreFactoryDefaults();
 
 		// Initalize CANcoder
-		absoluteEncoder = new CANCoder(turningEncoderPorts, "canivore");
+		absoluteEncoder = new CANCoder(turningEncoderPort, "canivore");
 
 		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
@@ -89,7 +89,7 @@ public class SwerveModule extends SubsystemBase {
 
 		turningMotor.setInverted(true);
 
-		angularEncoder.setPositionConversionFactor((ModuleConstants.kturnGearRatio) * 2 * Math.PI); // radians
+		angularEncoder.setPositionConversionFactor(ModuleConstants.kturnGearRatio * 2d * Math.PI); // radians
 		angularEncoder.setVelocityConversionFactor(
 				ModuleConstants.kturnGearRatio
 						* 2 * Math.PI
@@ -100,7 +100,7 @@ public class SwerveModule extends SubsystemBase {
 		driveMotor.getEncoder().setVelocityConversionFactor(
 				ModuleConstants.kdriveGearRatio
 						* ModuleConstants.kwheelCircumference
-						* (1 / 60)); // meters per second
+						* (1d / 60d)); // meters per second
 
 		// Initialize PID's
 		this.angularPID = turningMotor.getPIDController();
@@ -113,8 +113,8 @@ public class SwerveModule extends SubsystemBase {
 		this.drivePID.setI(drivePID[1]);
 		this.drivePID.setD(drivePID[2]);
 
-		this.angularPID.setFF(DriveConstants.ksTurning);
-		this.drivePID.setFF(DriveConstants.kvVoltSecondsPerMeter);
+		this.angularPID.setFF(ModuleConstants.kTurnFeedForward);
+		this.drivePID.setFF(ModuleConstants.kDriveFeedForward);
 
 		this.angularPID.setFeedbackDevice(turningMotor.getEncoder());
 		this.drivePID.setFeedbackDevice(driveMotor.getEncoder());
@@ -127,8 +127,8 @@ public class SwerveModule extends SubsystemBase {
 		this.drivePID.setOutputRange(-1, 1);
 
 		// Configure current limits for motors - prevents disabling/brownouts
-		driveMotor.setIdleMode(IdleMode.kBrake);
-		turningMotor.setIdleMode(IdleMode.kBrake);
+		driveMotor.setIdleMode(IdleMode.kCoast);
+		turningMotor.setIdleMode(IdleMode.kCoast);
 		turningMotor.setSmartCurrentLimit(30);
 		driveMotor.setSmartCurrentLimit(30);
 

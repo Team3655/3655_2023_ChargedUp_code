@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
@@ -17,58 +18,51 @@ import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-	/** Creates the motors for the Suckers */
-	private CANSparkMax m_rightSuckerMotor, m_centerSuckerMotor, m_leftSuckerMotor;
+	/** Motors for the Suckers */
+	private CANSparkMax mainSucker;
 
-	private ColorSensorV3 m_colorSense;
+	/** PID controlers for Suckers */
+	private SparkMaxPIDController mainPIDController;
 
-	/** Creates pid controlers for Suckers */
-	private SparkMaxPIDController m_centerPIDController, m_sidePIDController;
+	/** Encoders for Sucker motors */
+	private RelativeEncoder mainEncoder;
 
-	/** Creates encoders for Sucker motors */
-	private RelativeEncoder m_rightSuckerEncoder, m_centerSuckerEncoder, m_leftSuckerEncoder;
+	/** Color sensor for detectng which type of piece is held */
+	private ColorSensorV3 colorSense;
+
+	/** Used to tell if the suckers are running */
+	private boolean isSucking;
 
 	/** Creates a new IntakeSubsystem. */
 	public IntakeSubsystem() {
 
 		// Give Sucker motors their id's
-		m_rightSuckerMotor = new CANSparkMax(IntakeConstants.kRightSuckerPort, MotorType.kBrushless);
-		m_centerSuckerMotor = new CANSparkMax(IntakeConstants.kCenterSuckerPort, MotorType.kBrushless);
-		m_leftSuckerMotor = new CANSparkMax(IntakeConstants.kLeftSuckerPort, MotorType.kBrushless);
+		mainSucker = new CANSparkMax(IntakeConstants.kMainSuckerPort, MotorType.kBrushless);
 
 		/**
 		 * The restoreFactoryDefaults method can be used to reset the configuration
 		 * parameters in the SPARK MAX to their factory default state. If no argument is
 		 * passed, these parameters will not persist between power cycles
 		 */
-		m_rightSuckerMotor.restoreFactoryDefaults();
-		m_centerSuckerMotor.restoreFactoryDefaults();
-		m_leftSuckerMotor.restoreFactoryDefaults();
+		mainSucker.restoreFactoryDefaults();
 
 		// set current limits
-		m_rightSuckerMotor.setSmartCurrentLimit(IntakeConstants.kSideSuckerCurrentLimit);
-		m_centerSuckerMotor.setSmartCurrentLimit(IntakeConstants.kCenterSuckerCurrentLimit);
-		m_leftSuckerMotor.setSmartCurrentLimit(IntakeConstants.kSideSuckerCurrentLimit);
+		mainSucker.setSmartCurrentLimit(IntakeConstants.kMainSuckerCurrentTarget);
 
 		// sets motor defaults to break
-		m_rightSuckerMotor.setIdleMode(IdleMode.kCoast);
-		m_centerSuckerMotor.setIdleMode(IdleMode.kCoast);
-		m_leftSuckerMotor.setIdleMode(IdleMode.kCoast);
+		mainSucker.setIdleMode(IdleMode.kCoast);
 
 		/**
 		 * In order to use PID functionality for a controller, a SparkMaxPIDController
 		 * object is constructed by calling the getPIDController() method on an existing
 		 * CANSparkMax object
 		 */
-		m_centerPIDController = m_centerSuckerMotor.getPIDController();
-		m_sidePIDController = m_rightSuckerMotor.getPIDController();
+		mainPIDController = mainSucker.getPIDController();
+		mainPIDController.setP(IntakeConstants.kMainSuckerP);
+		mainPIDController.setOutputRange(0, IntakeConstants.kMainSuckerMaxOutput);
 
 		// Encoder object created to display velocity values
-		m_rightSuckerEncoder = m_rightSuckerMotor.getEncoder();
-		m_centerSuckerEncoder = m_centerSuckerMotor.getEncoder();
-		m_leftSuckerEncoder = m_leftSuckerMotor.getEncoder();
-
-		m_leftSuckerMotor.follow(m_rightSuckerMotor);
+		mainEncoder = mainSucker.getEncoder();
 
 	}
 
@@ -76,6 +70,29 @@ public class IntakeSubsystem extends SubsystemBase {
 	public void periodic() {
 		// This method will be called once per scheduler run
 	}
+
+	// region commands
+
+	public CommandBase toggleIntake() {
+		// toggle the state of the sucker
+		isSucking = !isSucking;
+
+		// Stops motor if isSucking is false
+		return runOnce(
+				() -> {
+
+					if (isSucking) {
+						mainPIDController.setReference(
+								IntakeConstants.kMainSuckerCurrentTarget,
+								ControlType.kCurrent);
+					} else {
+						mainSucker.stopMotor();
+					}
+
+				});
+	}
+
+	// endregion
 
 	// region getters
 
@@ -86,9 +103,11 @@ public class IntakeSubsystem extends SubsystemBase {
 	 * @return True if the robot is holding a piece
 	 */
 	public boolean getHasPiece() {
-		if (m_centerSuckerMotor.getOutputCurrent() > IntakeConstants.kHasPieceCurrentThreshold) {
+
+		if (mainEncoder.getVelocity() < IntakeConstants.kHasPieceRPMThreshold && isSucking) {
 			return true;
 		}
+
 		return false;
 	}
 
@@ -99,7 +118,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	 * @return True if the robot is holding a cone
 	 */
 	public boolean getHasCone() {
-		if (getHasPiece() && m_colorSense.getColor() == Color.kYellow) {
+		if (getHasPiece() && colorSense.getColor() == Color.kYellow) {
 			return true;
 		}
 		return false;
@@ -112,7 +131,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	 * @return True if the robot is holding a Cube
 	 */
 	public boolean getHasCube() {
-		if (getHasPiece() && m_colorSense.getColor() == Color.kPurple) {
+		if (getHasPiece() && colorSense.getColor() == Color.kPurple) {
 			return true;
 		}
 		return false;
