@@ -89,6 +89,7 @@ public final class Constants {
 
 		// TODO: Change max speed
 		public static final double kMaxSpeedMetersPerSecond = 1.5;
+		public static final double kMaxTurboMetersPerSecond = 3.5;
 		public static final double kMaxRPM = 60;
 
 		public static final int kPigeonPort = 20;

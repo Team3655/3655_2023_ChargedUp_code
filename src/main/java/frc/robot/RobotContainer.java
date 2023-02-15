@@ -107,7 +107,8 @@ public class RobotContainer {
 						() -> driveSubsystem.drive(
 								JoystickUtils.processJoystickInput(driverController.getLeftY()), // x axis
 								JoystickUtils.processJoystickInput(driverController.getLeftX()), // y axis
-								JoystickUtils.processJoystickInput(driverController.getLeftX()) // z axis
+								JoystickUtils.processJoystickInput(driverController.getLeftX()), // z axis
+								driverController.getHID().getLeftStickButton()
 						),
 						driveSubsystem));
 

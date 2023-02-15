@@ -30,7 +30,7 @@ public class TurnCommand extends PIDCommand {
 				// Set reference to target
 				targetAngleDegrees,
 				// Pipe output to turn robot
-				output -> driveSubsystem.drive(0, 0, output), driveSubsystem);
+				output -> driveSubsystem.drive(0, 0, output, false), driveSubsystem);
 
 		// Set the controller to be continuous (because it is an angle controller)
 		getController().enableContinuousInput(-180, 180);
