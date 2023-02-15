@@ -4,6 +4,9 @@
 
 package frc.robot.Objects;
 
+import frc.robot.Constants;
+import frc.robot.Constants.ModuleConstants;
+
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
@@ -20,8 +23,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule extends SubsystemBase {
 	/** Creates a new SwerveModule. */
@@ -61,7 +62,7 @@ public class SwerveModule extends SubsystemBase {
 		driveMotor.restoreFactoryDefaults();
 
 		// Initalize CANcoder
-		absoluteEncoder = new CANCoder(turningEncoderPort);
+		absoluteEncoder = new CANCoder(turningEncoderPort, Constants.kCanivoreCANBusName);
 
 		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);

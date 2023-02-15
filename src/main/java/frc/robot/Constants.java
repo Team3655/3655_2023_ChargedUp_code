@@ -19,6 +19,9 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
+	public static final String kRioCANBusName = "rio";
+	public static final String kCanivoreCANBusName = "canivore";
+
 	public static class ModuleConstants {
 
 		// Constants set for the _SDS MK4i_

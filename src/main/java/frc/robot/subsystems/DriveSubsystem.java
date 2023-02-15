@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Objects.SwerveModule;
 import frc.robot.Utils.JoystickUtils;
@@ -82,7 +83,7 @@ public class DriveSubsystem extends SubsystemBase {
 	};
 
 	// Initalizing the gyro sensor
-	private final WPI_Pigeon2 gyro = new WPI_Pigeon2(DriveConstants.kPigeonPort);
+	private final WPI_Pigeon2 gyro = new WPI_Pigeon2(DriveConstants.kPigeonPort, Constants.kCanivoreCANBusName);
 
 	// Odeometry class for tracking robot pose
 	SwerveDriveOdometry odometry = new SwerveDriveOdometry(
