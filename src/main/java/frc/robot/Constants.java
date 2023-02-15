@@ -104,6 +104,11 @@ public final class Constants {
 
 		public static final boolean kGyroReversed = true;
 
+		// PID constants for TurnCommand
+		public static double kTurnP = .1;
+		public static double kTurnI = 0;
+		public static double kTurnD = 0;
+
 	}
 
 	/**
@@ -119,6 +124,9 @@ public final class Constants {
 		public static final double PathPlannerTurnP = .5;
 		public static final double PathPlannerTurnI = 0;
 		public static final double PathPlannerTurnD = 0;
+
+		public static double kTurnCommandToleranceDeg = 5;
+		public static double kTurnCommandRateToleranceDegPerS = 0;
 
 	}
 
@@ -197,6 +205,21 @@ public final class Constants {
 		public static final double kMainSuckerP = .00001;
 
 		public static final double kMainSuckerMaxOutput = 1d / 3d;
+
+	}
+
+	public static class LimelightConstants {
+
+		// declare ID's of pipelines here 
+		public static int kRetroReflectivePipeline = 0;
+		public static int kApriltagPipeline = 1;
+
+		// Servo Constants
+		public static int kServoPort = 0;
+		// sets the offset of the sevo so the limelight is facing forward (double 0 - 1)
+		public static double kServoFrontPose = .5;
+		public static double kServoBackpose = 0;
+		
 
 	}
 
