@@ -8,7 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.AutoConstants;
 
 /** A command that will turn the robot to the specified angle. */
 public class TurnCommand extends PIDCommand {
@@ -22,9 +22,9 @@ public class TurnCommand extends PIDCommand {
 	public TurnCommand(double targetAngleDegrees, DriveSubsystem driveSubsystem) {
 		super(
 				new PIDController(
-						DriveConstants.kTurnP,
-						DriveConstants.kTurnI,
-						DriveConstants.kTurnD),
+						AutoConstants.PathPlannerTurnP,
+						AutoConstants.PathPlannerTurnI,
+						AutoConstants.PathPlannerTurnD),
 				// Close loop on heading
 				driveSubsystem::getHeading,
 				// Set reference to target
@@ -38,8 +38,8 @@ public class TurnCommand extends PIDCommand {
 		// stationary at the setpoint before it is considered as having reached the
 		// reference
 		getController().setTolerance(
-				DriveConstants.kTurnToleranceDeg,
-				DriveConstants.kTurnRateToleranceDegPerS);
+				AutoConstants.kTurnCommandToleranceDeg,
+				AutoConstants.kTurnCommandRateToleranceDegPerS);
 	}
 
 	@Override

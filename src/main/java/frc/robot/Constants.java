@@ -117,9 +117,6 @@ public final class Constants {
 		public static double kTurnI = 0;
 		public static double kTurnD = 0;
 
-		public static double kTurnToleranceDeg = 5;
-		public static double kTurnRateToleranceDegPerS = 0;
-
 	}
 
 	/**
@@ -163,6 +160,9 @@ public final class Constants {
 		public static final PIDGains kBalanceCommandGains = new PIDGains(.008, 0, 0);
 		public static final double kMaxBalancingVelocity = 1000;
 		public static final double kMaxBalancingAcceleration = 5000;
+
+		public static double kTurnCommandToleranceDeg = 5;
+		public static double kTurnCommandRateToleranceDegPerS = 0;
 
 	}
 
