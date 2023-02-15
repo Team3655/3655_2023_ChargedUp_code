@@ -17,7 +17,6 @@ import frc.robot.subsystems.DashboardSubsystem;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ArmPoseCommand;
-import frc.robot.commands.ArmSwitchCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
@@ -83,7 +82,7 @@ public class RobotContainer {
 		operatorController.button(4).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.TUCKED));
 
 		// Switches sides of the robot, VERY DANGEROUS! HAS NOT BEEN TESTED!
-		operatorController.button(9).onTrue(new ArmSwitchCommand(armSubsystem, intakeSubsystem));
+		operatorController.button(9).onTrue(armSubsystem.ToggleSide());
 
 		// Toggles field centric for the driver
 		new Trigger(driverController.back()).onTrue(driveSubsystem.toggleFieldCentric());

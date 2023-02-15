@@ -67,19 +67,12 @@ public class ArmSegment {
 		rightEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
 		leftEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
 
-		// set PID coefficients
-		rightPIDController.setP(0);
-		rightPIDController.setI(0);
-		rightPIDController.setD(0);
-		rightPIDController.setOutputRange(-0.5, 0.5);
-
-		leftPIDController.setP(0);
-		leftPIDController.setI(0);
-		leftPIDController.setD(0);
-		leftPIDController.setOutputRange(-0.5, 0.5);
-
 		// Sets the left motor to be inverted if it needs to be
-		leftMotor.setInverted(invertLeft);
+		if (invertLeft) {
+			leftMotor.setInverted(true);
+		} else {
+			rightMotor.setInverted(true);
+		}
 
 		// endregion
 	}
@@ -92,6 +85,11 @@ public class ArmSegment {
 		leftPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
 	}
 
+	public void invertMotors() {
+		rightMotor.setInverted(!rightMotor.getInverted());
+		leftMotor.setInverted(!leftMotor.getInverted());
+	}
+
 	/**
 	 * Sets the sign that controls the dominant side of the robot
 	 * 
@@ -101,10 +99,12 @@ public class ArmSegment {
 		targetSign = sign;
 	}
 
-	/** sets the min and max target angle of */
-	public void setConstraints(int min, int max) {
-		maxTheta = max;
-		minTheta = min;
+	/** sets the angle constraint and the speed constraint */
+	public void setConstraints(double theta, double maxSpeed) {
+		maxTheta = theta;
+		minTheta = -theta;
+		rightPIDController.setOutputRange(-maxSpeed, maxSpeed);
+		leftPIDController.setOutputRange(-maxSpeed, maxSpeed);
 	}
 
 	/**
