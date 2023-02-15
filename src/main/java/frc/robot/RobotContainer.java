@@ -4,26 +4,33 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.DriveConstants;
-
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.Utils.JoystickUtils;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPoses;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.DashboardSubsystem;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ArmPoseCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -38,7 +45,6 @@ public class RobotContainer {
 	// The robot's subsystems and commands are defined here...
 	private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-	private final DashboardSubsystem dashboardSubsystem = new DashboardSubsystem(driveSubsystem);
 	private final ArmSubsystem armSubsystem = new ArmSubsystem();
 	private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
@@ -46,6 +52,8 @@ public class RobotContainer {
 	private final CommandXboxController driverController = new CommandXboxController(
 			OperatorConstants.kDriverControllerPort);
 	private final CommandGenericHID operatorController = new CommandGenericHID(1);
+
+	Trigger select = driverController.back();
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -87,18 +95,19 @@ public class RobotContainer {
 		// Switches sides of the robot
 		operatorController.button(9).onTrue(armSubsystem.ToggleSide());
 
-		// Toggles field centric for the driver
-		new Trigger(driverController.back()).onTrue(driveSubsystem.toggleFieldCentric());
-		// Resets gyro for driver
-		new Trigger(driverController.start()).onTrue(driveSubsystem.zeroHeading());
+		new Trigger(driverController.start()).onTrue(new InstantCommand(
+				() -> driveSubsystem.zeroHeading()));
+
+		new Trigger(driverController.start()).onTrue(new InstantCommand(
+				() -> driveSubsystem.toggleFieldCentric()));
 
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								driverController.getLeftY() * DriveConstants.kMaxSpeedMetersPerSecond, // x axis
-								driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond, // y axis
-								driverController.getRightX() * DriveConstants.kMaxRPM // z axis
+								JoystickUtils.processJoystickInput(driverController.getLeftY()), // x axis
+								JoystickUtils.processJoystickInput(driverController.getLeftX()), // y axis
+								JoystickUtils.processJoystickInput(driverController.getLeftX()) // z axis
 						),
 						driveSubsystem));
 
@@ -111,6 +120,8 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		// An example command will be run in autonomous
-		return Autos.exampleAuto(exampleSubsystem);
+		PathPlannerTrajectory traj = PathPlanner.loadPath("Rotate", new PathConstraints(2, 3));
+
+		return driveSubsystem.followTrajectoryCommand(traj, true);
 	}
 }

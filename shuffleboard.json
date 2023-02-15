@@ -1,9 +1,9 @@
 {
   "tabPane": [
     {
-      "title": "DriveData",
+      "title": "SmartDashboard",
       "autoPopulate": true,
-      "autoPopulatePrefix": "",
+      "autoPopulatePrefix": "SmartDashboard/",
       "widgetPane": {
         "gridSize": 64.0,
         "showGrid": true,
@@ -39,15 +39,15 @@
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RL A P Conversion",
-                  "_title": "RL A P Conversion",
+                  "_source0": "network_table:///SmartDashboard/RR A P Conversion",
+                  "_title": "RR A P Conversion",
                   "_glyph": 148,
                   "_showGlyph": false
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RR A P Conversion",
-                  "_title": "RR A P Conversion",
+                  "_source0": "network_table:///SmartDashboard/RL A P Conversion",
+                  "_title": "RL A P Conversion",
                   "_glyph": 148,
                   "_showGlyph": false
                 }
@@ -82,22 +82,22 @@
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RL A V Conversion",
-                  "_title": "RL A V Conversion",
+                  "_source0": "network_table:///SmartDashboard/RR A V Conversion",
+                  "_title": "RR A V Conversion",
                   "_glyph": 148,
                   "_showGlyph": false
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RR A V Conversion",
-                  "_title": "RR A V Conversion",
+                  "_source0": "network_table:///SmartDashboard/RL A V Conversion",
+                  "_title": "RL A V Conversion",
                   "_glyph": 148,
                   "_showGlyph": false
                 }
               ]
             }
           },
-          "6,0": {
+          "4,0": {
             "size": [
               2,
               4
@@ -125,22 +125,22 @@
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RL Init Spark Enc",
-                  "_title": "RL Init Spark Enc",
+                  "_source0": "network_table:///SmartDashboard/RR Init Spark Enc",
+                  "_title": "RR Init Spark Enc",
                   "_glyph": 148,
                   "_showGlyph": false
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RR Init Spark Enc",
-                  "_title": "RR Init Spark Enc",
+                  "_source0": "network_table:///SmartDashboard/RL Init Spark Enc",
+                  "_title": "RL Init Spark Enc",
                   "_glyph": 148,
                   "_showGlyph": false
                 }
               ]
             }
           },
-          "4,0": {
+          "6,0": {
             "size": [
               2,
               4
@@ -168,15 +168,15 @@
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RL D V Conversion",
-                  "_title": "RL D V Conversion",
+                  "_source0": "network_table:///SmartDashboard/RR D V Conversion",
+                  "_title": "RR D V Conversion",
                   "_glyph": 148,
                   "_showGlyph": false
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RR D V Conversion",
-                  "_title": "RR D V Conversion",
+                  "_source0": "network_table:///SmartDashboard/RL D V Conversion",
+                  "_title": "RL D V Conversion",
                   "_glyph": 148,
                   "_showGlyph": false
                 }
@@ -211,22 +211,22 @@
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RL Relative",
-                  "_title": "RL Relative",
+                  "_source0": "network_table:///SmartDashboard/RR Relative",
+                  "_title": "RR Relative",
                   "_glyph": 148,
                   "_showGlyph": false
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RR Relative",
-                  "_title": "RR Relative",
+                  "_source0": "network_table:///SmartDashboard/RL Relative",
+                  "_title": "RL Relative",
                   "_glyph": 148,
                   "_showGlyph": false
                 }
               ]
             }
           },
-          "10,0": {
+          "12,0": {
             "size": [
               2,
               4
@@ -254,15 +254,15 @@
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RL Absolute",
-                  "_title": "RL Absolute",
+                  "_source0": "network_table:///SmartDashboard/RR Absolute",
+                  "_title": "RR Absolute",
                   "_glyph": 148,
                   "_showGlyph": false
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RR Absolute",
-                  "_title": "RR Absolute",
+                  "_source0": "network_table:///SmartDashboard/RL Absolute",
+                  "_title": "RL Absolute",
                   "_glyph": 148,
                   "_showGlyph": false
                 }
@@ -271,8 +271,8 @@
           },
           "0,5": {
             "size": [
-              3,
-              1
+              2,
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -282,10 +282,10 @@
               "_showGlyph": false
             }
           },
-          "3,5": {
+          "2,5": {
             "size": [
               2,
-              1
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -295,10 +295,10 @@
               "_showGlyph": false
             }
           },
-          "5,5": {
+          "4,5": {
             "size": [
               2,
-              1
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -308,14 +308,14 @@
               "_showGlyph": false
             }
           },
-          "12,0": {
+          "16,0": {
             "size": [
               2,
               4
             ],
             "content": {
               "_type": "List Layout",
-              "_title": "List Layout",
+              "_title": "Errors",
               "_glyph": 149,
               "_showGlyph": false,
               "Layout/Label position": "BOTTOM",
@@ -336,22 +336,22 @@
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RL Abs. Error",
-                  "_title": "RL Abs. Error",
+                  "_source0": "network_table:///SmartDashboard/RR Abs. Error",
+                  "_title": "RR Abs. Error",
                   "_glyph": 148,
                   "_showGlyph": false
                 },
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/RR Abs. Error",
-                  "_title": "RR Abs. Error",
+                  "_source0": "network_table:///SmartDashboard/RL Abs. Error",
+                  "_title": "RL Abs. Error",
                   "_glyph": 148,
                   "_showGlyph": false
                 }
               ]
             }
           },
-          "14,1": {
+          "7,5": {
             "size": [
               2,
               2
@@ -364,17 +364,90 @@
               "_showGlyph": false
             }
           },
-          "11,4": {
+          "14,0": {
             "size": [
-              3,
-              1
+              2,
+              4
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///Shuffleboard/Modules/Gyro",
-              "_title": "Shuffleboard/Modules/Gyro",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_type": "List Layout",
+              "_title": "Offsets",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/FL Offset",
+                  "_title": "FL Offset",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/FR Offset",
+                  "_title": "FR Offset",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RR Offset",
+                  "_title": "RR Offset",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RL Offset",
+                  "_title": "RL Offset",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          },
+          "10,0": {
+            "size": [
+              2,
+              4
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Optimized Angle",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/FL Optimized Angle",
+                  "_title": "FL Optimized Angle",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/FR Optimized Angle",
+                  "_title": "FR Optimized Angle",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RR Optimized Angle",
+                  "_title": "RR Optimized Angle",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RL Optimized Angle",
+                  "_title": "RL Optimized Angle",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
             }
           }
         }
@@ -395,9 +468,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -25600.0,
-    "y": -25600.0,
-    "width": 640.0,
-    "height": 480.0
+    "x": -7.199999809265137,
+    "y": -7.199999809265137,
+    "width": 1550.4000244140625,
+    "height": 838.4000244140625
   }
 }

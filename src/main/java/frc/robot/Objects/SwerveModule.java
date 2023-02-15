@@ -11,6 +11,7 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -18,9 +19,12 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -40,6 +44,17 @@ public class SwerveModule extends SubsystemBase {
 	private final double angleZero;
 
 	private final String moduleName;
+
+	private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
+		ModuleConstants.kAngularPID[0],
+		ModuleConstants.kAngularPID[1],
+		ModuleConstants.kAngularPID[2],
+		new TrapezoidProfile.Constraints(
+			2 * Math.PI * 200,
+			2 * Math.PI * 600));
+
+	SimpleMotorFeedforward turnFeedForward = new SimpleMotorFeedforward(
+		ModuleConstants.kTurnFeedForward, ModuleConstants.kvTurning);
 
 	public SwerveModule(
 			String moduleName,
@@ -65,8 +80,8 @@ public class SwerveModule extends SubsystemBase {
 		absoluteEncoder = new CANCoder(turningEncoderPort, Constants.kCanivoreCANBusName);
 
 		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
-		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
-		absoluteEncoder.configMagnetOffset(0);
+		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+		absoluteEncoder.configMagnetOffset(-angleZero);
 		absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
 
 		// Initialize Spark MAX encoders
@@ -77,14 +92,11 @@ public class SwerveModule extends SubsystemBase {
 		angularEncoder.setPositionConversionFactor(ModuleConstants.kturnGearRatio * 2d * Math.PI); // radians
 		angularEncoder.setVelocityConversionFactor(
 				ModuleConstants.kturnGearRatio
-						* 2d * Math.PI
-						* (1d / 60d)); // radians per second
-
-		// m_angularEncoder.setPosition(Math.toRadians(m_absoluteEncoder.getAbsolutePosition())
-		// - Math.toRadians(angleZero));
+						* 2 * Math.PI
+						* (1 / 60)); // radians per second
 
 		driveEncoder = driveMotor.getEncoder();
-		driveEncoder.setPositionConversionFactor(ModuleConstants.kdriveGearRatio * 2d * Math.PI); // meters
+		driveEncoder.setPositionConversionFactor(ModuleConstants.kdriveGearRatio * ModuleConstants.kwheelCircumference); // meters
 		driveMotor.getEncoder().setVelocityConversionFactor(
 				ModuleConstants.kdriveGearRatio
 						* ModuleConstants.kwheelCircumference
@@ -122,7 +134,10 @@ public class SwerveModule extends SubsystemBase {
 
 		resetAngleToAbsolute();
 
+		m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
 		SmartDashboard.putNumber(this.moduleName + " Init Spark Enc", resetAngleToAbsolute());
+		SmartDashboard.putNumber(this.moduleName + " Offset", angleZero);
 
 	}
 
@@ -143,10 +158,15 @@ public class SwerveModule extends SubsystemBase {
 		return Math.toDegrees(angularEncoder.getPosition());
 	}
 
+	public double getDistanceMeters(){
+		return driveEncoder.getPosition();
+	}
+
 	// Returns current position of the modules
 	public SwerveModulePosition getPosition() {
 
-		double m_moduleAngleRadians = angularEncoder.getPosition();
+		//double m_moduleAngleRadians = angularEncoder.getPosition();
+		double m_moduleAngleRadians = absoluteEncoder.getAbsolutePosition() * 2 * Math.PI / 360;
 
 		double m_distanceMeters = driveEncoder.getPosition();
 
@@ -155,25 +175,32 @@ public class SwerveModule extends SubsystemBase {
 
 	public void setDesiredState(SwerveModuleState desiredState) {
 
-		double m_moduleAngleRadians = angularEncoder.getPosition();
+		//double m_moduleAngleRadians = angularEncoder.getPosition();
+		double m_moduleAngleRadians = absoluteEncoder.getAbsolutePosition() * 2 * Math.PI / 360;
+
 		// Optimize the reference state to avoid spinning further than 90 degrees to
 		// desired state
 		SwerveModuleState optimizedState = SwerveModuleState.optimize(
 				desiredState,
 				new Rotation2d(m_moduleAngleRadians));
 
-		angularPID.setReference(
-				optimizedState.angle.getRadians(),
-				ControlType.kPosition);
+		final var turnOutput = m_turningPIDController.calculate(m_moduleAngleRadians, optimizedState.angle.getRadians())
+				+ turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
 
+		// angularPID.setReference(
+		// 		optimizedState.angle.getRadians(),
+		// 		ControlType.kPosition);
+
+
+		turningMotor.setVoltage(turnOutput);
 		drivePID.setReference(
 				optimizedState.speedMetersPerSecond,
 				ControlType.kVelocity);
 
+		SmartDashboard.putNumber(this.moduleName + " Optimized Angle", optimizedState.angle.getDegrees());
 	}
 
 	public void resetEncoders() {
-		angularEncoder.setPosition(0);
 		driveMotor.getEncoder().setPosition(0);
 	}
 

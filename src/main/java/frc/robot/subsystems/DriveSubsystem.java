@@ -27,7 +27,6 @@ import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Objects.SwerveModule;
-import frc.robot.Utils.JoystickUtils;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -74,7 +73,6 @@ public class DriveSubsystem extends SubsystemBase {
 			ModuleConstants.kAngularPID,
 			ModuleConstants.kDrivePID);
 
-	// TODO: Use variable here instead of entries below?
 	private SwerveModulePosition[] swervePosition = new SwerveModulePosition[] {
 			frontLeft.getPosition(),
 			frontRight.getPosition(),
@@ -113,6 +111,11 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("RL Relative", rearLeft.getRelativeHeading());
 		SmartDashboard.putNumber("RR Relative", rearRight.getRelativeHeading());
 
+		SmartDashboard.putNumber("Gyro", gyro.getAngle());
+
+		SmartDashboard.putNumber(frontLeft.getName() + " Meters", frontLeft.getDistanceMeters());
+		
+
 	}
 
 	// region getters
@@ -140,9 +143,9 @@ public class DriveSubsystem extends SubsystemBase {
 	public void drive(double xSpeed, double ySpeed, double rot) {
 
 		// Apply deadbands to inputs
-		xSpeed = JoystickUtils.deadBand(xSpeed);
-		ySpeed = JoystickUtils.deadBand(ySpeed);
-		rot = JoystickUtils.deadBand(rot);
+		xSpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
+		ySpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
+		rot *= DriveConstants.kMaxRPM;
 
 		var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
 				fieldRelative
@@ -214,28 +217,16 @@ public class DriveSubsystem extends SubsystemBase {
 								AutoConstants.PathPlannerP,
 								AutoConstants.PathPlannerI,
 								AutoConstants.PathPlannerD), // TODO: X controller.
-						// Tune these
-						// values for your robot. Leaving
-						// them 0 will only use
-						// feedforwards.
 						new PIDController(
 								AutoConstants.PathPlannerP,
 								AutoConstants.PathPlannerI,
-								AutoConstants.PathPlannerD), // TODO: controller
-						// (usually the
-						// same values as X controller)
+								AutoConstants.PathPlannerD), // TODO: Y controller
 						new PIDController(
 								AutoConstants.PathPlannerTurnP,
 								AutoConstants.PathPlannerTurnI,
 								AutoConstants.PathPlannerTurnD), // TODO: Rotation controller.
-						// Tune
-						// these values for your robot.
-						// Leaving them 0 will only use
-						// feedforwards.
 						this::setModuleStates, // Module states consumer
-						true, // Sho uld the path be automatically mirrored depending on alliance
-						// color.
-						// Optional, defaults to true
+						false, 
 						this // Requires this drive subsystem
 				));
 	}
