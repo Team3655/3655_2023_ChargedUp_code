@@ -50,7 +50,9 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMajorArmI,
 				ArmConstants.kMajorArmD);
 
-		majorArm.setConstraints(90, 0.4);
+		majorArm.setConstraints(
+				ArmConstants.kMajorArmConstraints,
+				ArmConstants.kMajorArmPIDOutputLimit);
 
 		// minor arm defs
 		minorArm = new ArmSegment(
@@ -64,7 +66,9 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMinorArmI,
 				ArmConstants.kMinorArmD);
 
-		minorArm.setConstraints(180, 0.3);
+		minorArm.setConstraints(
+				ArmConstants.kMinorArmConstraints,
+				ArmConstants.kMinorArmPIDOutputLimit);
 		// endregion
 
 		// the default state of the arms
