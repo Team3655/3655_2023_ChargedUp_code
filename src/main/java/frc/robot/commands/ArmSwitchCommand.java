@@ -4,36 +4,34 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
-import frc.robot.RobotContainer;
-import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
+
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ArmSwitchCommand extends SequentialCommandGroup {
+public class ArmSwitchCommand extends InstantCommand {
 
-	private static ArmSubsystem armSubsystem;
-	// private static LimelightSubsystem limelightSubsystem;
+	ArmSubsystem armSubsystem;
+	LimelightSubsystem limelightSubsystem;
 
-	/** Creates a new ArmSwitchCommand. */
-	public ArmSwitchCommand() {
+  public ArmSwitchCommand(ArmSubsystem armSubsystem, LimelightSubsystem limelightSubsystem) {
 
-		armSubsystem = RobotContainer.armSubsystem;
-		//limelightSubsystem = RobotContainer.limelightSubsystem;
+	this.armSubsystem = armSubsystem;
+	this.limelightSubsystem = limelightSubsystem;
 
-		// ArmPoses prevArmPose = armSubsystem.getArmState();
-		System.out.println(armSubsystem.getArmState());
+    // Use addRequirements() here to declare subsystem dependencies.
+	addRequirements(armSubsystem);
+	addRequirements(limelightSubsystem);
+  }
 
-		// Add your commands in the addCommands() call, e.g.
-		// addCommands(new FooCommand(), new BarCommand());
-		addCommands(
-				new ArmPoseCommand(ArmPoses.TUCKED),
-				new PrintCommand("SWITCHING SIDES!!!!!!!!!!!!!!!!!"),
-				new InstantCommand(() -> armSubsystem.ToggleSide()));
-	}
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+	armSubsystem.ToggleSide();
+	
+  }
+
 }
