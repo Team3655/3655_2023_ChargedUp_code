@@ -40,7 +40,7 @@ public class SwerveModule extends SubsystemBase {
 	private final SparkMaxPIDController angularPID;
 	private final SparkMaxPIDController drivePID;
 
-	private final double angleZero;
+	public final double angleZero;
 
 	private final String moduleName;
 
@@ -53,7 +53,7 @@ public class SwerveModule extends SubsystemBase {
 			2 * Math.PI * 600));
 
 	SimpleMotorFeedforward turnFeedForward = new SimpleMotorFeedforward(
-		ModuleConstants.kTurnFeedForward, ModuleConstants.kvTurning);
+		ModuleConstants.ksTurning, ModuleConstants.kvTurning);
 
 	public SwerveModule(
 			String moduleName,
@@ -71,16 +71,18 @@ public class SwerveModule extends SubsystemBase {
 		driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
 		turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
-		turningMotor.setInverted(true);
-
 		turningMotor.restoreFactoryDefaults();
 		driveMotor.restoreFactoryDefaults();
+
+		turningMotor.setInverted(true);
+		driveMotor.setInverted(true);
+
 
 		// Initalize CANcoder
 		absoluteEncoder = new CANCoder(absoluteEncoderPort);
 		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-		absoluteEncoder.configMagnetOffset(-angleZero);
+		absoluteEncoder.configMagnetOffset(-1 * angleZero);
 		absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
 
 		// Initialize Spark MAX encoders
@@ -109,7 +111,7 @@ public class SwerveModule extends SubsystemBase {
 		this.drivePID.setI(drivePID[1]);
 		this.drivePID.setD(drivePID[2]);
 
-		this.angularPID.setFF(ModuleConstants.kTurnFeedForward);
+		//this.angularPID.setFF(ModuleConstants.kTurnFeedForward);
 		this.drivePID.setFF(ModuleConstants.kDriveFeedForward);
 
 		this.angularPID.setFeedbackDevice(turningMotor.getEncoder());
@@ -123,12 +125,15 @@ public class SwerveModule extends SubsystemBase {
 		this.drivePID.setOutputRange(-1, 1);
 
 		// Configure current limits for motors
-		driveMotor.setIdleMode(IdleMode.kCoast);
-		turningMotor.setIdleMode(IdleMode.kCoast);
+		driveMotor.setIdleMode(IdleMode.kBrake);
+		turningMotor.setIdleMode(IdleMode.kBrake);
 		turningMotor.setSmartCurrentLimit(30);
 		driveMotor.setSmartCurrentLimit(30);
 
 		m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
+		SmartDashboard.putNumber(this.moduleName + " Offset", angleZero);
+		SmartDashboard.putString(this.moduleName + " Abs. Status", absoluteEncoder.getLastError().toString());
 	}
 
 	// Returns headings of the module
@@ -170,6 +175,7 @@ public class SwerveModule extends SubsystemBase {
 				+ turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
 
 		turningMotor.setVoltage(turnOutput);
+
 		drivePID.setReference(
 				optimizedState.speedMetersPerSecond,
 				ControlType.kVelocity);
@@ -183,6 +189,7 @@ public class SwerveModule extends SubsystemBase {
 
 	public void putConversionFactors() {
 		SmartDashboard.putNumber(moduleName + " D V Conversion", driveEncoder.getVelocityConversionFactor());
+		SmartDashboard.putNumber(moduleName + " D Ang Conv", driveEncoder.getPositionConversionFactor());
 	}
 
 	@Override

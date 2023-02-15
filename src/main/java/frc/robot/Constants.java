@@ -32,29 +32,29 @@ public final class Constants {
 		public static final double kDriveFeedForward = .2;
 
 		public static final double kvTurning = .43205;
-		public static final double kTurnFeedForward = .17161; // Tuned February 2, 2023
+		public static final double ksTurning = .17161; // Tuned February 2, 2023
 
 		// NEO drive motor CAN ID's
 		public static final int kFrontLeftDriveMotorPort = 1;
-		public static final int kFrontRightDriveMotorPort = 2;
-		public static final int kRearLeftDriveMotorPort = 3;
-		public static final int kRearRightDriveMotorPort = 4;
+		public static final int kFrontRightDriveMotorPort = 4;
+		public static final int kRearLeftDriveMotorPort = 7;
+		public static final int kRearRightDriveMotorPort = 10;
 
 		// NEO turning motor CAN ID's
-		public static final int kFrontLeftTurningMotorPort = 5;
-		public static final int kFrontRightTurningMotorPort = 6;
-		public static final int kRearLeftTurningMotorPort = 7;
-		public static final int kRearRightTurningMotorPort = 8;
+		public static final int kFrontLeftTurningMotorPort = 2;
+		public static final int kFrontRightTurningMotorPort = 5;
+		public static final int kRearLeftTurningMotorPort = 8;
+		public static final int kRearRightTurningMotorPort = 11;
 
 		// CANcoder CAN ID's
-		public static final int kFrontLeftTurningEncoderPort = 9;
-		public static final int kFrontRightTurningEncoderPort = 10;
-		public static final int kRearLeftTurningEncoderPort = 11;
+		public static final int kFrontLeftTurningEncoderPort = 3;
+		public static final int kFrontRightTurningEncoderPort = 9;
+		public static final int kRearLeftTurningEncoderPort = 6;
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// Offset angle for absolute encoders (find this using REV client)
 		public static final double kFrontLeftAngleZero = 62.578; 
-		public static final double kFrontRightAngleZero = -47.197; 
+		public static final double kFrontRightAngleZero = -49.395; 
 		public static final double kRearLeftAngleZero = -32.520; 
 		public static final double kRearRightAngleZero = -8.262;
 
@@ -85,7 +85,7 @@ public final class Constants {
 		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
 
 		// TODO: Change max speed
-		public static final double kMaxSpeedMetersPerSecond = 1.5;
+		public static final double kMaxSpeedMetersPerSecond = 3;
 		public static final double kMaxRPM = 60;
 
 		public static final int kPigeonPort = 20;
@@ -109,11 +109,11 @@ public final class Constants {
 	public static class AutoConstants {
 
 		// PID constants for path planner (these control drive direction not reaching target wheel speeds)
-		public static final double PathPlannerP = .6;
+		public static final double PathPlannerP = .5;
 		public static final double PathPlannerI = 0;
 		public static final double PathPlannerD = 0;
 
-		public static final double PathPlannerTurnP = .5;
+		public static final double PathPlannerTurnP = .8;
 		public static final double PathPlannerTurnI = 0;
 		public static final double PathPlannerTurnD = 0;
 
