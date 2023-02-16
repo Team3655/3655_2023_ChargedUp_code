@@ -125,8 +125,8 @@ public class SwerveModule extends SubsystemBase {
 		this.drivePID.setOutputRange(-1, 1);
 
 		// Configure current limits for motors
-		driveMotor.setIdleMode(IdleMode.kBrake);
-		turningMotor.setIdleMode(IdleMode.kBrake);
+		driveMotor.setIdleMode(IdleMode.kCoast);
+		turningMotor.setIdleMode(IdleMode.kCoast);
 		turningMotor.setSmartCurrentLimit(30);
 		driveMotor.setSmartCurrentLimit(30);
 

@@ -58,13 +58,13 @@ public final class Constants {
 		public static final double kRearLeftAngleZero = -32.520; 
 		public static final double kRearRightAngleZero = -8.262;
 
-		public static final double kModuleDriveControllerP = .001;
+		public static final double kModuleDriveControllerP = .1;
 		public static final double kModuleDriveControllerI = 0;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
 
-		public static final double kModuleTurningControllerP = 4.75;
-		public static final double kModuleTurningControllerI = 0;
-		public static final double kModuleTurningControllerD = 0;
+		public static final double kModuleTurningControllerP = 6.5;
+		public static final double kModuleTurningControllerI = 0.25;
+		public static final double kModuleTurningControllerD = 0.15;
 
 		// SPARK MAX Angular PID values
 		public static double[] kAngularPID = {
@@ -81,12 +81,12 @@ public final class Constants {
 
 	public static class DriveConstants {
 
-		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
-		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
+		// public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
+		// public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
 
 		// TODO: Change max speed
 		public static final double kMaxSpeedMetersPerSecond = 3;
-		public static final double kMaxRPM = 60;
+		public static final double kMaxRPM = 30;
 
 		public static final int kPigeonPort = 20;
 
@@ -99,7 +99,7 @@ public final class Constants {
 				new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //RL
 				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //RR
 
-		public static final boolean kGyroReversed = true;
+		public static final boolean kGyroReversed = false;
 
 	}
 

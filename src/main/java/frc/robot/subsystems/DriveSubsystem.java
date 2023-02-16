@@ -155,9 +155,9 @@ public class DriveSubsystem extends SubsystemBase {
 	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
 
 		// Apply deadbands to inputs
-		// xSpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
-		// ySpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
-		// rot *= DriveConstants.kMaxRPM;
+		xSpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
+		ySpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
+		rot *= DriveConstants.kMaxRPM;
 
 		var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
 				fieldRelative
@@ -165,7 +165,8 @@ public class DriveSubsystem extends SubsystemBase {
 						: new ChassisSpeeds(xSpeed, ySpeed, rot));
 
 		SwerveDriveKinematics.desaturateWheelSpeeds(
-				swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+			swerveModuleStates, 
+			DriveConstants.kMaxSpeedMetersPerSecond);
 
 		frontLeft.setDesiredState(swerveModuleStates[0]);
 		frontRight.setDesiredState(swerveModuleStates[1]);

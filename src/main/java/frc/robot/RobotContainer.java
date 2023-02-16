@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
@@ -59,7 +60,9 @@ public class RobotContainer {
 	// Replace with CommandPS4Controller or CommandJoystick if needed
 	private final CommandXboxController driverController = new CommandXboxController(
 			OperatorConstants.kDriverControllerPort);
-	private final CommandGenericHID operatorController = new CommandGenericHID(1);
+	
+	private final CommandJoystick rightDriveJoystick = new CommandJoystick(0);
+	private final CommandJoystick leftDriveJoystick = new CommandJoystick(1);
 
 	Trigger select = driverController.back();
 
@@ -127,33 +130,19 @@ public class RobotContainer {
 		// Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 		new Trigger(exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(exampleSubsystem));
 
-		// // Schedule ArmPoseCommand when operator presses coresponding button.
-		// operatorController.button(1).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.LOW_SCORE));
-		// operatorController.button(2).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.MID_SCORE));
-		// operatorController.button(3).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.HIGH_SCORE));
+		new Trigger(leftDriveJoystick.button(7)).onTrue(new InstantCommand(
+			() -> driveSubsystem.toggleFieldCentric()));
 
-		// operatorController.button(6).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.LOW_INTAKE));
-		// operatorController.button(7).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.MID_INTAKE));
-		// operatorController.button(8).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.HIGH_INTAKE));
-
-		// operatorController.button(4).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.TUCKED));
-
-		// // Switches sides of the robot, VERY DANGEROUS! HAS NOT BEEN TESTED!
-		// operatorController.button(9).onTrue(new ArmSwitchCommand(armSubsystem, intakeSubsystem));
-
-		new Trigger(driverController.start()).onTrue(new InstantCommand(
-				() -> driveSubsystem.zeroHeading()));
-
-		// new Trigger(driverController.start()).onTrue(new InstantCommand(
-		// 		() -> driveSubsystem.toggleFieldCentric()));
+		new Trigger(leftDriveJoystick.button(10)).onTrue(new InstantCommand(
+			() -> driveSubsystem.zeroHeading()));
 
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								driverController.getLeftY() * -1 * DriveConstants.kMaxSpeedMetersPerSecond, // x axis
-								driverController.getLeftX() * -1 * DriveConstants.kMaxSpeedMetersPerSecond, // y axis
-								driverController.getRightX() * -1 * DriveConstants.kMaxModuleAngularSpeedRadiansPerSecond, // z axis
+								JoystickUtils.processJoystickInput(rightDriveJoystick.getRawAxis(0)), // x axis
+								JoystickUtils.processJoystickInput(-rightDriveJoystick.getRawAxis(1)), // y axis
+								JoystickUtils.processJoystickInput(leftDriveJoystick.getRawAxis(0)), // rot axis
 								true 
 						),
 						driveSubsystem));
