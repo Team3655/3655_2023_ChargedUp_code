@@ -4,26 +4,22 @@
 
 package frc.robot;
 
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Utils.JoystickUtils;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPoses;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
-
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
 import frc.robot.subsystems.IntakeSubsystem;
-
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
-import frc.robot.commands.Autos;
+import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ArmPoseCommand;
+import frc.robot.commands.ArmSwitchCommand;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -98,8 +94,8 @@ public class RobotContainer {
 		new Trigger(driverController.start()).onTrue(new InstantCommand(
 				() -> driveSubsystem.zeroHeading()));
 
-		new Trigger(driverController.start()).onTrue(new InstantCommand(
-				() -> driveSubsystem.toggleFieldCentric()));
+		// Sucking is set to be the defaut state of the intake
+		intakeSubsystem.setDefaultCommand(intakeSubsystem.Suck());
 
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(

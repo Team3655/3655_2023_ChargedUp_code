@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.RelativeEncoder;
@@ -29,9 +30,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	/** Color sensor for detectng which type of piece is held */
 	private ColorSensorV3 colorSense;
-
-	/** Used to tell if the suckers are running */
-	private boolean isSucking;
 
 	/** Creates a new IntakeSubsystem. */
 	public IntakeSubsystem() {
@@ -73,22 +71,19 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	// region commands
 
-	public CommandBase toggleIntake() {
-		// toggle the state of the sucker
-		isSucking = !isSucking;
-
-		// Stops motor if isSucking is false
+	public CommandBase stopSucking() {
 		return runOnce(
 				() -> {
+					mainSucker.stopMotor();
+				});
+	}
 
-					if (isSucking) {
-						mainPIDController.setReference(
-								IntakeConstants.kMainSuckerCurrentTarget,
-								ControlType.kCurrent);
-					} else {
-						mainSucker.stopMotor();
-					}
-
+	public CommandBase Suck() {
+		return runOnce(
+				() -> {
+					mainPIDController.setReference(
+							IntakeConstants.kMainSuckerCurrentTarget,
+							ControlType.kCurrent);
 				});
 	}
 
@@ -104,7 +99,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	 */
 	public boolean getHasPiece() {
 
-		if (mainEncoder.getVelocity() < IntakeConstants.kHasPieceRPMThreshold && isSucking) {
+		if (mainEncoder.getVelocity() < IntakeConstants.kHasPieceRPMThreshold) {
 			return true;
 		}
 

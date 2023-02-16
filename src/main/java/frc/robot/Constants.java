@@ -56,9 +56,9 @@ public final class Constants {
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// Offset angle for absolute encoders (find this using REV client)
-		public static final double kFrontLeftAngleZero = 157.412; 
-		public static final double kFrontRightAngleZero = 76.025; 
-		public static final double kRearLeftAngleZero = -30.761; 
+		public static final double kFrontLeftAngleZero = 157.412;
+		public static final double kFrontRightAngleZero = 76.025;
+		public static final double kRearLeftAngleZero = -30.761;
 		public static final double kRearRightAngleZero = -23.642;
 
 		public static final double kModuleDriveControllerP = .001;
@@ -98,10 +98,10 @@ public final class Constants {
 		public static final double kWheelBase = 19 / 39.37; // meters
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-				new Translation2d(kWheelBase / 2, kTrackWidth / 2), //FL
-				new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //FR
-				new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //RL
-				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //RR
+				new Translation2d(kWheelBase / 2, kTrackWidth / 2), // FL
+				new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // FR
+				new Translation2d(-kWheelBase / 2, kTrackWidth / 2), // RL
+				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); // RR
 
 		public static final boolean kGyroReversed = true;
 
@@ -117,7 +117,8 @@ public final class Constants {
 	 */
 	public static class AutoConstants {
 
-		// PID constants for path planner (these control drive direction not reaching target wheel speeds)
+		// PID constants for path planner (these control drive direction not reaching
+		// target wheel speeds)
 		public static final double PathPlannerP = .6;
 		public static final double PathPlannerI = 0;
 		public static final double PathPlannerD = 0;
@@ -176,7 +177,7 @@ public final class Constants {
 		public static final int kMajorArmCurrentLimit = 30;
 		public static final int kMinorArmCurrentLimit = 30;
 
-		// speed limits for the arms 
+		// speed limits for the arms
 		public static final double kMajorArmPIDOutputLimit = .4;
 		public static final double kMinorArmPIDOutputLimit = .3;
 
@@ -188,22 +189,26 @@ public final class Constants {
 		public static final double kMajorArmP = 3;
 		public static final double kMajorArmI = .0001;
 		public static final double kMajorArmD = 0;
+		public static final double kMajorArmIzone = 0;
+		public static final double kMajorArmFF = 0;
 		public static final double kMinorArmP = 3;
 		public static final double kMinorArmI = .0001;
 		public static final double kMinorArmD = 0;
+		public static final double kMinorArmIzone = 0;
+		public static final double kMinorArmFF = 0;
 
 	}
 
 	public static class IntakeConstants {
 
 		// NEO 550 Sucker motor CAN ID's
-		public static final int kMainSuckerPort = 0;
+		public static final int kMainSuckerPort = 18;
 
-		public static final int kMainSuckerCurrentTarget = 15;
+		public static final int kMainSuckerCurrentTarget = 20;
 
 		public static final int kHasPieceRPMThreshold = 1000;
 
-		public static final double kMainSuckerP = .00001;
+		public static final double kMainSuckerP = .009;
 
 		public static final double kMainSuckerMaxOutput = 1d / 3d;
 
@@ -211,7 +216,7 @@ public final class Constants {
 
 	public static class LimelightConstants {
 
-		// declare ID's of pipelines here 
+		// declare ID's of pipelines here
 		public static int kRetroReflectivePipeline = 0;
 		public static int kApriltagPipeline = 1;
 
@@ -220,7 +225,6 @@ public final class Constants {
 		// sets the offset of the sevo so the limelight is facing forward (double 0 - 1)
 		public static double kServoFrontPose = .5;
 		public static double kServoBackpose = 0;
-		
 
 	}
 
