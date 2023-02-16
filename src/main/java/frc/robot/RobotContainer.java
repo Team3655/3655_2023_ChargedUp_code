@@ -75,6 +75,7 @@ public class RobotContainer {
 		// Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 		new Trigger(exampleSubsystem::exampleCondition).whileTrue(new ExampleCommand(exampleSubsystem));
 
+		// region Arm Commands
 		// Schedule ArmPoseCommand when operator presses coresponding button.
 		// scoring commands
 		operatorController.button(1).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.LOW_SCORE));
@@ -91,14 +92,16 @@ public class RobotContainer {
 
 		// Switches sides of the robot
 		operatorController.button(9).onTrue(new ArmSwitchCommand(armSubsystem, limelightSubsystem));
+		// endregion
 
+		// Sucking is set to be the defaut state of the intake
+		operatorController.button(10).whileTrue(intakeSubsystem.stopSucking());
+		intakeSubsystem.setDefaultCommand(intakeSubsystem.Suck());
+
+		// region Drive Commands
 		driverController.start().onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
 
 		driverController.start().onTrue(new InstantCommand(() -> driveSubsystem.toggleFieldCentric()));
-
-
-		// Sucking is set to be the defaut state of the intake
-		intakeSubsystem.setDefaultCommand(intakeSubsystem.Suck());
 
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(
@@ -110,7 +113,7 @@ public class RobotContainer {
 								driverController.getHID().getLeftStickButton()
 						),
 						driveSubsystem));
-
+		// endregion
 	}
 
 	/**

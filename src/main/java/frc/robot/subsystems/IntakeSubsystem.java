@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.RelativeEncoder;
@@ -45,7 +44,7 @@ public class IntakeSubsystem extends SubsystemBase {
 		mainSucker.restoreFactoryDefaults();
 
 		// set current limits
-		mainSucker.setSmartCurrentLimit(IntakeConstants.kMainSuckerCurrentTarget);
+		mainSucker.setSmartCurrentLimit(IntakeConstants.kMainSuckerCurrentLimit);
 
 		// sets motor defaults to break
 		mainSucker.setIdleMode(IdleMode.kCoast);
@@ -70,7 +69,6 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	// region commands
-
 	public CommandBase stopSucking() {
 		return runOnce(
 				() -> {
@@ -82,24 +80,21 @@ public class IntakeSubsystem extends SubsystemBase {
 		return runOnce(
 				() -> {
 					mainPIDController.setReference(
-							IntakeConstants.kMainSuckerCurrentTarget,
-							ControlType.kCurrent);
+							IntakeConstants.kMainSuckerRPMTarget,
+							ControlType.kSmartVelocity);
 				});
 	}
-
 	// endregion
 
 	// region getters
-
 	/**
-	 * Checks if the robot is holding a game piece by using the current draw of the
-	 * center sucker
+	 * Checks if the robot is holding a game piece by using the output of the motor
 	 *
 	 * @return True if the robot is holding a piece
 	 */
 	public boolean getHasPiece() {
 
-		if (mainEncoder.getVelocity() < IntakeConstants.kHasPieceRPMThreshold) {
+		if (mainEncoder.getVelocity() < IntakeConstants.kHasPieceThreshold) {
 			return true;
 		}
 
