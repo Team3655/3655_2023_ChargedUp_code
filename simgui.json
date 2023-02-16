@@ -24,5 +24,14 @@
       },
       "open": true
     }
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "height": 332
+        }
+      ]
+    }
   }
 }

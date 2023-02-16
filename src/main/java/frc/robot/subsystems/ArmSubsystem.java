@@ -1,11 +1,14 @@
 package frc.robot.subsystems;
 
+import java.util.HashMap;
+
+import frc.robot.Constants.ArmConstants;
+import frc.robot.Objects.ArmSegment;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import frc.robot.Constants.ArmConstants;
-import frc.robot.Objects.ArmSegment;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -23,11 +26,13 @@ public class ArmSubsystem extends SubsystemBase {
 		DRIVER_CONTROL
 	}
 
+	private final HashMap<ArmPoses, double[]> armStates = new HashMap<ArmPoses, double[]>();
+
+	/** used to track the state of the arm */
+	ArmPoses armState;
+
 	/** controls the side of the robot the arm is on */
 	private boolean isFront;
-
-	/** the variable setting the height of the arm */
-	ArmPoses armState;
 
 	// create arms
 	public ArmSegment majorArm;
@@ -36,6 +41,20 @@ public class ArmSubsystem extends SubsystemBase {
 	// endregion
 
 	public ArmSubsystem() {
+
+		armStates.put(ArmPoses.TUCKED, new double[]{0, 0});
+		armStates.put(ArmPoses.LOW_SCORE, new double[]{25, 95});
+		armStates.put(ArmPoses.MID_SCORE, new double[]{75, 90});
+		armStates.put(ArmPoses.HIGH_SCORE, new double[]{90, 90});
+		armStates.put(ArmPoses.LOW_INTAKE, new double[]{10, 95});
+		armStates.put(ArmPoses.MID_INTAKE, new double[]{30, 45});
+		armStates.put(ArmPoses.HIGH_INTAKE, new double[]{80, 80});
+		armStates.put(ArmPoses.DRIVER_CONTROL, new double[]{0, 0});
+
+		if (armStates.size() < ArmPoses.values().length) {
+			throw new IndexOutOfBoundsException("THERE ARE MORE ARM_POSES THAN ARM_STATES! THIS WILL RESLUT IN CRASHING IF NOT RESOLVED!");
+		}
+
 		// region: def arms
 
 		// major arm defs
@@ -88,10 +107,6 @@ public class ArmSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("major real theta: ", majorArm.getRealTheta());
 		SmartDashboard.putNumber("minor real theta: ", minorArm.getRealTheta());
 
-		// Address the arm motors
-		majorArm.setReference();
-		minorArm.setReference();
-
 	}
 
 	// region setters
@@ -103,58 +118,15 @@ public class ArmSubsystem extends SubsystemBase {
 	 *             LOW_INTAKE, MID_INTAKE, HIGH_INTAKE)
 	 */
 	public void setArmState(ArmPoses pose) {
-
 		armState = pose;
 
-		switch (armState) {
-			// When the arms are tucked in the center of the robot
-			// (this is the only legalstarting position)
-			case TUCKED:
-				majorArm.setTargetTheta(0);
-				minorArm.setTargetTheta(0);
-				break;
+		// gets the angle values from the hashmap
+		majorArm.setTargetTheta(armStates.get(pose)[0]);
+		minorArm.setTargetTheta(armStates.get(pose)[1]);
 
-			// Used for scoring in the lowest "hybrid" node
-			case LOW_SCORE:
-				majorArm.setTargetTheta(45);
-				minorArm.setTargetTheta(90);
-				break;
-
-			// Used for scoring in the middle node
-			case MID_SCORE:
-				majorArm.setTargetTheta(75);
-				minorArm.setTargetTheta(90);
-				break;
-
-			// Used for scoring in the highest node
-			case HIGH_SCORE:
-				majorArm.setTargetTheta(90);
-				minorArm.setTargetTheta(90);
-				break;
-
-			// Used for intaking off of the floor
-			case LOW_INTAKE:
-				majorArm.setTargetTheta(10);
-				minorArm.setTargetTheta(100);
-				break;
-
-			// Used for intaking from the human player chute
-			case MID_INTAKE:
-				majorArm.setTargetTheta(30);
-				minorArm.setTargetTheta(45);
-				break;
-
-			// Used for intaking from the sliding human player station
-			case HIGH_INTAKE:
-				majorArm.setTargetTheta(80);
-				minorArm.setTargetTheta(80);
-				break;
-
-			// goes to the pair of angles defined my the TSB driver
-			case DRIVER_CONTROL:
-				break;
-		}
-
+		// Address the arm motors
+		majorArm.setReference();
+		minorArm.setReference();
 	}
 
 	/** Toggles the dominant side of the robot */
