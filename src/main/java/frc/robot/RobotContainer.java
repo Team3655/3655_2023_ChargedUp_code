@@ -17,6 +17,7 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
+import com.pathplanner.lib.server.PathPlannerServer;
 
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -71,6 +72,8 @@ public class RobotContainer {
 	public RobotContainer() {
 		// Configure the trigger bindings
 		configureBindings();
+
+		PathPlannerServer.startServer(5811);
 
 		Shuffleboard.getTab("Autonomous").add(autoChooser);    
 

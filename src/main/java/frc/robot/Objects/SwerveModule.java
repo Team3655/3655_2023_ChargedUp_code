@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -44,13 +45,11 @@ public class SwerveModule extends SubsystemBase {
 
 	private final String moduleName;
 
-	private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
+
+	private final PIDController m_turningPIDController = new PIDController(
 		ModuleConstants.kAngularPID[0],
 		ModuleConstants.kAngularPID[1],
-		ModuleConstants.kAngularPID[2],
-		new TrapezoidProfile.Constraints(
-			2 * Math.PI * 200,
-			2 * Math.PI * 600));
+		ModuleConstants.kAngularPID[2]);
 
 	SimpleMotorFeedforward turnFeedForward = new SimpleMotorFeedforward(
 		ModuleConstants.ksTurning, ModuleConstants.kvTurning);
@@ -171,8 +170,12 @@ public class SwerveModule extends SubsystemBase {
 				desiredState,
 				new Rotation2d(m_moduleAngleRadians));
 
-		final var turnOutput = m_turningPIDController.calculate(m_moduleAngleRadians, optimizedState.angle.getRadians())
-				+ turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
+
+
+		final var angularFFOutput = turnFeedForward.calculate(m_turningPIDController.getSetpoint());
+		final var angularPIDOutput = m_turningPIDController.calculate(m_moduleAngleRadians, optimizedState.angle.getRadians());
+
+		final var turnOutput = angularFFOutput + angularPIDOutput;
 
 		turningMotor.setVoltage(turnOutput);
 
@@ -181,6 +184,8 @@ public class SwerveModule extends SubsystemBase {
 				ControlType.kVelocity);
 
 		SmartDashboard.putNumber(this.moduleName + " Optimized Angle", optimizedState.angle.getDegrees());
+		SmartDashboard.putNumber(this.moduleName + " FF", angularFFOutput);
+		SmartDashboard.putNumber(this.moduleName + " PID", angularPIDOutput);
 	}
 
 	public void resetEncoders() {
