@@ -142,13 +142,18 @@ public class ArmSegment {
 	 * @param I Seriously hurry up!
 	 * @param D Don't make me wait on behalf of your ignorance
 	 */
-	public void setPID(double P, double I, double D) {
+	public void setPID(double P, double I, double D, double Izone, double FF) {
 		rightPIDController.setP(P);
 		rightPIDController.setI(I);
 		rightPIDController.setD(D);
+		rightPIDController.setIZone(Izone);
+		rightPIDController.setFF(FF);
+		
 		leftPIDController.setP(P);
 		leftPIDController.setI(I);
 		leftPIDController.setD(D);
+		rightPIDController.setIZone(Izone);
+		rightPIDController.setFF(FF);
 	}
 
 	/**

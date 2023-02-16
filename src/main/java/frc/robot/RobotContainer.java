@@ -42,6 +42,7 @@ public class RobotContainer {
 	private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	private final DriveSubsystem driveSubsystem = new DriveSubsystem();
 	private final ArmSubsystem armSubsystem = new ArmSubsystem();
+	private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
 	private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
 	// Replace with CommandPS4Controller or CommandJoystick if needed
@@ -89,10 +90,12 @@ public class RobotContainer {
 		operatorController.button(4).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.TUCKED));
 
 		// Switches sides of the robot
-		operatorController.button(9).onTrue(armSubsystem.ToggleSide());
+		operatorController.button(9).onTrue(new ArmSwitchCommand(armSubsystem, limelightSubsystem));
 
-		new Trigger(driverController.start()).onTrue(new InstantCommand(
-				() -> driveSubsystem.zeroHeading()));
+		driverController.start().onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
+
+		driverController.start().onTrue(new InstantCommand(() -> driveSubsystem.toggleFieldCentric()));
+
 
 		// Sucking is set to be the defaut state of the intake
 		intakeSubsystem.setDefaultCommand(intakeSubsystem.Suck());
