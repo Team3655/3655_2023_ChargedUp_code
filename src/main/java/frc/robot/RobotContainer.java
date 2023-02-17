@@ -148,12 +148,12 @@ public class RobotContainer {
 		operatorController.button(4).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.TUCKED));
 
 		// Switches sides of the robot
-		operatorController.button(9).onTrue(new ArmSwitchCommand(armSubsystem, limelightSubsystem));
+		operatorController.button(9).onTrue(armSubsystem.ToggleSide());
 		// endregion
 
 		// Sucking is set to be the defaut state of the intake
 		operatorController.button(10).whileTrue(intakeSubsystem.stopSucking());
-		intakeSubsystem.setDefaultCommand(intakeSubsystem.Suck());
+		// intakeSubsystem.setDefaultCommand(intakeSubsystem.Suck());
 
 		// region Drive Commands
 		driverController.start().onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
@@ -162,8 +162,8 @@ public class RobotContainer {
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								JoystickUtils.processJoystickInput(rightDriveJoystick.getRawAxis(0)), // x axis
-								JoystickUtils.processJoystickInput(-rightDriveJoystick.getRawAxis(1)), // y axis
+								JoystickUtils.processJoystickInput(-rightDriveJoystick.getRawAxis(1)), // x axis
+								JoystickUtils.processJoystickInput(-rightDriveJoystick.getRawAxis(0)), // y axis
 								JoystickUtils.processJoystickInput(leftDriveJoystick.getRawAxis(0)), // rot axis
 								driverController.getHID().getLeftStickButton()
 						),

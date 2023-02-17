@@ -94,8 +94,8 @@ public final class Constants {
 
 		public static final int kPigeonPort = 20;
 
-		public static final double kTrackWidth = .61; // meters
-		public static final double kWheelBase = .61; // meters
+		public static final double kTrackWidth = Units.inchesToMeters(20); // meters
+		public static final double kWheelBase = Units.inchesToMeters(20); // meters
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
 				new Translation2d(kWheelBase / 2, kTrackWidth / 2), //FL
@@ -104,11 +104,6 @@ public final class Constants {
 				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //RR
 
 		public static final boolean kGyroReversed = false;
-
-		// PID constants for TurnCommand
-		public static double kTurnP = .1;
-		public static double kTurnI = 0;
-		public static double kTurnD = 0;
 
 	}
 
@@ -126,8 +121,8 @@ public final class Constants {
 		public static final double PathPlannerTurnI = 0;
 		public static final double PathPlannerTurnD = 0;
 
-		public static double kTurnCommandToleranceDeg = 5;
-		public static double kTurnCommandRateToleranceDegPerS = 0;
+		public static final double kTurnCommandToleranceDeg = 5;
+		public static final double kTurnCommandRateToleranceDegPerS = 0;
 
 	}
 
@@ -138,7 +133,7 @@ public final class Constants {
 		public static final int kDriverControllerPort = 0;
 		public static final int kOperatorControllerPort = 1;
 
-		public static final double KDeadBand = .1;
+		public static final double KDeadBand = .125;
 		public static final double kJoystickPow = 2.5;
 	}
 
@@ -185,15 +180,16 @@ public final class Constants {
 		public static final double kMinorArmConstraints = 180;
 
 		// Arm PID constants
-		public static final double kMajorArmP = 3;
-		public static final double kMajorArmI = .0001;
-		public static final double kMajorArmD = 0;
-		public static final double kMajorArmIzone = 0;
+		public static final double kMajorArmP = 4;
+		public static final double kMajorArmI = 0.001;
+		public static final double kMajorArmD = 0.1;
+		public static final double kMajorArmIzone = 10;
 		public static final double kMajorArmFF = 0;
+
 		public static final double kMinorArmP = 3;
-		public static final double kMinorArmI = .0001;
-		public static final double kMinorArmD = 0;
-		public static final double kMinorArmIzone = 0;
+		public static final double kMinorArmI = 0.001;
+		public static final double kMinorArmD = 0.1;
+		public static final double kMinorArmIzone = 10;
 		public static final double kMinorArmFF = 0;
 
 	}

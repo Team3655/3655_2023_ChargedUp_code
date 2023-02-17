@@ -79,9 +79,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	public CommandBase Suck() {
 		return runOnce(
 				() -> {
-					mainPIDController.setReference(
-							IntakeConstants.kMainSuckerRPMTarget,
-							ControlType.kSmartVelocity);
+					mainSucker.set(.1);
 				});
 	}
 	// endregion

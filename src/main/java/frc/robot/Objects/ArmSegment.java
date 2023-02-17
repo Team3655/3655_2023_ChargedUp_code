@@ -67,6 +67,9 @@ public class ArmSegment {
 		rightEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
 		leftEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
 
+		rightEncoder.setPosition(0);
+		leftEncoder.setPosition(0);
+
 		// Sets the left motor to be inverted if it needs to be
 		if (invertLeft) {
 			leftMotor.setInverted(true);
@@ -83,11 +86,6 @@ public class ArmSegment {
 	public void setReference() {
 		rightPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
 		leftPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
-	}
-
-	public void invertMotors() {
-		rightMotor.setInverted(!rightMotor.getInverted());
-		leftMotor.setInverted(!leftMotor.getInverted());
 	}
 
 	/**
