@@ -39,20 +39,20 @@ public final class Constants {
 
 		// NEO drive motor CAN ID's
 		public static final int kFrontLeftDriveMotorPort = 1;
-		public static final int kFrontRightDriveMotorPort = 4;
-		public static final int kRearLeftDriveMotorPort = 7;
-		public static final int kRearRightDriveMotorPort = 10;
+		public static final int kFrontRightDriveMotorPort = 2;
+		public static final int kRearLeftDriveMotorPort = 3;
+		public static final int kRearRightDriveMotorPort = 4;
 
 		// NEO turning motor CAN ID's
-		public static final int kFrontLeftTurningMotorPort = 2;
-		public static final int kFrontRightTurningMotorPort = 5;
-		public static final int kRearLeftTurningMotorPort = 8;
-		public static final int kRearRightTurningMotorPort = 11;
+		public static final int kFrontLeftTurningMotorPort = 5;
+		public static final int kFrontRightTurningMotorPort = 6;
+		public static final int kRearLeftTurningMotorPort = 7;
+		public static final int kRearRightTurningMotorPort = 8;
 
 		// CANcoder CAN ID's
-		public static final int kFrontLeftTurningEncoderPort = 3;
-		public static final int kFrontRightTurningEncoderPort = 9;
-		public static final int kRearLeftTurningEncoderPort = 6;
+		public static final int kFrontLeftTurningEncoderPort = 9;
+		public static final int kFrontRightTurningEncoderPort = 10;
+		public static final int kRearLeftTurningEncoderPort = 11;
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// Offset angle for absolute encoders (find this using REV client)
