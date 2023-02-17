@@ -35,7 +35,7 @@ public final class Constants {
 		public static final double kDriveFeedForward = .2;
 
 		public static final double kvTurning = .43205;
-		public static final double kTurnFeedForward = .17161; // Tuned February 2, 2023
+		public static final double ksTurning = .17161; // Tuned February 2, 2023
 
 		// NEO drive motor CAN ID's
 		public static final int kFrontLeftDriveMotorPort = 1;
@@ -61,13 +61,13 @@ public final class Constants {
 		public static final double kRearLeftAngleZero = -30.761;
 		public static final double kRearRightAngleZero = -23.642;
 
-		public static final double kModuleDriveControllerP = .001;
+		public static final double kModuleDriveControllerP = .1;
 		public static final double kModuleDriveControllerI = 0;
 		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
 
-		public static final double kModuleTurningControllerP = 6;
-		public static final double kModuleTurningControllerI = 0;
-		public static final double kModuleTurningControllerD = 0;
+		public static final double kModuleTurningControllerP = 6.5;
+		public static final double kModuleTurningControllerI = 0.25;
+		public static final double kModuleTurningControllerD = 0.15;
 
 		// SPARK MAX Angular PID values
 		public static double[] kAngularPID = {
@@ -84,8 +84,8 @@ public final class Constants {
 
 	public static class DriveConstants {
 
-		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
-		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
+		// public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
+		// public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
 
 		// TODO: Change max speed
 		public static final double kMaxSpeedMetersPerSecond = 1.5;
@@ -94,21 +94,16 @@ public final class Constants {
 
 		public static final int kPigeonPort = 20;
 
-		public static final double kTrackWidth = 19 / 39.37; // meters
-		public static final double kWheelBase = 19 / 39.37; // meters
+		public static final double kTrackWidth = Units.inchesToMeters(20); // meters
+		public static final double kWheelBase = Units.inchesToMeters(20); // meters
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-				new Translation2d(kWheelBase / 2, kTrackWidth / 2), // FL
-				new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // FR
-				new Translation2d(-kWheelBase / 2, kTrackWidth / 2), // RL
-				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); // RR
+				new Translation2d(kWheelBase / 2, kTrackWidth / 2), //FL
+				new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //FR
+				new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //RL
+				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //RR
 
-		public static final boolean kGyroReversed = true;
-
-		// PID constants for TurnCommand
-		public static double kTurnP = .1;
-		public static double kTurnI = 0;
-		public static double kTurnD = 0;
+		public static final boolean kGyroReversed = false;
 
 	}
 
@@ -117,18 +112,17 @@ public final class Constants {
 	 */
 	public static class AutoConstants {
 
-		// PID constants for path planner (these control drive direction not reaching
-		// target wheel speeds)
-		public static final double PathPlannerP = .6;
+		// PID constants for path planner (these control drive direction not reaching target wheel speeds)
+		public static final double PathPlannerP = .5;
 		public static final double PathPlannerI = 0;
 		public static final double PathPlannerD = 0;
 
-		public static final double PathPlannerTurnP = .5;
+		public static final double PathPlannerTurnP = .8;
 		public static final double PathPlannerTurnI = 0;
 		public static final double PathPlannerTurnD = 0;
 
-		public static double kTurnCommandToleranceDeg = 5;
-		public static double kTurnCommandRateToleranceDegPerS = 0;
+		public static final double kTurnCommandToleranceDeg = 5;
+		public static final double kTurnCommandRateToleranceDegPerS = 0;
 
 	}
 
@@ -139,7 +133,7 @@ public final class Constants {
 		public static final int kDriverControllerPort = 0;
 		public static final int kOperatorControllerPort = 1;
 
-		public static final double KDeadBand = .1;
+		public static final double KDeadBand = .125;
 		public static final double kJoystickPow = 2.5;
 	}
 
@@ -186,15 +180,16 @@ public final class Constants {
 		public static final double kMinorArmConstraints = 180;
 
 		// Arm PID constants
-		public static final double kMajorArmP = 3;
-		public static final double kMajorArmI = .0001;
-		public static final double kMajorArmD = 0;
-		public static final double kMajorArmIzone = 0;
+		public static final double kMajorArmP = 4;
+		public static final double kMajorArmI = 0.001;
+		public static final double kMajorArmD = 0.1;
+		public static final double kMajorArmIzone = 10;
 		public static final double kMajorArmFF = 0;
+
 		public static final double kMinorArmP = 3;
-		public static final double kMinorArmI = .0001;
-		public static final double kMinorArmD = 0;
-		public static final double kMinorArmIzone = 0;
+		public static final double kMinorArmI = 0.001;
+		public static final double kMinorArmD = 0.1;
+		public static final double kMinorArmIzone = 10;
 		public static final double kMinorArmFF = 0;
 
 	}

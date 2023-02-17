@@ -51,8 +51,9 @@ public class ArmSubsystem extends SubsystemBase {
 		armStates.put(ArmPoses.HIGH_INTAKE, new double[]{80, 80});
 		armStates.put(ArmPoses.DRIVER_CONTROL, new double[]{0, 0});
 
+		// this will cause the code to fail to run if the
 		if (armStates.size() < ArmPoses.values().length) {
-			throw new IndexOutOfBoundsException("THERE ARE MORE ARM_POSES THAN ARM_STATES! THIS WILL RESLUT IN CRASHING IF NOT RESOLVED!");
+			throw new IndexOutOfBoundsException("NOT ALL ARM POSES HAVE A VALUE IN THE HASHMAP! THIS WILL RESLUT IN CRASHING IF NOT RESOLVED!");
 		}
 
 		// region: def arms
@@ -107,6 +108,9 @@ public class ArmSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("major real theta: ", majorArm.getRealTheta());
 		SmartDashboard.putNumber("minor real theta: ", minorArm.getRealTheta());
 
+		majorArm.setReference();
+		minorArm.setReference();
+
 	}
 
 	// region setters
@@ -121,8 +125,8 @@ public class ArmSubsystem extends SubsystemBase {
 		armState = pose;
 
 		// gets the angle values from the hashmap
-		majorArm.setTargetTheta(armStates.get(pose)[0]);
-		minorArm.setTargetTheta(armStates.get(pose)[1]);
+		majorArm.setTargetTheta(armStates.get(armState)[0]);
+		minorArm.setTargetTheta(armStates.get(armState)[1]);
 
 		// Address the arm motors
 		majorArm.setReference();
