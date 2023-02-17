@@ -11,6 +11,7 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -106,14 +107,26 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("RL Absolute", rearLeft.getAbsoluteHeading());
 		SmartDashboard.putNumber("RR Absolute", rearRight.getAbsoluteHeading());
 
+		SmartDashboard.putNumber("FL Offset Check", frontLeft.getAbsoluteHeading() + frontLeft.angleZero);
+		SmartDashboard.putNumber("FR Offset Check", frontRight.getAbsoluteHeading() + frontRight.angleZero);
+		SmartDashboard.putNumber("RL Offset Check", rearLeft.getAbsoluteHeading() + rearLeft.angleZero);
+		SmartDashboard.putNumber("RR Offset Check", rearRight.getAbsoluteHeading() + rearRight.angleZero);
+
 		SmartDashboard.putNumber("FL Relative", frontLeft.getRelativeHeading());
 		SmartDashboard.putNumber("FR Relative", frontRight.getRelativeHeading());
 		SmartDashboard.putNumber("RL Relative", rearLeft.getRelativeHeading());
 		SmartDashboard.putNumber("RR Relative", rearRight.getRelativeHeading());
 
-		SmartDashboard.putNumber("Gyro", gyro.getAngle());
+		SmartDashboard.putNumber("Gyro", gyro.getYaw());
 
-		SmartDashboard.putNumber(frontLeft.getName() + " Meters", frontLeft.getDistanceMeters());
+		SmartDashboard.putNumber("FL Meters", frontLeft.getDistanceMeters());
+		SmartDashboard.putNumber("FR Meters", frontRight.getDistanceMeters());
+		SmartDashboard.putNumber("RL Meters", rearLeft.getDistanceMeters());
+		SmartDashboard.putNumber("RR Meters", rearRight.getDistanceMeters());
+
+		SmartDashboard.putNumber("2D Gyro", getHeading());
+		SmartDashboard.putNumber("2D X", getPose().getX());
+		SmartDashboard.putNumber("2D Y", getPose().getY());
 		
 
 	}
@@ -153,7 +166,8 @@ public class DriveSubsystem extends SubsystemBase {
 						: new ChassisSpeeds(xSpeed, ySpeed, rot));
 
 		SwerveDriveKinematics.desaturateWheelSpeeds(
-				swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+			swerveModuleStates, 
+			DriveConstants.kMaxSpeedMetersPerSecond);
 
 		frontLeft.setDesiredState(swerveModuleStates[0]);
 		frontRight.setDesiredState(swerveModuleStates[1]);
@@ -179,10 +193,8 @@ public class DriveSubsystem extends SubsystemBase {
 		rearRight.resetEncoders();
 	}
 
-	public CommandBase zeroHeading() {
-		return runOnce(() -> {
+	public void zeroHeading() {
 			gyro.reset();
-		});
 	}
 
 	public CommandBase toggleFieldCentric() {
@@ -191,12 +203,6 @@ public class DriveSubsystem extends SubsystemBase {
 		});
 	}
 
-	public void resetRelativeEncoders() {
-		frontLeft.resetAngleToAbsolute();
-		frontRight.resetAngleToAbsolute();
-		rearRight.resetAngleToAbsolute();
-		rearLeft.resetAngleToAbsolute();
-	}
 	// endregion
 
 	/**************************************************************************/
