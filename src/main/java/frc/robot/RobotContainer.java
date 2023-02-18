@@ -159,8 +159,8 @@ public class RobotContainer {
 		// endregion
 
 		// Sucking is set to be the defaut state of the intake
+		operatorController.button(10).onFalse(intakeSubsystem.startSucking());
 		operatorController.button(10).onTrue(intakeSubsystem.stopSucking());
-		intakeSubsystem.setDefaultCommand(intakeSubsystem.Suck());
 
 		// region Drive Commands
 		driverController.start().onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));

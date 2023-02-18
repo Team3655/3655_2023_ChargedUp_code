@@ -76,7 +76,7 @@ public class IntakeSubsystem extends SubsystemBase {
 				});
 	}
 
-	public CommandBase Suck() {
+	public CommandBase startSucking() {
 		return runOnce(
 				() -> {
 					mainSucker.set(.15);
