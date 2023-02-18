@@ -25,6 +25,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ArmBumpCommand;
 import frc.robot.commands.ArmPoseCommand;
 import frc.robot.commands.ArmSwitchCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -60,7 +61,7 @@ public class RobotContainer {
 	// Replace with CommandPS4Controller or CommandJoystick if needed
 	private final CommandXboxController driverController = new CommandXboxController(
 			OperatorConstants.kDriverControllerPort);
-	
+
 	private final CommandJoystick rightDriveJoystick = new CommandJoystick(0);
 	private final CommandJoystick leftDriveJoystick = new CommandJoystick(1);
 
@@ -77,36 +78,37 @@ public class RobotContainer {
 		// Configure the trigger bindings
 		configureBindings();
 
-		Shuffleboard.getTab("Autonomous").add(autoChooser);    
+		Shuffleboard.getTab("Autonomous").add(autoChooser);
 
 		PathPlannerTrajectory trajTesting = PathPlanner.generatePath(
-			new PathConstraints(1, 2), 
-				new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)), // position, heading
+				new PathConstraints(1, 2),
+				new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)), // position,
+																												// heading
 				new PathPoint(new Translation2d(1.0, 1.0), Rotation2d.fromDegrees(45), Rotation2d.fromDegrees(0)),
 				new PathPoint(new Translation2d(2, 1), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
 				new PathPoint(new Translation2d(0, 1), Rotation2d.fromDegrees(180), Rotation2d.fromDegrees(0)),
-				new PathPoint(new Translation2d(2, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)) // position, heading
-					);
+				new PathPoint(new Translation2d(2, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)) // position,
+																												// heading
+		);
 
 		PathPlannerTrajectory xtraj = PathPlanner.generatePath(
-			new PathConstraints(3, 4), 
-			new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0)),
-			new PathPoint(new Translation2d(4, 0), Rotation2d.fromDegrees(0)));
+				new PathConstraints(3, 4),
+				new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0)),
+				new PathPoint(new Translation2d(4, 0), Rotation2d.fromDegrees(0)));
 
 		PathPlannerTrajectory ytraj = PathPlanner.generatePath(
-			new PathConstraints(3, 4), 
-			new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(-90)),
-			new PathPoint(new Translation2d(0, -4), Rotation2d.fromDegrees(-90)));
+				new PathConstraints(3, 4),
+				new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(-90)),
+				new PathPoint(new Translation2d(0, -4), Rotation2d.fromDegrees(-90)));
 
 		PathPlannerTrajectory trajRotationTuning = PathPlanner.generatePath(
-			new PathConstraints(1, 2),
-				new PathPoint(new Translation2d(0,0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
+				new PathConstraints(1, 2),
+				new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
 				new PathPoint(new Translation2d(2, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(180)));
 
 		PathPlannerTrajectory trajUPath = PathPlanner.loadPath("Upath", new PathConstraints(2, 3));
 		PathPlannerTrajectory trajChargedUpTest = PathPlanner.loadPath("ChargedUpTest", new PathConstraints(3, 5));
 		PathPlannerTrajectory trajNewPath = PathPlanner.loadPath("New Path", new PathConstraints(3, 4));
-
 
 		autoChooser.addOption("UPath", trajUPath);
 		autoChooser.addOption("Testing", trajTesting);
@@ -149,11 +151,16 @@ public class RobotContainer {
 
 		// Switches sides of the robot
 		operatorController.button(9).onTrue(armSubsystem.ToggleSide());
+
+		operatorController.button(11).onTrue(armSubsystem.toggleArmMotors());
+		operatorController.button(13).onTrue(armSubsystem.zeroArms());
+
+		//operatorController.button(18).whileTrue(getAutonomousCommand())(new ArmBumpCommand(1, 0, armSubsystem));
 		// endregion
 
 		// Sucking is set to be the defaut state of the intake
-		operatorController.button(10).whileTrue(intakeSubsystem.stopSucking());
-		// intakeSubsystem.setDefaultCommand(intakeSubsystem.Suck());
+		operatorController.button(10).onTrue(intakeSubsystem.stopSucking());
+		intakeSubsystem.setDefaultCommand(intakeSubsystem.Suck());
 
 		// region Drive Commands
 		driverController.start().onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
@@ -165,8 +172,7 @@ public class RobotContainer {
 								JoystickUtils.processJoystickInput(-rightDriveJoystick.getRawAxis(1)), // x axis
 								JoystickUtils.processJoystickInput(-rightDriveJoystick.getRawAxis(0)), // y axis
 								JoystickUtils.processJoystickInput(leftDriveJoystick.getRawAxis(0)), // rot axis
-								driverController.getHID().getLeftStickButton()
-						),
+								driverController.getHID().getLeftStickButton()),
 						driveSubsystem));
 		// endregion
 	}
@@ -178,7 +184,6 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		// An example command will be run in autonomous
-
 
 		return driveSubsystem.followTrajectoryCommand(autoChooser.getSelected(), true);
 	}

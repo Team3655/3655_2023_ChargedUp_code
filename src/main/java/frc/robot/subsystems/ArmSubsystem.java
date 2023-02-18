@@ -7,6 +7,7 @@ import frc.robot.Objects.ArmSegment;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -26,7 +27,7 @@ public class ArmSubsystem extends SubsystemBase {
 		DRIVER_CONTROL
 	}
 
-	private final HashMap<ArmPoses, double[]> armStates = new HashMap<ArmPoses, double[]>();
+	public HashMap<ArmPoses, double[]> armStates = new HashMap<ArmPoses, double[]>();
 
 	/** used to track the state of the arm */
 	ArmPoses armState;
@@ -42,14 +43,14 @@ public class ArmSubsystem extends SubsystemBase {
 
 	public ArmSubsystem() {
 
-		armStates.put(ArmPoses.TUCKED, new double[]{0, 0});
-		armStates.put(ArmPoses.LOW_SCORE, new double[]{25, 95});
-		armStates.put(ArmPoses.MID_SCORE, new double[]{75, 90});
-		armStates.put(ArmPoses.HIGH_SCORE, new double[]{90, 90});
-		armStates.put(ArmPoses.LOW_INTAKE, new double[]{10, 95});
-		armStates.put(ArmPoses.MID_INTAKE, new double[]{30, 45});
-		armStates.put(ArmPoses.HIGH_INTAKE, new double[]{80, 80});
-		armStates.put(ArmPoses.DRIVER_CONTROL, new double[]{0, 0});
+		armStates.put(ArmPoses.TUCKED, new double[]{0, 0, .4});
+		armStates.put(ArmPoses.LOW_SCORE, new double[]{0, 90, .3});
+		armStates.put(ArmPoses.MID_SCORE, new double[]{45, 30, .3});
+		armStates.put(ArmPoses.HIGH_SCORE, new double[]{100, 55, .07});
+		armStates.put(ArmPoses.LOW_INTAKE, new double[]{-5, 98, .3});
+		armStates.put(ArmPoses.MID_INTAKE, new double[]{13, 33, .3});
+		armStates.put(ArmPoses.HIGH_INTAKE, new double[]{100, 85, .3});	
+		armStates.put(ArmPoses.DRIVER_CONTROL, new double[]{0, 0, .3});
 
 		// this will cause the code to fail to run if the
 		if (armStates.size() < ArmPoses.values().length) {
@@ -69,8 +70,7 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMajorArmP,
 				ArmConstants.kMajorArmI,
 				ArmConstants.kMajorArmD,
-				ArmConstants.kMajorArmIzone,
-				ArmConstants.kMajorArmFF);
+				ArmConstants.kMajorArmIzone);
 
 		majorArm.setConstraints(
 				ArmConstants.kMajorArmConstraints,
@@ -87,8 +87,7 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMinorArmP,
 				ArmConstants.kMinorArmI,
 				ArmConstants.kMinorArmD,
-				ArmConstants.kMinorArmIzone,
-				ArmConstants.kMinorArmFF);
+				ArmConstants.kMinorArmIzone);
 
 		minorArm.setConstraints(
 				ArmConstants.kMinorArmConstraints,
@@ -98,7 +97,7 @@ public class ArmSubsystem extends SubsystemBase {
 		// the default state of the arms
 		isFront = true;
 
-		setArmState(ArmPoses.TUCKED);
+		//setArmState(ArmPoses.TUCKED);
 	}
 
 	@Override
@@ -107,9 +106,8 @@ public class ArmSubsystem extends SubsystemBase {
 
 		SmartDashboard.putNumber("major real theta: ", majorArm.getRealTheta());
 		SmartDashboard.putNumber("minor real theta: ", minorArm.getRealTheta());
-
-		majorArm.setReference();
-		minorArm.setReference();
+		SmartDashboard.putNumber("major power draw", majorArm.getPowerDraw());
+		SmartDashboard.putNumber("minor power draw", minorArm.getPowerDraw());
 
 	}
 
@@ -128,9 +126,11 @@ public class ArmSubsystem extends SubsystemBase {
 		majorArm.setTargetTheta(armStates.get(armState)[0]);
 		minorArm.setTargetTheta(armStates.get(armState)[1]);
 
-		// Address the arm motors
+		minorArm.setConstraints(ArmConstants.kMinorArmConstraints, armStates.get(armState)[2]);
+
 		majorArm.setReference();
 		minorArm.setReference();
+
 	}
 
 	/** Toggles the dominant side of the robot */
@@ -139,6 +139,22 @@ public class ArmSubsystem extends SubsystemBase {
 			isFront = !isFront;
 			majorArm.setSign((isFront) ? 1 : -1);
 			minorArm.setSign((isFront) ? 1 : -1);
+			majorArm.setReference();
+			minorArm.setReference();
+		});
+	}
+
+	public CommandBase toggleArmMotors() {
+		return runOnce(() -> {
+			minorArm.toggleMotors();
+			majorArm.toggleMotors();
+		});
+	}
+
+	public CommandBase zeroArms() {
+		return runOnce(() -> {
+			minorArm.resetZeros();
+			majorArm.resetZeros();
 		});
 	}
 
@@ -166,6 +182,10 @@ public class ArmSubsystem extends SubsystemBase {
 			return true;
 		}
 		return false;
+	}
+
+	public double[] getTargetTheta() {
+		return new double[]{majorArm.getTargetTheta(), minorArm.getTargetTheta()};
 	}
 
 	// endregion

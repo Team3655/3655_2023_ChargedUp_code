@@ -168,29 +168,27 @@ public final class Constants {
 		public static final int kMinorArmLength = 23;
 
 		// current limits of the arms
-		public static final int kMajorArmCurrentLimit = 30;
-		public static final int kMinorArmCurrentLimit = 30;
+		public static final int kMajorArmCurrentLimit = 25;
+		public static final int kMinorArmCurrentLimit = 15;
 
 		// speed limits for the arms
-		public static final double kMajorArmPIDOutputLimit = .4;
+		public static final double kMajorArmPIDOutputLimit = .3;
 		public static final double kMinorArmPIDOutputLimit = .3;
 
 		// angle limits for the arms (min will be set to -input)
-		public static final double kMajorArmConstraints = 90;
+		public static final double kMajorArmConstraints = 101;
 		public static final double kMinorArmConstraints = 180;
 
 		// Arm PID constants
-		public static final double kMajorArmP = 4;
-		public static final double kMajorArmI = 0.001;
-		public static final double kMajorArmD = 0.1;
-		public static final double kMajorArmIzone = 10;
-		public static final double kMajorArmFF = 0;
+		public static final double kMajorArmP = 3;
+		public static final double kMajorArmI = 0;
+		public static final double kMajorArmD = 0;
+		public static final double kMajorArmIzone = 5;
 
-		public static final double kMinorArmP = 3;
-		public static final double kMinorArmI = 0.001;
-		public static final double kMinorArmD = 0.1;
-		public static final double kMinorArmIzone = 10;
-		public static final double kMinorArmFF = 0;
+		public static final double kMinorArmP = 6;
+		public static final double kMinorArmI = 0.0001;
+		public static final double kMinorArmD = 0;
+		public static final double kMinorArmIzone = 5;
 
 	}
 

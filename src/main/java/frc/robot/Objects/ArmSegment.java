@@ -28,11 +28,14 @@ public class ArmSegment {
 	/** Controls the direction of the arm */
 	private int targetSign;
 
+	private boolean isRunning;
+
 	// endregion
 
 	public ArmSegment(int rightPort, int leftPort, double gearRatio, Boolean invertLeft) {
 
 		targetSign = 1;
+		isRunning = true;
 
 		// region def_motors
 		// creates left and right arm motors
@@ -66,9 +69,6 @@ public class ArmSegment {
 		// Tells the motors to automatically convert degrees to rotations
 		rightEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
 		leftEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
-
-		rightEncoder.setPosition(0);
-		leftEncoder.setPosition(0);
 
 		// Sets the left motor to be inverted if it needs to be
 		if (invertLeft) {
@@ -140,18 +140,16 @@ public class ArmSegment {
 	 * @param I Seriously hurry up!
 	 * @param D Don't make me wait on behalf of your ignorance
 	 */
-	public void setPID(double P, double I, double D, double Izone, double FF) {
+	public void setPID(double P, double I, double D, double Izone) {
 		rightPIDController.setP(P);
 		rightPIDController.setI(I);
 		rightPIDController.setD(D);
 		rightPIDController.setIZone(Izone);
-		rightPIDController.setFF(FF);
-		
+
 		leftPIDController.setP(P);
 		leftPIDController.setI(I);
 		leftPIDController.setD(D);
 		rightPIDController.setIZone(Izone);
-		rightPIDController.setFF(FF);
 	}
 
 	/**
@@ -162,6 +160,24 @@ public class ArmSegment {
 	public void setSmartCurrentLimit(int limit) {
 		rightMotor.setSmartCurrentLimit(limit);
 		leftMotor.setSmartCurrentLimit(limit);
+		rightMotor.setSecondaryCurrentLimit(limit + 3);
+		leftMotor.setSecondaryCurrentLimit(limit + 3);
+	}
+
+	public void toggleMotors() {
+		isRunning = !isRunning;
+
+		if (isRunning) {
+			rightMotor.stopMotor();
+			leftMotor.stopMotor();
+		} else {
+			setReference();
+		}
+	}
+
+	public void resetZeros() {
+		rightEncoder.setPosition(0);
+		leftEncoder.setPosition(0);
 	}
 
 	// endregion
@@ -196,6 +212,10 @@ public class ArmSegment {
 			return true;
 		}
 		return false;
+	}
+
+	public double getPowerDraw() {
+		return rightMotor.getOutputCurrent() + leftMotor.getOutputCurrent();
 	}
 
 	// endregion

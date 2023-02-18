@@ -72,14 +72,14 @@ public class IntakeSubsystem extends SubsystemBase {
 	public CommandBase stopSucking() {
 		return runOnce(
 				() -> {
-					mainSucker.stopMotor();
+					mainSucker.set(0);
 				});
 	}
 
 	public CommandBase Suck() {
 		return runOnce(
 				() -> {
-					mainSucker.set(.1);
+					mainSucker.set(.15);
 				});
 	}
 	// endregion
