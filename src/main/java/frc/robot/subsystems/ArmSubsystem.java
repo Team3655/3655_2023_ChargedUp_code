@@ -29,14 +29,14 @@ public class ArmSubsystem extends SubsystemBase {
 	public HashMap<ArmPoses, double[]> armStates = new HashMap<ArmPoses, double[]>();
 
 	/** used to track the state of the arm */
-	ArmPoses armState;
+	ArmPoses targetArmState;
 
 	/** controls the side of the robot the arm is on */
 	private boolean isFront;
 
 	// create arms
-	public ArmSegment majorArm;
-	public ArmSegment minorArm;
+	private ArmSegment majorArm;
+	private ArmSegment minorArm;
 
 	// endregion
 
@@ -44,7 +44,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 		armStates.put(ArmPoses.TUCKED, new double[]{0, 0, .4});
 		armStates.put(ArmPoses.LOW_SCORE, new double[]{0, 90, .3});
-		armStates.put(ArmPoses.MID_SCORE, new double[]{45, 30, .3});
+		armStates.put(ArmPoses.MID_SCORE, new double[]{50, 33, .3});
 		armStates.put(ArmPoses.HIGH_SCORE, new double[]{100, 55, .07});
 		armStates.put(ArmPoses.LOW_INTAKE, new double[]{-5, 98, .3});
 		armStates.put(ArmPoses.MID_INTAKE, new double[]{13, 33, .3});
@@ -53,7 +53,8 @@ public class ArmSubsystem extends SubsystemBase {
 
 		// this will cause the code to fail to run if the
 		if (armStates.size() < ArmPoses.values().length) {
-			throw new IndexOutOfBoundsException("NOT ALL ARM POSES HAVE A VALUE IN THE HASHMAP! THIS WILL RESLUT IN CRASHING IF NOT RESOLVED!");
+			throw new IndexOutOfBoundsException(
+				"NOT ALL ARM POSES HAVE A VALUE IN THE HASHMAP! THIS WILL RESLUT IN CRASHING IF NOT RESOLVED!");
 		}
 
 		// region: def arms
@@ -112,7 +113,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 	// region Commands
 
-	public CommandBase ArmPoseCommand(ArmPoses state) {
+	public CommandBase ArmPoseCommand(final ArmPoses state) {
 		return runOnce(() -> {
 			setArmState(state);
 		});
@@ -153,14 +154,14 @@ public class ArmSubsystem extends SubsystemBase {
 	 * @param state can be (LOW_SCORE, MID_SCORE, HIGH_SCORE,
 	 *             LOW_INTAKE, MID_INTAKE, HIGH_INTAKE)
 	 */
-	public void setArmState(ArmPoses state) {
-		armState = state;
+	public void setArmState(final ArmPoses state) {
+		targetArmState = state;
 
 		// gets the angle values from the hashmap
-		majorArm.setTargetTheta(armStates.get(armState)[0]);
-		minorArm.setTargetTheta(armStates.get(armState)[1]);
+		majorArm.setTargetTheta(armStates.get(targetArmState)[0]);
+		minorArm.setTargetTheta(armStates.get(targetArmState)[1]);
 
-		minorArm.setConstraints(ArmConstants.kMinorArmConstraints, armStates.get(armState)[2]);
+		minorArm.setConstraints(ArmConstants.kMinorArmConstraints, armStates.get(targetArmState)[2]);
 
 		majorArm.setReference();
 		minorArm.setReference();
@@ -178,7 +179,7 @@ public class ArmSubsystem extends SubsystemBase {
 	 *         MID_INTAKE, HIGH_INTAKE)
 	 */
 	public ArmPoses getArmState() {
-		return armState;
+		return targetArmState;
 	}
 
 	/** ruturns true if the target dominant side of the robot is front */
@@ -186,7 +187,7 @@ public class ArmSubsystem extends SubsystemBase {
 		return isFront;
 	}
 
-	public boolean getAtTarget(double deadBand) {
+	public boolean getAtTarget(final double deadBand) {
 		if (majorArm.getAtTarget(deadBand) && minorArm.getAtTarget(deadBand)) {
 			return true;
 		}
