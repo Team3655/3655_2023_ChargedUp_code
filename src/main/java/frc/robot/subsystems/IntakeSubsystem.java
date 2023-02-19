@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
@@ -79,7 +78,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	public CommandBase startSucking() {
 		return runOnce(
 				() -> {
-					mainSucker.set(.15);
+					mainSucker.set(IntakeConstants.kMainSuckerSetpoint);
 				});
 	}
 	// endregion

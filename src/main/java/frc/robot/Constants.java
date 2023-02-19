@@ -24,6 +24,9 @@ public final class Constants {
 
 	public static class ModuleConstants {
 
+		// The max speed the modules are capable of
+		public static final double kMaxModuleSpeedMetersPerSecond = Units.feetToMeters(14.5);
+
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1d / 6.75;
 		public static final double kturnGearRatio = 1d / (150d / 7d);
@@ -90,12 +93,12 @@ public final class Constants {
 		// TODO: Change max speed
 		public static final double kMaxSpeedMetersPerSecond = 1.5;
 		public static final double kMaxTurboMetersPerSecond = 3.5;
-		public static final double kMaxRPM = 60;
+		public static final double kMaxRPM = .75 * 60;
 
 		public static final int kPigeonPort = 20;
 
-		public static final double kTrackWidth = Units.inchesToMeters(20); // meters
-		public static final double kWheelBase = Units.inchesToMeters(20); // meters
+		public static final double kTrackWidth = Units.inchesToMeters(20); // in meters!
+		public static final double kWheelBase = Units.inchesToMeters(20); // in meters!
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
 				new Translation2d(kWheelBase / 2, kTrackWidth / 2), //FL
@@ -198,10 +201,10 @@ public final class Constants {
 		public static final int kSideSuckerPort = 17;
 		public static final int kMainSuckerPort = 18;
 
-		public static final int kSideSuckerCurrentLimit = 10;
-		public static final int kMainSuckerCurrentLimit = 15;
+		public static final int kSideSuckerCurrentLimit = 8;
+		public static final int kMainSuckerCurrentLimit = 10;
 
-		public static final int kMainSuckerRPMTarget = 1000;
+		public static final double kMainSuckerSetpoint = .15;
 		public static final int kHasPieceThreshold = 1000;
 
 		public static final double kMainSuckerP = .009;

@@ -4,6 +4,12 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Objects.SwerveModule;
+
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -23,11 +29,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.ModuleConstants;
-import frc.robot.Constants;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Objects.SwerveModule;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -166,8 +167,8 @@ public class DriveSubsystem extends SubsystemBase {
 						: new ChassisSpeeds(xSpeed, ySpeed, rot));
 
 		SwerveDriveKinematics.desaturateWheelSpeeds(
-			swerveModuleStates, 
-			DriveConstants.kMaxSpeedMetersPerSecond);
+			swerveModuleStates,
+			ModuleConstants.kMaxModuleSpeedMetersPerSecond);
 
 		frontLeft.setDesiredState(swerveModuleStates[0]);
 		frontRight.setDesiredState(swerveModuleStates[1]);

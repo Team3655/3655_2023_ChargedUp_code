@@ -7,7 +7,6 @@ import frc.robot.Objects.ArmSegment;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -111,26 +110,12 @@ public class ArmSubsystem extends SubsystemBase {
 
 	}
 
-	// region setters
+	// region Commands
 
-	/**
-	 * Sets the height of the arm
-	 * 
-	 * @param pose can be (LOW_SCORE, MID_SCORE, HIGH_SCORE,
-	 *             LOW_INTAKE, MID_INTAKE, HIGH_INTAKE)
-	 */
-	public void setArmState(ArmPoses pose) {
-		armState = pose;
-
-		// gets the angle values from the hashmap
-		majorArm.setTargetTheta(armStates.get(armState)[0]);
-		minorArm.setTargetTheta(armStates.get(armState)[1]);
-
-		minorArm.setConstraints(ArmConstants.kMinorArmConstraints, armStates.get(armState)[2]);
-
-		majorArm.setReference();
-		minorArm.setReference();
-
+	public CommandBase ArmPoseCommand(ArmPoses state) {
+		return runOnce(() -> {
+			setArmState(state);
+		});
 	}
 
 	/** Toggles the dominant side of the robot */
@@ -156,6 +141,30 @@ public class ArmSubsystem extends SubsystemBase {
 			minorArm.resetZeros();
 			majorArm.resetZeros();
 		});
+	}
+
+	// endregion 
+
+	// region Setters
+
+	/**
+	 * Sets the height of the arm
+	 * 
+	 * @param state can be (LOW_SCORE, MID_SCORE, HIGH_SCORE,
+	 *             LOW_INTAKE, MID_INTAKE, HIGH_INTAKE)
+	 */
+	public void setArmState(ArmPoses state) {
+		armState = state;
+
+		// gets the angle values from the hashmap
+		majorArm.setTargetTheta(armStates.get(armState)[0]);
+		minorArm.setTargetTheta(armStates.get(armState)[1]);
+
+		minorArm.setConstraints(ArmConstants.kMinorArmConstraints, armStates.get(armState)[2]);
+
+		majorArm.setReference();
+		minorArm.setReference();
+
 	}
 
 	// endregion
