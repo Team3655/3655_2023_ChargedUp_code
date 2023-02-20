@@ -29,6 +29,9 @@ public class IntakeSubsystem extends SubsystemBase {
 	/** Color sensor for detectng which type of piece is held */
 	private ColorSensorV3 colorSense;
 
+	/** controls wheter the suck is on */
+	private boolean suckOn;
+
 	/** Creates a new IntakeSubsystem. */
 	public IntakeSubsystem() {
 
@@ -60,6 +63,8 @@ public class IntakeSubsystem extends SubsystemBase {
 		// Encoder object created to display velocity values
 		mainEncoder = mainSucker.getEncoder();
 
+		// Toggle control of Sucking
+		suckOn = false;
 	}
 
 	@Override
@@ -79,6 +84,18 @@ public class IntakeSubsystem extends SubsystemBase {
 		return runOnce(
 				() -> {
 					mainSucker.set(IntakeConstants.kMainSuckerSetpoint);
+				});
+	}
+
+	public CommandBase toggleSucking() {
+		return runOnce(() -> {
+				suckOn = !suckOn;
+				if (suckOn=true) {
+					mainSucker.set(.15);
+				}
+				if (suckOn=false) {
+					mainSucker.set(0);
+				}
 				});
 	}
 	// endregion

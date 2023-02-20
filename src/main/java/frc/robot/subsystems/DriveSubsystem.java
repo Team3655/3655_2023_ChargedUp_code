@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class DriveSubsystem extends SubsystemBase {
 
-	private boolean fieldRelative;
+	private boolean fieldRelative=true;
 
 	/** Creates a new DriveSubsystem. */
 	public DriveSubsystem() {

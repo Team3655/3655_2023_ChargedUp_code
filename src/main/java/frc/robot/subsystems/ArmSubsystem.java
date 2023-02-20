@@ -42,14 +42,14 @@ public class ArmSubsystem extends SubsystemBase {
 
 	public ArmSubsystem() {
 
-		armStates.put(ArmPoses.TUCKED, new double[]{0, 0, .4});
-		armStates.put(ArmPoses.LOW_SCORE, new double[]{0, 90, .3});
-		armStates.put(ArmPoses.MID_SCORE, new double[]{45, 30, .3});
+		armStates.put(ArmPoses.TUCKED, new double[]{0, 0, .2});
+		armStates.put(ArmPoses.LOW_SCORE, new double[]{0, 90, .2});
+		armStates.put(ArmPoses.MID_SCORE, new double[]{55, 40, .1});
 		armStates.put(ArmPoses.HIGH_SCORE, new double[]{100, 55, .07});
-		armStates.put(ArmPoses.LOW_INTAKE, new double[]{-5, 98, .3});
-		armStates.put(ArmPoses.MID_INTAKE, new double[]{13, 33, .3});
-		armStates.put(ArmPoses.HIGH_INTAKE, new double[]{100, 85, .3});	
-		armStates.put(ArmPoses.DRIVER_CONTROL, new double[]{0, 0, .3});
+		armStates.put(ArmPoses.LOW_INTAKE, new double[]{-5, 98, .2});
+		armStates.put(ArmPoses.MID_INTAKE, new double[]{13, 33, .2});
+		armStates.put(ArmPoses.HIGH_INTAKE, new double[]{100, 85, .2});	
+		armStates.put(ArmPoses.DRIVER_CONTROL, new double[]{0, 0, .2});
 
 		// this will cause the code to fail to run if the
 		if (armStates.size() < ArmPoses.values().length) {

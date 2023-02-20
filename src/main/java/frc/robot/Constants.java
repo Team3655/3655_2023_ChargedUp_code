@@ -91,9 +91,9 @@ public final class Constants {
 		// public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
 
 		// TODO: Change max speed
-		public static final double kMaxSpeedMetersPerSecond = 1.5;
+		public static final double kMaxSpeedMetersPerSecond = 3.5;
 		public static final double kMaxTurboMetersPerSecond = 3.5;
-		public static final double kMaxRPM = .75 * 60;
+		public static final double kMaxRPM = 50;
 
 		public static final int kPigeonPort = 20;
 
