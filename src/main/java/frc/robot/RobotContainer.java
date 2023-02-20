@@ -9,8 +9,11 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,6 +26,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Utils.JoystickUtils;
+import frc.robot.commands.ArmBumpCommand;
+import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPoses;
@@ -41,6 +46,9 @@ import frc.robot.subsystems.LimelightSubsystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+	private Debouncer buttomDebouncer = new Debouncer(Units.millisecondsToSeconds(50), DebounceType.kBoth);
+
 	// The robot's subsystems and commands are defined here...
 	private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	private final DriveSubsystem driveSubsystem = new DriveSubsystem();
@@ -56,8 +64,6 @@ public class RobotContainer {
 	private final CommandJoystick TurnJoystick = new CommandJoystick(1);
 
 	private final CommandGenericHID operatorController = new CommandGenericHID(2);
-
-	Trigger select = driverController.back();
 
 	private SendableChooser<PathPlannerTrajectory> autoChooser = new SendableChooser<>();
 
@@ -140,16 +146,17 @@ public class RobotContainer {
 		operatorController.button(4).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.TUCKED));
 
 		// Switches sides of the robot
-		operatorController.button(9).onTrue(armSubsystem.ToggleSide());
+		operatorController.button(9).onTrue(new ArmSwitchCommand(armSubsystem, limelightSubsystem));
 
 		operatorController.button(11).onTrue(armSubsystem.toggleArmMotors());
 		operatorController.button(13).onTrue(armSubsystem.zeroArms());
 
-		//operatorController.button(18).whileTrue(getAutonomousCommand())(new ArmBumpCommand(1, 0, armSubsystem));
+		operatorController.button(18).whileTrue(new ArmBumpCommand(1, 0, armSubsystem));
 		// endregion
 
 		// Sucking is set to be the defaut state of the intake
 		operatorController.button(10).onTrue(intakeSubsystem.stopSucking()).onFalse(intakeSubsystem.startSucking());
+		operatorController.button(5).onTrue(intakeSubsystem.toggleSideSucker());
 
 		// region Drive Commands
 		driverController.start().onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
@@ -158,10 +165,11 @@ public class RobotContainer {
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								JoystickUtils.processJoystickInput(-DriveJoystick.getRawAxis(1)), // x axis
-								JoystickUtils.processJoystickInput(-DriveJoystick.getRawAxis(0)), // y axis
-								JoystickUtils.processJoystickInput(TurnJoystick.getRawAxis(0)), // rot axis
-								driverController.getHID().getLeftStickButton()),
+								JoystickUtils.processJoystickInput(-DriveJoystick.getRawAxis(1)),     // x axis
+								JoystickUtils.processJoystickInput(-DriveJoystick.getRawAxis(0)),     // y axis
+								JoystickUtils.processJoystickInput(TurnJoystick.getRawAxis(0)),       // rot axis
+								buttomDebouncer.calculate(DriveJoystick.getHID().getRawButton(0)),  // turbo boolean
+								buttomDebouncer.calculate(DriveJoystick.getHID().getRawButton(1))), // sneak boolean
 						driveSubsystem));
 		// endregion
 	}

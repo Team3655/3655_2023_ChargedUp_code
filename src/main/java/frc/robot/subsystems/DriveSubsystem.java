@@ -154,11 +154,26 @@ public class DriveSubsystem extends SubsystemBase {
 	// endregion
 
 	// region setter
-	public void drive(double xSpeed, double ySpeed, double rot, boolean isTurbo) {
+	public void drive(double xSpeed, double ySpeed, double rot) {
+		drive(xSpeed, ySpeed, rot, true, false);
+	}
+
+	public void drive(double xSpeed, double ySpeed, double rot, boolean isTurbo, Boolean isSneak) {
+
+		double maxSpeed;
+
+		if (isSneak) {
+			maxSpeed = DriveConstants.kMaxSneakMetersPerSecond;
+		} else if (isTurbo) {
+			maxSpeed = DriveConstants.kMaxTurboMetersPerSecond;
+		} else {
+			maxSpeed = DriveConstants.kMaxSpeedMetersPerSecond;
+		}
 
 		// Apply deadbands to inputs
-		xSpeed *= (isTurbo) ? DriveConstants.kMaxTurboMetersPerSecond : DriveConstants.kMaxSpeedMetersPerSecond;
-		ySpeed *= (isTurbo) ? DriveConstants.kMaxTurboMetersPerSecond : DriveConstants.kMaxSpeedMetersPerSecond;
+		xSpeed *= maxSpeed;
+		ySpeed *= maxSpeed;
+		
 		rot *= DriveConstants.kMaxRPM;
 
 		var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(

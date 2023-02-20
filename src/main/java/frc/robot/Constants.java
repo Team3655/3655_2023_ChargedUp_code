@@ -83,12 +83,11 @@ public final class Constants {
 	}
 	public static class DriveConstants {
 
-		// public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
-		// public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
-
 		// TODO: Change max speed
-		public static final double kMaxSpeedMetersPerSecond = 3.5;
-		public static final double kMaxTurboMetersPerSecond = 3.5;
+		public static final double kMaxSneakMetersPerSecond = 1.5;
+		public static final double kMaxSpeedMetersPerSecond = 3.0;
+		public static final double kMaxTurboMetersPerSecond = 4.5;
+
 		public static final double kMaxRPM = 50;
 
 		public static final int kPigeonPort = 20;
@@ -167,12 +166,12 @@ public final class Constants {
 		public static final int kMinorArmLength = 23;
 
 		// current limits of the arms
-		public static final int kMajorArmCurrentLimit = 25;
+		public static final int kMajorArmCurrentLimit = 20;
 		public static final int kMinorArmCurrentLimit = 15;
 
 		// speed limits for the arms
-		public static final double kMajorArmPIDOutputLimit = .3;
-		public static final double kMinorArmPIDOutputLimit = .3;
+		public static final double kMajorArmPIDOutputLimit = .5;
+		public static final double kMinorArmPIDOutputLimit = .4;
 
 		// angle limits for the arms (min will be set to -input)
 		public static final double kMajorArmConstraints = 101;
@@ -218,7 +217,7 @@ public final class Constants {
 		// Servo Constants
 		public static int kServoPort = 0;
 		// sets the offset of the sevo so the limelight is facing forward (double 0 - 1)
-		public static double kServoFrontPose = .5;
+		public static double kServoFrontPose = .76;
 		public static double kServoBackpose = 0;
 
 	}
