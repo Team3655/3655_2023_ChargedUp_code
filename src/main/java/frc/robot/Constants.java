@@ -58,11 +58,11 @@ public final class Constants {
 		public static final double kRearLeftAngleZero = -32.520; 
 		public static final double kRearRightAngleZero = -8.262;
 
-		public static final double kModuleDriveControllerP = .001;
+		public static final double kModuleDriveControllerP = .0001;
 		public static final double kModuleDriveControllerI = 0;
-		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
+		public static final double kModuleDriveControllerD = 0; 
 
-		public static final double kModuleTurningControllerP = 8;
+		public static final double kModuleTurningControllerP = 4;
 		public static final double kModuleTurningControllerI = 0;
 		public static final double kModuleTurningControllerD = 0;
 
@@ -84,7 +84,6 @@ public final class Constants {
 		public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
 		public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 35 * Math.PI;
 
-		// TODO: Change max speed
 		public static final double kMaxSpeedMetersPerSecond = 3;
 		public static final double kMaxRPM = 60;
 
@@ -109,11 +108,11 @@ public final class Constants {
 	public static class AutoConstants {
 
 		// PID constants for path planner (these control drive direction not reaching target wheel speeds)
-		public static final double PathPlannerP = 5; //.5
+		public static final double PathPlannerP = 4; //.5
 		public static final double PathPlannerI = 0;
 		public static final double PathPlannerD = 0;
 
-		public static final double PathPlannerTurnP = 5; //.8
+		public static final double PathPlannerTurnP = 22; //.8
 		public static final double PathPlannerTurnI = 0;
 		public static final double PathPlannerTurnD = 0;
 
@@ -126,7 +125,7 @@ public final class Constants {
 		public static final int kDriverControllerPort = 0;
 		public static final int kOperatorControllerPort = 1;
 
-		public static final double KDeadBand = .1;
+		public static final double KDeadBand = .1; 
 		public static final double kJoystickPow = 2.5;
 	}
 

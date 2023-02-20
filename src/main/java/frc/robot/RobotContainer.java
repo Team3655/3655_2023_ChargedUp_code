@@ -104,6 +104,7 @@ public class RobotContainer {
 		PathPlannerTrajectory trajUPath = PathPlanner.loadPath("Upath", new PathConstraints(2, 3));
 		PathPlannerTrajectory trajChargedUpTest = PathPlanner.loadPath("ChargedUpTest", new PathConstraints(3, 5));
 		PathPlannerTrajectory trajNewPath = PathPlanner.loadPath("New Path", new PathConstraints(3, 4));
+		PathPlannerTrajectory trajRotationTuningV2 = PathPlanner.loadPath("RotationTuningV2", new PathConstraints(2.5, 5));
 
 
 		autoChooser.addOption("UPath", trajUPath);
@@ -113,6 +114,7 @@ public class RobotContainer {
 		autoChooser.addOption("y Traj", ytraj);
 		autoChooser.addOption("Rotation Tuning", trajRotationTuning);
 		autoChooser.addOption("New Path", trajNewPath);
+		autoChooser.addOption("Rotation Tuning V2", trajRotationTuningV2);
 	}
 
 	/**
@@ -154,13 +156,25 @@ public class RobotContainer {
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								driverController.getLeftY() * -1 * DriveConstants.kMaxSpeedMetersPerSecond, // x axis
-								driverController.getLeftX() * -1 * DriveConstants.kMaxSpeedMetersPerSecond, // y axis
-								driverController.getRightX() * -1 * DriveConstants.kMaxModuleAngularSpeedRadiansPerSecond, // z axis
+								deadband(driverController.getLeftY()) * -1 * DriveConstants.kMaxSpeedMetersPerSecond, // x axis
+								deadband(driverController.getLeftX()) * -1 * DriveConstants.kMaxSpeedMetersPerSecond, // y axis
+								deadband(driverController.getRightX()) * -1 * DriveConstants.kMaxModuleAngularSpeedRadiansPerSecond, // z axis
 								true 
 						),
 						driveSubsystem));
 
+	}
+
+	public double deadband(double rawAxis){
+		double deadband = 0;
+		double modifiedAxis = 0;
+		if(Math.abs(rawAxis) < deadband){
+			modifiedAxis = 0;
+		} else {
+			modifiedAxis = rawAxis;
+		}
+
+		return modifiedAxis;
 	}
 
 	/**
@@ -169,9 +183,6 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		// An example command will be run in autonomous
-
-
 		return driveSubsystem.followTrajectoryCommand(autoChooser.getSelected(), true);
 	}
 }
