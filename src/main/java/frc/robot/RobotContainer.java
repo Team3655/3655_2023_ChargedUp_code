@@ -28,7 +28,6 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ArmPoseCommand;
-import frc.robot.commands.ArmSwitchCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -129,20 +128,6 @@ public class RobotContainer {
 	private void configureBindings() {
 		// Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 		new Trigger(exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(exampleSubsystem));
-
-		// // Schedule ArmPoseCommand when operator presses coresponding button.
-		// operatorController.button(1).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.LOW_SCORE));
-		// operatorController.button(2).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.MID_SCORE));
-		// operatorController.button(3).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.HIGH_SCORE));
-
-		// operatorController.button(6).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.LOW_INTAKE));
-		// operatorController.button(7).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.MID_INTAKE));
-		// operatorController.button(8).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.HIGH_INTAKE));
-
-		// operatorController.button(4).onTrue(new ArmPoseCommand(armSubsystem, ArmPoses.TUCKED));
-
-		// // Switches sides of the robot, VERY DANGEROUS! HAS NOT BEEN TESTED!
-		// operatorController.button(9).onTrue(new ArmSwitchCommand(armSubsystem, intakeSubsystem));
 
 		new Trigger(driverController.start()).onTrue(new InstantCommand(
 				() -> driveSubsystem.zeroHeading()));
