@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Objects.ArmSegment;
-
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,24 +38,28 @@ public class ArmSubsystem extends SubsystemBase {
 	private ArmSegment majorArm;
 	private ArmSegment minorArm;
 
+	private DutyCycleEncoder throughBore;	
+
 	// endregion
 
 	public ArmSubsystem() {
 
-		armStates.put(ArmPoses.TUCKED, new double[]{0, 0, .4});
-		armStates.put(ArmPoses.LOW_SCORE, new double[]{0, 90, .3});
-		armStates.put(ArmPoses.MID_SCORE, new double[]{50, 33, .3});
-		armStates.put(ArmPoses.HIGH_SCORE, new double[]{100, 55, .07});
-		armStates.put(ArmPoses.LOW_INTAKE, new double[]{-5, 98, .3});
-		armStates.put(ArmPoses.MID_INTAKE, new double[]{13, 33, .3});
-		armStates.put(ArmPoses.HIGH_INTAKE, new double[]{100, 85, .3});	
-		armStates.put(ArmPoses.DRIVER_CONTROL, new double[]{0, 0, .3});
+		armStates.put(ArmPoses.TUCKED, new double[]{0, 0, ArmConstants.kMinorArmPIDOutputLimit});
+		armStates.put(ArmPoses.LOW_SCORE, new double[]{0, 90, ArmConstants.kMinorArmPIDOutputLimit});
+		armStates.put(ArmPoses.MID_SCORE, new double[]{50, 33, ArmConstants.kMinorArmPIDOutputLimit});
+		armStates.put(ArmPoses.HIGH_SCORE, new double[]{100, 55, .1});
+		armStates.put(ArmPoses.LOW_INTAKE, new double[]{-10, 98, ArmConstants.kMinorArmPIDOutputLimit});
+		armStates.put(ArmPoses.MID_INTAKE, new double[]{13, 33, ArmConstants.kMinorArmPIDOutputLimit});
+		armStates.put(ArmPoses.HIGH_INTAKE, new double[]{100, 85, ArmConstants.kMinorArmPIDOutputLimit});	
+		armStates.put(ArmPoses.DRIVER_CONTROL, new double[]{0, 0, ArmConstants.kMinorArmPIDOutputLimit});
 
 		// this will cause the code to fail to run if the
 		if (armStates.size() < ArmPoses.values().length) {
 			throw new IndexOutOfBoundsException(
 				"NOT ALL ARM POSES HAVE A VALUE IN THE HASHMAP! THIS WILL RESLUT IN CRASHING IF NOT RESOLVED!");
 		}
+
+		
 
 		// region: def arms
 
