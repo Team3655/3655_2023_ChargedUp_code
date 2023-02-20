@@ -19,9 +19,6 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
-	public static final String kRioCANBusName = "rio";
-	public static final String kCanivoreCANBusName = "canivore";
-
 	public static class ModuleConstants {
 
 		// The max speed the modules are capable of
@@ -84,7 +81,6 @@ public final class Constants {
 				kModuleDriveControllerI,
 				kModuleDriveControllerD };
 	}
-
 	public static class DriveConstants {
 
 		// public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
@@ -226,5 +222,9 @@ public final class Constants {
 		public static double kServoBackpose = 0;
 
 	}
+
+	public static final String kRioCANBusName = "rio";
+
+	public static final String kCanivoreCANBusName = "canivore";
 
 }
