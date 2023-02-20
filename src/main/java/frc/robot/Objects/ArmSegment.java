@@ -5,6 +5,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
 public class ArmSegment {
 
@@ -61,6 +62,12 @@ public class ArmSegment {
 		 */
 		rightPIDController = rightMotor.getPIDController();
 		leftPIDController = leftMotor.getPIDController();
+
+		rightPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
+		leftPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
+
+		// rightPIDController.setSmartMotionMaxVelocity(.00001, 0);
+		// leftPIDController.setSmartMotionMaxVelocity(.00001, 0);
 
 		// Encoder object created to display position values
 		rightEncoder = rightMotor.getEncoder();

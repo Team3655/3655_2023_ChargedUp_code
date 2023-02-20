@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -13,6 +15,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -29,11 +32,13 @@ public class IntakeSubsystem extends SubsystemBase {
 	/** Color sensor for detectng which type of piece is held */
 	private ColorSensorV3 colorSense;
 
-	/** controls wheter the suck is on */
-	private boolean suckOn;
+	private PowerDistribution pdh;
 
 	/** Creates a new IntakeSubsystem. */
 	public IntakeSubsystem() {
+
+		pdh = new PowerDistribution(1, ModuleType.kRev);
+
 
 		// Give Sucker motors their id's
 		mainSucker = new CANSparkMax(IntakeConstants.kMainSuckerPort, MotorType.kBrushless);
@@ -58,13 +63,7 @@ public class IntakeSubsystem extends SubsystemBase {
 		 */
 		mainPIDController = mainSucker.getPIDController();
 		mainPIDController.setP(IntakeConstants.kMainSuckerP);
-		mainPIDController.setOutputRange(0, IntakeConstants.kMainSuckerMaxOutput);
-
-		// Encoder object created to display velocity values
-		mainEncoder = mainSucker.getEncoder();
-
-		// Toggle control of Sucking
-		suckOn = false;
+		mainPIDController.setOutputRange(0, IntakeConstants.kMainSuckerMaxOutput);		
 	}
 
 	@Override
@@ -87,17 +86,17 @@ public class IntakeSubsystem extends SubsystemBase {
 				});
 	}
 
-	public CommandBase toggleSucking() {
-		return runOnce(() -> {
-				suckOn = !suckOn;
-				if (suckOn=true) {
-					mainSucker.set(.15);
-				}
-				if (suckOn=false) {
-					mainSucker.set(0);
-				}
+	public CommandBase toggleSideSucker() {
+		return runOnce(
+				() -> {
+					if (pdh.getSwitchableChannel()) {
+						pdh.setSwitchableChannel(false);
+					} else {
+						pdh.setSwitchableChannel(true);
+					}
 				});
 	}
+
 	// endregion
 
 	// region getters
