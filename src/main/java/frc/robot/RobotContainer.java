@@ -53,13 +53,12 @@ public class RobotContainer {
 	private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
 	// Replace with CommandPS4Controller or CommandJoystick if needed
-	private final CommandXboxController driverController = new CommandXboxController(
-			OperatorConstants.kDriverControllerPort);
+	//private final CommandXboxController driverController = new CommandXboxController(
+			//OperatorConstants.kDriverControllerPort);
 
-	private final CommandJoystick DriveJoystick = new CommandJoystick(0);
-	private final CommandJoystick TurnJoystick = new CommandJoystick(1);
-
-	private final CommandGenericHID operatorController = new CommandGenericHID(2);
+	private final CommandJoystick DriveJoystick = new CommandJoystick(OperatorConstants.kDriveJoystickPort);
+	private final CommandJoystick TurnJoystick = new CommandJoystick(OperatorConstants.kTurnJoystickPort);
+	private final CommandGenericHID operatorController = new CommandGenericHID(OperatorConstants.kOperatorControllerPort);
 
 	private SendableChooser<PathPlannerTrajectory> autoChooser = new SendableChooser<>();
 
@@ -74,6 +73,7 @@ public class RobotContainer {
 
 		Shuffleboard.getTab("Autonomous").add(autoChooser);
 
+		// region Paths
 		PathPlannerTrajectory trajTesting = PathPlanner.generatePath(
 				new PathConstraints(1, 2),
 				new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)), // position,
@@ -104,7 +104,7 @@ public class RobotContainer {
 		PathPlannerTrajectory trajChargedUpTest = PathPlanner.loadPath("ChargedUpTest", new PathConstraints(3, 5));
 		PathPlannerTrajectory trajNewPath = PathPlanner.loadPath("New Path", new PathConstraints(3, 4));
 		PathPlannerTrajectory trajRotationTuningV2 = PathPlanner.loadPath("RotationTuningV2", new PathConstraints(2.5, 5));
-
+		// endregion 
 
 		autoChooser.addOption("UPath", trajUPath);
 		autoChooser.addOption("Testing", trajTesting);
@@ -159,18 +159,18 @@ public class RobotContainer {
 		operatorController.button(10).onTrue(intakeSubsystem.stopSucking()).onFalse(intakeSubsystem.startSucking());
 		operatorController.button(5).onTrue(intakeSubsystem.toggleSideSucker());
 
+		
 		// region Drive Commands
 		DriveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
 		DriveJoystick.button(12).onTrue(new InstantCommand(() -> driveSubsystem.toggleFieldCentric()));
 		
-
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								JoystickUtils.processJoystickInput(DriveJoystick.getRawAxis(1)),     // x axis
-								JoystickUtils.processJoystickInput(DriveJoystick.getRawAxis(0)),     // y axis
-								JoystickUtils.processJoystickInput(TurnJoystick.getRawAxis(0)),      // rot axis
+								JoystickUtils.processJoystickInput(DriveJoystick.getX()), // x axis
+								JoystickUtils.processJoystickInput(DriveJoystick.getY()), // y axis
+								JoystickUtils.processJoystickInput(TurnJoystick.getY()),  // rot axis
 								DriveJoystick.getHID().getRawButton(1),  // turbo boolean
 								DriveJoystick.getHID().getRawButton(2)), // sneak boolean
 						driveSubsystem));

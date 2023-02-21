@@ -52,6 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
 		// set current limits
 		mainSucker.setSmartCurrentLimit(IntakeConstants.kMainSuckerCurrentLimit);
+		mainSucker.setSecondaryCurrentLimit(IntakeConstants.kMainSuckerStallCurrentLimit);
 
 		// sets motor defaults to break
 		mainSucker.setIdleMode(IdleMode.kCoast);
