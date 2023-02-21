@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Objects.ArmSegment;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -37,8 +36,6 @@ public class ArmSubsystem extends SubsystemBase {
 	// create arms
 	private ArmSegment majorArm;
 	private ArmSegment minorArm;
-
-	private DutyCycleEncoder throughBore;	
 
 	// endregion
 

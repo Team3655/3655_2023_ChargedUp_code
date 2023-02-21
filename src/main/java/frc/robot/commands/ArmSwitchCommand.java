@@ -12,10 +12,12 @@ import frc.robot.subsystems.LimelightSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ArmSwitchCommand extends ParallelCommandGroup {
-  /** Creates a new ArmSwitchCommand. */
-  public ArmSwitchCommand(ArmSubsystem armSubsystem, LimelightSubsystem limelightSubsystem) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    addCommands(armSubsystem.ToggleSide(), limelightSubsystem.FlipLimelight(armSubsystem.getIsFront()));
-  }
+	/** Creates a new ArmSwitchCommand. */
+	public ArmSwitchCommand(ArmSubsystem armSubsystem, LimelightSubsystem limelightSubsystem) {
+		// Add your commands in the addCommands() call, e.g.
+		// addCommands(new FooCommand(), new BarCommand());
+		addCommands(
+				armSubsystem.ToggleSide(),
+				limelightSubsystem.FlipLimelight(armSubsystem.getIsFront()));
+	}
 }
