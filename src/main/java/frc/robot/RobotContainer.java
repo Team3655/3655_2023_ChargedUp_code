@@ -165,11 +165,11 @@ public class RobotContainer {
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								JoystickUtils.processJoystickInput(-DriveJoystick.getRawAxis(1)),     // x axis
-								JoystickUtils.processJoystickInput(-DriveJoystick.getRawAxis(0)),     // y axis
+								JoystickUtils.processJoystickInput(DriveJoystick.getRawAxis(1)),     // x axis
+								JoystickUtils.processJoystickInput(DriveJoystick.getRawAxis(0)),     // y axis
 								JoystickUtils.processJoystickInput(TurnJoystick.getRawAxis(0)),       // rot axis
-								buttomDebouncer.calculate(DriveJoystick.getHID().getRawButton(0)),  // turbo boolean
-								buttomDebouncer.calculate(DriveJoystick.getHID().getRawButton(1))), // sneak boolean
+								DriveJoystick.getHID().getRawButton(1),  // turbo boolean
+								DriveJoystick.getHID().getRawButton(2)), // sneak boolean
 						driveSubsystem));
 		// endregion
 	}

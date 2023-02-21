@@ -88,7 +88,7 @@ public final class Constants {
 		public static final double kMaxSpeedMetersPerSecond = 3.0;
 		public static final double kMaxTurboMetersPerSecond = 4.5;
 
-		public static final double kMaxRPM = 50;
+		public static final double kMaxRPM = 30;
 
 		public static final int kPigeonPort = 20;
 
