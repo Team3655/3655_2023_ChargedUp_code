@@ -81,6 +81,10 @@ public class SwerveModule extends SubsystemBase {
 		driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
 		turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
+		driveMotor.setInverted(true);
+		turningMotor.setInverted(true);
+
+
 		turningMotor.restoreFactoryDefaults();
 		driveMotor.restoreFactoryDefaults();
 
