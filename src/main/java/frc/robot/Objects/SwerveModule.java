@@ -4,9 +4,6 @@
 
 package frc.robot.Objects;
 
-import frc.robot.Constants;
-import frc.robot.Constants.ModuleConstants;
-
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
@@ -28,6 +25,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Timer;
+
+import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule extends SubsystemBase {
 	/** Creates a new SwerveModule. */
@@ -47,10 +47,24 @@ public class SwerveModule extends SubsystemBase {
 	private final String moduleName;
 
 
-	private final PIDController m_turningPIDController = new PIDController(
+	private final PIDController turningPIDController = new PIDController(
 		ModuleConstants.kAngularPID[0],
 		ModuleConstants.kAngularPID[1],
 		ModuleConstants.kAngularPID[2]);
+
+	private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
+		ModuleConstants.kAngularPID[0],
+		ModuleConstants.kAngularPID[1],
+		ModuleConstants.kAngularPID[2],
+		new TrapezoidProfile.Constraints( // radians/s?
+			2 * Math.PI * 80, //theoretical is 5676 RPM -> 94*2pi
+			2 * Math.PI * 60
+		));
+
+	// private final PIDController m_turningPIDController = new PIDController(
+	// 	ModuleConstants.kAngularPID[0],
+	// 	ModuleConstants.kAngularPID[1],
+	// 	ModuleConstants.kAngularPID[2]);
 
 	SimpleMotorFeedforward turnFeedForward = new SimpleMotorFeedforward(
 		ModuleConstants.ksTurning, ModuleConstants.kvTurning);
@@ -79,20 +93,21 @@ public class SwerveModule extends SubsystemBase {
 
 
 		// Initalize CANcoder
-		absoluteEncoder = new CANCoder(absoluteEncoderPort, Constants.kCanivoreCANBusName);
-
+		absoluteEncoder = new CANCoder(absoluteEncoderPort);
+		absoluteEncoder.configFactoryDefault();
 		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+		Timer.delay(1);
 		absoluteEncoder.configMagnetOffset(-1 * angleZero);
 		absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
 
 		// Initialize Spark MAX encoders
 		angularEncoder = turningMotor.getEncoder();
-		angularEncoder.setPositionConversionFactor(ModuleConstants.kturnGearRatio * 2d * Math.PI); // radians
-		angularEncoder.setVelocityConversionFactor(
-				ModuleConstants.kturnGearRatio
-						* 2 * Math.PI
-						* (1 / 60)); // radians per second
+		// angularEncoder.setPositionConversionFactor(ModuleConstants.kturnGearRatio * 2d * Math.PI); // radians
+		// angularEncoder.setVelocityConversionFactor(
+		// 		ModuleConstants.kturnGearRatio
+		// 				* 2 * Math.PI
+		// 				* (1 / 60)); // radians per second
 
 		driveEncoder = driveMotor.getEncoder();
 		driveEncoder.setPositionConversionFactor(ModuleConstants.kdriveGearRatio * ModuleConstants.kwheelCircumference); // meters
@@ -103,9 +118,9 @@ public class SwerveModule extends SubsystemBase {
 
 		// Initialize PID's
 		this.angularPID = turningMotor.getPIDController();
-		this.angularPID.setP(angularPID[0]);
-		this.angularPID.setI(angularPID[1]);
-		this.angularPID.setD(angularPID[2]);
+		// this.angularPID.setP(angularPID[0]);
+		// this.angularPID.setI(angularPID[1]);
+		// this.angularPID.setD(angularPID[2]);
 
 		this.drivePID = driveMotor.getPIDController();
 		this.drivePID.setP(drivePID[0]);
@@ -115,7 +130,7 @@ public class SwerveModule extends SubsystemBase {
 		//this.angularPID.setFF(ModuleConstants.kTurnFeedForward);
 		this.drivePID.setFF(ModuleConstants.kDriveFeedForward);
 
-		this.angularPID.setFeedbackDevice(turningMotor.getEncoder());
+		// this.angularPID.setFeedbackDevice(turningMotor.getEncoder());
 		this.drivePID.setFeedbackDevice(driveMotor.getEncoder());
 
 		// this.angularPID.setPositionPIDWrappingEnabled(true);
@@ -126,8 +141,8 @@ public class SwerveModule extends SubsystemBase {
 		this.drivePID.setOutputRange(-1, 1);
 
 		// Configure current limits for motors
-		driveMotor.setIdleMode(IdleMode.kCoast);
-		turningMotor.setIdleMode(IdleMode.kCoast);
+		driveMotor.setIdleMode(IdleMode.kBrake);
+		turningMotor.setIdleMode(IdleMode.kBrake);
 		turningMotor.setSmartCurrentLimit(30);
 		driveMotor.setSmartCurrentLimit(30);
 
@@ -154,7 +169,7 @@ public class SwerveModule extends SubsystemBase {
 	public SwerveModulePosition getPosition() {
 
 		//double m_moduleAngleRadians = angularEncoder.getPosition();
-		double m_moduleAngleRadians = absoluteEncoder.getAbsolutePosition() * 2 * Math.PI / 360;
+		double m_moduleAngleRadians = Math.toRadians(absoluteEncoder.getAbsolutePosition());
 
 		double m_distanceMeters = driveEncoder.getPosition();
 
@@ -164,7 +179,7 @@ public class SwerveModule extends SubsystemBase {
 	public void setDesiredState(SwerveModuleState desiredState) {
 
 		//double m_moduleAngleRadians = angularEncoder.getPosition();
-		double m_moduleAngleRadians = absoluteEncoder.getAbsolutePosition() * 2 * Math.PI / 360;
+		double m_moduleAngleRadians = Math.toRadians(absoluteEncoder.getAbsolutePosition());
 
 		// Optimize the reference state to avoid spinning further than 90 degrees to
 		// desired state
@@ -174,10 +189,11 @@ public class SwerveModule extends SubsystemBase {
 
 
 
-		final var angularFFOutput = turnFeedForward.calculate(m_turningPIDController.getSetpoint());
 		final var angularPIDOutput = m_turningPIDController.calculate(m_moduleAngleRadians, optimizedState.angle.getRadians());
+		final var angularFFOutput = turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-		final var turnOutput = angularFFOutput + angularPIDOutput;
+
+		final var turnOutput = angularPIDOutput + angularFFOutput;
 
 		turningMotor.setVoltage(turnOutput);
 
@@ -188,6 +204,7 @@ public class SwerveModule extends SubsystemBase {
 		SmartDashboard.putNumber(this.moduleName + " Optimized Angle", optimizedState.angle.getDegrees());
 		SmartDashboard.putNumber(this.moduleName + " FF", angularFFOutput);
 		SmartDashboard.putNumber(this.moduleName + " PID", angularPIDOutput);
+		SmartDashboard.putNumber(this.moduleName + " Turn Output", turnOutput);
 	}
 
 	public void resetEncoders() {

@@ -212,11 +212,11 @@ public class DriveSubsystem extends SubsystemBase {
 			gyro.reset();
 	}
 
-	public CommandBase toggleFieldCentric() {
-		return runOnce(() -> {
-			fieldRelative = !fieldRelative;
-		});
-	}
+	// public CommandBase toggleFieldCentric() {
+	// 	return runOnce(() -> {
+	// 		fieldRelative = !fieldRelative;
+	// 	});
+	// }
 
 	// endregion
 
@@ -237,15 +237,15 @@ public class DriveSubsystem extends SubsystemBase {
 						new PIDController(
 								AutoConstants.PathPlannerP,
 								AutoConstants.PathPlannerI,
-								AutoConstants.PathPlannerD), // TODO: X controller.
+								AutoConstants.PathPlannerD), 
 						new PIDController(
 								AutoConstants.PathPlannerP,
 								AutoConstants.PathPlannerI,
-								AutoConstants.PathPlannerD), // TODO: Y controller
+								AutoConstants.PathPlannerD), 
 						new PIDController(
 								AutoConstants.PathPlannerTurnP,
 								AutoConstants.PathPlannerTurnI,
-								AutoConstants.PathPlannerTurnD), // TODO: Rotation controller.
+								AutoConstants.PathPlannerTurnD), 
 						this::setModuleStates, // Module states consumer
 						false, 
 						this // Requires this drive subsystem

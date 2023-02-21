@@ -8,9 +8,17 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
+import com.pathplanner.lib.server.PathPlannerServer;
 
-import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import frc.robot.subsystems.IntakeSubsystem;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
+import frc.robot.commands.Autos;
+import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ArmPoseCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -74,6 +82,8 @@ public class RobotContainer {
 		// Configure the trigger bindings
 		configureBindings();
 
+		PathPlannerServer.startServer(5811);
+
 		Shuffleboard.getTab("Autonomous").add(autoChooser);
 
 		PathPlannerTrajectory trajTesting = PathPlanner.generatePath(
@@ -105,6 +115,8 @@ public class RobotContainer {
 		PathPlannerTrajectory trajUPath = PathPlanner.loadPath("Upath", new PathConstraints(2, 3));
 		PathPlannerTrajectory trajChargedUpTest = PathPlanner.loadPath("ChargedUpTest", new PathConstraints(3, 5));
 		PathPlannerTrajectory trajNewPath = PathPlanner.loadPath("New Path", new PathConstraints(3, 4));
+		PathPlannerTrajectory trajRotationTuningV2 = PathPlanner.loadPath("RotationTuningV2", new PathConstraints(2.5, 5));
+
 
 		autoChooser.addOption("UPath", trajUPath);
 		autoChooser.addOption("Testing", trajTesting);
@@ -113,6 +125,7 @@ public class RobotContainer {
 		autoChooser.addOption("y Traj", ytraj);
 		autoChooser.addOption("Rotation Tuning", trajRotationTuning);
 		autoChooser.addOption("New Path", trajNewPath);
+		autoChooser.addOption("Rotation Tuning V2", trajRotationTuningV2);
 	}
 
 	/**
@@ -175,6 +188,18 @@ public class RobotContainer {
 								DriveJoystick.getHID().getRawButton(2)), // sneak boolean
 						driveSubsystem));
 		// endregion
+	}
+
+	public double deadband(double rawAxis){
+		double deadband = 0;
+		double modifiedAxis = 0;
+		if(Math.abs(rawAxis) < deadband){
+			modifiedAxis = 0;
+		} else {
+			modifiedAxis = rawAxis;
+		}
+
+		return modifiedAxis;
 	}
 
 	/**
