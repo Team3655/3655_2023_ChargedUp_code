@@ -50,10 +50,17 @@ public class ArmSubsystem extends SubsystemBase {
 		armStates.put(ArmPoses.HIGH_INTAKE, new double[]{100, 85, ArmConstants.kMinorArmPIDOutputLimit});	
 		armStates.put(ArmPoses.DRIVER_CONTROL, new double[]{0, 0, ArmConstants.kMinorArmPIDOutputLimit});
 
-		// this will cause the code to fail to run if the
-		if (armStates.size() < ArmPoses.values().length) {
-			throw new IndexOutOfBoundsException(
+		// this will cause the code to fail to run if the hashmap is not full
+		for (ArmPoses pose : ArmPoses.values()) {
+			try {
+				double x = 0;
+				x = x + armStates.get(pose)[0];
+				x = x + armStates.get(pose)[1];
+				x = x + armStates.get(pose)[2];
+			} catch(Exception exception) {
+				throw new IndexOutOfBoundsException(
 				"NOT ALL ARM POSES HAVE A VALUE IN THE HASHMAP! THIS WILL RESLUT IN CRASHING IF NOT RESOLVED!");
+			}
 		}
 
 		
@@ -98,7 +105,7 @@ public class ArmSubsystem extends SubsystemBase {
 		// the default state of the arms
 		isFront = true;
 
-		//setArmState(ArmPoses.TUCKED);
+		setArmState(ArmPoses.TUCKED);
 	}
 
 	@Override
@@ -107,8 +114,9 @@ public class ArmSubsystem extends SubsystemBase {
 
 		SmartDashboard.putNumber("major real theta: ", majorArm.getRealTheta());
 		SmartDashboard.putNumber("minor real theta: ", minorArm.getRealTheta());
-		SmartDashboard.putNumber("major power draw", majorArm.getPowerDraw());
-		SmartDashboard.putNumber("minor power draw", minorArm.getPowerDraw());
+		SmartDashboard.putNumber("major power draw: ", majorArm.getPowerDraw());
+		SmartDashboard.putNumber("minor power draw: ", minorArm.getPowerDraw());
+		SmartDashboard.putBoolean("At target: ", getAtTarget(5));
 
 	}
 
@@ -189,6 +197,7 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public boolean getAtTarget(final double deadBand) {
+
 		if (majorArm.getAtTarget(deadBand) && minorArm.getAtTarget(deadBand)) {
 			return true;
 		}

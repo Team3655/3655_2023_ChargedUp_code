@@ -127,7 +127,6 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("2D Gyro", getHeading());
 		SmartDashboard.putNumber("2D X", getPose().getX());
 		SmartDashboard.putNumber("2D Y", getPose().getY());
-
 	}
 
 	// region getters
@@ -181,7 +180,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 		SwerveDriveKinematics.desaturateWheelSpeeds(
 				swerveModuleStates,
-				ModuleConstants.kMaxModuleSpeedMetersPerSecond);
+				maxSpeed);
 
 		frontLeft.setDesiredState(swerveModuleStates[0]);
 		frontRight.setDesiredState(swerveModuleStates[1]);

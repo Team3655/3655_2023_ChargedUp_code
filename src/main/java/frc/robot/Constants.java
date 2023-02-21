@@ -21,6 +21,10 @@ public final class Constants {
 
 	public static class ModuleConstants {
 
+		// Current limits for the wheels
+		public static final int kTurnMotorCurrentLimit = 15;
+		public static final int kDriveMotorCurrentLimit = 25;
+
 		// The max speed the modules are capable of
 		public static final double kMaxModuleSpeedMetersPerSecond = Units.feetToMeters(14.5);
 
@@ -63,7 +67,7 @@ public final class Constants {
 
 		public static final double kModuleDriveControllerP = .1;
 		public static final double kModuleDriveControllerI = 0;
-		public static final double kModuleDriveControllerD = 0; // TODO: Set PID constants
+		public static final double kModuleDriveControllerD = 0; 
 
 		public static final double kModuleTurningControllerP = 6.5;
 		public static final double kModuleTurningControllerI = 0.25;
@@ -128,10 +132,12 @@ public final class Constants {
 	 * The constants pertaining to the drive station
 	 */
 	public static class OperatorConstants {
-		public static final int kDriverControllerPort = 0;
-		public static final int kOperatorControllerPort = 1;
+		public static final int kDriveJoystickPort = 0;
+		public static final int kTurnJoystickPort = 1;
+		public static final int kOperatorControllerPort = 2;
 
 		public static final double KDeadBand = .125;
+		// this is the number that the joystick input will be raised to
 		public static final double kJoystickPow = 2.5;
 	}
 
@@ -170,7 +176,7 @@ public final class Constants {
 		public static final int kMinorArmCurrentLimit = 15;
 
 		// speed limits for the arms
-		public static final double kMajorArmPIDOutputLimit = .5;
+		public static final double kMajorArmPIDOutputLimit = .45;
 		public static final double kMinorArmPIDOutputLimit = .4;
 
 		// angle limits for the arms (min will be set to -input)
@@ -198,6 +204,7 @@ public final class Constants {
 
 		public static final int kSideSuckerCurrentLimit = 8;
 		public static final int kMainSuckerCurrentLimit = 10;
+		public static final int kMainSuckerStallCurrentLimit = 12;
 
 		public static final double kMainSuckerSetpoint = .15;
 		public static final int kHasPieceThreshold = 1000;
