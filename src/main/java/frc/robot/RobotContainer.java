@@ -159,7 +159,10 @@ public class RobotContainer {
 		operatorController.button(5).onTrue(intakeSubsystem.toggleSideSucker());
 
 		// region Drive Commands
-		driverController.start().onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
+		DriveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
+		DriveJoystick.button(12).onTrue(new InstantCommand(() -> driveSubsystem.toggleFieldCentric()));
+		
+		
 
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(
