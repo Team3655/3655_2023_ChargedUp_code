@@ -18,7 +18,6 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.ArmPoseCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -36,12 +35,10 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Utils.JoystickUtils;
 import frc.robot.commands.ArmBumpCommand;
 import frc.robot.commands.ArmSwitchCommand;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPoses;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
 /**
@@ -55,7 +52,6 @@ import frc.robot.subsystems.LimelightSubsystem;
  */
 public class RobotContainer {
 
-	private Debouncer buttomDebouncer = new Debouncer(Units.millisecondsToSeconds(50), DebounceType.kBoth);
 
 	// The robot's subsystems and commands are defined here...
 	private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();

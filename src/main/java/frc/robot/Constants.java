@@ -55,7 +55,7 @@ public final class Constants {
 		public static final int kRearLeftTurningEncoderPort = 11;
 		public static final int kRearRightTurningEncoderPort = 12;
 
-		// Offset angle for absolute encoders (find this using REV client)
+		// Offset angle for absolute encoders (find this using CTRE client)
 		public static final double kFrontLeftAngleZero = 157.412;
 		public static final double kFrontRightAngleZero = 76.025;
 		public static final double kRearLeftAngleZero = -30.761;
@@ -211,14 +211,14 @@ public final class Constants {
 	public static class LimelightConstants {
 
 		// declare ID's of pipelines here
-		public static int kRetroReflectivePipeline = 0;
-		public static int kApriltagPipeline = 1;
+		public static final int kRetroReflectivePipeline = 0;
+		public static final int kApriltagPipeline = 1;
 
 		// Servo Constants
-		public static int kServoPort = 0;
+		public static final int kServoPort = 0;
 		// sets the offset of the sevo so the limelight is facing forward (double 0 - 1)
-		public static double kServoFrontPose = .76;
-		public static double kServoBackpose = 0;
+		public static final double kServoFrontPose = .76;
+		public static final double kServoBackpose = 0;
 
 	}
 

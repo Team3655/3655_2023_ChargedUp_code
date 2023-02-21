@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class DriveSubsystem extends SubsystemBase {
 
-	private boolean fieldRelative=true;
+	private boolean fieldRelative = true;
 
 	/** Creates a new DriveSubsystem. */
 	public DriveSubsystem() {
@@ -127,7 +127,6 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("2D Gyro", getHeading());
 		SmartDashboard.putNumber("2D X", getPose().getX());
 		SmartDashboard.putNumber("2D Y", getPose().getY());
-		
 
 	}
 
@@ -172,7 +171,7 @@ public class DriveSubsystem extends SubsystemBase {
 		// Apply deadbands to inputs
 		xSpeed *= maxSpeed;
 		ySpeed *= maxSpeed;
-		
+
 		rot *= DriveConstants.kMaxRPM;
 
 		var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
@@ -181,8 +180,8 @@ public class DriveSubsystem extends SubsystemBase {
 						: new ChassisSpeeds(xSpeed, ySpeed, rot));
 
 		SwerveDriveKinematics.desaturateWheelSpeeds(
-			swerveModuleStates,
-			ModuleConstants.kMaxModuleSpeedMetersPerSecond);
+				swerveModuleStates,
+				ModuleConstants.kMaxModuleSpeedMetersPerSecond);
 
 		frontLeft.setDesiredState(swerveModuleStates[0]);
 		frontRight.setDesiredState(swerveModuleStates[1]);
@@ -209,14 +208,14 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	public void zeroHeading() {
-			gyro.reset();
+		gyro.reset();
 	}
 
-	// public CommandBase toggleFieldCentric() {
-	// 	return runOnce(() -> {
-	// 		fieldRelative = !fieldRelative;
-	// 	});
-	// }
+	public CommandBase toggleFieldCentric() {
+		return runOnce(() -> {
+			fieldRelative = !fieldRelative;
+		});
+	}
 
 	// endregion
 
@@ -237,17 +236,17 @@ public class DriveSubsystem extends SubsystemBase {
 						new PIDController(
 								AutoConstants.PathPlannerP,
 								AutoConstants.PathPlannerI,
-								AutoConstants.PathPlannerD), 
+								AutoConstants.PathPlannerD),
 						new PIDController(
 								AutoConstants.PathPlannerP,
 								AutoConstants.PathPlannerI,
-								AutoConstants.PathPlannerD), 
+								AutoConstants.PathPlannerD),
 						new PIDController(
 								AutoConstants.PathPlannerTurnP,
 								AutoConstants.PathPlannerTurnI,
-								AutoConstants.PathPlannerTurnD), 
+								AutoConstants.PathPlannerTurnD),
 						this::setModuleStates, // Module states consumer
-						false, 
+						false,
 						this // Requires this drive subsystem
 				));
 	}
