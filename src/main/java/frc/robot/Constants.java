@@ -21,6 +21,10 @@ public final class Constants {
 
 	public static class ModuleConstants {
 
+		// Current limits for the wheels
+		public static final int kTurnMotorCurrentLimit = 15;
+		public static final int kDriveMotorCurrentLimit = 25;
+
 		// The max speed the modules are capable of
 		public static final double kMaxModuleSpeedMetersPerSecond = Units.feetToMeters(14.5);
 

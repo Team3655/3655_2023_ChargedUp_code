@@ -10,18 +10,9 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 import com.pathplanner.lib.server.PathPlannerServer;
 
-import frc.robot.subsystems.IntakeSubsystem;
-
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
-import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.ArmPoseCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -36,7 +27,6 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Utils.JoystickUtils;
 import frc.robot.commands.ArmBumpCommand;
 import frc.robot.commands.ArmSwitchCommand;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPoses;
 import frc.robot.subsystems.DriveSubsystem;
@@ -54,8 +44,6 @@ import frc.robot.subsystems.LimelightSubsystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
-	private Debouncer buttomDebouncer = new Debouncer(Units.millisecondsToSeconds(50), DebounceType.kBoth);
 
 	// The robot's subsystems and commands are defined here...
 	private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
@@ -175,7 +163,6 @@ public class RobotContainer {
 		DriveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
 		DriveJoystick.button(12).onTrue(new InstantCommand(() -> driveSubsystem.toggleFieldCentric()));
 		
-		
 
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(
@@ -183,23 +170,11 @@ public class RobotContainer {
 						() -> driveSubsystem.drive(
 								JoystickUtils.processJoystickInput(DriveJoystick.getRawAxis(1)),     // x axis
 								JoystickUtils.processJoystickInput(DriveJoystick.getRawAxis(0)),     // y axis
-								JoystickUtils.processJoystickInput(TurnJoystick.getRawAxis(0)),       // rot axis
+								JoystickUtils.processJoystickInput(TurnJoystick.getRawAxis(0)),      // rot axis
 								DriveJoystick.getHID().getRawButton(1),  // turbo boolean
 								DriveJoystick.getHID().getRawButton(2)), // sneak boolean
 						driveSubsystem));
 		// endregion
-	}
-
-	public double deadband(double rawAxis){
-		double deadband = 0;
-		double modifiedAxis = 0;
-		if(Math.abs(rawAxis) < deadband){
-			modifiedAxis = 0;
-		} else {
-			modifiedAxis = rawAxis;
-		}
-
-		return modifiedAxis;
 	}
 
 	/**
