@@ -105,7 +105,7 @@ public class RobotContainer {
 		PathPlannerTrajectory trajNewPath = PathPlanner.loadPath("New Path", new PathConstraints(3, 4));
 		PathPlannerTrajectory trajRotationTuningV2 = PathPlanner.loadPath("RotationTuningV2", new PathConstraints(2.5, 5));
 		// endregion 
-
+		autoChooser.setDefaultOption("Upath", trajUPath);
 		autoChooser.addOption("UPath", trajUPath);
 		autoChooser.addOption("Testing", trajTesting);
 		autoChooser.addOption("ChargedUpTest", trajChargedUpTest);
@@ -152,14 +152,18 @@ public class RobotContainer {
 		operatorController.button(11).onTrue(armSubsystem.toggleArmMotors());
 		operatorController.button(13).onTrue(armSubsystem.zeroArms());
 
-		operatorController.button(18).whileTrue(new ArmBumpCommand(1, 0, armSubsystem));
+		operatorController.button(18).whileTrue(new ArmBumpCommand(+5, 0, armSubsystem));
+		operatorController.button(20).whileTrue(new ArmBumpCommand(-5, 0, armSubsystem));
+
+		operatorController.button(17).whileTrue(new ArmBumpCommand(0, +5, armSubsystem));
+		operatorController.button(19).whileTrue(new ArmBumpCommand(0, -5, armSubsystem));
 		// endregion
 
 		// Sucking is set to be the defaut state of the intake
 		operatorController.button(10).onTrue(intakeSubsystem.stopSucking()).onFalse(intakeSubsystem.startSucking());
 		operatorController.button(5).onTrue(intakeSubsystem.toggleSideSucker());
 
-		
+
 		// region Drive Commands
 		DriveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
 		DriveJoystick.button(12).onTrue(new InstantCommand(() -> driveSubsystem.toggleFieldCentric()));

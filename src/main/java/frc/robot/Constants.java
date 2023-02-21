@@ -176,7 +176,7 @@ public final class Constants {
 		public static final int kMinorArmCurrentLimit = 15;
 
 		// speed limits for the arms
-		public static final double kMajorArmPIDOutputLimit = .5;
+		public static final double kMajorArmPIDOutputLimit = .45;
 		public static final double kMinorArmPIDOutputLimit = .4;
 
 		// angle limits for the arms (min will be set to -input)

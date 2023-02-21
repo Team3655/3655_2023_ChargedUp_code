@@ -33,7 +33,7 @@ public class ArmBumpCommand extends InstantCommand {
 						armSubsystem.getTargetTheta()[0] + majorArmBump,
 						armSubsystem.getTargetTheta()[1] + minorArmBump });
 
-		armSubsystem.setArmState(ArmPoses.DRIVER_CONTROL);
+		armSubsystem.ArmPoseCommand(ArmPoses.DRIVER_CONTROL);
 	}
 
 }
