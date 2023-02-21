@@ -142,7 +142,7 @@
           },
           "0,5": {
             "size": [
-              3,
+              2,
               1
             ],
             "content": {
@@ -153,7 +153,7 @@
               "_showGlyph": false
             }
           },
-          "3,5": {
+          "0,6": {
             "size": [
               2,
               1
@@ -166,7 +166,7 @@
               "_showGlyph": false
             }
           },
-          "5,5": {
+          "0,4": {
             "size": [
               2,
               1
@@ -179,7 +179,7 @@
               "_showGlyph": false
             }
           },
-          "5,6": {
+          "2,4": {
             "size": [
               2,
               2
@@ -364,10 +364,10 @@
               ]
             }
           },
-          "7,4": {
+          "2,6": {
             "size": [
               2,
-              3
+              2
             ],
             "content": {
               "_type": "List Layout",
@@ -486,10 +486,10 @@
               ]
             }
           },
-          "9,4": {
+          "4,4": {
             "size": [
               2,
-              2
+              3
             ],
             "content": {
               "_type": "Text View",
@@ -499,10 +499,10 @@
               "_showGlyph": false
             }
           },
-          "14,5": {
+          "4,7": {
             "size": [
-              3,
-              3
+              1,
+              1
             ],
             "content": {
               "_type": "Text View",
@@ -512,10 +512,10 @@
               "_showGlyph": false
             }
           },
-          "11,5": {
+          "5,7": {
             "size": [
-              3,
-              3
+              1,
+              1
             ],
             "content": {
               "_type": "Text View",
@@ -523,6 +523,118 @@
               "_title": "/SmartDashboard/PPSwerveControllerCommand/yErrorMeters",
               "_glyph": 148,
               "_showGlyph": false
+            }
+          },
+          "16,4": {
+            "size": [
+              2,
+              4
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Turn PID Output",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RR PID",
+                  "_title": "SmartDashboard/RR PID",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RL PID",
+                  "_title": "SmartDashboard/RL PID",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/FR PID",
+                  "_title": "SmartDashboard/FR PID",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          },
+          "14,4": {
+            "size": [
+              2,
+              4
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Turn FF",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/FL FF",
+                  "_title": "SmartDashboard/FL FF",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/FR FF",
+                  "_title": "SmartDashboard/FR FF",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RL FF",
+                  "_title": "SmartDashboard/RL FF",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          },
+          "6,4": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/RR FF",
+              "_title": "SmartDashboard/RR FF",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/RR FF": true
+            }
+          },
+          "10,4": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/FL PID",
+              "_title": "SmartDashboard/FL PID",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/FL PID": true
             }
           }
         }
@@ -1120,6 +1232,84 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/PPSwerveControllerCommand/rotationErrorDegrees",
               "_title": "PPSwerveControllerCommand/rotationErrorDegrees",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/FL FF",
+              "_title": "FL FF",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/FL PID",
+              "_title": "FL PID",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/FR FF",
+              "_title": "FR FF",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/FR PID",
+              "_title": "FR PID",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/RL FF",
+              "_title": "RL FF",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/RL PID",
+              "_title": "RL PID",
               "_glyph": 148,
               "_showGlyph": false
             }
