@@ -64,7 +64,9 @@ public class IntakeSubsystem extends SubsystemBase {
 		 */
 		mainPIDController = mainSucker.getPIDController();
 		mainPIDController.setP(IntakeConstants.kMainSuckerP);
-		mainPIDController.setOutputRange(0, IntakeConstants.kMainSuckerMaxOutput);		
+		mainPIDController.setOutputRange(0, IntakeConstants.kMainSuckerMaxOutput);
+		
+		mainSucker.set(IntakeConstants.kMainSuckerSetpoint);
 	}
 
 	@Override

@@ -163,15 +163,15 @@ public class RobotContainer {
 
 		// region Drive Commands
 		DriveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
-		DriveJoystick.button(12).onTrue(new InstantCommand(() -> driveSubsystem.toggleFieldCentric()));
+		DriveJoystick.button(12).onTrue(driveSubsystem.toggleFieldCentric());
 		
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								JoystickUtils.processJoystickInput(DriveJoystick.getX()), // x axis
-								JoystickUtils.processJoystickInput(DriveJoystick.getY()), // y axis
-								JoystickUtils.processJoystickInput(TurnJoystick.getY()),  // rot axis
+								JoystickUtils.processJoystickInput(DriveJoystick.getY()), // x axis
+								JoystickUtils.processJoystickInput(DriveJoystick.getX()), // y axis
+								JoystickUtils.processJoystickInput(TurnJoystick.getX()),  // rot axis
 								DriveJoystick.getHID().getRawButton(1),  // turbo boolean
 								DriveJoystick.getHID().getRawButton(2)), // sneak boolean
 						driveSubsystem));

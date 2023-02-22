@@ -26,7 +26,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
-
+import frc.robot.Constants;
 import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule extends SubsystemBase {
@@ -61,10 +61,6 @@ public class SwerveModule extends SubsystemBase {
 			2 * Math.PI * 60
 		));
 
-	// private final PIDController m_turningPIDController = new PIDController(
-	// 	ModuleConstants.kAngularPID[0],
-	// 	ModuleConstants.kAngularPID[1],
-	// 	ModuleConstants.kAngularPID[2]);
 
 	SimpleMotorFeedforward turnFeedForward = new SimpleMotorFeedforward(
 		ModuleConstants.ksTurning, ModuleConstants.kvTurning);
@@ -93,7 +89,7 @@ public class SwerveModule extends SubsystemBase {
 
 
 		// Initalize CANcoder
-		absoluteEncoder = new CANCoder(absoluteEncoderPort);
+		absoluteEncoder = new CANCoder(absoluteEncoderPort, Constants.kCanivoreCANBusName);
 		absoluteEncoder.configFactoryDefault();
 		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
@@ -190,10 +186,10 @@ public class SwerveModule extends SubsystemBase {
 
 
 		final var angularPIDOutput = m_turningPIDController.calculate(m_moduleAngleRadians, optimizedState.angle.getRadians());
-		final var angularFFOutput = turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
+		//final var angularFFOutput = turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
 
 
-		final var turnOutput = angularPIDOutput + angularFFOutput;
+		final var turnOutput = angularPIDOutput /*+ angularFFOutput*/;
 
 		turningMotor.setVoltage(turnOutput);
 
@@ -202,7 +198,7 @@ public class SwerveModule extends SubsystemBase {
 				ControlType.kVelocity);
 
 		SmartDashboard.putNumber(this.moduleName + " Optimized Angle", optimizedState.angle.getDegrees());
-		SmartDashboard.putNumber(this.moduleName + " FF", angularFFOutput);
+		// SmartDashboard.putNumber(this.moduleName + " FF", angularFFOutput);
 		SmartDashboard.putNumber(this.moduleName + " PID", angularPIDOutput);
 		SmartDashboard.putNumber(this.moduleName + " Turn Output", turnOutput);
 	}
