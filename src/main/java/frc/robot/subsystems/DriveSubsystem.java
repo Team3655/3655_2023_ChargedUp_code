@@ -151,6 +151,13 @@ public class DriveSubsystem extends SubsystemBase {
 	// endregion
 
 	// region setter
+
+	public void robotCentricDrive(double xSpeed, double ySpeed, double rot) {
+		setFieldCentric(false);
+		drive(xSpeed, ySpeed, rot);
+		setFieldCentric(true);
+	}
+
 	public void drive(double xSpeed, double ySpeed, double rot) {
 		drive(xSpeed, ySpeed, rot, true, false);
 	}
@@ -189,6 +196,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 	}
 
+	
 	public void setModuleStates(SwerveModuleState[] desiredStates) {
 		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
 
@@ -198,6 +206,7 @@ public class DriveSubsystem extends SubsystemBase {
 		rearRight.setDesiredState(desiredStates[3]);
 
 	}
+	
 
 	public void resetEncoders() {
 		frontLeft.resetEncoders();
@@ -214,6 +223,10 @@ public class DriveSubsystem extends SubsystemBase {
 		return runOnce(() -> {
 			fieldRelative = !fieldRelative;
 		});
+	}
+
+	public void setFieldCentric(boolean fieldCentric) {
+		fieldRelative = fieldCentric;
 	}
 
 	// endregion

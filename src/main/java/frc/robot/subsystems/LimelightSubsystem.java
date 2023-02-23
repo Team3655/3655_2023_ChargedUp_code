@@ -13,7 +13,7 @@ import frc.robot.Constants.LimelightConstants;
 
 public class LimelightSubsystem extends SubsystemBase {
 
-	private Limelight limelight;
+	public Limelight limelight;
 	private Servo LimeLightFlipper;
 
 	/** Creates a new LimelightSubsystem */
@@ -46,21 +46,6 @@ public class LimelightSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		limelight.updateAll();
-	}
-
-	/** Points the robots heading at the target by rotating the bot */
-	public void aimAtTarget() {
-		// TODO: finish method
-	}
-
-	/**
-	 * points the robot at the target by locking the heading and translating the bot
-	 * 
-	 * @param angle The heading to lock the robot to
-	 */
-	public void alignWithTarget(double headingDegrees) {
-		// TODO: finish method
 	}
 
 }

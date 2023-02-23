@@ -1,4 +1,4 @@
-package frc.robot.Objects.Helpers;
+package frc.robot.Utils.Helpers;
 
 class IKhelper {
 

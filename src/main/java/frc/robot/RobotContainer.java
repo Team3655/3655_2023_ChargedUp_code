@@ -7,13 +7,11 @@ package frc.robot;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPoint;
 import com.pathplanner.lib.server.PathPlannerServer;
 
 import frc.robot.commands.ExampleCommand;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.commands.LLAlignCommand;
+import frc.robot.commands.LLPuppydogCommand;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -52,10 +50,6 @@ public class RobotContainer {
 	private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
 	private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
-	// Replace with CommandPS4Controller or CommandJoystick if needed
-	//private final CommandXboxController driverController = new CommandXboxController(
-			//OperatorConstants.kDriverControllerPort);
-
 	private final CommandJoystick DriveJoystick = new CommandJoystick(OperatorConstants.kDriveJoystickPort);
 	private final CommandJoystick TurnJoystick = new CommandJoystick(OperatorConstants.kTurnJoystickPort);
 	private final CommandGenericHID operatorController = new CommandGenericHID(OperatorConstants.kOperatorControllerPort);
@@ -75,44 +69,15 @@ public class RobotContainer {
 		Shuffleboard.getTab("Autonomous").add(autoChooser);
 
 		// region Paths
-		PathPlannerTrajectory trajTesting = PathPlanner.generatePath(
-				new PathConstraints(1, 2),
-				new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)), // position,
-																												// heading
-				new PathPoint(new Translation2d(1.0, 1.0), Rotation2d.fromDegrees(45), Rotation2d.fromDegrees(0)),
-				new PathPoint(new Translation2d(2, 1), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
-				new PathPoint(new Translation2d(0, 1), Rotation2d.fromDegrees(180), Rotation2d.fromDegrees(0)),
-				new PathPoint(new Translation2d(2, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)) // position,
-																												// heading
-		);
-
-		PathPlannerTrajectory xtraj = PathPlanner.generatePath(
-				new PathConstraints(3, 4),
-				new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0)),
-				new PathPoint(new Translation2d(4, 0), Rotation2d.fromDegrees(0)));
-
-		PathPlannerTrajectory ytraj = PathPlanner.generatePath(
-				new PathConstraints(3, 4),
-				new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(-90)),
-				new PathPoint(new Translation2d(0, -4), Rotation2d.fromDegrees(-90)));
-
-		PathPlannerTrajectory trajRotationTuning = PathPlanner.generatePath(
-				new PathConstraints(1, 2),
-				new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
-				new PathPoint(new Translation2d(2, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(180)));
-
 		PathPlannerTrajectory trajUPath = PathPlanner.loadPath("Upath", new PathConstraints(2, 3));
 		PathPlannerTrajectory trajChargedUpTest = PathPlanner.loadPath("ChargedUpTest", new PathConstraints(3, 5));
 		PathPlannerTrajectory trajNewPath = PathPlanner.loadPath("New Path", new PathConstraints(3, 4));
 		PathPlannerTrajectory trajRotationTuningV2 = PathPlanner.loadPath("RotationTuningV2", new PathConstraints(2.5, 5));
 		// endregion 
+
 		autoChooser.setDefaultOption("Upath", trajUPath);
 		autoChooser.addOption("UPath", trajUPath);
-		autoChooser.addOption("Testing", trajTesting);
 		autoChooser.addOption("ChargedUpTest", trajChargedUpTest);
-		autoChooser.addOption("x Traj", xtraj);
-		autoChooser.addOption("y Traj", ytraj);
-		autoChooser.addOption("Rotation Tuning", trajRotationTuning);
 		autoChooser.addOption("New Path", trajNewPath);
 		autoChooser.addOption("Rotation Tuning V2", trajRotationTuningV2);
 	}
@@ -163,19 +128,25 @@ public class RobotContainer {
 		operatorController.button(5).onTrue(intakeSubsystem.toggleSideSucker());
 
 
+		//programmerController.leftBumper().whileTrue(new LLAlignCommand (limelightSubsystem, driveSubsystem));
+		DriveJoystick.button(3).whileTrue(new LLAlignCommand(limelightSubsystem, driveSubsystem));
+		//programmerController.rightBumper().whileTrue(new LLAlignCommand (limelightSubsystem, driveSubsystem));
+
 		// region Drive Commands
 		DriveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
 		DriveJoystick.button(12).onTrue(driveSubsystem.toggleFieldCentric());
 		programmerController.button(8).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
 		programmerController.button(6).onTrue(driveSubsystem.toggleFieldCentric());
+
+		DriveJoystick.povUp().whileTrue(new RunCommand(() -> driveSubsystem.robotCentricDrive(-0.05, 0, 0), driveSubsystem));
 		
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								-JoystickUtils.processJoystickInput(DriveJoystick.getY()) - JoystickUtils.processJoystickInput(programmerController.getLeftY()), // x axis
-								-JoystickUtils.processJoystickInput(DriveJoystick.getX()) - JoystickUtils.processJoystickInput(programmerController.getLeftX()), // y axis
-								-JoystickUtils.processJoystickInput(TurnJoystick.getX()) - JoystickUtils.processJoystickInput(programmerController.getRightX()),  // rot axis
+								JoystickUtils.processJoystickInput(DriveJoystick.getY()) - JoystickUtils.processJoystickInput(programmerController.getLeftY()), // x axis
+								JoystickUtils.processJoystickInput(DriveJoystick.getX()) - JoystickUtils.processJoystickInput(programmerController.getLeftX()), // y axis
+								JoystickUtils.processJoystickInput(TurnJoystick.getX()) - JoystickUtils.processJoystickInput(programmerController.getRightX()),  // rot axis
 								DriveJoystick.getHID().getRawButton(1),  // turbo boolean
 								DriveJoystick.getHID().getRawButton(2)), // sneak boolean
 						driveSubsystem));

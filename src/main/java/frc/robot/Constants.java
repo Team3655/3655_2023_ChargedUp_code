@@ -92,7 +92,7 @@ public final class Constants {
 		public static final double kMaxSpeedMetersPerSecond = 3.0;
 		public static final double kMaxTurboMetersPerSecond = 4.5;
 
-		public static final double kMaxRPM = 30;
+		public static final double kMaxRPM = 15;
 
 		public static final int kPigeonPort = 20;
 
@@ -105,7 +105,7 @@ public final class Constants {
 				new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //RL
 				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //RR
 
-		public static final boolean kGyroReversed = false;
+		public static final boolean kGyroReversed = true;
 
 	}
 
@@ -115,11 +115,11 @@ public final class Constants {
 	public static class AutoConstants {
 
 		// PID constants for path planner (these control drive direction not reaching target wheel speeds)
-		public static final double PathPlannerP = .5;
+		public static final double PathPlannerP = 4;
 		public static final double PathPlannerI = 0;
 		public static final double PathPlannerD = 0;
 
-		public static final double PathPlannerTurnP = .8;
+		public static final double PathPlannerTurnP = 22;
 		public static final double PathPlannerTurnI = 0;
 		public static final double PathPlannerTurnD = 0;
 
@@ -135,6 +135,7 @@ public final class Constants {
 		public static final int kDriveJoystickPort = 0;
 		public static final int kTurnJoystickPort = 1;
 		public static final int kOperatorControllerPort = 2;
+		public static final int kProgrammerControllerPort = 3;
 
 		public static final double KDeadBand = .125;
 		// this is the number that the joystick input will be raised to
@@ -176,7 +177,7 @@ public final class Constants {
 		public static final int kMinorArmCurrentLimit = 15;
 
 		// speed limits for the arms
-		public static final double kMajorArmPIDOutputLimit = .45;
+		public static final double kMajorArmPIDOutputLimit = .35;
 		public static final double kMinorArmPIDOutputLimit = .4;
 
 		// angle limits for the arms (min will be set to -input)
@@ -226,6 +227,11 @@ public final class Constants {
 		// sets the offset of the sevo so the limelight is facing forward (double 0 - 1)
 		public static final double kServoFrontPose = .76;
 		public static final double kServoBackpose = 0;
+
+		// piss values for limelight
+		public static final double LLP = 0.003;
+		public static final double LLI = 0.0005;
+		public static final double LLD = .00005;
 
 	}
 
