@@ -97,7 +97,7 @@ public class SwerveModule extends SubsystemBase {
 		absoluteEncoder.configFactoryDefault();
 		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-		//Timer.delay(2);
+		Timer.delay(1);
 		absoluteEncoder.configMagnetOffset(-1 * angleZero);
 		absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
 

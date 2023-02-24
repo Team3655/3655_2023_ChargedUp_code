@@ -10,7 +10,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Objects.Limelight;
-import frc.robot.Utils.Helpers.DoubleSmoother;
+import frc.robot.TractorToolbox.TractorParts.DoubleSmoother;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -24,26 +24,30 @@ public class LLPuppydogCommand extends CommandBase {
 	ProfiledPIDController LLTargetpidController;
 	PIDController LLDrivepidController;
 
-	DoubleSmoother driveOutput;
-	DoubleSmoother turnOutput;
+	DoubleSmoother driveOutputSmoother;
+	DoubleSmoother turnOutputSmoother;
 
 	/** Creates a new LLTargetCommand. */
 	public LLPuppydogCommand(LimelightSubsystem limelightSubsystem, DriveSubsystem driveSubsystem) {
 		// Use addRequirements() here to declare subsystem dependencies.
 
-		LLTargetpidController = new ProfiledPIDController(LimelightConstants.LLP, LimelightConstants.LLI,
-				LimelightConstants.LLD, new TrapezoidProfile.Constraints(40, 40));
-		LLTargetpidController.setTolerance(0	);
+		LLTargetpidController = new ProfiledPIDController(
+				LimelightConstants.LLPuppyTurnGains.kP,
+				LimelightConstants.LLPuppyTurnGains.kI,
+				LimelightConstants.LLPuppyTurnGains.kD,
+				new TrapezoidProfile.Constraints(40, 40));
 
-		LLDrivepidController = new PIDController(.5, 0.0001, 0.0005);
-		LLDrivepidController.setTolerance(0);
+		LLDrivepidController = new PIDController(
+				LimelightConstants.LLPuppyDriveGains.kP,
+				LimelightConstants.LLPuppyDriveGains.kI,
+				LimelightConstants.LLPuppyDriveGains.kD);
 
 		this.limelightSubsystem = limelightSubsystem;
 		this.driveSubsystem = driveSubsystem;
 		limelight = this.limelightSubsystem.limelight;
 
-		turnOutput = new DoubleSmoother(.4);
-		driveOutput = new DoubleSmoother(.5);
+		turnOutputSmoother = new DoubleSmoother(LimelightConstants.PuppyTurnMotionSmoothing);
+		driveOutputSmoother = new DoubleSmoother(LimelightConstants.PuppyDriveMotionSmoothing);
 
 		addRequirements(limelightSubsystem, driveSubsystem);
 	}
@@ -52,7 +56,7 @@ public class LLPuppydogCommand extends CommandBase {
 	@Override
 	public void initialize() {
 		driveSubsystem.setFieldCentric(false);
-		//limelight.enableTracking();
+		limelight.setLedMode(0);
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -62,7 +66,10 @@ public class LLPuppydogCommand extends CommandBase {
 			double turnPIDOutput = LLTargetpidController.calculate(limelight.getX(), 0);
 			double drivePIDOutput = LLDrivepidController.calculate(limelight.getArea(), .5);
 
-			driveSubsystem.drive(driveOutput.smoothInput(drivePIDOutput), 0, -turnOutput.smoothInput(turnPIDOutput));
+			double turnOutput = turnOutputSmoother.smoothInput(turnPIDOutput);
+			double driveOutput = driveOutputSmoother.smoothInput(drivePIDOutput);
+
+			driveSubsystem.drive(driveOutput, 0, -turnOutput);
 		} else {
 			driveSubsystem.drive(0, 0, 0);
 		}
@@ -72,7 +79,7 @@ public class LLPuppydogCommand extends CommandBase {
 	@Override
 	public void end(boolean interrupted) {
 		driveSubsystem.setFieldCentric(true);
-		//limelight.disableTracking();
+		limelight.setLedMode(1);
 	}
 
 	// Returns true when the command should end.

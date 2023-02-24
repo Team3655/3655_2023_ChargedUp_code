@@ -30,7 +30,7 @@ public class Limelight {
 	NetworkTableEntry solvePNP;
 	double[] defaultArray = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 
-	public void GetLimelightValues() {
+	public Limelight() {
 
 		limelight = NetworkTableInstance.getDefault().getTable("limelight");// Instantiate the tables
 		tx = limelight.getEntry("tx");

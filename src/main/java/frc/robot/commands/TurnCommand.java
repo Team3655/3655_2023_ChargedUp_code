@@ -22,9 +22,9 @@ public class TurnCommand extends PIDCommand {
 	public TurnCommand(double targetAngleDegrees, DriveSubsystem driveSubsystem) {
 		super(
 				new PIDController(
-						AutoConstants.PathPlannerTurnP,
-						AutoConstants.PathPlannerTurnI,
-						AutoConstants.PathPlannerTurnD),
+						.0001,
+						0,
+						0.00005),
 				// Close loop on heading
 				driveSubsystem::getHeading,
 				// Set reference to target
@@ -45,6 +45,6 @@ public class TurnCommand extends PIDCommand {
 	@Override
 	public boolean isFinished() {
 		// End when the controller is at the reference.
-		return getController().atSetpoint();
+		return false;
 	}
 }

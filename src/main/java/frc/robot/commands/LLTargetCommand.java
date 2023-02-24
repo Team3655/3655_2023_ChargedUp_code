@@ -23,10 +23,12 @@ public class LLTargetCommand extends CommandBase {
 	/** Creates a new LLTargetCommand. */
 	public LLTargetCommand(LimelightSubsystem limelightSubsystem, DriveSubsystem driveSubsystem) {
 		// Use addRequirements() here to declare subsystem dependencies.
-		
-		LLTargetpidController = new PIDController(LimelightConstants.LLP, LimelightConstants.LLI, LimelightConstants.LLD);
-		LLTargetpidController.setTolerance(0);
 
+		LLTargetpidController = new PIDController(
+				LimelightConstants.LLTargetGains.kP,
+				LimelightConstants.LLTargetGains.kP,
+				LimelightConstants.LLTargetGains.kP);
+		LLTargetpidController.setTolerance(0);
 
 		this.limelightSubsystem = limelightSubsystem;
 		this.driveSubsystem = driveSubsystem;

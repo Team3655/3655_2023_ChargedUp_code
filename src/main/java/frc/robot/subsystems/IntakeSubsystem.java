@@ -79,6 +79,7 @@ public class IntakeSubsystem extends SubsystemBase {
 		return runOnce(
 				() -> {
 					mainSucker.set(0);
+					enableSideSucker();
 				});
 	}
 
@@ -86,6 +87,7 @@ public class IntakeSubsystem extends SubsystemBase {
 		return runOnce(
 				() -> {
 					mainSucker.set(IntakeConstants.kMainSuckerSetpoint);
+					disableSideSucker();
 				});
 	}
 
@@ -93,11 +95,19 @@ public class IntakeSubsystem extends SubsystemBase {
 		return runOnce(
 				() -> {
 					if (pdh.getSwitchableChannel()) {
-						pdh.setSwitchableChannel(false);
+						disableSideSucker();
 					} else {
-						pdh.setSwitchableChannel(true);
+						enableSideSucker();
 					}
 				});
+	}
+
+	public void disableSideSucker() {
+		pdh.setSwitchableChannel(false);
+	}
+
+	public void enableSideSucker() {
+		pdh.setSwitchableChannel(true);
 	}
 
 	// endregion

@@ -124,7 +124,7 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("RL Meters", rearLeft.getDistanceMeters());
 		SmartDashboard.putNumber("RR Meters", rearRight.getDistanceMeters());
 
-		SmartDashboard.putNumber("2D Gyro", getHeading());
+		SmartDashboard.putNumber("2D Gyro", getHeading360());
 		SmartDashboard.putNumber("2D X", getPose().getX());
 		SmartDashboard.putNumber("2D Y", getPose().getY());
 	}
@@ -132,6 +132,10 @@ public class DriveSubsystem extends SubsystemBase {
 	// region getters
 	public double getHeading() {
 		return gyro.getRotation2d().getDegrees();
+	}
+
+	public double getHeading360() {
+		return (gyro.getRotation2d().getDegrees() % 360);
 	}
 
 	public double getTurnRate() {

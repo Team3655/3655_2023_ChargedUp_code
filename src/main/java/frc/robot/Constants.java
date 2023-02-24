@@ -6,7 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+
+import frc.robot.TractorToolbox.TractorParts.PIDGains;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -123,6 +126,9 @@ public final class Constants {
 		public static final double PathPlannerTurnI = 0;
 		public static final double PathPlannerTurnD = 0;
 
+		public static final PIDGains kTurnCommandGains = new PIDGains(.01, 0, 0);
+		public static final double kTurnCommandMaxVelocity = 1;
+		public static final double kTurnCommandMaxAcceleration = 1;
 		public static final double kTurnCommandToleranceDeg = 5;
 		public static final double kTurnCommandRateToleranceDegPerS = 0;
 
@@ -229,9 +235,17 @@ public final class Constants {
 		public static final double kServoBackpose = 0;
 
 		// piss values for limelight
-		public static final double LLP = 0.003;
-		public static final double LLI = 0.0005;
-		public static final double LLD = .00005;
+		public static final PIDGains LLTargetGains = new PIDGains(0.008, 0, 0); // TODO: gains for target command
+
+		public static final PIDGains LLPuppyTurnGains = new PIDGains(0.008, 0, 0); // TODO: gains for puppydog command
+		public static final PIDGains LLPuppyDriveGains = new PIDGains(0.008, 0, 0);
+		public static final double PuppyTurnMotionSmoothing = 0.3;
+		public static final double PuppyDriveMotionSmoothing = 0.4;
+
+		public static final PIDGains LLAlignDriveGains = new PIDGains(.04, 0.0003, 0.0005); // TODO: gains for align command
+		public static final PIDGains LLAlignStrafeGains = new PIDGains(.8, 0.0001, 0.0005);
+		public static final double AlignDriveMotionSmoothing = .2;
+		public static final double AlignStrafeMotionSmoothing = .15;
 
 	}
 
