@@ -26,8 +26,8 @@ public class LLTargetCommand extends CommandBase {
 
 		LLTargetpidController = new PIDController(
 				LimelightConstants.LLTargetGains.kP,
-				LimelightConstants.LLTargetGains.kP,
-				LimelightConstants.LLTargetGains.kP);
+				LimelightConstants.LLTargetGains.kI,
+				LimelightConstants.LLTargetGains.kD);
 		LLTargetpidController.setTolerance(0);
 
 		this.limelightSubsystem = limelightSubsystem;

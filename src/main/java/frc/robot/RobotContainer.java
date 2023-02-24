@@ -51,8 +51,8 @@ public class RobotContainer {
 	private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
 	private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
-	private final CommandJoystick DriveJoystick = new CommandJoystick(OperatorConstants.kDriveJoystickPort);
-	private final CommandJoystick TurnJoystick = new CommandJoystick(OperatorConstants.kTurnJoystickPort);
+	private final CommandJoystick driveJoystick = new CommandJoystick(OperatorConstants.kDriveJoystickPort);
+	private final CommandJoystick turnJoystick = new CommandJoystick(OperatorConstants.kTurnJoystickPort);
 	private final CommandGenericHID operatorController = new CommandGenericHID(
 			OperatorConstants.kOperatorControllerPort);
 	private final CommandXboxController programmerController = new CommandXboxController(
@@ -132,37 +132,37 @@ public class RobotContainer {
 		operatorController.button(5).onTrue(intakeSubsystem.toggleSideSucker());
 
 		// region Targeting Commmands
-		DriveJoystick.button(3).whileTrue(new LLAlignCommand(limelightSubsystem, driveSubsystem));
+		driveJoystick.button(3).whileTrue(new LLAlignCommand(limelightSubsystem, driveSubsystem));
 		programmerController.a().whileTrue(new LLAlignCommand(limelightSubsystem, driveSubsystem));
 		programmerController.b().whileTrue(new LLPuppydogCommand(limelightSubsystem, driveSubsystem));
 		programmerController.x().whileTrue(new ProfiledTurnCommand(0, driveSubsystem));
 		// endregion
 
 		// region Drive Commands
-		DriveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
-		DriveJoystick.button(12).onTrue(driveSubsystem.toggleFieldCentric());
+		driveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
+		driveJoystick.button(12).onTrue(driveSubsystem.toggleFieldCentric());
 
 		programmerController.button(8).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
 		programmerController.button(6).onTrue(driveSubsystem.toggleFieldCentric());
 
-		DriveJoystick.povUp().whileTrue(
+		driveJoystick.povUp().whileTrue(
 				new RunCommand(() -> driveSubsystem.robotCentricDrive(-0.05, 0, 0), driveSubsystem));
-		DriveJoystick.povDown().whileTrue(
+		driveJoystick.povDown().whileTrue(
 				new RunCommand(() -> driveSubsystem.robotCentricDrive(0.05, 0, 0), driveSubsystem));
 
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								JoystickUtils.processJoystickInput(DriveJoystick.getY())
+								JoystickUtils.processJoystickInput(driveJoystick.getY())
 										- JoystickUtils.processJoystickInput(programmerController.getLeftY()), // x axis
-								JoystickUtils.processJoystickInput(DriveJoystick.getX())
+								JoystickUtils.processJoystickInput(driveJoystick.getX())
 										- JoystickUtils.processJoystickInput(programmerController.getLeftX()), // y axis
-								JoystickUtils.processJoystickInput(TurnJoystick.getX())
+								JoystickUtils.processJoystickInput(turnJoystick.getX())
 										- JoystickUtils.processJoystickInput(programmerController.getRightX()), // rot
 																												// axis
-								DriveJoystick.getHID().getRawButton(1), // turbo boolean
-								DriveJoystick.getHID().getRawButton(2)), // sneak boolean
+								driveJoystick.getHID().getRawButton(1), // turbo boolean
+								driveJoystick.getHID().getRawButton(2)), // sneak boolean
 						driveSubsystem));
 		// endregion
 	}
