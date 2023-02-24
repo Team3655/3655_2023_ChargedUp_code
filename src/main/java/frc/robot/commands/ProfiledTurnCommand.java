@@ -20,9 +20,9 @@ public class ProfiledTurnCommand extends ProfiledPIDCommand {
 				// The ProfiledPIDController used by the command
 				new ProfiledPIDController(
 						// The PID gains
-						0.01,
-						0,
-						0,
+						AutoConstants.kTurnCommandGains.kP,
+						AutoConstants.kTurnCommandGains.kI,
+						AutoConstants.kTurnCommandGains.kD,
 						// The motion profile constraints
 						new TrapezoidProfile.Constraints(100, 100)),
 				// This should return the measurement

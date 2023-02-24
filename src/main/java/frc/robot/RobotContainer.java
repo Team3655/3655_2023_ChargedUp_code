@@ -9,11 +9,9 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.server.PathPlannerServer;
 
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.LLAlignCommand;
 import frc.robot.commands.LLPuppydogCommand;
 import frc.robot.commands.ProfiledTurnCommand;
-import frc.robot.commands.TurnCommand;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -133,9 +131,10 @@ public class RobotContainer {
 
 		// region Targeting Commmands
 		driveJoystick.button(3).whileTrue(new LLAlignCommand(limelightSubsystem, driveSubsystem));
+		driveJoystick.button(4).whileTrue(new ProfiledTurnCommand(180, driveSubsystem));
 		programmerController.a().whileTrue(new LLAlignCommand(limelightSubsystem, driveSubsystem));
 		programmerController.b().whileTrue(new LLPuppydogCommand(limelightSubsystem, driveSubsystem));
-		programmerController.x().whileTrue(new ProfiledTurnCommand(0, driveSubsystem));
+		programmerController.x().whileTrue(new ProfiledTurnCommand(180, driveSubsystem));
 		// endregion
 
 		// region Drive Commands

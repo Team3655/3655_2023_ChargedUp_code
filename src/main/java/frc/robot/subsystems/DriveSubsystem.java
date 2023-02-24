@@ -10,6 +10,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Objects.SwerveModule;
 
+import java.security.GeneralSecurityException;
+
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -17,12 +19,14 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -33,63 +37,90 @@ public class DriveSubsystem extends SubsystemBase {
 
 	private boolean fieldRelative = true;
 	private boolean gyroTurning = false;
+	private double targetRotationDegrees;
+
+	private final SwerveModule frontLeft;
+	private final SwerveModule frontRight;
+	private final SwerveModule rearLeft;
+	private final SwerveModule rearRight;
+
+	private SwerveModulePosition[] swervePosition;
+
+	// Initalizing the gyro sensor
+	private final WPI_Pigeon2 gyro;
+
+	// Odeometry class for tracking robot pose
+	SwerveDriveOdometry odometry;
+
+	// PID controller for gyro turning
+	private ProfiledPIDController gyroTurnPidController;
 
 	/** Creates a new DriveSubsystem. */
 	public DriveSubsystem() {
 
+		frontLeft = new SwerveModule(
+				"FL",
+				ModuleConstants.kFrontLeftDriveMotorPort,
+				ModuleConstants.kFrontLeftTurningMotorPort,
+				ModuleConstants.kFrontLeftTurningEncoderPort,
+				ModuleConstants.kFrontLeftAngleZero,
+				ModuleConstants.kAngularPID,
+				ModuleConstants.kDrivePID);
+
+		frontRight = new SwerveModule(
+				"FR",
+				ModuleConstants.kFrontRightDriveMotorPort,
+				ModuleConstants.kFrontRightTurningMotorPort,
+				ModuleConstants.kFrontRightTurningEncoderPort,
+				ModuleConstants.kFrontRightAngleZero,
+				ModuleConstants.kAngularPID,
+				ModuleConstants.kDrivePID);
+
+		rearLeft = new SwerveModule(
+				"RL",
+				ModuleConstants.kRearLeftDriveMotorPort,
+				ModuleConstants.kRearLeftTurningMotorPort,
+				ModuleConstants.kRearLeftTurningEncoderPort,
+				ModuleConstants.kRearLeftAngleZero,
+				ModuleConstants.kAngularPID,
+				ModuleConstants.kDrivePID);
+
+		rearRight = new SwerveModule(
+				"RR",
+				ModuleConstants.kRearRightDriveMotorPort,
+				ModuleConstants.kRearRightTurningMotorPort,
+				ModuleConstants.kRearRightTurningEncoderPort,
+				ModuleConstants.kRearRightAngleZero,
+				ModuleConstants.kAngularPID,
+				ModuleConstants.kDrivePID);
+
+		swervePosition = new SwerveModulePosition[] {
+				frontLeft.getPosition(),
+				frontRight.getPosition(),
+				rearLeft.getPosition(),
+				rearRight.getPosition()
+		};
+
+		gyro = new WPI_Pigeon2(DriveConstants.kPigeonPort, Constants.kCanivoreCANBusName);
+
+		odometry = new SwerveDriveOdometry(
+				DriveConstants.kDriveKinematics,
+				gyro.getRotation2d(),
+				swervePosition);
+
+		gyroTurnPidController = new ProfiledPIDController(
+				DriveConstants.kGyroTurningGains.kP,
+				DriveConstants.kGyroTurningGains.kI,
+				DriveConstants.kGyroTurningGains.kD,
+				new TrapezoidProfile.Constraints(
+						DriveConstants.kMaxTurningVelocityDegrees,
+						DriveConstants.kMaxTurningAcceleratonDegrees));
+
+		gyroTurnPidController.enableContinuousInput(-180, 180);
+		gyroTurnPidController.setTolerance(DriveConstants.kGyroTurnTolerance);
+
+		targetRotationDegrees = 0;
 	}
-
-	private final SwerveModule frontLeft = new SwerveModule(
-			"FL",
-			ModuleConstants.kFrontLeftDriveMotorPort,
-			ModuleConstants.kFrontLeftTurningMotorPort,
-			ModuleConstants.kFrontLeftTurningEncoderPort,
-			ModuleConstants.kFrontLeftAngleZero,
-			ModuleConstants.kAngularPID,
-			ModuleConstants.kDrivePID);
-
-	private final SwerveModule frontRight = new SwerveModule(
-			"FR",
-			ModuleConstants.kFrontRightDriveMotorPort,
-			ModuleConstants.kFrontRightTurningMotorPort,
-			ModuleConstants.kFrontRightTurningEncoderPort,
-			ModuleConstants.kFrontRightAngleZero,
-			ModuleConstants.kAngularPID,
-			ModuleConstants.kDrivePID);
-
-	private final SwerveModule rearLeft = new SwerveModule(
-			"RL",
-			ModuleConstants.kRearLeftDriveMotorPort,
-			ModuleConstants.kRearLeftTurningMotorPort,
-			ModuleConstants.kRearLeftTurningEncoderPort,
-			ModuleConstants.kRearLeftAngleZero,
-			ModuleConstants.kAngularPID,
-			ModuleConstants.kDrivePID);
-
-	private final SwerveModule rearRight = new SwerveModule(
-			"RR",
-			ModuleConstants.kRearRightDriveMotorPort,
-			ModuleConstants.kRearRightTurningMotorPort,
-			ModuleConstants.kRearRightTurningEncoderPort,
-			ModuleConstants.kRearRightAngleZero,
-			ModuleConstants.kAngularPID,
-			ModuleConstants.kDrivePID);
-
-	private SwerveModulePosition[] swervePosition = new SwerveModulePosition[] {
-			frontLeft.getPosition(),
-			frontRight.getPosition(),
-			rearLeft.getPosition(),
-			rearRight.getPosition()
-	};
-
-	// Initalizing the gyro sensor
-	private final WPI_Pigeon2 gyro = new WPI_Pigeon2(DriveConstants.kPigeonPort, Constants.kCanivoreCANBusName);
-
-	// Odeometry class for tracking robot pose
-	SwerveDriveOdometry odometry = new SwerveDriveOdometry(
-			DriveConstants.kDriveKinematics,
-			gyro.getRotation2d(),
-			swervePosition);
 
 	@Override
 	public void periodic() {
@@ -167,7 +198,7 @@ public class DriveSubsystem extends SubsystemBase {
 		drive(xSpeed, ySpeed, rot, true, false);
 	}
 
-	public void drive(double xSpeed, double ySpeed, double rot, boolean isTurbo, Boolean isSneak) {
+	public void drive(double xSpeed, double ySpeed, double rot, boolean isTurbo, boolean isSneak) {
 
 		double maxSpeed;
 
@@ -183,7 +214,12 @@ public class DriveSubsystem extends SubsystemBase {
 		xSpeed *= maxSpeed;
 		ySpeed *= maxSpeed;
 
-		rot *= DriveConstants.kMaxRPM;
+		if (gyroTurning) {
+			targetRotationDegrees += rot;
+			rot = gyroTurnPidController.calculate(getHeading360(), targetRotationDegrees);
+		} else {
+			rot *= DriveConstants.kMaxRPM;
+		}
 
 		var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
 				fieldRelative
@@ -201,7 +237,6 @@ public class DriveSubsystem extends SubsystemBase {
 
 	}
 
-	
 	public void setModuleStates(SwerveModuleState[] desiredStates) {
 		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
 
@@ -211,7 +246,6 @@ public class DriveSubsystem extends SubsystemBase {
 		rearRight.setDesiredState(desiredStates[3]);
 
 	}
-	
 
 	public void resetEncoders() {
 		frontLeft.resetEncoders();

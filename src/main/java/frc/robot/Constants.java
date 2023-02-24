@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -90,7 +92,7 @@ public final class Constants {
 	public static class DriveConstants {
 
 		// TODO: Change max speed
-		public static final double kMaxSneakMetersPerSecond = 1.5;
+		public static final double kMaxSneakMetersPerSecond = 1.;
 		public static final double kMaxSpeedMetersPerSecond = 3.0;
 		public static final double kMaxTurboMetersPerSecond = 4.5;
 
@@ -108,6 +110,13 @@ public final class Constants {
 				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //RR
 
 		public static final boolean kGyroReversed = true;
+		public static final boolean kFeildCentric = true;
+		public static final boolean kGyroTuring = false;
+
+		public static final PIDGains kGyroTurningGains = new PIDGains(.025, 0, 0);
+		public static final double kMaxTurningVelocityDegrees = 20;
+		public static final double kMaxTurningAcceleratonDegrees = 10;	
+		public static final double kGyroTurnTolerance = 2;
 
 	}
 
@@ -125,7 +134,7 @@ public final class Constants {
 		public static final double PathPlannerTurnI = 0;
 		public static final double PathPlannerTurnD = 0;
 
-		public static final PIDGains kTurnCommandGains = new PIDGains(.01, 0, 0);
+		public static final PIDGains kTurnCommandGains = new PIDGains(.02, 0, 0);
 		public static final double kTurnCommandMaxVelocity = 1;
 		public static final double kTurnCommandMaxAcceleration = 1;
 		public static final double kTurnCommandToleranceDeg = 5;
@@ -241,10 +250,11 @@ public final class Constants {
 		public static final double PuppyTurnMotionSmoothing = 0.3;
 		public static final double PuppyDriveMotionSmoothing = 0.4;
 
-		public static final PIDGains LLAlignDriveGains = new PIDGains(.04, 0.0003, 0.0005); // TODO: gains for align command
-		public static final PIDGains LLAlignStrafeGains = new PIDGains(.8, 0.0001, 0.0005);
-		public static final double AlignDriveMotionSmoothing = .2;
-		public static final double AlignStrafeMotionSmoothing = .15;
+		
+		public static final PIDGains LLAlignStrafeGains = new PIDGains(.04, 0.0015, 0.001);
+		public static final PIDGains LLAlignDriveGains = new PIDGains(.8, 0.0003, 0.0005); // TODO: gains for align command
+		public static final double AlignDriveMotionSmoothing = .35;
+		public static final double AlignStrafeMotionSmoothing = .2;
 
 	}
 
