@@ -10,8 +10,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Objects.SwerveModule;
 
-import java.security.GeneralSecurityException;
-
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import com.pathplanner.lib.PathPlannerTrajectory;

@@ -66,6 +66,9 @@ public class ArmSegment {
 		rightPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
 		leftPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
 
+		rightPIDController.setSmartMotionMaxAccel(5, 0);
+		leftPIDController.setSmartMotionMaxAccel(5, 0);
+
 		// rightPIDController.setSmartMotionMaxVelocity(.00001, 0);
 		// leftPIDController.setSmartMotionMaxVelocity(.00001, 0);
 

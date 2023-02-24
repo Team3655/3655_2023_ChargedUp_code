@@ -39,18 +39,11 @@ public class SwerveModule extends SubsystemBase {
 	private final RelativeEncoder angularEncoder;
 	private final RelativeEncoder driveEncoder;
 
-	private final SparkMaxPIDController angularPID;
 	private final SparkMaxPIDController drivePID;
 
 	public final double angleZero;
 
 	private final String moduleName;
-
-
-	private final PIDController turningPIDController = new PIDController(
-		ModuleConstants.kAngularPID[0],
-		ModuleConstants.kAngularPID[1],
-		ModuleConstants.kAngularPID[2]);
 
 	private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
 		ModuleConstants.kAngularPID[0],
@@ -117,11 +110,6 @@ public class SwerveModule extends SubsystemBase {
 						* (1d / 60d)); // meters per second
 
 		// Initialize PID's
-		this.angularPID = turningMotor.getPIDController();
-		// this.angularPID.setP(angularPID[0]);
-		// this.angularPID.setI(angularPID[1]);
-		// this.angularPID.setD(angularPID[2]);
-
 		this.drivePID = driveMotor.getPIDController();
 		this.drivePID.setP(drivePID[0]);
 		this.drivePID.setI(drivePID[1]);
