@@ -10,7 +10,6 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 import com.pathplanner.lib.server.PathPlannerServer;
 
-import frc.robot.commands.ExampleCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -58,6 +57,7 @@ public class RobotContainer {
 	private final CommandJoystick DriveJoystick = new CommandJoystick(OperatorConstants.kDriveJoystickPort);
 	private final CommandJoystick TurnJoystick = new CommandJoystick(OperatorConstants.kTurnJoystickPort);
 	private final CommandGenericHID operatorController = new CommandGenericHID(OperatorConstants.kOperatorControllerPort);
+	private final CommandXboxController programmerController = new CommandXboxController(OperatorConstants.kProgrammerControllerPort);
 
 	private SendableChooser<PathPlannerTrajectory> autoChooser = new SendableChooser<>();
 
@@ -99,12 +99,12 @@ public class RobotContainer {
 				new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
 				new PathPoint(new Translation2d(2, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(180)));
 
-		PathPlannerTrajectory trajUPath = PathPlanner.loadPath("Upath", new PathConstraints(2, 3));
+		PathPlannerTrajectory trajUPath = PathPlanner.loadPath("UPath", new PathConstraints(2, 3));
 		PathPlannerTrajectory trajChargedUpTest = PathPlanner.loadPath("ChargedUpTest", new PathConstraints(3, 5));
 		PathPlannerTrajectory trajNewPath = PathPlanner.loadPath("New Path", new PathConstraints(3, 4));
 		PathPlannerTrajectory trajRotationTuningV2 = PathPlanner.loadPath("RotationTuningV2", new PathConstraints(2.5, 5));
 		// endregion 
-		autoChooser.setDefaultOption("Upath", trajUPath);
+		autoChooser.setDefaultOption("UPath", trajUPath);
 		autoChooser.addOption("UPath", trajUPath);
 		autoChooser.addOption("Testing", trajTesting);
 		autoChooser.addOption("ChargedUpTest", trajChargedUpTest);
@@ -164,14 +164,16 @@ public class RobotContainer {
 		// region Drive Commands
 		DriveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
 		DriveJoystick.button(12).onTrue(driveSubsystem.toggleFieldCentric());
+		programmerController.button(8).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
+		programmerController.button(6).onTrue(driveSubsystem.toggleFieldCentric());
 		
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								JoystickUtils.processJoystickInput(DriveJoystick.getY()), // x axis
-								JoystickUtils.processJoystickInput(DriveJoystick.getX()), // y axis
-								JoystickUtils.processJoystickInput(TurnJoystick.getX()),  // rot axis
+								-JoystickUtils.processJoystickInput(DriveJoystick.getY()) - JoystickUtils.processJoystickInput(programmerController.getLeftY()), // x axis
+								-JoystickUtils.processJoystickInput(DriveJoystick.getX()) - JoystickUtils.processJoystickInput(programmerController.getLeftX()), // y axis
+								-JoystickUtils.processJoystickInput(TurnJoystick.getX()) - JoystickUtils.processJoystickInput(programmerController.getRightX()),  // rot axis
 								DriveJoystick.getHID().getRawButton(1),  // turbo boolean
 								DriveJoystick.getHID().getRawButton(2)), // sneak boolean
 						driveSubsystem));

@@ -60,18 +60,18 @@ public final class Constants {
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// Offset angle for absolute encoders (find this using CTRE client)
-		public static final double kFrontLeftAngleZero = 157.412;
-		public static final double kFrontRightAngleZero = 76.025;
-		public static final double kRearLeftAngleZero = -30.761;
-		public static final double kRearRightAngleZero = -23.642;
+		public static final double kFrontLeftAngleZero = 62.578; 
+		public static final double kFrontRightAngleZero = -49.395; 
+		public static final double kRearLeftAngleZero = -32.520; 
+		public static final double kRearRightAngleZero = -8.262;
 
 		public static final double kModuleDriveControllerP = .1;
 		public static final double kModuleDriveControllerI = 0;
 		public static final double kModuleDriveControllerD = 0; 
 
-		public static final double kModuleTurningControllerP = 6.5;
-		public static final double kModuleTurningControllerI = 0.25;
-		public static final double kModuleTurningControllerD = 0.15;
+		public static final double kModuleTurningControllerP = 6;
+		public static final double kModuleTurningControllerI = 0;
+		public static final double kModuleTurningControllerD = 0;
 
 		// SPARK MAX Angular PID values
 		public static double[] kAngularPID = {
@@ -96,8 +96,8 @@ public final class Constants {
 
 		public static final int kPigeonPort = 20;
 
-		public static final double kTrackWidth = Units.inchesToMeters(20); // in meters!
-		public static final double kWheelBase = Units.inchesToMeters(20); // in meters!
+		public static final double kTrackWidth = Units.inchesToMeters(24.5); // in meters!
+		public static final double kWheelBase = Units.inchesToMeters(24.5); // in meters!
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
 				new Translation2d(kWheelBase / 2, kTrackWidth / 2), //FL
@@ -115,11 +115,11 @@ public final class Constants {
 	public static class AutoConstants {
 
 		// PID constants for path planner (these control drive direction not reaching target wheel speeds)
-		public static final double PathPlannerP = .5;
+		public static final double PathPlannerP = .21;
 		public static final double PathPlannerI = 0;
 		public static final double PathPlannerD = 0;
 
-		public static final double PathPlannerTurnP = .8;
+		public static final double PathPlannerTurnP = 5;
 		public static final double PathPlannerTurnI = 0;
 		public static final double PathPlannerTurnD = 0;
 
@@ -135,6 +135,7 @@ public final class Constants {
 		public static final int kDriveJoystickPort = 0;
 		public static final int kTurnJoystickPort = 1;
 		public static final int kOperatorControllerPort = 2;
+		public static final int kProgrammerControllerPort = 3;
 
 		public static final double KDeadBand = .125;
 		// this is the number that the joystick input will be raised to
@@ -231,6 +232,6 @@ public final class Constants {
 
 	public static final String kRioCANBusName = "rio";
 
-	public static final String kCanivoreCANBusName = "canivore";
+	public static final String kCanivoreCANBusName = "rio";
 
 }
