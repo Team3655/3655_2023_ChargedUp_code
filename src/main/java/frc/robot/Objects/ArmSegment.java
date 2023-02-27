@@ -31,6 +31,7 @@ public class ArmSegment {
 
 	private boolean isRunning;
 
+
 	// endregion
 
 	public ArmSegment(int rightPort, int leftPort, double gearRatio, Boolean invertLeft) {
@@ -68,9 +69,6 @@ public class ArmSegment {
 
 		rightPIDController.setSmartMotionMaxAccel(5, 0);
 		leftPIDController.setSmartMotionMaxAccel(5, 0);
-
-		// rightPIDController.setSmartMotionMaxVelocity(.00001, 0);
-		// leftPIDController.setSmartMotionMaxVelocity(.00001, 0);
 
 		// Encoder object created to display position values
 		rightEncoder = rightMotor.getEncoder();

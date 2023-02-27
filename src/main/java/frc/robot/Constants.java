@@ -36,7 +36,7 @@ public final class Constants {
 
 		public static final double kwheelCircumference = Units.inchesToMeters(4) * Math.PI;
 
-		// TODO: Set feedforward values for drive
+		// TODO: Set feedforward values for turning
 		public static final double ksVolts = .1;
 		public static final double kDriveFeedForward = .2;
 
@@ -89,8 +89,7 @@ public final class Constants {
 	}
 	public static class DriveConstants {
 
-		// TODO: Change max speed
-		public static final double kMaxSneakMetersPerSecond = 1.;
+		public static final double kMaxSneakMetersPerSecond = 1.5;
 		public static final double kMaxSpeedMetersPerSecond = 3.0;
 		public static final double kMaxTurboMetersPerSecond = 4.5;
 
@@ -250,9 +249,9 @@ public final class Constants {
 
 		
 		public static final PIDGains LLAlignStrafeGains = new PIDGains(.04, 0.0015, 0.001);
-		public static final PIDGains LLAlignDriveGains = new PIDGains(.8, 0.0003, 0.0005); // TODO: gains for align command
+		public static final PIDGains LLAlignDriveGains = new PIDGains(.8, 0.0003, 0.0005);
 		public static final double AlignDriveMotionSmoothing = .35;
-		public static final double AlignStrafeMotionSmoothing = .2;
+		public static final double AlignStrafeMotionSmoothing = .25;
 
 	}
 

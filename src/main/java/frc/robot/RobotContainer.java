@@ -132,6 +132,7 @@ public class RobotContainer {
 		// region Targeting Commmands
 		driveJoystick.button(3).whileTrue(new LLAlignCommand(limelightSubsystem, driveSubsystem));
 		driveJoystick.button(4).whileTrue(new ProfiledTurnCommand(180, driveSubsystem));
+		driveJoystick.button(5).whileTrue(new ProfiledTurnCommand(180, driveSubsystem));
 		programmerController.a().whileTrue(new LLAlignCommand(limelightSubsystem, driveSubsystem));
 		programmerController.b().whileTrue(new LLPuppydogCommand(limelightSubsystem, driveSubsystem));
 		programmerController.x().whileTrue(new ProfiledTurnCommand(180, driveSubsystem));

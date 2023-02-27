@@ -43,7 +43,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 		armStates.put(ArmPoses.TUCKED, new double[]{0, 0, .25});
 		armStates.put(ArmPoses.LOW_SCORE, new double[]{0, 90, ArmConstants.kMinorArmPIDOutputLimit});
-		armStates.put(ArmPoses.MID_SCORE, new double[]{55, 33, .2});
+		armStates.put(ArmPoses.MID_SCORE, new double[]{55, 33, .15});
 		armStates.put(ArmPoses.HIGH_SCORE, new double[]{100, 55, .08});
 		armStates.put(ArmPoses.LOW_INTAKE, new double[]{-10, 98, ArmConstants.kMinorArmPIDOutputLimit});
 		armStates.put(ArmPoses.MID_INTAKE, new double[]{13, 33, .25});

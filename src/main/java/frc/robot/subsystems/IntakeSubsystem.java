@@ -7,10 +7,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
@@ -20,11 +20,10 @@ import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
 
+	// TODO: add servo gripper code
+
 	/** Motors for the Suckers */
 	private CANSparkMax mainSucker;
-
-	/** PID controlers for Suckers */
-	private SparkMaxPIDController mainPIDController;
 
 	/** Encoders for Sucker motors */
 	private RelativeEncoder mainEncoder;
@@ -32,6 +31,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	/** Color sensor for detectng which type of piece is held */
 	private ColorSensorV3 colorSense;
 
+	/** power distribution hub, used for switching the solenoid */
 	private PowerDistribution pdh;
 
 	/** Creates a new IntakeSubsystem. */
@@ -54,17 +54,8 @@ public class IntakeSubsystem extends SubsystemBase {
 		mainSucker.setSmartCurrentLimit(IntakeConstants.kMainSuckerCurrentLimit);
 		mainSucker.setSecondaryCurrentLimit(IntakeConstants.kMainSuckerStallCurrentLimit);
 
-		// sets motor defaults to break
+		// sets motor default idle mode
 		mainSucker.setIdleMode(IdleMode.kCoast);
-
-		/**
-		 * In order to use PID functionality for a controller, a SparkMaxPIDController
-		 * object is constructed by calling the getPIDController() method on an existing
-		 * CANSparkMax object
-		 */
-		mainPIDController = mainSucker.getPIDController();
-		mainPIDController.setP(IntakeConstants.kMainSuckerP);
-		mainPIDController.setOutputRange(0, IntakeConstants.kMainSuckerMaxOutput);
 		
 		mainSucker.set(IntakeConstants.kMainSuckerSetpoint);
 	}
