@@ -85,21 +85,16 @@ public class SwerveModule extends SubsystemBase {
 
 
 		// Initalize CANcoder
+		Timer.delay(1);
 		absoluteEncoder = new CANCoder(absoluteEncoderPort, Constants.kCanivoreCANBusName);
 		absoluteEncoder.configFactoryDefault();
 		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-		Timer.delay(1);
 		absoluteEncoder.configMagnetOffset(-1 * angleZero);
 		absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
 
 		// Initialize Spark MAX encoders
 		angularEncoder = turningMotor.getEncoder();
-		// angularEncoder.setPositionConversionFactor(ModuleConstants.kturnGearRatio * 2d * Math.PI); // radians
-		// angularEncoder.setVelocityConversionFactor(
-		// 		ModuleConstants.kturnGearRatio
-		// 				* 2 * Math.PI
-		// 				* (1 / 60)); // radians per second
 
 		driveEncoder = driveMotor.getEncoder();
 		driveEncoder.setPositionConversionFactor(ModuleConstants.kdriveGearRatio * ModuleConstants.kwheelCircumference); // meters
@@ -114,17 +109,10 @@ public class SwerveModule extends SubsystemBase {
 		this.drivePID.setI(drivePID[1]);
 		this.drivePID.setD(drivePID[2]);
 
-		//this.angularPID.setFF(ModuleConstants.kTurnFeedForward);
 		this.drivePID.setFF(ModuleConstants.kDriveFeedForward);
 
-		// this.angularPID.setFeedbackDevice(turningMotor.getEncoder());
 		this.drivePID.setFeedbackDevice(driveMotor.getEncoder());
 
-		// this.angularPID.setPositionPIDWrappingEnabled(true);
-		// this.angularPID.setPositionPIDWrappingMinInput(Math.toRadians(0));
-		// this.angularPID.setPositionPIDWrappingMaxInput(Math.toRadians(360));
-
-		// this.angularPID.setOutputRange(-1, 1);
 		this.drivePID.setOutputRange(-1, 1);
 
 		// Configure current limits for motors
@@ -195,8 +183,12 @@ public class SwerveModule extends SubsystemBase {
 	}
 
 	public void resetEncoders() {
-		driveMotor.getEncoder().setPosition(0);
-	}
+		absoluteEncoder.configFactoryDefault();
+		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+		absoluteEncoder.configMagnetOffset(-1 * angleZero);
+		absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
+	}	
 
 	public void putConversionFactors() {
 		SmartDashboard.putNumber(moduleName + " D V Conversion", driveEncoder.getVelocityConversionFactor());

@@ -212,9 +212,7 @@ public class ArmSegment {
 	 */
 	public boolean getAtTarget(double deadBand) {
 		// get absolute value of the difference
-		double error = Math.abs(getRealTheta() - targetTheta);
-		// convert deadband to radians
-		deadBand = Math.toRadians(deadBand);
+		double error = Math.abs(Math.abs(getRealTheta()) - Math.toDegrees(targetTheta));
 
 		if (error < deadBand) {
 			return true;

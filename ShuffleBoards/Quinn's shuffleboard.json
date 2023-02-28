@@ -376,6 +376,32 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "7,5": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Gyro pitch",
+              "_title": "/SmartDashboard/Gyro pitch",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,5": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Gyro roll",
+              "_title": "/SmartDashboard/Gyro roll",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -402,85 +428,62 @@
         "showGrid": true,
         "hgap": 16.0,
         "vgap": 16.0,
-        "titleType": 2,
+        "titleType": 1,
         "tiles": {
-          "0,0": {
+          "4,2": {
             "size": [
-              3,
-              3
+              1,
+              1
             ],
             "content": {
-              "_type": "Graph",
+              "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/major real theta: ",
               "_title": "major real theta: ",
               "_glyph": 148,
-              "_showGlyph": false,
-              "Graph/Visible time": 30.0,
-              "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": false,
-              "Y-axis/Upper bound": 90.0,
-              "Y-axis/Lower bound": -90.0,
-              "Y-axis/Unit": "deg",
-              "Visible data/SmartDashboard/major real theta: ": true
+              "_showGlyph": false
             }
           },
-          "7,0": {
+          "5,2": {
             "size": [
-              3,
-              3
+              1,
+              1
             ],
             "content": {
-              "_type": "Graph",
+              "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/minor real theta: ",
               "_title": "minor real theta: ",
               "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/At target major",
+              "_title": "SmartDashboard/At target major",
+              "_glyph": 148,
               "_showGlyph": false,
-              "Graph/Visible time": 30.0,
-              "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": false,
-              "Y-axis/Upper bound": 120.0,
-              "Y-axis/Lower bound": -120.0,
-              "Y-axis/Unit": "deg",
-              "Visible data/SmartDashboard/minor real theta: ": true
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           },
-          "6,0": {
+          "5,3": {
             "size": [
               1,
               1
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/major real theta: ",
-              "_title": "SmartDashboard/major real theta: ",
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/At target: ",
+              "_title": "SmartDashboard/At target: ",
               "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "5,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/minor real theta: ",
-              "_title": "SmartDashboard/minor real theta: ",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "4,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/major power draw",
-              "_title": "SmartDashboard/major power draw",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           }
         }

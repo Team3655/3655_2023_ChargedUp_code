@@ -13,9 +13,9 @@ import frc.robot.subsystems.DriveSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ProfiledTurnCommand extends ProfiledPIDCommand {
+public class TurnCommand extends ProfiledPIDCommand {
 	/** Creates a new ProfiledTurnCommand. */
-	public ProfiledTurnCommand(double targetAngleDegrees, DriveSubsystem driveSubsystem) {
+	public TurnCommand(double targetAngleDegrees, DriveSubsystem driveSubsystem) {
 		super(
 				// The ProfiledPIDController used by the command
 				new ProfiledPIDController(

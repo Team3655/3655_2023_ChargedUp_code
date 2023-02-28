@@ -74,6 +74,10 @@ public class IntakeSubsystem extends SubsystemBase {
 				});
 	}
 
+	public void stopstopSucking() {
+		mainSucker.set(0);
+	}
+
 	public CommandBase startSucking() {
 		return runOnce(
 				() -> {

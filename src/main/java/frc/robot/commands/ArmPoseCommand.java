@@ -14,7 +14,7 @@ public class ArmPoseCommand extends CommandBase {
 	ArmPoses armPose;
 
 	/** Creates a new ArmPoseCommand. */
-	public ArmPoseCommand(ArmPoses armPose , ArmSubsystem armSubsystem) {
+	public ArmPoseCommand(ArmPoses armPose, ArmSubsystem armSubsystem) {
 		this.armSubsystem = armSubsystem;
 		this.armPose = armPose;
 		// Use addRequirements() here to declare subsystem dependencies.
@@ -24,7 +24,7 @@ public class ArmPoseCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		armSubsystem.ArmPoseCommand(armPose);
+		armSubsystem.setArmState(armPose);
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -40,7 +40,7 @@ public class ArmPoseCommand extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		if (armSubsystem.getAtTarget(5)) {
+		if (armSubsystem.getAtTarget(8)) {
 			return true;
 		}
 		return false;

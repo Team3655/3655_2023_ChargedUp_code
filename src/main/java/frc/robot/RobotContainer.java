@@ -11,7 +11,9 @@ import com.pathplanner.lib.server.PathPlannerServer;
 
 import frc.robot.commands.LLAlignCommand;
 import frc.robot.commands.LLPuppydogCommand;
-import frc.robot.commands.ProfiledTurnCommand;
+import frc.robot.commands.TurnCommand;
+import frc.robot.commands.ScoreAndLeaveSequence;
+import frc.robot.commands.TimedDriveCommand;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,6 +28,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.TractorToolbox.JoystickUtils;
 import frc.robot.commands.ArmBumpCommand;
 import frc.robot.commands.ArmSwitchCommand;
+import frc.robot.commands.BalanceCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPoses;
 import frc.robot.subsystems.DriveSubsystem;
@@ -131,12 +134,14 @@ public class RobotContainer {
 
 		// region Targeting Commmands
 		driveJoystick.button(3).whileTrue(new LLAlignCommand(limelightSubsystem, driveSubsystem));
-		driveJoystick.button(4).whileTrue(new ProfiledTurnCommand(180, driveSubsystem));
-		driveJoystick.button(5).whileTrue(new ProfiledTurnCommand(180, driveSubsystem));
+		driveJoystick.button(4).whileTrue(new TurnCommand(180, driveSubsystem));
+		driveJoystick.button(5).whileTrue(new TurnCommand(180, driveSubsystem));
 		programmerController.a().whileTrue(new LLAlignCommand(limelightSubsystem, driveSubsystem));
 		programmerController.b().whileTrue(new LLPuppydogCommand(limelightSubsystem, driveSubsystem));
-		programmerController.x().whileTrue(new ProfiledTurnCommand(180, driveSubsystem));
+		programmerController.x().whileTrue(new TurnCommand(180, driveSubsystem));
 		// endregion
+
+		programmerController.y().whileTrue(new BalanceCommand(driveSubsystem));
 
 		// region Drive Commands
 		driveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
@@ -171,6 +176,6 @@ public class RobotContainer {
 	public Command getAutonomousCommand() {
 		// An example command will be run in autonomous
 
-		return driveSubsystem.followTrajectoryCommand(autoChooser.getSelected(), true);
+		return new ScoreAndLeaveSequence(armSubsystem, intakeSubsystem, limelightSubsystem, driveSubsystem);
 	}
 }

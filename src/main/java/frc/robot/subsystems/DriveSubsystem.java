@@ -15,6 +15,7 @@ import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -100,6 +101,7 @@ public class DriveSubsystem extends SubsystemBase {
 		};
 
 		gyro = new WPI_Pigeon2(DriveConstants.kPigeonPort, Constants.kCanivoreCANBusName);
+		gyro.setYaw(0);
 
 		odometry = new SwerveDriveOdometry(
 				DriveConstants.kDriveKinematics,
@@ -127,6 +129,13 @@ public class DriveSubsystem extends SubsystemBase {
 				gyro.getRotation2d(),
 				swervePosition);
 
+		if (DriverStation.isDisabled()) {
+			frontLeft.resetEncoders();
+			frontRight.resetEncoders();
+			rearLeft.resetEncoders();
+			rearRight.resetEncoders();
+		}
+
 		frontLeft.putConversionFactors();
 		frontRight.putConversionFactors();
 		rearRight.putConversionFactors();
@@ -147,7 +156,9 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("RL Relative", rearLeft.getRelativeHeading());
 		SmartDashboard.putNumber("RR Relative", rearRight.getRelativeHeading());
 
-		SmartDashboard.putNumber("Gyro", gyro.getYaw());
+		SmartDashboard.putNumber("Gyro yaw", gyro.getYaw());
+		SmartDashboard.putNumber("Gyro pitch", gyro.getPitch());
+		SmartDashboard.putNumber("Gyro roll", gyro.getRoll());
 
 		SmartDashboard.putNumber("FL Meters", frontLeft.getDistanceMeters());
 		SmartDashboard.putNumber("FR Meters", frontRight.getDistanceMeters());
@@ -166,6 +177,14 @@ public class DriveSubsystem extends SubsystemBase {
 
 	public double getHeading360() {
 		return (gyro.getRotation2d().getDegrees() % 360);
+	}
+
+	public double getRoll() {
+		return gyro.getRoll();
+	}
+
+	public double getPitch() {
+		return gyro.getPitch();
 	}
 
 	public double getTurnRate() {

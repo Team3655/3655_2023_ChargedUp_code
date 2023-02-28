@@ -117,6 +117,10 @@ public class ArmSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("major power draw: ", majorArm.getPowerDraw());
 		SmartDashboard.putNumber("minor power draw: ", minorArm.getPowerDraw());
 		SmartDashboard.putBoolean("At target: ", getAtTarget(5));
+		SmartDashboard.putBoolean("At target major", majorArm.getAtTarget(5));
+		SmartDashboard.putBoolean("At target major", majorArm.getAtTarget(5));
+
+
 
 	}
 
@@ -129,14 +133,12 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	/** Toggles the dominant side of the robot */
-	public CommandBase ToggleSide() {
-		return runOnce(() -> {
+	public void ToggleSide() {
 			isFront = !isFront;
 			majorArm.setSign((isFront) ? 1 : -1);
 			minorArm.setSign((isFront) ? 1 : -1);
 			majorArm.setReference();
 			minorArm.setReference();
-		});
 	}
 
 	public CommandBase toggleArmMotors() {
