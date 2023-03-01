@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ArmSubsystem.ArmPoses;
+import frc.robot.Constants.ArmConstants.ArmPoses;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -28,7 +28,7 @@ public class ArmBumpCommand extends InstantCommand {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		armSubsystem.armStates.replace(ArmSubsystem.ArmPoses.DRIVER_CONTROL,
+		armSubsystem.armStates.replace(ArmPoses.DRIVER_CONTROL,
 				new double[] {
 						armSubsystem.getTargetTheta()[0] + majorArmBump,
 						armSubsystem.getTargetTheta()[1] + minorArmBump });

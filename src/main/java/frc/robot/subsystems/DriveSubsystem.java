@@ -14,8 +14,6 @@ import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-import com.pathplanner.lib.server.PathPlannerServer;
-import com.pathplanner.lib.server.PathPlannerServerThread;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;

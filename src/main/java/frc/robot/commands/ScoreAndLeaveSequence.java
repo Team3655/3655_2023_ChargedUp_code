@@ -12,7 +12,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
-import frc.robot.subsystems.ArmSubsystem.ArmPoses;
+import frc.robot.Constants.ArmConstants.ArmPoses;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -69,7 +71,7 @@ public final class Constants {
 
 		public static final double kModuleDriveControllerP = .1;
 		public static final double kModuleDriveControllerI = 0;
-		public static final double kModuleDriveControllerD = 0; 
+		public static final double kModuleDriveControllerD = 0;
 
 		public static final double kModuleTurningControllerP = 6.5;
 		public static final double kModuleTurningControllerI = 0.25;
@@ -87,6 +89,7 @@ public final class Constants {
 				kModuleDriveControllerI,
 				kModuleDriveControllerD };
 	}
+
 	public static class DriveConstants {
 
 		public static final double kMaxSneakMetersPerSecond = 1.5;
@@ -101,10 +104,10 @@ public final class Constants {
 		public static final double kWheelBase = Units.inchesToMeters(20); // in meters!
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-				new Translation2d(kWheelBase / 2, kTrackWidth / 2), //FL
-				new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //FR
-				new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //RL
-				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //RR
+				new Translation2d(kWheelBase / 2, kTrackWidth / 2), // FL
+				new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // FR
+				new Translation2d(-kWheelBase / 2, kTrackWidth / 2), // RL
+				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); // RR
 
 		public static final boolean kGyroReversed = true;
 		public static final boolean kFeildCentric = true;
@@ -112,7 +115,7 @@ public final class Constants {
 
 		public static final PIDGains kGyroTurningGains = new PIDGains(.025, 0, 0);
 		public static final double kMaxTurningVelocityDegrees = 20;
-		public static final double kMaxTurningAcceleratonDegrees = 10;	
+		public static final double kMaxTurningAcceleratonDegrees = 10;
 		public static final double kGyroTurnTolerance = 2;
 
 	}
@@ -122,8 +125,9 @@ public final class Constants {
 	 */
 	public static class AutoConstants {
 
-		// PID constants for path planner (these control drive direction not reaching target wheel speeds)
-		public static final PIDGains PPDriveGains = new PIDGains(.5, 0, 0); 
+		// PID constants for path planner (these control drive direction not reaching
+		// target wheel speeds)
+		public static final PIDGains PPDriveGains = new PIDGains(.5, 0, 0);
 
 		public static final PIDGains PPTurnGains = new PIDGains(1, 0, 0);
 
@@ -207,6 +211,31 @@ public final class Constants {
 		public static final double kMinorArmD = 0;
 		public static final double kMinorArmIzone = 5;
 
+		public static enum ArmPoses {
+			TUCKED,
+			LOW_SCORE,
+			MID_SCORE,
+			HIGH_SCORE,
+			LOW_INTAKE,
+			MID_INTAKE,
+			HIGH_INTAKE,
+			DRIVER_CONTROL
+		}
+
+		public static final HashMap<ArmPoses, double[]> kArmStates = new HashMap<ArmPoses, double[]>() {
+			{
+				put(ArmPoses.TUCKED, new double[] { 0, 0, .25 });
+				put(ArmPoses.LOW_SCORE, new double[] { 0, 90, kMinorArmPIDOutputLimit });
+				put(ArmPoses.MID_SCORE, new double[] { 55, 33, .15 });
+				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55, .08 });
+				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98, kMinorArmPIDOutputLimit });
+				put(ArmPoses.MID_INTAKE, new double[] { 13, 33, .25 });
+				put(ArmPoses.HIGH_INTAKE, new double[] { 105, 80, .25 });
+				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0, kMinorArmPIDOutputLimit });
+			}
+
+		};
+
 	}
 
 	public static class IntakeConstants {
@@ -248,7 +277,6 @@ public final class Constants {
 		public static final double PuppyTurnMotionSmoothing = 0.3;
 		public static final double PuppyDriveMotionSmoothing = 0.4;
 
-		
 		public static final PIDGains LLAlignStrafeGains = new PIDGains(.04, 0.0015, 0.001);
 		public static final PIDGains LLAlignDriveGains = new PIDGains(.8, 0.0003, 0.0005);
 		public static final double AlignDriveMotionSmoothing = .35;

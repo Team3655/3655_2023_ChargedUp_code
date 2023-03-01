@@ -7,7 +7,6 @@ package frc.robot;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.server.PathPlannerServer;
 
 import frc.robot.commands.LLAlignCommand;
 import frc.robot.commands.LLPuppydogCommand;
@@ -29,7 +28,7 @@ import frc.robot.commands.ArmBumpCommand;
 import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ArmSubsystem.ArmPoses;
+import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;

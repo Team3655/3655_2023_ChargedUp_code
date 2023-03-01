@@ -3,7 +3,9 @@ package frc.robot.subsystems;
 import java.util.HashMap;
 
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.Objects.ArmSegment;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,19 +15,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 	// region properties
 
-	/** used for controling the height of the arm */
-	public enum ArmPoses {
-		TUCKED,
-		LOW_SCORE,
-		MID_SCORE,
-		HIGH_SCORE,
-		LOW_INTAKE,
-		MID_INTAKE,
-		HIGH_INTAKE,
-		DRIVER_CONTROL
-	}
-
-	public HashMap<ArmPoses, double[]> armStates = new HashMap<ArmPoses, double[]>();
+	public HashMap<ArmPoses, double[]> armStates = ArmConstants.kArmStates;
 
 	/** used to track the state of the arm */
 	ArmPoses targetArmState;
@@ -40,15 +30,6 @@ public class ArmSubsystem extends SubsystemBase {
 	// endregion
 
 	public ArmSubsystem() {
-
-		armStates.put(ArmPoses.TUCKED, new double[]{0, 0, .25});
-		armStates.put(ArmPoses.LOW_SCORE, new double[]{0, 90, ArmConstants.kMinorArmPIDOutputLimit});
-		armStates.put(ArmPoses.MID_SCORE, new double[]{55, 33, .15});
-		armStates.put(ArmPoses.HIGH_SCORE, new double[]{100, 55, .08});
-		armStates.put(ArmPoses.LOW_INTAKE, new double[]{-10, 98, ArmConstants.kMinorArmPIDOutputLimit});
-		armStates.put(ArmPoses.MID_INTAKE, new double[]{13, 33, .25});
-		armStates.put(ArmPoses.HIGH_INTAKE, new double[]{105, 80, .25});	
-		armStates.put(ArmPoses.DRIVER_CONTROL, new double[]{0, 0, ArmConstants.kMinorArmPIDOutputLimit});
 
 		// this will cause the code to fail to run if the hashmap is not full
 		for (ArmPoses pose : ArmPoses.values()) {
