@@ -4,20 +4,11 @@
 
 package frc.robot.subsystems;
 
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.ModuleConstants;
-import frc.robot.Constants;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Objects.SwerveModule;
-
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
-
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -28,10 +19,19 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import frc.robot.Constants;
+import frc.robot.Constants.AutoConstants.PathPLannerConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ModuleConstants;
+import frc.robot.Objects.SwerveModule;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -142,8 +142,6 @@ public class DriveSubsystem extends SubsystemBase {
 				swervePosition);
 
 		field.setRobotPose(odometry.getPoseMeters());
-
-		
 
 		if (DriverStation.isDisabled()) {
 			// frontLeft.resetEncoders();
@@ -301,22 +299,27 @@ public class DriveSubsystem extends SubsystemBase {
 
 	/**************************************************************************/
 
+	public CommandBase followWithCommands(PathPlannerTrajectory trajectory, boolean isFirstPath) {
+
+		return new FollowPathWithEvents(null, null, null);
+	}
+
 	public SequentialCommandGroup followTrajectoryCommand(PathPlannerTrajectory trajectory, boolean isFirstPath) {
 
 		PIDController xPIDController = new PIDController(
-				AutoConstants.PPDriveGains.kP,
-				AutoConstants.PPDriveGains.kI,
-				AutoConstants.PPDriveGains.kD);
+				PathPLannerConstants.kPPDriveGains.kP,
+				PathPLannerConstants.kPPDriveGains.kI,
+				PathPLannerConstants.kPPDriveGains.kD);
 
 		PIDController yPIDController = new PIDController(
-				AutoConstants.PPDriveGains.kP,
-				AutoConstants.PPDriveGains.kI,
-				AutoConstants.PPDriveGains.kD);
+				PathPLannerConstants.kPPDriveGains.kP,
+				PathPLannerConstants.kPPDriveGains.kI,
+				PathPLannerConstants.kPPDriveGains.kD);
 
 		PIDController rotationPIDController = new PIDController(
-				AutoConstants.PPTurnGains.kP,
-				AutoConstants.PPTurnGains.kI,
-				AutoConstants.PPTurnGains.kD);
+				PathPLannerConstants.kPPTurnGains.kP,
+				PathPLannerConstants.kPPTurnGains.kI,
+				PathPLannerConstants.kPPTurnGains.kD);
 
 		rotationPIDController.enableContinuousInput(-Math.PI, Math.PI);
 

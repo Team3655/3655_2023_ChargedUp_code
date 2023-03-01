@@ -9,6 +9,7 @@ import java.util.HashMap;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.TractorToolbox.TractorParts.PIDGains;
 
@@ -125,11 +126,21 @@ public final class Constants {
 	 */
 	public static class AutoConstants {
 
-		// PID constants for path planner (these control drive direction not reaching
-		// target wheel speeds)
-		public static final PIDGains PPDriveGains = new PIDGains(.5, 0, 0);
+		public static class PathPLannerConstants {
 
-		public static final PIDGains PPTurnGains = new PIDGains(1, 0, 0);
+			// PID constants for path planner (these control drive direction not reaching
+			// target wheel speeds)
+			public static final PIDGains kPPDriveGains = new PIDGains(.5, 0, 0);
+
+			public static final PIDGains kPPTurnGains = new PIDGains(1, 0, 0);
+
+			public static final HashMap<String, Command> kPPEventMap = new HashMap<>() {
+				{
+					// put("ScoreHigh", new ScoreSequence());
+				}
+			};
+
+		}
 
 		public static final PIDGains kTurnCommandGains = new PIDGains(.02, 0, 0);
 		public static final double kTurnCommandMaxVelocity = 1;

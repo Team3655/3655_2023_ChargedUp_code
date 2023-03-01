@@ -8,10 +8,6 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
-import frc.robot.commands.LLAlignCommand;
-import frc.robot.commands.LLPuppydogCommand;
-import frc.robot.commands.TurnCommand;
-import frc.robot.commands.ScoreAndLeaveSequence;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,16 +18,20 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.TractorToolbox.JoystickUtils;
 import frc.robot.commands.ArmBumpCommand;
 import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.commands.BalanceCommand;
+import frc.robot.commands.LLAlignCommand;
+import frc.robot.commands.LLPuppydogCommand;
+import frc.robot.commands.TurnCommand;
+import frc.robot.commands.Autonomous.ScoreAndLeaveSequence;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
