@@ -2,17 +2,17 @@ package frc.robot.TractorToolbox.TractorParts;
 
 class ArmKinematicshelper {
 
-	double theta1 = 0;
-	double theta2 = 0;
+	private double theta1 = 0;
+	private double theta2 = 0;
 
-	double inverseTheta1 = 0;
-	double inverseTheta2 = 0;
+	private double inverseTheta1 = 0;
+	private double inverseTheta2 = 0;
 
-	double offset1 = 0;
-	double offset2 = 0;
+	private double offset1 = 0;
+	private double offset2 = 0;
 
-	double length1 = 0;
-	double length2 = 0;
+	private double length1 = 0;
+	private double length2 = 0;
 
 	public ArmKinematicshelper(double segOneThetaOffset, double segOneLength, double segTwoThetaOffset, double segTwoLength) {
 		offset1 = segOneThetaOffset;
@@ -64,6 +64,10 @@ class ArmKinematicshelper {
 		inverseTheta1 = dir + -(theta1 - dir);
 		inverseTheta2 = dir + -(theta2 - dir);
 
+	}
+
+	public void setOverhand() {
+		
 	}
 
 	public double getTheta1() {

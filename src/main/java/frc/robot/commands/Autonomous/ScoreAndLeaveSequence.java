@@ -9,33 +9,36 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.Constants.ArmConstants.ArmPoses;
+import frc.robot.RobotContainer;
 import frc.robot.commands.ArmPoseCommand;
 import frc.robot.commands.ScoreSequence;
 import frc.robot.commands.TimedDriveCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreAndLeaveSequence extends SequentialCommandGroup {
+
+	private static DriveSubsystem driveSubsystem;
+	private static ArmSubsystem armSubsystem;
+
 	/** Creates a new ScoreAndLeaveSequence. */
-	public ScoreAndLeaveSequence(
-			ArmSubsystem armSubsystem,
-			IntakeSubsystem intakeSubsystem,
-			LimelightSubsystem limelightSubsystem,
-			DriveSubsystem driveSubsystem) {
+	public ScoreAndLeaveSequence() {
+
+		driveSubsystem = RobotContainer.driveSubsystem;
+		armSubsystem = RobotContainer.armSubsystem;
+
 		// Add your commands in the addCommands() call, e.g.
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(
 				new InstantCommand(() -> driveSubsystem.zeroHeading()),
 				new InstantCommand(() -> armSubsystem.ToggleSide()),
-				new ScoreSequence(ArmPoses.HIGH_SCORE, armSubsystem, intakeSubsystem, limelightSubsystem),
+				new ScoreSequence(ArmPoses.HIGH_SCORE),
 				new InstantCommand(() -> Timer.delay(1)),
-				new ArmPoseCommand(ArmPoses.TUCKED, armSubsystem),
-				new TimedDriveCommand(-.2, .2, 0, 500, driveSubsystem),
-				new TimedDriveCommand(-.5, 0, 0, 1200, driveSubsystem));
+				new ArmPoseCommand(ArmPoses.TUCKED),
+				new TimedDriveCommand(-.2, .2, 0, 500),
+				new TimedDriveCommand(-.5, 0, 0, 1200));
 	}
 }

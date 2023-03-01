@@ -145,7 +145,7 @@ public final class Constants {
 		public static final PIDGains kTurnCommandGains = new PIDGains(.02, 0, 0);
 		public static final double kTurnCommandMaxVelocity = 1;
 		public static final double kTurnCommandMaxAcceleration = 1;
-		public static final double kTurnCommandToleranceDeg = 5;
+		public static final double kTurnCommandToleranceDeg = 1;
 		public static final double kTurnCommandRateToleranceDegPerS = 0;
 
 		public static final double kBalnaceCommandDeadbandDeg = 2;

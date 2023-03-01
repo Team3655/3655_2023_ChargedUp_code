@@ -30,6 +30,7 @@ import frc.robot.commands.TurnCommand;
 import frc.robot.commands.Autonomous.ScoreAndLeaveSequence;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -45,10 +46,11 @@ import frc.robot.subsystems.LimelightSubsystem;
 public class RobotContainer {
 
 	// The robot's subsystems and commands are defined here...
-	private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-	private final ArmSubsystem armSubsystem = new ArmSubsystem();
-	private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
-	private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+	public static final DriveSubsystem driveSubsystem = new DriveSubsystem();
+	public static final ArmSubsystem armSubsystem = new ArmSubsystem();
+	public static final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
+	public static final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
 	private final CommandJoystick driveJoystick = new CommandJoystick(OperatorConstants.kDriveJoystickPort);
 	private final CommandJoystick turnJoystick = new CommandJoystick(OperatorConstants.kTurnJoystickPort);
@@ -66,6 +68,7 @@ public class RobotContainer {
 		// Configure the trigger bindings
 		configureBindings();
 
+		// region Def Auto
 		Shuffleboard.getTab("Autonomous").add(autoChooser);
 
 		// region Paths
@@ -75,15 +78,18 @@ public class RobotContainer {
 		PathPlannerTrajectory trajTurn90 = PathPlanner.loadPath("90 turn", new PathConstraints(.1, .05));
 		PathPlannerTrajectory traj2MetersX = PathPlanner.loadPath("2 metersX", new PathConstraints(1.0, .5));
 		PathPlannerTrajectory traj2MetersY = PathPlanner.loadPath("2 metersY", new PathConstraints(1.0, .5));
+		PathPlannerTrajectory trajOdometryHell = PathPlanner.loadPath("Odometry Hell", new PathConstraints(3.0, 2.0));
 		// endregion
 
 		autoChooser.setDefaultOption("2 metersX", driveSubsystem.followTrajectoryCommand(traj2MetersX, true));
+		autoChooser.addOption("Odometry Hell", driveSubsystem.followTrajectoryCommand(trajOdometryHell, true));
 		autoChooser.addOption("90 turn", driveSubsystem.followTrajectoryCommand(trajTurn90, true));
 		autoChooser.addOption("2 metersY", driveSubsystem.followTrajectoryCommand(traj2MetersY, true));
 		autoChooser.addOption("ChargedUpTest", driveSubsystem.followTrajectoryCommand(trajChargedUpTest, true));
 		autoChooser.addOption("New Path", driveSubsystem.followTrajectoryCommand(trajNewPath, true));
 		autoChooser.addOption("Rotation Tuning V2", driveSubsystem.followTrajectoryCommand(trajRotationTuningV2, true));
-		autoChooser.addOption("Simple human player", new ScoreAndLeaveSequence(armSubsystem, intakeSubsystem, limelightSubsystem, driveSubsystem));
+		autoChooser.addOption("Simple human player", new ScoreAndLeaveSequence());
+		// endregion
 	}
 
 	/**
@@ -115,16 +121,16 @@ public class RobotContainer {
 		operatorController.button(4).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.TUCKED));
 
 		// Switches sides of the robot
-		operatorController.button(9).onTrue(new ArmSwitchCommand(armSubsystem, limelightSubsystem));
+		operatorController.button(9).onTrue(new ArmSwitchCommand());
 
 		operatorController.button(11).onTrue(armSubsystem.toggleArmMotors());
 		operatorController.button(13).onTrue(armSubsystem.zeroArms());
 
-		operatorController.button(18).whileTrue(new ArmBumpCommand(+5, 0, armSubsystem));
-		operatorController.button(20).whileTrue(new ArmBumpCommand(-5, 0, armSubsystem));
+		operatorController.button(18).whileTrue(new ArmBumpCommand(+5, 0));
+		operatorController.button(20).whileTrue(new ArmBumpCommand(-5, 0));
 
-		operatorController.button(17).whileTrue(new ArmBumpCommand(0, +5, armSubsystem));
-		operatorController.button(19).whileTrue(new ArmBumpCommand(0, -5, armSubsystem));
+		operatorController.button(17).whileTrue(new ArmBumpCommand(0, +5));
+		operatorController.button(19).whileTrue(new ArmBumpCommand(0, -5));
 		// endregion
 
 		// Sucking is set to be the defaut state of the intake
@@ -132,15 +138,15 @@ public class RobotContainer {
 		operatorController.button(5).onTrue(intakeSubsystem.toggleSideSucker());
 
 		// region Targeting Commmands
-		driveJoystick.button(3).whileTrue(new LLAlignCommand(limelightSubsystem, driveSubsystem));
-		driveJoystick.button(4).whileTrue(new TurnCommand(180, driveSubsystem));
-		driveJoystick.button(5).whileTrue(new TurnCommand(180, driveSubsystem));
-		programmerController.a().whileTrue(new LLAlignCommand(limelightSubsystem, driveSubsystem));
-		programmerController.b().whileTrue(new LLPuppydogCommand(limelightSubsystem, driveSubsystem));
-		programmerController.x().whileTrue(new TurnCommand(180, driveSubsystem));
+		driveJoystick.button(3).whileTrue(new LLAlignCommand());
+		driveJoystick.button(4).whileTrue(new TurnCommand(180));
+		driveJoystick.button(5).whileTrue(new TurnCommand(180));
+		programmerController.a().whileTrue(new LLAlignCommand());
+		programmerController.b().whileTrue(new LLPuppydogCommand());
+		programmerController.x().whileTrue(new TurnCommand(180));
 		// endregion
 
-		programmerController.y().whileTrue(new BalanceCommand(driveSubsystem));
+		programmerController.y().whileTrue(new BalanceCommand());
 
 		// region Drive Commands
 		driveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));

@@ -8,7 +8,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import frc.robot.Constants.LimelightConstants;
+import frc.robot.RobotContainer;
 import frc.robot.Objects.Limelight;
 import frc.robot.TractorToolbox.TractorParts.DoubleSmoother;
 import frc.robot.subsystems.DriveSubsystem;
@@ -16,8 +18,8 @@ import frc.robot.subsystems.LimelightSubsystem;
 
 public class LLPuppydogCommand extends CommandBase {
 
-	LimelightSubsystem limelightSubsystem;
-	DriveSubsystem driveSubsystem;
+	private static LimelightSubsystem limelightSubsystem;
+	private static DriveSubsystem driveSubsystem;
 
 	Limelight limelight;
 
@@ -28,8 +30,11 @@ public class LLPuppydogCommand extends CommandBase {
 	DoubleSmoother turnOutputSmoother;
 
 	/** Creates a new LLTargetCommand. */
-	public LLPuppydogCommand(LimelightSubsystem limelightSubsystem, DriveSubsystem driveSubsystem) {
-		// Use addRequirements() here to declare subsystem dependencies.
+	public LLPuppydogCommand() {
+		
+		driveSubsystem = RobotContainer.driveSubsystem;
+		limelightSubsystem = RobotContainer.limelightSubsystem;
+		limelight = limelightSubsystem.limelight;
 
 		LLTargetpidController = new ProfiledPIDController(
 				LimelightConstants.LLPuppyTurnGains.kP,
@@ -42,13 +47,10 @@ public class LLPuppydogCommand extends CommandBase {
 				LimelightConstants.LLPuppyDriveGains.kI,
 				LimelightConstants.LLPuppyDriveGains.kD);
 
-		this.limelightSubsystem = limelightSubsystem;
-		this.driveSubsystem = driveSubsystem;
-		limelight = this.limelightSubsystem.limelight;
-
 		turnOutputSmoother = new DoubleSmoother(LimelightConstants.PuppyTurnMotionSmoothing);
 		driveOutputSmoother = new DoubleSmoother(LimelightConstants.PuppyDriveMotionSmoothing);
 
+		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(limelightSubsystem, driveSubsystem);
 	}
 

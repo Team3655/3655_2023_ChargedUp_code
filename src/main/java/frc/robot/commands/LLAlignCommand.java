@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Objects.Limelight;
 import frc.robot.TractorToolbox.TractorParts.DoubleSmoother;
@@ -14,8 +15,8 @@ import frc.robot.subsystems.LimelightSubsystem;
 
 public class LLAlignCommand extends CommandBase {
 
-	LimelightSubsystem limelightSubsystem;
-	DriveSubsystem driveSubsystem;
+	private static LimelightSubsystem limelightSubsystem;
+	private static DriveSubsystem driveSubsystem;
 
 	Limelight limelight;
 
@@ -26,8 +27,11 @@ public class LLAlignCommand extends CommandBase {
 	DoubleSmoother strafeOutputSmoother;
 
 	/** Creates a new LLTargetCommand. */
-	public LLAlignCommand(LimelightSubsystem limelightSubsystem, DriveSubsystem driveSubsystem) {
-		// Use addRequirements() here to declare subsystem dependencies.
+	public LLAlignCommand() {
+
+		driveSubsystem = RobotContainer.driveSubsystem;
+		limelightSubsystem = RobotContainer.limelightSubsystem;
+		limelight = limelightSubsystem.limelight;
 
 		LLStrafePIDController = new PIDController(
 			LimelightConstants.LLAlignStrafeGains.kP,
@@ -41,13 +45,10 @@ public class LLAlignCommand extends CommandBase {
 			LimelightConstants.LLAlignDriveGains.kD);
 		LLDrivePIDController.setTolerance(0.05);
 
-		this.limelightSubsystem = limelightSubsystem;
-		this.driveSubsystem = driveSubsystem;
-		limelight = this.limelightSubsystem.limelight;
-
 		strafeOutputSmoother = new DoubleSmoother(LimelightConstants.AlignStrafeMotionSmoothing);
 		driveOutputSmoother = new DoubleSmoother(LimelightConstants.AlignDriveMotionSmoothing);
 
+		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(limelightSubsystem, driveSubsystem);
 	}
 

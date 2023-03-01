@@ -6,25 +6,26 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants.ArmPoses;
+import frc.robot.subsystems.IntakeSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreSequence extends SequentialCommandGroup {
+
+	public static IntakeSubsystem intakeSubsystem;
+
 	/** Creates a new ScoreCommand. */
-	public ScoreSequence(
-			ArmPoses armPose,
-			ArmSubsystem armSubsystem,
-			IntakeSubsystem intakeSubsystem,
-			LimelightSubsystem limelightSubsystem) {
+	public ScoreSequence(ArmPoses armPose) {
+
+		intakeSubsystem = RobotContainer.intakeSubsystem;
+
 		// Add your commands in the addCommands() call, e.g.
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(
-				new ArmPoseCommand(armPose, armSubsystem),
+				new ArmPoseCommand(armPose),
 				new InstantCommand(() -> intakeSubsystem.stopSucking()));
 	}
 }

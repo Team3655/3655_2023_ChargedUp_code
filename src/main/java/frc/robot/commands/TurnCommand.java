@@ -6,50 +6,65 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TurnCommand extends ProfiledPIDCommand {
+public class TurnCommand extends CommandBase {
+
+	private static DriveSubsystem driveSubsystem;
+	private static ProfiledPIDController turnPIDController;
+
 	/** Creates a new ProfiledTurnCommand. */
-	public TurnCommand(double targetAngleDegrees, DriveSubsystem driveSubsystem) {
-		super(
-				// The ProfiledPIDController used by the command
-				new ProfiledPIDController(
-						// The PID gains
-						AutoConstants.kTurnCommandGains.kP,
-						AutoConstants.kTurnCommandGains.kI,
-						AutoConstants.kTurnCommandGains.kD,
-						// The motion profile constraints
-						new TrapezoidProfile.Constraints(100, 100)),
-				// This should return the measurement
-				driveSubsystem::getHeading360,
-				// This should return the goal (can also be a constant)
-				targetAngleDegrees,
-				// This uses the output
-				(output, setpoint) -> {
-					driveSubsystem.drive(0, 0, -output);
-				});
-		// Use addRequirements() here to declare subsystem dependencies.
-		// Configure additional PID options by calling `getController` here.
-		// Set the controller to be continuous (because it is an angle controller)
-		getController().enableContinuousInput(-180, 180);
-		// Set the controller tolerance - the delta tolerance ensures the robot is
-		// stationary at the setpoint before it is considered as having reached the
-		// reference
-		getController().setTolerance(
+	public TurnCommand(double targetAngleDegrees) {
+
+		driveSubsystem = RobotContainer.driveSubsystem;
+
+		turnPIDController = new ProfiledPIDController(
+				// The PID gains
+				AutoConstants.kTurnCommandGains.kP,
+				AutoConstants.kTurnCommandGains.kI,
+				AutoConstants.kTurnCommandGains.kD,
+				// The motion profile constraints
+				new TrapezoidProfile.Constraints(100, 100));
+
+		turnPIDController.enableContinuousInput(-180, 180);
+
+		turnPIDController.setTolerance(
 				AutoConstants.kTurnCommandToleranceDeg,
 				AutoConstants.kTurnCommandRateToleranceDegPerS);
 
+		turnPIDController.setGoal(targetAngleDegrees);
+
 		addRequirements(driveSubsystem);
+	}
+
+	// Called when the command is initially scheduled.
+	@Override
+	public void initialize() {
+	}
+
+	// Called every time the scheduler runs while the command is scheduled.
+	@Override
+	public void execute() {
+		double turnOutput = turnPIDController.calculate(driveSubsystem.getHeading360());
+		driveSubsystem.drive(0, 0, -turnOutput);
+	}
+
+	// Called once the command ends or is interrupted.
+	@Override
+	public void end(boolean interrupted) {
+		// sets motors speeds back to zero when event is complete
+		driveSubsystem.drive(0, 0, 0);
 	}
 
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return false;
+		return turnPIDController.atGoal();
 	}
 }

@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -13,8 +14,16 @@ import frc.robot.subsystems.LimelightSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ArmSwitchCommand extends ParallelCommandGroup {
+
+	private static ArmSubsystem armSubsystem;
+	private static LimelightSubsystem limelightSubsystem;
+
 	/** Creates a new ArmSwitchCommand. */
-	public ArmSwitchCommand(ArmSubsystem armSubsystem, LimelightSubsystem limelightSubsystem) {
+	public ArmSwitchCommand() {
+
+		armSubsystem = RobotContainer.armSubsystem;
+		limelightSubsystem = RobotContainer.limelightSubsystem;
+
 		// Add your commands in the addCommands() call, e.g.
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(

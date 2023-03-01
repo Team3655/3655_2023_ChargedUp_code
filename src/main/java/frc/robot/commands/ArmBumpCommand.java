@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants.ArmPoses;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -13,12 +14,14 @@ import frc.robot.Constants.ArmConstants.ArmPoses;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ArmBumpCommand extends InstantCommand {
 
-	ArmSubsystem armSubsystem;
-	double majorArmBump;
-	double minorArmBump;
+	private static ArmSubsystem armSubsystem;
+	private double majorArmBump;
+	private double minorArmBump;
 
-	public ArmBumpCommand(double majorArmBump, double minorArmBump, ArmSubsystem armSubsystem) {
-		this.armSubsystem = armSubsystem;
+	public ArmBumpCommand(double majorArmBump, double minorArmBump) {
+
+		armSubsystem = RobotContainer.armSubsystem;
+
 		this.majorArmBump = majorArmBump;
 		this.minorArmBump = minorArmBump;
 		// Use addRequirements() here to declare subsystem dependencies.

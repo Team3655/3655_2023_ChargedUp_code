@@ -5,20 +5,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+
 import frc.robot.Constants.ArmConstants.ArmPoses;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmPoseCommand extends CommandBase {
 
-	ArmSubsystem armSubsystem;
-	ArmPoses armPose;
+	private static ArmSubsystem armSubsystem;
+	private ArmPoses armPose;
 
 	/** Creates a new ArmPoseCommand. */
-	public ArmPoseCommand(ArmPoses armPose, ArmSubsystem armSubsystem) {
-		this.armSubsystem = armSubsystem;
+	public ArmPoseCommand(ArmPoses armPose) {
+		armSubsystem = RobotContainer.armSubsystem;
 		this.armPose = armPose;
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(this.armSubsystem);
+		addRequirements(armSubsystem);
 	}
 
 	// Called when the command is initially scheduled.

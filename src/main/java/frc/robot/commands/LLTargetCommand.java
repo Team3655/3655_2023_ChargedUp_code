@@ -6,23 +6,28 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import frc.robot.Constants.LimelightConstants;
+import frc.robot.RobotContainer;
 import frc.robot.Objects.Limelight;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
 public class LLTargetCommand extends CommandBase {
 
-	LimelightSubsystem limelightSubsystem;
-	DriveSubsystem driveSubsystem;
+	private static LimelightSubsystem limelightSubsystem;
+	private static DriveSubsystem driveSubsystem;
 
 	Limelight limelight;
 
 	PIDController LLTargetpidController;
 
 	/** Creates a new LLTargetCommand. */
-	public LLTargetCommand(LimelightSubsystem limelightSubsystem, DriveSubsystem driveSubsystem) {
-		// Use addRequirements() here to declare subsystem dependencies.
+	public LLTargetCommand() {
+
+		driveSubsystem = RobotContainer.driveSubsystem;
+		limelightSubsystem = RobotContainer.limelightSubsystem;
+		limelight = limelightSubsystem.limelight;
 
 		LLTargetpidController = new PIDController(
 				LimelightConstants.LLTargetGains.kP,
@@ -30,10 +35,7 @@ public class LLTargetCommand extends CommandBase {
 				LimelightConstants.LLTargetGains.kD);
 		LLTargetpidController.setTolerance(0);
 
-		this.limelightSubsystem = limelightSubsystem;
-		this.driveSubsystem = driveSubsystem;
-		limelight = this.limelightSubsystem.limelight;
-
+		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(limelightSubsystem, driveSubsystem);
 	}
 

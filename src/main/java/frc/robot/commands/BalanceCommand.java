@@ -7,13 +7,14 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.TractorToolbox.TractorParts.DoubleSmoother;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class BalanceCommand extends CommandBase {
 
-	private final DriveSubsystem driveSubsystem;
+	private static DriveSubsystem driveSubsystem;
 
 	private final ProfiledPIDController drivePIDController;
 	private final ProfiledPIDController strafePIDController;
@@ -23,20 +24,20 @@ public class BalanceCommand extends CommandBase {
 
 
 	/** Creates a new BalanceCommand. */
-	public BalanceCommand(DriveSubsystem driveSubsystem) {
+	public BalanceCommand() {
 
-		this.driveSubsystem = driveSubsystem;
+		driveSubsystem = RobotContainer.driveSubsystem;
 
 		drivePIDController = new ProfiledPIDController(
 				AutoConstants.kBalanceCommandGains.kP, 
-				AutoConstants.kBalanceCommandGains.kP, 
-				AutoConstants.kBalanceCommandGains.kP,
+				AutoConstants.kBalanceCommandGains.kI, 
+				AutoConstants.kBalanceCommandGains.kD,
 				new TrapezoidProfile.Constraints(AutoConstants.kMaxBalancingVelocity, AutoConstants.kMaxBalancingAcceleration));
 
 		strafePIDController = new ProfiledPIDController(
-				AutoConstants.kBalanceCommandGains.kP, 
-				AutoConstants.kBalanceCommandGains.kP, 
 				AutoConstants.kBalanceCommandGains.kP,
+				AutoConstants.kBalanceCommandGains.kI,
+				AutoConstants.kBalanceCommandGains.kD,
 				new TrapezoidProfile.Constraints(AutoConstants.kMaxBalancingVelocity, AutoConstants.kMaxBalancingAcceleration));
 
 		driveSmoother = new DoubleSmoother(.1);
