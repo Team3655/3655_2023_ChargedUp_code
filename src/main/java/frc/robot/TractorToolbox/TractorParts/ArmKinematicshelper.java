@@ -1,6 +1,6 @@
 package frc.robot.TractorToolbox.TractorParts;
 
-class IKhelper {
+class ArmKinematicshelper {
 
 	double theta1 = 0;
 	double theta2 = 0;
@@ -14,7 +14,7 @@ class IKhelper {
 	double length1 = 0;
 	double length2 = 0;
 
-	public IKhelper(double segOneThetaOffset, double segOneLength, double segTwoThetaOffset, double segTwoLength) {
+	public ArmKinematicshelper(double segOneThetaOffset, double segOneLength, double segTwoThetaOffset, double segTwoLength) {
 		offset1 = segOneThetaOffset;
 		offset2 = segTwoThetaOffset;
 
