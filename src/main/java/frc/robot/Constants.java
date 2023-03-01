@@ -93,7 +93,7 @@ public final class Constants {
 		public static final double kMaxSpeedMetersPerSecond = 3.0;
 		public static final double kMaxTurboMetersPerSecond = 4.5;
 
-		public static final double kMaxRPM = 15;
+		public static final double kMaxRPM = 10;
 
 		public static final int kPigeonPort = 20;
 
@@ -123,13 +123,9 @@ public final class Constants {
 	public static class AutoConstants {
 
 		// PID constants for path planner (these control drive direction not reaching target wheel speeds)
-		public static final double PathPlannerP = 4;
-		public static final double PathPlannerI = 0;
-		public static final double PathPlannerD = 0;
+		public static final PIDGains PPDriveGains = new PIDGains(.5, 0, 0); 
 
-		public static final double PathPlannerTurnP = 22;
-		public static final double PathPlannerTurnI = 0;
-		public static final double PathPlannerTurnD = 0;
+		public static final PIDGains PPTurnGains = new PIDGains(1, 0, 0);
 
 		public static final PIDGains kTurnCommandGains = new PIDGains(.02, 0, 0);
 		public static final double kTurnCommandMaxVelocity = 1;
@@ -137,9 +133,10 @@ public final class Constants {
 		public static final double kTurnCommandToleranceDeg = 5;
 		public static final double kTurnCommandRateToleranceDegPerS = 0;
 
-		public static final PIDGains kBalanceCommandGains = new PIDGains(.001, 0, 0);
+		public static final double kBalnaceCommandDeadbandDeg = 2;
+		public static final PIDGains kBalanceCommandGains = new PIDGains(.01, 0, 0);
 		public static final double kMaxBalancingVelocity = 10;
-		public static final double kMaxBalancingAcceleration = 10;
+		public static final double kMaxBalancingAcceleration = 5;
 
 	}
 

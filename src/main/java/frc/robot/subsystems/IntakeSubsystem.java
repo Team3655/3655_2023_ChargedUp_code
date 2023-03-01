@@ -39,7 +39,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
 		pdh = new PowerDistribution(1, ModuleType.kRev);
 
-
 		// Give Sucker motors their id's
 		mainSucker = new CANSparkMax(IntakeConstants.kMainSuckerPort, MotorType.kBrushless);
 

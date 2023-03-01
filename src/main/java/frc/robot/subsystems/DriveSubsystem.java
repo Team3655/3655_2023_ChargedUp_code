@@ -14,12 +14,16 @@ import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+import com.pathplanner.lib.server.PathPlannerServer;
+import com.pathplanner.lib.server.PathPlannerServerThread;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -27,7 +31,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -53,6 +56,8 @@ public class DriveSubsystem extends SubsystemBase {
 
 	// PID controller for gyro turning
 	private ProfiledPIDController gyroTurnPidController;
+
+	private Field2d field;
 
 	/** Creates a new DriveSubsystem. */
 	public DriveSubsystem() {
@@ -108,6 +113,8 @@ public class DriveSubsystem extends SubsystemBase {
 				gyro.getRotation2d(),
 				swervePosition);
 
+		field = new Field2d();
+
 		gyroTurnPidController = new ProfiledPIDController(
 				DriveConstants.kGyroTurningGains.kP,
 				DriveConstants.kGyroTurningGains.kI,
@@ -125,15 +132,26 @@ public class DriveSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+		swervePosition = new SwerveModulePosition[] {
+				frontLeft.getPosition(),
+				frontRight.getPosition(),
+				rearLeft.getPosition(),
+				rearRight.getPosition()
+		};
+
 		odometry.update(
-				gyro.getRotation2d(),
+				Rotation2d.fromDegrees(getHeading()),
 				swervePosition);
 
+		field.setRobotPose(odometry.getPoseMeters());
+
+		
+
 		if (DriverStation.isDisabled()) {
-			frontLeft.resetEncoders();
-			frontRight.resetEncoders();
-			rearLeft.resetEncoders();
-			rearRight.resetEncoders();
+			// frontLeft.resetEncoders();
+			// frontRight.resetEncoders();
+			// rearLeft.resetEncoders();
+			// rearRight.resetEncoders();
 		}
 
 		frontLeft.putConversionFactors();
@@ -151,11 +169,6 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("RL Offset Check", rearLeft.getAbsoluteHeading() + rearLeft.angleZero);
 		SmartDashboard.putNumber("RR Offset Check", rearRight.getAbsoluteHeading() + rearRight.angleZero);
 
-		SmartDashboard.putNumber("FL Relative", frontLeft.getRelativeHeading());
-		SmartDashboard.putNumber("FR Relative", frontRight.getRelativeHeading());
-		SmartDashboard.putNumber("RL Relative", rearLeft.getRelativeHeading());
-		SmartDashboard.putNumber("RR Relative", rearRight.getRelativeHeading());
-
 		SmartDashboard.putNumber("Gyro yaw", gyro.getYaw());
 		SmartDashboard.putNumber("Gyro pitch", gyro.getPitch());
 		SmartDashboard.putNumber("Gyro roll", gyro.getRoll());
@@ -165,7 +178,8 @@ public class DriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("RL Meters", rearLeft.getDistanceMeters());
 		SmartDashboard.putNumber("RR Meters", rearRight.getDistanceMeters());
 
-		SmartDashboard.putNumber("2D Gyro", getHeading360());
+		SmartDashboard.putData("field", field);
+		SmartDashboard.putNumber("2D Gyro", odometry.getPoseMeters().getRotation().getDegrees());
 		SmartDashboard.putNumber("2D X", getPose().getX());
 		SmartDashboard.putNumber("2D Y", getPose().getY());
 	}
@@ -289,11 +303,30 @@ public class DriveSubsystem extends SubsystemBase {
 
 	/**************************************************************************/
 
-	public Command followTrajectoryCommand(PathPlannerTrajectory trajectory, boolean isFirstPath) {
+	public SequentialCommandGroup followTrajectoryCommand(PathPlannerTrajectory trajectory, boolean isFirstPath) {
+
+		PIDController xPIDController = new PIDController(
+				AutoConstants.PPDriveGains.kP,
+				AutoConstants.PPDriveGains.kI,
+				AutoConstants.PPDriveGains.kD);
+
+		PIDController yPIDController = new PIDController(
+				AutoConstants.PPDriveGains.kP,
+				AutoConstants.PPDriveGains.kI,
+				AutoConstants.PPDriveGains.kD);
+
+		PIDController rotationPIDController = new PIDController(
+				AutoConstants.PPTurnGains.kP,
+				AutoConstants.PPTurnGains.kI,
+				AutoConstants.PPTurnGains.kD);
+
+		rotationPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
 		return new SequentialCommandGroup(
 				new InstantCommand(() -> {
 					// Reset odometry for the first path you run during auto
 					if (isFirstPath) {
+						this.zeroHeading();
 						this.resetOdometry(trajectory.getInitialHolonomicPose());
 					}
 				}),
@@ -301,20 +334,11 @@ public class DriveSubsystem extends SubsystemBase {
 						trajectory,
 						this::getPose, // Pose supplier
 						DriveConstants.kDriveKinematics, // SwerveDriveKinematics
-						new PIDController(
-								AutoConstants.PathPlannerP,
-								AutoConstants.PathPlannerI,
-								AutoConstants.PathPlannerD),
-						new PIDController(
-								AutoConstants.PathPlannerP,
-								AutoConstants.PathPlannerI,
-								AutoConstants.PathPlannerD),
-						new PIDController(
-								AutoConstants.PathPlannerTurnP,
-								AutoConstants.PathPlannerTurnI,
-								AutoConstants.PathPlannerTurnD),
+						xPIDController,
+						yPIDController,
+						rotationPIDController,
 						this::setModuleStates, // Module states consumer
-						false,
+						true, // Alliance dependent
 						this // Requires this drive subsystem
 				));
 	}

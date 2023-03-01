@@ -13,7 +13,6 @@ import frc.robot.commands.LLAlignCommand;
 import frc.robot.commands.LLPuppydogCommand;
 import frc.robot.commands.TurnCommand;
 import frc.robot.commands.ScoreAndLeaveSequence;
-import frc.robot.commands.TimedDriveCommand;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -59,7 +58,7 @@ public class RobotContainer {
 	private final CommandXboxController programmerController = new CommandXboxController(
 			OperatorConstants.kProgrammerControllerPort);
 
-	private SendableChooser<PathPlannerTrajectory> autoChooser = new SendableChooser<>();
+	private SendableChooser<Command> autoChooser = new SendableChooser<>();
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -68,23 +67,24 @@ public class RobotContainer {
 		// Configure the trigger bindings
 		configureBindings();
 
-		PathPlannerServer.startServer(5811);
-
 		Shuffleboard.getTab("Autonomous").add(autoChooser);
 
 		// region Paths
-		PathPlannerTrajectory trajUPath = PathPlanner.loadPath("Upath", new PathConstraints(2, 3));
 		PathPlannerTrajectory trajChargedUpTest = PathPlanner.loadPath("ChargedUpTest", new PathConstraints(3, 5));
-		PathPlannerTrajectory trajNewPath = PathPlanner.loadPath("New Path", new PathConstraints(3, 4));
-		PathPlannerTrajectory trajRotationTuningV2 = PathPlanner.loadPath("RotationTuningV2",
-				new PathConstraints(2.5, 5));
+		PathPlannerTrajectory trajNewPath = PathPlanner.loadPath("New Path", new PathConstraints(3.5, 2.0));
+		PathPlannerTrajectory trajRotationTuningV2 = PathPlanner.loadPath("RotationTuningV2", new PathConstraints(2.5, 5));
+		PathPlannerTrajectory trajTurn90 = PathPlanner.loadPath("90 turn", new PathConstraints(.1, .05));
+		PathPlannerTrajectory traj2MetersX = PathPlanner.loadPath("2 metersX", new PathConstraints(1.0, .5));
+		PathPlannerTrajectory traj2MetersY = PathPlanner.loadPath("2 metersY", new PathConstraints(1.0, .5));
 		// endregion
 
-		autoChooser.setDefaultOption("Upath", trajUPath);
-		autoChooser.addOption("UPath", trajUPath);
-		autoChooser.addOption("ChargedUpTest", trajChargedUpTest);
-		autoChooser.addOption("New Path", trajNewPath);
-		autoChooser.addOption("Rotation Tuning V2", trajRotationTuningV2);
+		autoChooser.setDefaultOption("2 metersX", driveSubsystem.followTrajectoryCommand(traj2MetersX, true));
+		autoChooser.addOption("90 turn", driveSubsystem.followTrajectoryCommand(trajTurn90, true));
+		autoChooser.addOption("2 metersY", driveSubsystem.followTrajectoryCommand(traj2MetersY, true));
+		autoChooser.addOption("ChargedUpTest", driveSubsystem.followTrajectoryCommand(trajChargedUpTest, true));
+		autoChooser.addOption("New Path", driveSubsystem.followTrajectoryCommand(trajNewPath, true));
+		autoChooser.addOption("Rotation Tuning V2", driveSubsystem.followTrajectoryCommand(trajRotationTuningV2, true));
+		autoChooser.addOption("Simple human player", new ScoreAndLeaveSequence(armSubsystem, intakeSubsystem, limelightSubsystem, driveSubsystem));
 	}
 
 	/**
@@ -175,7 +175,6 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		// An example command will be run in autonomous
-
-		return new ScoreAndLeaveSequence(armSubsystem, intakeSubsystem, limelightSubsystem, driveSubsystem);
+		return autoChooser.getSelected();
 	}
 }

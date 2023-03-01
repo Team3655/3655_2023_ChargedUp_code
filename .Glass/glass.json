@@ -8,6 +8,18 @@
     },
     "Transitory Values": {
       "open": false
+    },
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Autonomous/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/field": "Field2d"
+    },
+    "windows": {
+      "/SmartDashboard/field": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables Settings": {

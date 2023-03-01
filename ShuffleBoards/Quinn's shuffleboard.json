@@ -402,6 +402,45 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "10,6": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/2D Gyro",
+              "_title": "SmartDashboard/2D Gyro",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,7": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/2D X",
+              "_title": "SmartDashboard/2D X",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,7": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/2D Y",
+              "_title": "SmartDashboard/2D Y",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }

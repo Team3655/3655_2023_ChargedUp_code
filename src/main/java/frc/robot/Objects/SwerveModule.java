@@ -35,7 +35,6 @@ public class SwerveModule extends SubsystemBase {
 	private final CANSparkMax turningMotor;
 
 	private final CANCoder absoluteEncoder;
-	private final RelativeEncoder angularEncoder;
 	private final RelativeEncoder driveEncoder;
 
 	private final SparkMaxPIDController drivePID;
@@ -81,20 +80,18 @@ public class SwerveModule extends SubsystemBase {
 		driveMotor.restoreFactoryDefaults();
 
 		turningMotor.setInverted(true);
-		driveMotor.setInverted(true);
+		// driveMotor.setInverted(true);
 
 
 		// Initalize CANcoder
-		Timer.delay(1);
 		absoluteEncoder = new CANCoder(absoluteEncoderPort, Constants.kCanivoreCANBusName);
+		Timer.delay(1);
 		absoluteEncoder.configFactoryDefault();
 		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
 		absoluteEncoder.configMagnetOffset(-1 * angleZero);
 		absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
-
-		// Initialize Spark MAX encoders
-		angularEncoder = turningMotor.getEncoder();
+		absoluteEncoder.clearStickyFaults();
 
 		driveEncoder = driveMotor.getEncoder();
 		driveEncoder.setPositionConversionFactor(ModuleConstants.kdriveGearRatio * ModuleConstants.kwheelCircumference); // meters
@@ -118,8 +115,8 @@ public class SwerveModule extends SubsystemBase {
 		// Configure current limits for motors
 		driveMotor.setIdleMode(IdleMode.kBrake);
 		turningMotor.setIdleMode(IdleMode.kBrake);
-		turningMotor.setSmartCurrentLimit(30);
-		driveMotor.setSmartCurrentLimit(30);
+		turningMotor.setSmartCurrentLimit(ModuleConstants.kTurnMotorCurrentLimit);
+		driveMotor.setSmartCurrentLimit(ModuleConstants.kDriveMotorCurrentLimit);
 
 		m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -130,10 +127,6 @@ public class SwerveModule extends SubsystemBase {
 	// Returns headings of the module
 	public double getAbsoluteHeading() {
 		return absoluteEncoder.getAbsolutePosition();
-	}
-
-	public double getRelativeHeading() {
-		return Math.toDegrees(angularEncoder.getPosition());
 	}
 
 	public double getDistanceMeters(){
@@ -183,11 +176,18 @@ public class SwerveModule extends SubsystemBase {
 	}
 
 	public void resetEncoders() {
+		Timer.delay(.1);
 		absoluteEncoder.configFactoryDefault();
+		Timer.delay(.1);
 		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+		Timer.delay(.1);
 		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+		Timer.delay(.1);
 		absoluteEncoder.configMagnetOffset(-1 * angleZero);
-		absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
+		//Timer.delay(.1);
+		// absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
+		Timer.delay(.1);
+		absoluteEncoder.clearStickyFaults();
 	}	
 
 	public void putConversionFactors() {

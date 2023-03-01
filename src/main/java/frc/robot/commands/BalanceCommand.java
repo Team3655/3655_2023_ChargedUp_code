@@ -16,6 +16,7 @@ public class BalanceCommand extends CommandBase {
 	private final DriveSubsystem driveSubsystem;
 
 	private final ProfiledPIDController drivePIDController;
+	private final ProfiledPIDController strafePIDController;
 
 	private final DoubleSmoother driveSmoother;
 	private final DoubleSmoother strafeSmoother;
@@ -31,11 +32,15 @@ public class BalanceCommand extends CommandBase {
 				AutoConstants.kBalanceCommandGains.kP, 
 				AutoConstants.kBalanceCommandGains.kP,
 				new TrapezoidProfile.Constraints(AutoConstants.kMaxBalancingVelocity, AutoConstants.kMaxBalancingAcceleration));
-		
-		drivePIDController.setTolerance(10);
+
+		strafePIDController = new ProfiledPIDController(
+				AutoConstants.kBalanceCommandGains.kP, 
+				AutoConstants.kBalanceCommandGains.kP, 
+				AutoConstants.kBalanceCommandGains.kP,
+				new TrapezoidProfile.Constraints(AutoConstants.kMaxBalancingVelocity, AutoConstants.kMaxBalancingAcceleration));
 
 		driveSmoother = new DoubleSmoother(.1);
-		strafeSmoother = new DoubleSmoother(.2);
+		strafeSmoother = new DoubleSmoother(.1);
 
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(driveSubsystem);
@@ -56,13 +61,13 @@ public class BalanceCommand extends CommandBase {
 		double driveOutput = 0;
 		double strafeOutput = 0;
 
-		if (Math.abs(driveSubsystem.getPitch()) + Math.abs(driveSubsystem.getRoll()) > .5) {
+		if (Math.abs(driveSubsystem.getPitch()) + Math.abs(driveSubsystem.getRoll()) > AutoConstants.kBalnaceCommandDeadbandDeg) {
 			driveOutput = drivePIDController.calculate(driveSubsystem.getRoll(), 0);
-			//strafeOutput = drivePIDController.calculate(driveSubsystem.getPitch(), 0);
+			strafeOutput = strafePIDController.calculate(driveSubsystem.getPitch(), 0);
 		}
 
 		driveOutput = driveSmoother.smoothInput(driveOutput);
-		//strafeOutput = strafeSmoother.smoothInput(strafeOutput);
+		strafeOutput = strafeSmoother.smoothInput(strafeOutput);
 
 		driveSubsystem.drive(-driveOutput, -strafeOutput, 0);
 	}
