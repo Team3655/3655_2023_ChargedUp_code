@@ -300,8 +300,10 @@ public class DriveSubsystem extends SubsystemBase {
 	/**************************************************************************/
 
 	public CommandBase followWithCommands(PathPlannerTrajectory trajectory, boolean isFirstPath) {
-
-		return new FollowPathWithEvents(null, null, null);
+		return new FollowPathWithEvents(
+			followTrajectoryCommand(trajectory, isFirstPath), 
+			trajectory.getMarkers(), 
+			PathPLannerConstants.kPPEventMap);
 	}
 
 	public SequentialCommandGroup followTrajectoryCommand(PathPlannerTrajectory trajectory, boolean isFirstPath) {
@@ -335,11 +337,11 @@ public class DriveSubsystem extends SubsystemBase {
 						trajectory,
 						this::getPose, // Pose supplier
 						DriveConstants.kDriveKinematics, // SwerveDriveKinematics
-						xPIDController,
-						yPIDController,
-						rotationPIDController,
+						xPIDController, // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+						yPIDController, // Y controller (usually the same values as X controller)
+						rotationPIDController, // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
 						this::setModuleStates, // Module states consumer
-						true, // Alliance dependent
+						true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
 						this // Requires this drive subsystem
 				));
 	}

@@ -10,8 +10,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.TractorToolbox.TractorParts.PIDGains;
+import frc.robot.commands.Autonomous.IntakeSequence;
+import frc.robot.commands.Autonomous.ScoreSequence;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -136,7 +138,10 @@ public final class Constants {
 
 			public static final HashMap<String, Command> kPPEventMap = new HashMap<>() {
 				{
-					// put("ScoreHigh", new ScoreSequence());
+					put("ScoreHigh", new ScoreSequence(ArmPoses.HIGH_SCORE));
+					put("ScoreMid", new ScoreSequence(ArmPoses.MID_SCORE));
+					put("ScoreLow", new ScoreSequence(ArmPoses.LOW_SCORE));
+					put("Intake", new IntakeSequence());
 				}
 			};
 

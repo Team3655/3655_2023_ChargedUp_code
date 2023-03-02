@@ -44,8 +44,6 @@ public class ArmSubsystem extends SubsystemBase {
 			}
 		}
 
-		
-
 		// region: def arms
 
 		// major arm defs
