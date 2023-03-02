@@ -4,11 +4,14 @@
 
 package frc.robot.commands.Autonomous;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.commands.ArmPoseCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -17,16 +20,20 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class ScoreSequence extends SequentialCommandGroup {
 
 	public static IntakeSubsystem intakeSubsystem;
+	public static ArmSubsystem armSubsystem;
 
 	/** Creates a new ScoreCommand. */
 	public ScoreSequence(ArmPoses armPose) {
 
 		intakeSubsystem = RobotContainer.intakeSubsystem;
+		armSubsystem = RobotContainer.armSubsystem;
 
 		// Add your commands in the addCommands() call, e.g.
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(
 				new ArmPoseCommand(armPose),
-				new InstantCommand(() -> intakeSubsystem.stopSucking()));
+				new InstantCommand(() -> intakeSubsystem.stopSucking()),
+				new InstantCommand(() -> Timer.delay(AutoConstants.kScoreSequenceDropTime)),
+				new InstantCommand(() -> armSubsystem.ArmPoseCommand(ArmPoses.TUCKED)));
 	}
 }
