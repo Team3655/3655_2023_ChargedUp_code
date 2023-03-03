@@ -1,4 +1,4 @@
-package frc.robot.Objects;
+package frc.robot.Mechanisms;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;

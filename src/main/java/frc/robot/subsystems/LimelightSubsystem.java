@@ -7,9 +7,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
-import frc.robot.Objects.Limelight;
 import frc.robot.Constants.LimelightConstants;
+import frc.robot.Mechanisms.Limelight;
 
 public class LimelightSubsystem extends SubsystemBase {
 

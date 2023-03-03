@@ -24,9 +24,7 @@ import frc.robot.TractorToolbox.JoystickUtils;
 import frc.robot.commands.ArmBumpCommand;
 import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.commands.LLAlignCommand;
-import frc.robot.commands.LLPuppydogCommand;
-import frc.robot.commands.TurnCommand;
-import frc.robot.commands.Autonomous.BalanceCommand;
+import frc.robot.commands.TurnCommand;	
 import frc.robot.commands.Autonomous.Autos.ScoreAndLeaveSequence;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -79,16 +77,20 @@ public class RobotContainer {
 		PathPlannerTrajectory traj2MetersX = PathPlanner.loadPath("2 metersX", new PathConstraints(1.0, .5));
 		PathPlannerTrajectory traj2MetersY = PathPlanner.loadPath("2 metersY", new PathConstraints(1.0, .5));
 		PathPlannerTrajectory trajOdometryHell = PathPlanner.loadPath("Odometry Hell", new PathConstraints(3.0, 2.0));
+		PathPlannerTrajectory autoEventTest = PathPlanner.loadPath("Event Test", new PathConstraints(3.0, 2.0));
 		// endregion
 
 		autoChooser.setDefaultOption("2 metersX", driveSubsystem.followTrajectoryCommand(traj2MetersX, true));
+		//Complex Autos
+		autoChooser.addOption("Event Test", driveSubsystem.followWithCommands(autoEventTest, true));
+		autoChooser.addOption("Simple human player", new ScoreAndLeaveSequence());
+		// Basic Paths
 		autoChooser.addOption("Odometry Hell", driveSubsystem.followTrajectoryCommand(trajOdometryHell, true));
 		autoChooser.addOption("90 turn", driveSubsystem.followTrajectoryCommand(trajTurn90, true));
 		autoChooser.addOption("2 metersY", driveSubsystem.followTrajectoryCommand(traj2MetersY, true));
 		autoChooser.addOption("ChargedUpTest", driveSubsystem.followTrajectoryCommand(trajChargedUpTest, true));
 		autoChooser.addOption("New Path", driveSubsystem.followTrajectoryCommand(trajNewPath, true));
 		autoChooser.addOption("Rotation Tuning V2", driveSubsystem.followTrajectoryCommand(trajRotationTuningV2, true));
-		autoChooser.addOption("Simple human player", new ScoreAndLeaveSequence());
 		// endregion
 	}
 
@@ -116,9 +118,11 @@ public class RobotContainer {
 		operatorController.button(6).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.LOW_INTAKE));
 		operatorController.button(7).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.MID_INTAKE));
 		operatorController.button(8).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.HIGH_INTAKE));
+		programmerController.b().onTrue(armSubsystem.ArmPoseCommand(ArmPoses.LOW_INTAKE));
 
 		// tuck arms
 		operatorController.button(4).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.TUCKED));
+		programmerController.y().onTrue(armSubsystem.ArmPoseCommand(ArmPoses.TUCKED));
 
 		// Switches sides of the robot
 		operatorController.button(9).onTrue(new ArmSwitchCommand());
@@ -142,11 +146,11 @@ public class RobotContainer {
 		driveJoystick.button(4).whileTrue(new TurnCommand(180));
 		driveJoystick.button(5).whileTrue(new TurnCommand(180));
 		programmerController.a().whileTrue(new LLAlignCommand());
-		programmerController.b().whileTrue(new LLPuppydogCommand());
+		//	programmerController.b().whileTrue(new LLPuppydogCommand());
 		programmerController.x().whileTrue(new TurnCommand(180));
 		// endregion
 
-		programmerController.y().whileTrue(new BalanceCommand());
+		//programmerController.y().whileTrue(new BalanceCommand());
 
 		// region Drive Commands
 		driveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));

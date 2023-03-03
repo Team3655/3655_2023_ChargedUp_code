@@ -2,14 +2,14 @@ package frc.robot.subsystems;
 
 import java.util.HashMap;
 
-import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.ArmConstants.ArmPoses;
-import frc.robot.Objects.ArmSegment;
-
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.ArmConstants.ArmPoses;
+import frc.robot.Mechanisms.ArmSegment;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -26,6 +26,9 @@ public class ArmSubsystem extends SubsystemBase {
 	// create arms
 	private ArmSegment majorArm;
 	private ArmSegment minorArm;
+
+	private Servo leftGripperServo;	
+	private Servo rightGripperServo;
 
 	// endregion
 
@@ -81,10 +84,11 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMinorArmPIDOutputLimit);
 		// endregion
 
+		leftGripperServo = new Servo(ArmConstants.kLeftGripperPort);
+		rightGripperServo = new Servo(ArmConstants.kRightGripperPort);
+
 		// the default state of the arms
 		isFront = true;
-
-		setArmState(ArmPoses.TUCKED);
 	}
 
 	@Override
@@ -156,6 +160,16 @@ public class ArmSubsystem extends SubsystemBase {
 		majorArm.setReference();
 		minorArm.setReference();
 
+	}
+
+	public void closeGrip() {
+		leftGripperServo.set(0);
+		rightGripperServo.set(0);
+	}
+
+	public void openGrip() {
+		leftGripperServo.set(1);
+		rightGripperServo.set(1);
 	}
 
 	// endregion

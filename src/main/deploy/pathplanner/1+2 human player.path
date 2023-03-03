@@ -16,7 +16,9 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "ScoreHigh"
+        ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
@@ -113,7 +115,9 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "ScoreHigh"
+        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -123,5 +127,18 @@
   "maxVelocity": 4.25,
   "maxAcceleration": 3.75,
   "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.45,
+      "names": [
+        "IntakeDown"
+      ]
+    },
+    {
+      "position": 2.5,
+      "names": [
+        "IntakeDown"
+      ]
+    }
+  ]
 }

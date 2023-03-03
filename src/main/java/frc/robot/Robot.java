@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
 		PathPlannerServer.startServer(5811);
 		robotContainer = new RobotContainer();
 		DriverStation.silenceJoystickConnectionWarning(true);
+			
 	}
 
 	/**

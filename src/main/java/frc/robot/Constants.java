@@ -12,6 +12,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.TractorToolbox.TractorParts.PIDGains;
+import frc.robot.commands.ArmPoseCommand;
 import frc.robot.commands.Autonomous.IntakeSequence;
 import frc.robot.commands.Autonomous.ScoreSequence;
 
@@ -103,6 +104,8 @@ public final class Constants {
 
 		public static final int kPigeonPort = 20;
 
+		public static final double kBumperToBumperWidth = Units.inchesToMeters(31);
+
 		public static final double kTrackWidth = Units.inchesToMeters(20); // in meters!
 		public static final double kWheelBase = Units.inchesToMeters(20); // in meters!
 
@@ -132,7 +135,7 @@ public final class Constants {
 
 			// PID constants for path planner (these control drive direction not reaching
 			// target wheel speeds)
-			public static final PIDGains kPPDriveGains = new PIDGains(.5, 0, 0);
+			public static final PIDGains kPPDriveGains = new PIDGains(.75, 0, 0);
 
 			public static final PIDGains kPPTurnGains = new PIDGains(1, 0, 0);
 
@@ -141,10 +144,10 @@ public final class Constants {
 					put("ScoreHigh", new ScoreSequence(ArmPoses.HIGH_SCORE));
 					put("ScoreMid", new ScoreSequence(ArmPoses.MID_SCORE));
 					put("ScoreLow", new ScoreSequence(ArmPoses.LOW_SCORE));
-					put("Intake", new IntakeSequence());
+					put("IntakeDown", new IntakeSequence());
+					put("DropArm", new ArmPoseCommand(ArmPoses.LOW_INTAKE));
 				}
 			};
-
 		}
 
 		public static final PIDGains kTurnCommandGains = new PIDGains(.02, 0, 0);
@@ -184,6 +187,9 @@ public final class Constants {
 		public static final int kLeftMajorArmPort = 14;
 		public static final int kRightMinorArmPort = 15;
 		public static final int kLeftMinorArmPort = 16;
+
+		public static final int kLeftGripperPort = 1;
+		public static final int kRightGripperPort = 2 ;
 
 		public static final int kMajorArmGearBoxRatio = 100;
 		public static final int kMinorArmGearBoxRatio = 100;

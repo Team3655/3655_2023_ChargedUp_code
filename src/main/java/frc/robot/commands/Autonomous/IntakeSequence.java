@@ -26,7 +26,7 @@ public class IntakeSequence extends SequentialCommandGroup {
 		// Add your commands in the addCommands() call, e.g.
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(
-				new InstantCommand(() -> intakeSubsystem.startSucking()),
+				new InstantCommand(() -> intakeSubsystem.stopSucking()),
 				new ArmPoseCommand(ArmPoses.LOW_INTAKE));
 	}
 }
