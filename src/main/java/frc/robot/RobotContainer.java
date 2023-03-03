@@ -4,10 +4,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,11 +17,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.TractorToolbox.JoystickUtils;
+import frc.robot.TractorToolbox.TractorParts.PathBuilder;
 import frc.robot.commands.ArmBumpCommand;
 import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.commands.LLAlignCommand;
-import frc.robot.commands.TurnCommand;	
-import frc.robot.commands.Autonomous.Autos.ScoreAndLeaveSequence;
+import frc.robot.commands.TurnCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -50,6 +46,8 @@ public class RobotContainer {
 	public static final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
 	public static final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
+	public final PathBuilder autoBuilder = new PathBuilder();
+
 	private final CommandJoystick driveJoystick = new CommandJoystick(OperatorConstants.kDriveJoystickPort);
 	private final CommandJoystick turnJoystick = new CommandJoystick(OperatorConstants.kTurnJoystickPort);
 	private final CommandGenericHID operatorController = new CommandGenericHID(
@@ -69,28 +67,14 @@ public class RobotContainer {
 		// region Def Auto
 		Shuffleboard.getTab("Autonomous").add(autoChooser);
 
-		// region Paths
-		PathPlannerTrajectory trajChargedUpTest = PathPlanner.loadPath("ChargedUpTest", new PathConstraints(3, 5));
-		PathPlannerTrajectory trajNewPath = PathPlanner.loadPath("New Path", new PathConstraints(3.5, 2.0));
-		PathPlannerTrajectory trajRotationTuningV2 = PathPlanner.loadPath("RotationTuningV2", new PathConstraints(2.5, 5));
-		PathPlannerTrajectory trajTurn90 = PathPlanner.loadPath("90 turn", new PathConstraints(.1, .05));
-		PathPlannerTrajectory traj2MetersX = PathPlanner.loadPath("2 metersX", new PathConstraints(1.0, .5));
-		PathPlannerTrajectory traj2MetersY = PathPlanner.loadPath("2 metersY", new PathConstraints(1.0, .5));
-		PathPlannerTrajectory trajOdometryHell = PathPlanner.loadPath("Odometry Hell", new PathConstraints(3.0, 2.0));
-		PathPlannerTrajectory autoEventTest = PathPlanner.loadPath("Event Test", new PathConstraints(3.0, 2.0));
-		// endregion
+		autoBuilder.populatePathMap();
 
-		autoChooser.setDefaultOption("2 metersX", driveSubsystem.followTrajectoryCommand(traj2MetersX, true));
-		//Complex Autos
-		autoChooser.addOption("Event Test", driveSubsystem.followWithCommands(autoEventTest, true));
-		autoChooser.addOption("Simple human player", new ScoreAndLeaveSequence());
-		// Basic Paths
-		autoChooser.addOption("Odometry Hell", driveSubsystem.followTrajectoryCommand(trajOdometryHell, true));
-		autoChooser.addOption("90 turn", driveSubsystem.followTrajectoryCommand(trajTurn90, true));
-		autoChooser.addOption("2 metersY", driveSubsystem.followTrajectoryCommand(traj2MetersY, true));
-		autoChooser.addOption("ChargedUpTest", driveSubsystem.followTrajectoryCommand(trajChargedUpTest, true));
-		autoChooser.addOption("New Path", driveSubsystem.followTrajectoryCommand(trajNewPath, true));
-		autoChooser.addOption("Rotation Tuning V2", driveSubsystem.followTrajectoryCommand(trajRotationTuningV2, true));
+		autoChooser.setDefaultOption("Event Test", autoBuilder.getPathCommand("Event Test"));
+		autoChooser.addOption("Circle Charge", autoBuilder.getPathCommand("Circle Charge"));
+		autoChooser.addOption("Odometry Hell", autoBuilder.getPathCommand("Odometry Hell"));
+		autoChooser.addOption("2 metersX", autoBuilder.getPathCommand("2 metersX"));
+		autoChooser.addOption("2 metersY", autoBuilder.getPathCommand("2 metersY"));
+		autoChooser.addOption("90 turn", autoBuilder.getPathCommand("90 turn"));
 		// endregion
 	}
 

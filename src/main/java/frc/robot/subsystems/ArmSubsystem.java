@@ -103,8 +103,6 @@ public class ArmSubsystem extends SubsystemBase {
 		SmartDashboard.putBoolean("At target major", majorArm.getAtTarget(5));
 		SmartDashboard.putBoolean("At target major", majorArm.getAtTarget(5));
 
-
-
 	}
 
 	// region Commands

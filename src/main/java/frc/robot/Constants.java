@@ -136,8 +136,10 @@ public final class Constants {
 			// PID constants for path planner (these control drive direction not reaching
 			// target wheel speeds)
 			public static final PIDGains kPPDriveGains = new PIDGains(.75, 0, 0);
-
 			public static final PIDGains kPPTurnGains = new PIDGains(1, 0, 0);
+
+			public static final double kPPMaxVelocity = 3.0;
+			public static final double kPPMaxAcceleration = 3.0;
 
 			public static final HashMap<String, Command> kPPEventMap = new HashMap<>() {
 				{
