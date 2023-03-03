@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.TractorToolbox.TractorParts.PIDGains;
 import frc.robot.commands.ArmPoseCommand;
-import frc.robot.commands.Autonomous.IntakeSequence;
+import frc.robot.commands.Autonomous.IntakeDownSequence;
 import frc.robot.commands.Autonomous.ScoreSequence;
 
 /**
@@ -144,7 +144,7 @@ public final class Constants {
 					put("ScoreHigh", new ScoreSequence(ArmPoses.HIGH_SCORE));
 					put("ScoreMid", new ScoreSequence(ArmPoses.MID_SCORE));
 					put("ScoreLow", new ScoreSequence(ArmPoses.LOW_SCORE));
-					put("IntakeDown", new IntakeSequence());
+					put("IntakeDown", new IntakeDownSequence());
 					put("DropArm", new ArmPoseCommand(ArmPoses.LOW_INTAKE));
 				}
 			};
