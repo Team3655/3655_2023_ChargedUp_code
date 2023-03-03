@@ -14,12 +14,12 @@ import frc.robot.subsystems.IntakeSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class IntakeSequence extends SequentialCommandGroup {
+public class IntakeDownSequence extends SequentialCommandGroup {
 
 	public static IntakeSubsystem intakeSubsystem;
 
 	/** Creates a new ScoreCommand. */
-	public IntakeSequence() {
+	public IntakeDownSequence() {
 
 		intakeSubsystem = RobotContainer.intakeSubsystem;
 

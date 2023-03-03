@@ -150,6 +150,8 @@ public final class Constants {
 			};
 		}
 
+		public static final double kScoreSequenceDropTime = .2; // in seconds 
+
 		public static final PIDGains kTurnCommandGains = new PIDGains(.02, 0, 0);
 		public static final double kTurnCommandMaxVelocity = 1;
 		public static final double kTurnCommandMaxAcceleration = 1;
