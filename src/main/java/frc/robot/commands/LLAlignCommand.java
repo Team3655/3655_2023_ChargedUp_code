@@ -68,7 +68,7 @@ public class LLAlignCommand extends CommandBase {
 			double strafeOutput = strafeOutputSmoother.smoothInput(strafePIDOutput);
 			double driveOutput = driveOutputSmoother.smoothInput(drivePIDOutput);
 			
-			driveSubsystem.drive(driveOutput, strafeOutput, 0);
+			driveSubsystem.drive(-driveOutput, -strafeOutput, 0);
 
 		} else {
 			driveSubsystem.drive(0, 0, 0);

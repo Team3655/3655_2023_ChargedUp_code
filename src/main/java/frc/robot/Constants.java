@@ -254,7 +254,7 @@ public final class Constants {
 				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55, .08 });
 				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98, kMinorArmPIDOutputLimit });
 				put(ArmPoses.MID_INTAKE, new double[] { 13, 33, .25 });
-				put(ArmPoses.HIGH_INTAKE, new double[] { 105, 80, .25 });
+				put(ArmPoses.HIGH_INTAKE, new double[] { 95, 80, .25 });
 				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0, kMinorArmPIDOutputLimit });
 			}
 

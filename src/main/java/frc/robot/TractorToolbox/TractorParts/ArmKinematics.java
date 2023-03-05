@@ -1,9 +1,12 @@
 package frc.robot.TractorToolbox.TractorParts;
 
-class ArmKinematicshelper {
+class ArmKinematics {
 
 	private double theta1 = 0;
 	private double theta2 = 0;
+
+	private double forwardEndEffectorX = 0;
+	private double forwardEndEffectorY = 0;
 
 	private double inverseTheta1 = 0;
 	private double inverseTheta2 = 0;
@@ -14,7 +17,7 @@ class ArmKinematicshelper {
 	private double length1 = 0;
 	private double length2 = 0;
 
-	public ArmKinematicshelper(double segOneThetaOffset, double segOneLength, double segTwoThetaOffset, double segTwoLength) {
+	public ArmKinematics(double segOneThetaOffset, double segOneLength, double segTwoThetaOffset, double segTwoLength) {
 		offset1 = segOneThetaOffset;
 		offset2 = segTwoThetaOffset;
 
@@ -22,7 +25,7 @@ class ArmKinematicshelper {
 		length2 = segTwoLength;
 	}
 
-	public void setTarget(double inputX, double inputY) {
+	public void setInverseTarget(double inputX, double inputY) {
 
 		double x = inputX;
 		double y = inputY;
@@ -66,7 +69,7 @@ class ArmKinematicshelper {
 
 	}
 
-	public void setOverhand() {
+	public void setForwardTheta(double theta1, double theta2) {
 		
 	}
 
@@ -85,5 +88,7 @@ class ArmKinematicshelper {
 	public double getInverseTheta2() {
 		return inverseTheta2 - offset2;
 	}
+
+	
 
 }
