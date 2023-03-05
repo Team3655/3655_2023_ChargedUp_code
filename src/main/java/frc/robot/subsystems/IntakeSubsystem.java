@@ -53,7 +53,7 @@ public class IntakeSubsystem extends SubsystemBase {
 		mainSucker.setSecondaryCurrentLimit(IntakeConstants.kMainSuckerStallCurrentLimit);
 
 		// sets motor default idle mode
-		mainSucker.setIdleMode(IdleMode.kCoast);
+		mainSucker.setIdleMode(IdleMode.kBrake);
 		
 		mainSucker.set(IntakeConstants.kMainSuckerSetpoint);
 	}
