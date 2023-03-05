@@ -99,7 +99,7 @@ public class ArmSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("minor real theta: ", minorArm.getRealTheta());
 		SmartDashboard.putNumber("major power draw: ", majorArm.getPowerDraw());
 		SmartDashboard.putNumber("minor power draw: ", minorArm.getPowerDraw());
-		SmartDashboard.putBoolean("At target: ", getAtTarget(5));
+		SmartDashboard.putBoolean("At target: ", getAtTarget(8));
 		SmartDashboard.putBoolean("At target major", majorArm.getAtTarget(5));
 		SmartDashboard.putBoolean("At target major", majorArm.getAtTarget(5));
 
@@ -189,7 +189,7 @@ public class ArmSubsystem extends SubsystemBase {
 		return isFront;
 	}
 
-	public boolean getAtTarget(final double deadBand) {
+	public boolean getAtTarget(double deadBand) {
 
 		if (majorArm.getAtTarget(deadBand) && minorArm.getAtTarget(deadBand)) {
 			return true;

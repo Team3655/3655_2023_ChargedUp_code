@@ -45,11 +45,22 @@ public class PathBuilder {
 						PathPLannerConstants.kPPTurnGains.kD),
 				driveSubsystem::setModuleStates,
 				PathPLannerConstants.kPPEventMap,
+				true,
 				driveSubsystem);
 	}
 
 	public Command getPathCommand(String path) {
 		return pathMap.get(path);
+	}
+
+	public void addPath(String pathName) {
+		pathMap.put(
+					pathName,
+					autoBuilder.fullAuto(PathPlanner.loadPathGroup(
+							pathName,
+							new PathConstraints(
+									PathPLannerConstants.kPPMaxVelocity,
+									PathPLannerConstants.kPPMaxAcceleration))));
 	}
 
 	/** fills the path map with paths from the pathplanner directory */

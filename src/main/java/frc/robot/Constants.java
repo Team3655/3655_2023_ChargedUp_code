@@ -139,7 +139,7 @@ public final class Constants {
 			public static final PIDGains kPPTurnGains = new PIDGains(1, 0, 0);
 
 			public static final double kPPMaxVelocity = 3.0;
-			public static final double kPPMaxAcceleration = 3.0;
+			public static final double kPPMaxAcceleration = 1.0;
 
 			public static final HashMap<String, Command> kPPEventMap = new HashMap<>() {
 				{
@@ -270,16 +270,11 @@ public final class Constants {
 		public static final int kSideSuckerPort = 17;
 		public static final int kMainSuckerPort = 18;
 
-		public static final int kSideSuckerCurrentLimit = 8;
 		public static final int kMainSuckerCurrentLimit = 10;
 		public static final int kMainSuckerStallCurrentLimit = 12;
 
-		public static final double kMainSuckerSetpoint = .15;
+		public static final double kMainSuckerSetpoint = 0.35 ; // .35
 		public static final int kHasPieceThreshold = 1000;
-
-		public static final double kMainSuckerP = .009;
-
-		public static final double kMainSuckerMaxOutput = 1d / 3d;
 
 	}
 

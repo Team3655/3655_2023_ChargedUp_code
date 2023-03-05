@@ -67,9 +67,12 @@ public class RobotContainer {
 		// region Def Auto
 		Shuffleboard.getTab("Autonomous").add(autoChooser);
 
-		autoBuilder.populatePathMap();
+		//autoBuilder.populatePathMap();
+		autoBuilder.addPath("Event Test");
+		autoBuilder.addPath("Cube");
 
 		autoChooser.setDefaultOption("Event Test", autoBuilder.getPathCommand("Event Test"));
+		autoChooser.addOption("Cube", autoBuilder.getPathCommand("Cube"));
 		autoChooser.addOption("Circle Charge", autoBuilder.getPathCommand("Circle Charge"));
 		autoChooser.addOption("Odometry Hell", autoBuilder.getPathCommand("Odometry Hell"));
 		autoChooser.addOption("2 metersX", autoBuilder.getPathCommand("2 metersX"));
@@ -152,9 +155,9 @@ public class RobotContainer {
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								JoystickUtils.processJoystickInput(driveJoystick.getY()) - JoystickUtils.processJoystickInput(programmerController.getLeftY()), // x axis
-								JoystickUtils.processJoystickInput(driveJoystick.getX()) - JoystickUtils.processJoystickInput(programmerController.getLeftX()), // y axis
-								JoystickUtils.processJoystickInput(turnJoystick.getX()) - JoystickUtils.processJoystickInput(programmerController.getRightX()), // rot axis
+								-JoystickUtils.processJoystickInput(driveJoystick.getY()) - JoystickUtils.processJoystickInput(programmerController.getLeftY()), // x axis
+								-JoystickUtils.processJoystickInput(driveJoystick.getX()) - JoystickUtils.processJoystickInput(programmerController.getLeftX()), // y axis
+								-JoystickUtils.processJoystickInput(turnJoystick.getX()) - JoystickUtils.processJoystickInput(programmerController.getRightX()), // rot axis
 								driveJoystick.getHID().getRawButton(1), // turbo boolean
 								driveJoystick.getHID().getRawButton(2)), // sneak boolean
 						driveSubsystem));
