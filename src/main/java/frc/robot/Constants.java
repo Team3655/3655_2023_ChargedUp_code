@@ -68,10 +68,10 @@ public final class Constants {
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// Offset angle for absolute encoders (find this using CTRE client)
-		public static final double kFrontLeftAngleZero = 157.412;
-		public static final double kFrontRightAngleZero = 76.025;
-		public static final double kRearLeftAngleZero = -30.761;
-		public static final double kRearRightAngleZero = -23.642;
+		public static final double kFrontLeftAngleZero = 156.75;
+		public static final double kFrontRightAngleZero = 76.35;
+		public static final double kRearLeftAngleZero = -27.95;
+		public static final double kRearRightAngleZero = -23.48;
 
 		public static final double kModuleDriveControllerP = .1;
 		public static final double kModuleDriveControllerI = 0;
@@ -135,11 +135,11 @@ public final class Constants {
 
 			// PID constants for path planner (these control drive direction not reaching
 			// target wheel speeds)
-			public static final PIDGains kPPDriveGains = new PIDGains(.75, 0, 0);
-			public static final PIDGains kPPTurnGains = new PIDGains(1, 0, 0);
+			public static final PIDGains kPPDriveGains = new PIDGains(1.5, 0, 0);
+			public static final PIDGains kPPTurnGains = new PIDGains(1.5, 0, 0);
 
-			public static final double kPPMaxVelocity = 3.0;
-			public static final double kPPMaxAcceleration = 1.0;
+			public static final double kPPMaxVelocity = 2.0;
+			public static final double kPPMaxAcceleration = 0.5;
 
 			public static final HashMap<String, Command> kPPEventMap = new HashMap<>() {
 				{
