@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import java.util.HashMap;
 
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -10,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.Mechanisms.ArmSegment;
+import frc.robot.Mechanisms.Gripper;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -27,8 +27,8 @@ public class ArmSubsystem extends SubsystemBase {
 	private ArmSegment majorArm;
 	private ArmSegment minorArm;
 
-	private Servo leftGripperServo;	
-	private Servo rightGripperServo;
+	// create gripper
+	private Gripper gripper;
 
 	// endregion
 
@@ -84,8 +84,7 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMinorArmPIDOutputLimit);
 		// endregion
 
-		leftGripperServo = new Servo(ArmConstants.kLeftGripperPort);
-		rightGripperServo = new Servo(ArmConstants.kRightGripperPort);
+		gripper = new Gripper(ArmConstants.kLeftGripperPort, ArmConstants.kRightGripperPort);
 
 		// the default state of the arms
 		isFront = true;
@@ -147,6 +146,13 @@ public class ArmSubsystem extends SubsystemBase {
 	 *             LOW_INTAKE, MID_INTAKE, HIGH_INTAKE)
 	 */
 	public void setArmState(final ArmPoses state) {
+
+		if (state == ArmPoses.TUCKED) {
+			gripper.closeGriper();
+		} else {
+			gripper.openGriper();
+		}
+
 		targetArmState = state;
 
 		// gets the angle values from the hashmap
@@ -158,16 +164,6 @@ public class ArmSubsystem extends SubsystemBase {
 		majorArm.setReference();
 		minorArm.setReference();
 
-	}
-
-	public void closeGrip() {
-		leftGripperServo.set(0);
-		rightGripperServo.set(0);
-	}
-
-	public void openGrip() {
-		leftGripperServo.set(1);
-		rightGripperServo.set(1);
 	}
 
 	// endregion
@@ -187,6 +183,14 @@ public class ArmSubsystem extends SubsystemBase {
 	/** ruturns true if the target dominant side of the robot is front */
 	public boolean getIsFront() {
 		return isFront;
+	}
+
+	public void openGriper() {
+		gripper.openGriper();
+	}
+
+	public void closeGriper() {
+		gripper.closeGriper();
 	}
 
 	public boolean getAtTarget(double deadBand) {

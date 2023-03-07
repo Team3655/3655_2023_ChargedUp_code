@@ -18,9 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-
-	// TODO: add servo gripper code
-
+	
 	/** Motors for the Suckers */
 	private CANSparkMax mainSucker;
 

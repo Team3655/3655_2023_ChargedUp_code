@@ -147,7 +147,6 @@ public final class Constants {
 					put("ScoreMid", new ScoreSequence(ArmPoses.MID_SCORE));
 					put("ScoreLow", new ScoreSequence(ArmPoses.LOW_SCORE));
 					put("IntakeDown", new IntakeDownSequence());
-					put("DropArm", new ArmPoseCommand(ArmPoses.LOW_INTAKE));
 				}
 			};
 		}
@@ -273,7 +272,7 @@ public final class Constants {
 		public static final int kMainSuckerCurrentLimit = 10;
 		public static final int kMainSuckerStallCurrentLimit = 12;
 
-		public static final double kMainSuckerSetpoint = 0.35 ; // .35
+		public static final double kMainSuckerSetpoint = 0.5;
 		public static final int kHasPieceThreshold = 1000;
 
 	}
@@ -291,9 +290,10 @@ public final class Constants {
 		public static final double kServoBackpose = 0;
 
 		// piss values for limelight
-		public static final PIDGains LLTargetGains = new PIDGains(0.008, 0, 0); // TODO: gains for target command
+		public static final PIDGains LLTargetGains = new PIDGains(0.008, 0, 0);
+		
 
-		public static final PIDGains LLPuppyTurnGains = new PIDGains(0.008, 0, 0); // TODO: gains for puppydog command
+		public static final PIDGains LLPuppyTurnGains = new PIDGains(0.008, 0, 0); 
 		public static final PIDGains LLPuppyDriveGains = new PIDGains(0.008, 0, 0);
 		public static final double PuppyTurnMotionSmoothing = 0.3;
 		public static final double PuppyDriveMotionSmoothing = 0.4;
