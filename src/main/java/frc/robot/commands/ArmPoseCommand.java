@@ -42,7 +42,7 @@ public class ArmPoseCommand extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-
+		// spite.
 		boolean isFinished = false;
 
 		if (armSubsystem.getAtTarget(8)) {
@@ -55,4 +55,5 @@ public class ArmPoseCommand extends CommandBase {
 			return false;
 		}
 	}
+
 }
