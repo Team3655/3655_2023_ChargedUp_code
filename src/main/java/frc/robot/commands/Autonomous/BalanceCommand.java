@@ -50,7 +50,7 @@ public class BalanceCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		driveSubsystem.setFieldCentric(false);
+		driveSubsystem.setFieldCentric(true);
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -70,13 +70,12 @@ public class BalanceCommand extends CommandBase {
 		driveOutput = driveSmoother.smoothInput(driveOutput);
 		strafeOutput = strafeSmoother.smoothInput(strafeOutput);
 
-		driveSubsystem.drive(-driveOutput, -strafeOutput, 0);
+		driveSubsystem.drive(-driveOutput, 0, 0);
 	}
 
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		driveSubsystem.setFieldCentric(true);
 	}
 
 	// Returns true when the command should end.

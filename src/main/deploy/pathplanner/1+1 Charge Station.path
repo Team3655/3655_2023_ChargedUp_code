@@ -78,5 +78,19 @@
   "maxVelocity": 3.75,
   "maxAcceleration": 3.0,
   "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.15,
+      "names": [
+        "ToggleSide",
+        "IntakeDown"
+      ]
+    },
+    {
+      "position": 1.05,
+      "names": [
+        "Tuck"
+      ]
+    }
+  ]
 }
