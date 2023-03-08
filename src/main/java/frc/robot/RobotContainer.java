@@ -20,6 +20,7 @@ import frc.robot.TractorToolbox.JoystickUtils;
 import frc.robot.TractorToolbox.TractorParts.PathBuilder;
 import frc.robot.commands.ArmBumpCommand;
 import frc.robot.commands.ArmSwitchCommand;
+import frc.robot.commands.FloorIntakeCommand;
 import frc.robot.commands.LLAlignCommand;
 import frc.robot.commands.TurnCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -102,10 +103,10 @@ public class RobotContainer {
 		operatorController.button(3).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.HIGH_SCORE));
 
 		// intaking commands
-		operatorController.button(6).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.LOW_INTAKE));
+		operatorController.button(6).onTrue(new FloorIntakeCommand());
 		operatorController.button(7).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.MID_INTAKE));
 		operatorController.button(8).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.HIGH_INTAKE));
-		programmerController.b().onTrue(armSubsystem.ArmPoseCommand(ArmPoses.LOW_INTAKE));
+		programmerController.b().onTrue(new FloorIntakeCommand());
 
 		// tuck arms
 		operatorController.button(4).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.TUCKED));
@@ -147,9 +148,9 @@ public class RobotContainer {
 		programmerController.button(6).onTrue(driveSubsystem.toggleFieldCentric());
 
 		driveJoystick.povUp().whileTrue(
-				new RunCommand(() -> driveSubsystem.robotCentricDrive(-0.05, 0, 0), driveSubsystem));
-		driveJoystick.povDown().whileTrue(
 				new RunCommand(() -> driveSubsystem.robotCentricDrive(0.05, 0, 0), driveSubsystem));
+		driveJoystick.povDown().whileTrue(
+				new RunCommand(() -> driveSubsystem.robotCentricDrive(-0.05, 0, 0), driveSubsystem));
 
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(

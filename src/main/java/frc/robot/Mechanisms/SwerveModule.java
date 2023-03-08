@@ -44,17 +44,15 @@ public class SwerveModule extends SubsystemBase {
 	private final String moduleName;
 
 	private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
-		ModuleConstants.kAngularPID[0],
-		ModuleConstants.kAngularPID[1],
-		ModuleConstants.kAngularPID[2],
-		new TrapezoidProfile.Constraints( // radians/s?
-			2 * Math.PI * 80, //theoretical is 5676 RPM -> 94*2pi
-			2 * Math.PI * 60
-		));
-
+			ModuleConstants.kAngularPID[0],
+			ModuleConstants.kAngularPID[1],
+			ModuleConstants.kAngularPID[2],
+			new TrapezoidProfile.Constraints( // radians/s?
+					2 * Math.PI * 80, // theoretical is 5676 RPM -> 94*2pi
+					2 * Math.PI * 60));
 
 	SimpleMotorFeedforward turnFeedForward = new SimpleMotorFeedforward(
-		ModuleConstants.ksTurning, ModuleConstants.kvTurning);
+			ModuleConstants.ksTurning, ModuleConstants.kvTurning);
 
 	public SwerveModule(
 			String moduleName,
@@ -75,13 +73,11 @@ public class SwerveModule extends SubsystemBase {
 		driveMotor.setInverted(true);
 		turningMotor.setInverted(true);
 
-
 		turningMotor.restoreFactoryDefaults();
 		driveMotor.restoreFactoryDefaults();
 
 		turningMotor.setInverted(true);
 		// driveMotor.setInverted(true);
-
 
 		// Initalize CANcoder
 		absoluteEncoder = new CANCoder(absoluteEncoderPort, Constants.kCanivoreCANBusName);
@@ -129,14 +125,13 @@ public class SwerveModule extends SubsystemBase {
 		return absoluteEncoder.getAbsolutePosition();
 	}
 
-	public double getDistanceMeters(){
+	public double getDistanceMeters() {
 		return driveEncoder.getPosition();
 	}
 
 	// Returns current position of the modules
 	public SwerveModulePosition getPosition() {
 
-		//double m_moduleAngleRadians = angularEncoder.getPosition();
 		double m_moduleAngleRadians = Math.toRadians(absoluteEncoder.getAbsolutePosition());
 
 		double m_distanceMeters = driveEncoder.getPosition();
@@ -146,7 +141,6 @@ public class SwerveModule extends SubsystemBase {
 
 	public void setDesiredState(SwerveModuleState desiredState) {
 
-		//double m_moduleAngleRadians = angularEncoder.getPosition();
 		double m_moduleAngleRadians = Math.toRadians(absoluteEncoder.getAbsolutePosition());
 
 		// Optimize the reference state to avoid spinning further than 90 degrees to
@@ -155,13 +149,11 @@ public class SwerveModule extends SubsystemBase {
 				desiredState,
 				new Rotation2d(m_moduleAngleRadians));
 
+		final var angularPIDOutput = m_turningPIDController.calculate(m_moduleAngleRadians,
+				optimizedState.angle.getRadians());
+		// final var angularFFOutput =
 
-
-		final var angularPIDOutput = m_turningPIDController.calculate(m_moduleAngleRadians, optimizedState.angle.getRadians());
-		//final var angularFFOutput = turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
-
-
-		final var turnOutput = angularPIDOutput /*+ angularFFOutput*/;
+		final var turnOutput = angularPIDOutput;
 
 		turningMotor.setVoltage(turnOutput);
 
@@ -170,9 +162,9 @@ public class SwerveModule extends SubsystemBase {
 				ControlType.kVelocity);
 
 		SmartDashboard.putNumber(this.moduleName + " Optimized Angle", optimizedState.angle.getDegrees());
-		// SmartDashboard.putNumber(this.moduleName + " FF", angularFFOutput);
 		SmartDashboard.putNumber(this.moduleName + " PID", angularPIDOutput);
 		SmartDashboard.putNumber(this.moduleName + " Turn Output", turnOutput);
+
 	}
 
 	public void resetEncoders() {
@@ -184,15 +176,8 @@ public class SwerveModule extends SubsystemBase {
 		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
 		Timer.delay(.1);
 		absoluteEncoder.configMagnetOffset(-1 * angleZero);
-		//Timer.delay(.1);
-		// absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 100);
 		Timer.delay(.1);
 		absoluteEncoder.clearStickyFaults();
-	}	
-
-	public void putConversionFactors() {
-		SmartDashboard.putNumber(moduleName + " D V Conversion", driveEncoder.getVelocityConversionFactor());
-		SmartDashboard.putNumber(moduleName + " D Ang Conv", driveEncoder.getPositionConversionFactor());
 	}
 
 	@Override

@@ -150,11 +150,6 @@ public class DriveSubsystem extends SubsystemBase {
 			// rearRight.resetEncoders();
 		}
 
-		frontLeft.putConversionFactors();
-		frontRight.putConversionFactors();
-		rearRight.putConversionFactors();
-		rearLeft.putConversionFactors();
-
 		SmartDashboard.putNumber("FL Absolute", frontLeft.getAbsoluteHeading());
 		SmartDashboard.putNumber("FR Absolute", frontRight.getAbsoluteHeading());
 		SmartDashboard.putNumber("RL Absolute", rearLeft.getAbsoluteHeading());

@@ -5,15 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 import frc.robot.RobotContainer;
+import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ArmSwitchCommand extends ParallelCommandGroup {
+public class ArmSwitchCommand extends SequentialCommandGroup {
 
 	private static ArmSubsystem armSubsystem;
 	private static LimelightSubsystem limelightSubsystem;
@@ -24,10 +27,15 @@ public class ArmSwitchCommand extends ParallelCommandGroup {
 		armSubsystem = RobotContainer.armSubsystem;
 		limelightSubsystem = RobotContainer.limelightSubsystem;
 
+		ArmPoses prevArmPose = armSubsystem.getArmState();
+		System.out.println(armSubsystem.getArmState() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
 		// Add your commands in the addCommands() call, e.g.
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(
+				new ArmPoseCommand(ArmPoses.TUCKED),
 				new InstantCommand(() -> armSubsystem.ToggleSide()),
 				limelightSubsystem.FlipLimelight(armSubsystem.getIsFront()));
+				// new ArmPoseCommand(prevArmPose),
 	}
 }

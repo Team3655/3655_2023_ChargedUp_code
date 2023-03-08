@@ -147,13 +147,13 @@ public class ArmSubsystem extends SubsystemBase {
 	 */
 	public void setArmState(final ArmPoses state) {
 
+		targetArmState = state;
+
 		if (state == ArmPoses.TUCKED) {
 			gripper.closeGriper();
 		} else {
 			gripper.openGriper();
 		}
-
-		targetArmState = state;
 
 		// gets the angle values from the hashmap
 		majorArm.setTargetTheta(armStates.get(targetArmState)[0]);
