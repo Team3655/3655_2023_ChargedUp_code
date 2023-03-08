@@ -23,20 +23,12 @@ public class LimelightSubsystem extends SubsystemBase {
 		LimeLightFlipper.set(LimelightConstants.kServoFrontPose);
 	}
 
-	/**
-	 * Example command factory method.
-	 *
-	 * @return a command
-	 */
-	public CommandBase FlipLimelight(boolean isFront) {
-		return runOnce(
-				() -> {
-					if (isFront) {
-						LimeLightFlipper.set(LimelightConstants.kServoFrontPose);
-					} else {
-						LimeLightFlipper.set(LimelightConstants.kServoBackpose);
-					}
-				});
+	public void FlipLimelight(boolean isFront) {
+		if (isFront) {
+			LimeLightFlipper.set(LimelightConstants.kServoFrontPose);
+		} else {
+			LimeLightFlipper.set(LimelightConstants.kServoBackpose);
+		}
 	}
 
 	public boolean exampleCondition() {

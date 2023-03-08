@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -24,10 +25,13 @@ public class ArmSwitchCommand extends ParallelCommandGroup {
 		armSubsystem = RobotContainer.armSubsystem;
 		limelightSubsystem = RobotContainer.limelightSubsystem;
 
+		ArmPoses prevArmPose = armSubsystem.getArmState(); 
 		// Add your commands in the addCommands() call, e.g.
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(
+				new ArmPoseCommand(ArmPoses.TUCKED),
 				new InstantCommand(() -> armSubsystem.ToggleSide()),
-				limelightSubsystem.FlipLimelight(armSubsystem.getIsFront()));
+				new InstantCommand(() -> limelightSubsystem.FlipLimelight(armSubsystem.getIsFront())),
+				new ArmPoseCommand(prevArmPose));
 	}
 }

@@ -12,7 +12,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.TractorToolbox.TractorParts.PIDGains;
-import frc.robot.commands.ArmPoseCommand;
 import frc.robot.commands.Autonomous.IntakeDownSequence;
 import frc.robot.commands.Autonomous.ScoreSequence;
 
