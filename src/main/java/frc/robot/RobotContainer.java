@@ -23,6 +23,7 @@ import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.commands.FloorIntakeCommand;
 import frc.robot.commands.LLAlignCommand;
 import frc.robot.commands.TurnCommand;
+import frc.robot.commands.Autonomous.BalanceCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -68,17 +69,16 @@ public class RobotContainer {
 		// region Def Auto
 		Shuffleboard.getTab("Autonomous").add(autoChooser);
 
-		//autoBuilder.populatePathMap();
+		// autoBuilder.populatePathMap(); // TODO: fix auto builder
 		autoBuilder.addPath("Event Test");
-		autoBuilder.addPath("Cube");
+		autoBuilder.addPath("1+1 Human Player");
+		autoBuilder.addPath("1+1 Charge Station");
 
 		autoChooser.setDefaultOption("Event Test", autoBuilder.getPathCommand("Event Test"));
-		autoChooser.addOption("Cube", autoBuilder.getPathCommand("Cube"));
-		autoChooser.addOption("Circle Charge", autoBuilder.getPathCommand("Circle Charge"));
-		autoChooser.addOption("Odometry Hell", autoBuilder.getPathCommand("Odometry Hell"));
-		autoChooser.addOption("2 metersX", autoBuilder.getPathCommand("2 metersX"));
-		autoChooser.addOption("2 metersY", autoBuilder.getPathCommand("2 metersY"));
-		autoChooser.addOption("90 turn", autoBuilder.getPathCommand("90 turn"));
+		autoChooser.addOption("1+1 Human Player", autoBuilder.getPathCommand("1+1 Human Player"));
+		autoChooser.addOption("1+1 Charge Station", autoBuilder.getPathCommand("1+1 Charge Station"));
+		
+
 		// endregion
 	}
 
@@ -134,11 +134,10 @@ public class RobotContainer {
 		driveJoystick.button(4).whileTrue(new TurnCommand(180));
 		driveJoystick.button(5).whileTrue(new TurnCommand(180));
 		programmerController.a().whileTrue(new LLAlignCommand());
-		//	programmerController.b().whileTrue(new LLPuppydogCommand());
 		programmerController.x().whileTrue(new TurnCommand(180));
 		// endregion
 
-		//programmerController.y().whileTrue(new BalanceCommand());
+		programmerController.y().whileTrue(new BalanceCommand()); // TODO: stress test balance
 
 		// region Drive Commands
 		driveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));

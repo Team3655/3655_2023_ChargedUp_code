@@ -70,6 +70,7 @@ public class BalanceCommand extends CommandBase {
 		driveOutput = driveSmoother.smoothInput(driveOutput);
 		strafeOutput = strafeSmoother.smoothInput(strafeOutput);
 
+		// add strafe output here to have the robot strafe while balancing
 		driveSubsystem.drive(-driveOutput, 0, 0);
 	}
 

@@ -5,8 +5,8 @@ class ArmKinematics {
 	private double theta1 = 0;
 	private double theta2 = 0;
 
-	private double forwardEndEffectorX = 0;
-	private double forwardEndEffectorY = 0;
+	// private double forwardEndEffectorX = 0; // TODO: add fk for arms
+	// private double forwardEndEffectorY = 0;
 
 	private double inverseTheta1 = 0;
 	private double inverseTheta2 = 0;
