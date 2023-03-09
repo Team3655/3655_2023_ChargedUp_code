@@ -12,9 +12,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.TractorToolbox.TractorParts.PIDGains;
+import frc.robot.commands.ArmPoseCommand;
 import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.commands.Autonomous.IntakeDownSequence;
 import frc.robot.commands.Autonomous.ScoreSequence;
+import frc.robot.commands.Autonomous.SuckCommand;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -96,8 +98,8 @@ public final class Constants {
 
 	public static class DriveConstants {
 
-		public static final double kMaxSneakMetersPerSecond = 1.5;
-		public static final double kMaxSpeedMetersPerSecond = 3.0;
+		public static final double kMaxSneakMetersPerSecond = 1.0;
+		public static final double kMaxSpeedMetersPerSecond = 2.5;
 		public static final double kMaxTurboMetersPerSecond = 4.5;
 
 		public static final double kMaxRPM = 10;
@@ -135,27 +137,29 @@ public final class Constants {
 
 			// PID constants for path planner (these control drive direction not reaching
 			// target wheel speeds)
-			public static final PIDGains kPPDriveGains = new PIDGains(1.5, 0, 0);
-			public static final PIDGains kPPTurnGains = new PIDGains(1.5, 0, 0);
+			public static final PIDGains kPPDriveGains = new PIDGains(4, 0, 0);
+			public static final PIDGains kPPTurnGains = new PIDGains(5, 0, 0);
 
-			public static final double kPPMaxVelocity = 3.0;
-			public static final double kPPMaxAcceleration = 1.5;
+			public static final double kPPMaxVelocity = 3.0;	
+			public static final double kPPMaxAcceleration = 2.0;
 
 			public static final HashMap<String, Command> kPPEventMap = new HashMap<>() {
 				{
-					put("Tuck", new ScoreSequence(ArmPoses.TUCKED));
+					put("Tuck", new ArmPoseCommand(ArmPoses.TUCKED));
 					put("ScoreHigh", new ScoreSequence(ArmPoses.HIGH_SCORE));
 					put("ScoreMid", new ScoreSequence(ArmPoses.MID_SCORE));
 					put("ScoreLow", new ScoreSequence(ArmPoses.LOW_SCORE));
 					put("IntakeDown", new IntakeDownSequence());
 					put("ToggleSide", new ArmSwitchCommand());
+					put("Suck", new SuckCommand(true, 150));
+					put("Drop", new SuckCommand(false, 500));
 				}
 			};
 		}
 
 		public static final double kScoreSequenceDropTime = 3; // in seconds 
 
-		public static final PIDGains kTurnCommandGains = new PIDGains(.02, 0, 0);
+		public static final PIDGains kTurnCommandGains = new PIDGains(.01, 0, 0);
 		public static final double kTurnCommandMaxVelocity = 1;
 		public static final double kTurnCommandMaxAcceleration = 1;
 		public static final double kTurnCommandToleranceDeg = 1;
@@ -220,10 +224,10 @@ public final class Constants {
 		public static final int kMinorArmCurrentLimit = 15;
 
 		// speed limits for the arms
-		public static final double kMajorArmPIDOutputLimit = .4;
+		public static final double kMajorArmPIDOutputLimit = .35;
 		public static final double kMinorArmPIDOutputLimit = .4;
 
-		// angle limits for the arms (min will be set to -input)
+		// angle limits for the arms (min will be set to -inpu
 		public static final double kMajorArmConstraints = 101;
 		public static final double kMinorArmConstraints = 180;
 

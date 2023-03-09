@@ -32,8 +32,6 @@ public class ScoreSequence extends SequentialCommandGroup {
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(
 				new ArmPoseCommand(armPose),
-				new InstantCommand(() -> intakeSubsystem.stopSucking()),
-				new InstantCommand(() -> Timer.delay(AutoConstants.kScoreSequenceDropTime)),
-				new InstantCommand(() -> armSubsystem.ArmPoseCommand(ArmPoses.TUCKED)));
+				new SuckCommand(false, 500));
 	}
 }

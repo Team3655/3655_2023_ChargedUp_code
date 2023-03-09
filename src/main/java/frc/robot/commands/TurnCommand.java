@@ -30,7 +30,7 @@ public class TurnCommand extends CommandBase {
 				AutoConstants.kTurnCommandGains.kI,
 				AutoConstants.kTurnCommandGains.kD,
 				// The motion profile constraints
-				new TrapezoidProfile.Constraints(100, 100));
+				new TrapezoidProfile.Constraints(360, 75));
 
 		turnPIDController.enableContinuousInput(-180, 180);
 
@@ -52,7 +52,7 @@ public class TurnCommand extends CommandBase {
 	@Override
 	public void execute() {
 		double turnOutput = turnPIDController.calculate(driveSubsystem.getHeading360());
-		driveSubsystem.drive(0, 0, -turnOutput);
+		driveSubsystem.drive(0, 0, turnOutput);
 	}
 
 	// Called once the command ends or is interrupted.

@@ -48,7 +48,7 @@ public class SwerveModule extends SubsystemBase {
 			ModuleConstants.kAngularPID[1],
 			ModuleConstants.kAngularPID[2],
 			new TrapezoidProfile.Constraints( // radians/s?
-					2 * Math.PI * 80, // theoretical is 5676 RPM -> 94*2pi
+					2 * Math.PI * 3, // theoretical is 5676 RPM -> 94*2pi
 					2 * Math.PI * 60));
 
 	SimpleMotorFeedforward turnFeedForward = new SimpleMotorFeedforward(
@@ -82,7 +82,7 @@ public class SwerveModule extends SubsystemBase {
 		// Initalize CANcoder
 		absoluteEncoder = new CANCoder(absoluteEncoderPort, Constants.kCanivoreCANBusName);
 		Timer.delay(1);
-		absoluteEncoder.configFactoryDefault();
+		//absoluteEncoder.configFactoryDefault();
 		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
 		absoluteEncoder.configMagnetOffset(-1 * angleZero);
@@ -151,9 +151,10 @@ public class SwerveModule extends SubsystemBase {
 
 		final var angularPIDOutput = m_turningPIDController.calculate(m_moduleAngleRadians,
 				optimizedState.angle.getRadians());
-		// final var angularFFOutput =
+				
+		final var angularFFOutput = turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-		final var turnOutput = angularPIDOutput;
+		final var turnOutput = angularPIDOutput + angularFFOutput;
 
 		turningMotor.setVoltage(turnOutput);
 
