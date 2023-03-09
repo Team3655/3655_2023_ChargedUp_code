@@ -48,8 +48,8 @@ public class SwerveModule extends SubsystemBase {
 			ModuleConstants.kAngularPID[1],
 			ModuleConstants.kAngularPID[2],
 			new TrapezoidProfile.Constraints( // radians/s?
-					2 * Math.PI * 3, // theoretical is 5676 RPM -> 94*2pi
-					2 * Math.PI * 60));
+					2 * Math.PI * 600, // theoretical is 5676 RPM -> 94*2pi
+					2 * Math.PI * 1200));
 
 	SimpleMotorFeedforward turnFeedForward = new SimpleMotorFeedforward(
 			ModuleConstants.ksTurning, ModuleConstants.kvTurning);
@@ -151,7 +151,7 @@ public class SwerveModule extends SubsystemBase {
 
 		final var angularPIDOutput = m_turningPIDController.calculate(m_moduleAngleRadians,
 				optimizedState.angle.getRadians());
-				
+
 		final var angularFFOutput = turnFeedForward.calculate(m_turningPIDController.getSetpoint().velocity);
 
 		final var turnOutput = angularPIDOutput + angularFFOutput;

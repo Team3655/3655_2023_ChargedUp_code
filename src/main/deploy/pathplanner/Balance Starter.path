@@ -18,8 +18,7 @@
       "stopEvent": {
         "names": [
           "ToggleSide",
-          "ScoreHigh",
-          "ToggleSide"
+          "ScoreHigh"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -49,5 +48,12 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 0.15,
+      "names": [
+        "ToggleSide"
+      ]
+    }
+  ]
 }

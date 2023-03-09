@@ -94,7 +94,6 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "ScoreHigh",
           "Tuck"
         ],
         "executionBehavior": "sequential",
@@ -117,6 +116,13 @@
       "position": 1.01,
       "names": [
         "Tuck"
+      ]
+    },
+    {
+      "position": 2.0,
+      "names": [
+        "event",
+        "ScoreHigh"
       ]
     }
   ]
