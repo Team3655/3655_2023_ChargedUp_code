@@ -34,7 +34,7 @@ public class ArmSegment {
 
 	// endregion
 
-	public ArmSegment(int rightPort, int leftPort, double gearRatio, Boolean invertLeft) {
+	public ArmSegment(int leftPort, int rightPort, double gearRatio, Boolean invertLeft) {
 
 		targetSign = 1;
 		isRunning = true;
@@ -85,6 +85,14 @@ public class ArmSegment {
 			rightMotor.setInverted(true);
 		}
 
+		leftMotor.follow(rightMotor);
+
+		rightMotor.burnFlash();
+		leftMotor.burnFlash();
+
+		// rightMotor.set(0);
+		// leftMotor.set(.1);
+
 		// endregion
 	}
 
@@ -93,7 +101,7 @@ public class ArmSegment {
 	/** Sets the pid referance point to the target theta of the segment */
 	public void setReference() {
 		rightPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
-		leftPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
+		//leftPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
 	}
 
 	/**
@@ -204,6 +212,14 @@ public class ArmSegment {
 		return Math.toDegrees((rightEncoder.getPosition() + leftEncoder.getPosition()) / 2);
 	}
 
+	public double getLeftRealTheta() {
+		return Math.toDegrees(leftEncoder.getPosition());
+	}
+
+	public double getRightRealTheta() {
+		return Math.toDegrees(rightEncoder.getPosition());
+	}
+
 	/**
 	 * Checks of the arm is at its target position
 	 * 
@@ -222,6 +238,20 @@ public class ArmSegment {
 
 	public double getPowerDraw() {
 		return rightMotor.getOutputCurrent() + leftMotor.getOutputCurrent();
+	}
+
+	/**
+	 * @return the Output current
+	 */
+	public double getLeftMotorOutput() {
+		return leftMotor.getOutputCurrent();
+	}
+
+	/**
+	 * @return the Output current
+	 */
+	public double getRightMotorOutput() {
+		return rightMotor.getOutputCurrent();
 	}
 
 	// endregion

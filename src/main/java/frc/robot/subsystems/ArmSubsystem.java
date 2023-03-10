@@ -94,13 +94,30 @@ public class ArmSubsystem extends SubsystemBase {
 	public void periodic() {
 		// This method will be called once per scheduler run
 
+		SmartDashboard.putNumber("major target", majorArm.getTargetTheta());
+		SmartDashboard.putNumber("minor target", minorArm.getTargetTheta());
+
 		SmartDashboard.putNumber("major real theta: ", majorArm.getRealTheta());
 		SmartDashboard.putNumber("minor real theta: ", minorArm.getRealTheta());
+
+		SmartDashboard.putNumber("major left real theta", majorArm.getLeftRealTheta());
+		SmartDashboard.putNumber("major right real theta", majorArm.getRightRealTheta());
+
+		SmartDashboard.putNumber("major left real theta", majorArm.getLeftRealTheta());
+		SmartDashboard.putNumber("major right real theta", majorArm.getRightRealTheta());
+
 		SmartDashboard.putNumber("major power draw: ", majorArm.getPowerDraw());
 		SmartDashboard.putNumber("minor power draw: ", minorArm.getPowerDraw());
+
 		SmartDashboard.putBoolean("At target: ", getAtTarget(8));
 		SmartDashboard.putBoolean("At target major", majorArm.getAtTarget(5));
 		SmartDashboard.putBoolean("At target major", majorArm.getAtTarget(5));
+
+		SmartDashboard.putNumber("LeftMajorOutput", majorArm.getLeftMotorOutput());
+		SmartDashboard.putNumber("RightMajorOutput", majorArm.getRightMotorOutput());
+
+		// majorArm.setReference();
+		// minorArm.setReference();
 
 	}
 
@@ -145,14 +162,14 @@ public class ArmSubsystem extends SubsystemBase {
 	 * @param state can be (LOW_SCORE, MID_SCORE, HIGH_SCORE,
 	 *             LOW_INTAKE, MID_INTAKE, HIGH_INTAKE)
 	 */
-	public void setArmState(final ArmPoses state) {
+	public void setArmState(ArmPoses state) {
 
 		targetArmState = state;
 
 		if (state == ArmPoses.TUCKED) {
 			gripper.closeGriper();
 		} else {
-			gripper.openGriper();
+			// gripper.openGriper();
 		}
 
 		// gets the angle values from the hashmap

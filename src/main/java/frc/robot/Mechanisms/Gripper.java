@@ -14,16 +14,17 @@ public class Gripper {
 	public Gripper(int rightPort, int leftPort) {
 		rightServo = new Servo(rightPort);
 		leftServo = new Servo(leftPort);
+		closeGriper();
 	}
 
 	public void openGriper() {
 		rightServo.set(1);
-		leftServo.set(1);
+		leftServo.set(0);
 	}
 
 	public void closeGriper() {
 		rightServo.set(0);
-		leftServo.set(0);
+		leftServo.set(1);
 	}
 
 }

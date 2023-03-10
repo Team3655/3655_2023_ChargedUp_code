@@ -127,6 +127,7 @@ public class RobotContainer {
 
 		// Sucking is set to be the defaut state of the intake
 		operatorController.button(10).onTrue(intakeSubsystem.stopSucking()).onFalse(intakeSubsystem.startSucking());
+		operatorController.button(21).onTrue(intakeSubsystem.stopSucking());
 		operatorController.button(5).onTrue(intakeSubsystem.toggleSideSucker());
 
 		// region Targeting Commmands

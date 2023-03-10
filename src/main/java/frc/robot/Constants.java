@@ -197,8 +197,8 @@ public final class Constants {
 		public static final int kRightMinorArmPort = 15;
 		public static final int kLeftMinorArmPort = 16;
 
-		public static final int kLeftGripperPort = 1;
-		public static final int kRightGripperPort = 2 ;
+		public static final int kLeftGripperPort = 0;
+		public static final int kRightGripperPort = 1;
 
 		public static final int kMajorArmGearBoxRatio = 100;
 		public static final int kMinorArmGearBoxRatio = 100;
@@ -238,7 +238,7 @@ public final class Constants {
 		public static final double kMajorArmIzone = 5;
 
 		public static final double kMinorArmP = 6;
-		public static final double kMinorArmI = 0.0001;
+		public static final double kMinorArmI = 0.0001;	
 		public static final double kMinorArmD = 0;
 		public static final double kMinorArmIzone = 5;
 
@@ -290,7 +290,7 @@ public final class Constants {
 		public static final int kApriltagPipeline = 1;
 
 		// Servo Constants
-		public static final int kServoPort = 0;
+		public static final int kServoPort = 2;
 		// sets the offset of the sevo so the limelight is facing forward (double 0 - 1)
 		public static final double kServoFrontPose = .76;
 		public static final double kServoBackpose = 0;
