@@ -54,7 +54,7 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kRightMajorArmPort,
 				ArmConstants.kLeftMajorArmPort,
 				ArmConstants.kMajorArmTicks,
-				true);
+				false);
 
 		majorArm.setPID(
 				ArmConstants.kMajorArmP,
@@ -71,7 +71,7 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kRightMinorArmPort,
 				ArmConstants.kLeftMinorArmPort,
 				ArmConstants.kMinorArmTicks,
-				false);
+				true);
 
 		minorArm.setPID(
 				ArmConstants.kMinorArmP,
@@ -180,7 +180,6 @@ public class ArmSubsystem extends SubsystemBase {
 
 		majorArm.setReference();
 		minorArm.setReference();
-
 	}
 
 	// endregion

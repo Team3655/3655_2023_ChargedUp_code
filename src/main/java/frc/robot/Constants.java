@@ -70,10 +70,10 @@ public final class Constants {
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// Offset angle for absolute encoders (find this using CTRE client)
-		public static final double kFrontLeftAngleZero = 156.75;
-		public static final double kFrontRightAngleZero = 76.35;
-		public static final double kRearLeftAngleZero = -27.95;
-		public static final double kRearRightAngleZero = -23.48;
+		public static final double kFrontLeftAngleZero = 34.805;
+		public static final double kFrontRightAngleZero = 121.113;
+		public static final double kRearLeftAngleZero = 149.414;
+		public static final double kRearRightAngleZero = 61.699;
 
 		public static final double kModuleDriveControllerP = .1;
 		public static final double kModuleDriveControllerI = 0;
@@ -151,8 +151,8 @@ public final class Constants {
 					put("ScoreLow", new ScoreSequence(ArmPoses.LOW_SCORE));
 					put("IntakeDown", new IntakeDownSequence());
 					put("ToggleSide", new ArmSwitchCommand());
-					put("Suck", new SuckCommand(true, 150));
-					put("Drop", new SuckCommand(false, 500));
+					put("Suck", new SuckCommand(true, 250));
+					put("Drop", new SuckCommand(false, 1000));
 				}
 			};
 		}
@@ -224,8 +224,8 @@ public final class Constants {
 		public static final int kMinorArmCurrentLimit = 15;
 
 		// speed limits for the arms
-		public static final double kMajorArmPIDOutputLimit = .35;
-		public static final double kMinorArmPIDOutputLimit = .4;
+		public static final double kMajorArmPIDOutputLimit = .3;
+		public static final double kMinorArmPIDOutputLimit = .35;
 
 		// angle limits for the arms (min will be set to -inpu
 		public static final double kMajorArmConstraints = 101;
@@ -257,10 +257,10 @@ public final class Constants {
 			{
 				put(ArmPoses.TUCKED, new double[] { 0, 0, .25 });
 				put(ArmPoses.LOW_SCORE, new double[] { 0, 90, kMinorArmPIDOutputLimit });
-				put(ArmPoses.MID_SCORE, new double[] { 55, 33, .15 });
-				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55, .08 });
+				put(ArmPoses.MID_SCORE, new double[] { 45, 28, .15 });
+				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55, .06 });
 				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98, kMinorArmPIDOutputLimit });
-				put(ArmPoses.MID_INTAKE, new double[] { 13, 33, .25 });
+				put(ArmPoses.MID_INTAKE, new double[] { 13, 33, .15 });
 				put(ArmPoses.HIGH_INTAKE, new double[] { 95, 80, .25 });
 				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0, kMinorArmPIDOutputLimit });
 			}

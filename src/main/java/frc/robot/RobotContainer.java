@@ -24,6 +24,7 @@ import frc.robot.commands.FloorIntakeCommand;
 import frc.robot.commands.LLAlignCommand;
 import frc.robot.commands.TurnCommand;
 import frc.robot.commands.Autonomous.BalanceCommand;
+import frc.robot.commands.Autonomous.Autos.BalanceSequence;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -73,10 +74,17 @@ public class RobotContainer {
 		autoBuilder.addPath("Event Test");
 		autoBuilder.addPath("1+1 Human Player");
 		autoBuilder.addPath("1+1 Charge Station");
+		autoBuilder.addPath("1 Human Player");
+		autoBuilder.addPath("1 Wall");
+		//autoBuilder.addPath("1 Charge");
 
 		autoChooser.setDefaultOption("Event Test", autoBuilder.getPathCommand("Event Test"));
-		autoChooser.addOption("1+1 Human Player", autoBuilder.getPathCommand("1+1 Human Player"));
-		autoChooser.addOption("1+1 Charge Station", autoBuilder.getPathCommand("1+1 Charge Station"));
+		autoChooser.addOption("1 Human Player", autoBuilder.getPathCommand("1 Human Player"));
+		autoChooser.addOption("1 Wall", autoBuilder.getPathCommand("1 Wall"));
+		//autoChooser.addOption("1 Charge", autoBuilder.getPathCommand("1 Charge").andThen(new BalanceCommand()));
+		autoChooser.addOption("Charge Station", new BalanceSequence());
+		// autoChooser.addOption("1+1 Human Player", autoBuilder.getPathCommand("1+1 Human Player"));
+		// autoChooser.addOption("1+1 Charge Station", autoBuilder.getPathCommand("1+1 Charge Station"));
 		
 
 		// endregion

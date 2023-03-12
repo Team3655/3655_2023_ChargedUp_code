@@ -62,7 +62,7 @@ public class BalanceCommand extends CommandBase {
 		double driveOutput = 0;
 		double strafeOutput = 0;
 
-		if (Math.abs(driveSubsystem.getPitch()) + Math.abs(driveSubsystem.getRoll()) > AutoConstants.kBalnaceCommandDeadbandDeg) {
+		if (Math.abs(driveSubsystem.getRoll()) > AutoConstants.kBalnaceCommandDeadbandDeg) {
 			driveOutput = drivePIDController.calculate(driveSubsystem.getRoll(), 0);
 			strafeOutput = strafePIDController.calculate(driveSubsystem.getPitch(), 0);
 		}

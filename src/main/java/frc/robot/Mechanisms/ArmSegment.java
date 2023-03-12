@@ -3,6 +3,7 @@ package frc.robot.Mechanisms;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
@@ -34,7 +35,7 @@ public class ArmSegment {
 
 	// endregion
 
-	public ArmSegment(int leftPort, int rightPort, double gearRatio, Boolean invertLeft) {
+	public ArmSegment(int leftPort, int rightPort, double gearRatio, Boolean invertLeader) {
 
 		targetSign = 1;
 		isRunning = true;
@@ -79,16 +80,15 @@ public class ArmSegment {
 		leftEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
 
 		// Sets the left motor to be inverted if it needs to be
-		if (invertLeft) {
+		/*if (invertLeft) {
 			leftMotor.setInverted(true);
 		} else {
 			rightMotor.setInverted(true);
 		}
+		*/
 
-		leftMotor.follow(rightMotor);
-
-		rightMotor.burnFlash();
-		leftMotor.burnFlash();
+		rightMotor.setInverted(invertLeader);
+		leftMotor.follow(rightMotor, true);
 
 		// rightMotor.set(0);
 		// leftMotor.set(.1);

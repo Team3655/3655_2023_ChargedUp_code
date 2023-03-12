@@ -72,6 +72,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	public void stopstopSucking() {
 		mainSucker.set(0);
+		enableSideSucker();
 	}
 
 	public CommandBase startSucking() {
@@ -84,6 +85,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	public void startstartSucking() {
 		mainSucker.set(IntakeConstants.kMainSuckerSetpoint);
+		disableSideSucker();
 	}
 
 	public CommandBase toggleSideSucker() {
