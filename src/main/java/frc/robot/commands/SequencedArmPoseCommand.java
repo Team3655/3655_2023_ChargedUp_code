@@ -5,20 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
-import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmPoseCommand extends CommandBase {
+public class SequencedArmPoseCommand extends CommandBase {
 
 	private static ArmSubsystem armSubsystem;
-	private ArmPoses armPose;
 
-	/** Creates a new ArmPoseCommand. */
-	public ArmPoseCommand(ArmPoses armPose) {
+	/** Creates a new OdometryCommand. */
+	public SequencedArmPoseCommand() {
 		armSubsystem = RobotContainer.armSubsystem;
-		this.armPose = armPose;
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(armSubsystem);
 	}
@@ -26,7 +22,6 @@ public class ArmPoseCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		armSubsystem.setSequencedArmState(armPose);
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -42,18 +37,6 @@ public class ArmPoseCommand extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		// spite.
-		boolean isFinished = false;
-
-		if (armSubsystem.getAtTarget(8)) {
-			isFinished = true;
-		}
-
-		if (isFinished == true) {
-			return true;
-		} else {
-			return false;
-		}
+		return false;
 	}
-
 }

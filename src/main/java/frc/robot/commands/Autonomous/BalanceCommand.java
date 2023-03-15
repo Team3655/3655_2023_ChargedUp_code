@@ -51,6 +51,7 @@ public class BalanceCommand extends CommandBase {
 	@Override
 	public void initialize() {
 		driveSubsystem.setFieldCentric(true);
+		
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -60,18 +61,17 @@ public class BalanceCommand extends CommandBase {
 		// Pitch is associated with strafing
 
 		double driveOutput = 0;
-		double strafeOutput = 0;
 
-		if (Math.abs(driveSubsystem.getRoll()) > AutoConstants.kBalnaceCommandDeadbandDeg) {
-			driveOutput = drivePIDController.calculate(driveSubsystem.getRoll(), 0);
-			strafeOutput = strafePIDController.calculate(driveSubsystem.getPitch(), 0);
+		if (Math.abs(driveSubsystem.getRoll()) + Math.abs(driveSubsystem.getPitch()) > AutoConstants.kBalnaceCommandDeadbandDeg) {
+			driveOutput = drivePIDController.calculate(driveSubsystem.getPitch(), 0);
+			//strafeOutput = strafePIDController.calculate(driveSubsystem.getPitch(), 0);
 		}
 
-		driveOutput = driveSmoother.smoothInput(driveOutput);
-		strafeOutput = strafeSmoother.smoothInput(strafeOutput);
+		// driveOutput = driveSmoother.smoothInput(driveOutput);
+		// strafeOutput = strafeSmoother.smoothInput(strafeOutput);
 
 		// add strafe output here to have the robot strafe while balancing
-		driveSubsystem.drive(-driveOutput, 0, 0);
+		driveSubsystem.drive(driveOutput, 0, 0);
 	}
 
 	// Called once the command ends or is interrupted.

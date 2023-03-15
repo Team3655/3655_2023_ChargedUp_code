@@ -41,9 +41,9 @@ public class ArmSubsystem extends SubsystemBase {
 				x = x + armStates.get(pose)[0];
 				x = x + armStates.get(pose)[1];
 				x = x + armStates.get(pose)[2];
-			} catch(Exception exception) {
+			} catch (Exception exception) {
 				throw new IndexOutOfBoundsException(
-				"NOT ALL ARM POSES HAVE A VALUE IN THE HASHMAP! THIS WILL RESLUT IN CRASHING IF NOT RESOLVED!");
+						"NOT ALL ARM POSES HAVE A VALUE IN THE HASHMAP! THIS WILL RESLUT IN CRASHING IF NOT RESOLVED!");
 			}
 		}
 
@@ -81,18 +81,22 @@ public class ArmSubsystem extends SubsystemBase {
 
 		minorArm.setConstraints(
 				ArmConstants.kMinorArmConstraints,
-				ArmConstants.kMinorArmPIDOutputLimit);
+				ArmConstants.kMinorFirstStageArmPIDOutputLimit);
 		// endregion
 
 		gripper = new Gripper(ArmConstants.kLeftGripperPort, ArmConstants.kRightGripperPort);
 
 		// the default state of the arms
 		isFront = true;
+
+		setSequencedArmState(ArmPoses.TUCKED);
 	}
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+
+		SmartDashboard.putString("ArmState", targetArmState.toString());
 
 		SmartDashboard.putNumber("major target", majorArm.getTargetTheta());
 		SmartDashboard.putNumber("minor target", minorArm.getTargetTheta());
@@ -111,31 +115,35 @@ public class ArmSubsystem extends SubsystemBase {
 
 		SmartDashboard.putBoolean("At target: ", getAtTarget(8));
 		SmartDashboard.putBoolean("At target major", majorArm.getAtTarget(5));
-		SmartDashboard.putBoolean("At target major", majorArm.getAtTarget(5));
+		SmartDashboard.putBoolean("At target minor", minorArm.getAtTarget(5));
 
 		SmartDashboard.putNumber("LeftMajorOutput", majorArm.getLeftMotorOutput());
 		SmartDashboard.putNumber("RightMajorOutput", majorArm.getRightMotorOutput());
 
-		// majorArm.setReference();
-		// minorArm.setReference();
-
+		updateOutputLimit();
 	}
 
 	// region Commands
 
-	public CommandBase ArmPoseCommand(final ArmPoses state) {
+	public CommandBase UnsequencedArmPoseCommand(final ArmPoses state) {
 		return runOnce(() -> {
-			setArmState(state);
+			setUnsequencedArmState(state);
+		});
+	}
+
+	public CommandBase SequencedArmPoseCommand(final ArmPoses state) {
+		return runOnce(() -> {
+			setSequencedArmState(state);
 		});
 	}
 
 	/** Toggles the dominant side of the robot */
 	public void ToggleSide() {
-			isFront = !isFront;
-			majorArm.setSign((isFront) ? 1 : -1);
-			minorArm.setSign((isFront) ? 1 : -1);
-			majorArm.setReference();
-			minorArm.setReference();
+		isFront = !isFront;
+		majorArm.setSign((isFront) ? 1 : -1);
+		minorArm.setSign((isFront) ? 1 : -1);
+		majorArm.setReference();
+		minorArm.setReference();
 	}
 
 	public CommandBase toggleArmMotors() {
@@ -152,7 +160,7 @@ public class ArmSubsystem extends SubsystemBase {
 		});
 	}
 
-	// endregion 
+	// endregion
 
 	// region Setters
 
@@ -160,10 +168,24 @@ public class ArmSubsystem extends SubsystemBase {
 	 * Sets the height of the arm
 	 * 
 	 * @param state can be (LOW_SCORE, MID_SCORE, HIGH_SCORE,
-	 *             LOW_INTAKE, MID_INTAKE, HIGH_INTAKE)
+	 *              LOW_INTAKE, MID_INTAKE, HIGH_INTAKE)
 	 */
-	public void setArmState(ArmPoses state) {
+	public void setUnsequencedArmState(ArmPoses state) {
+		minorArm.setConstraints(ArmConstants.kMinorArmConstraints, armStates.get(targetArmState)[2]);
 
+		setTargetArmState(state);
+	}
+
+	public void setSequencedArmState(ArmPoses state) {
+		minorArm.setConstraints(ArmConstants.kMinorArmConstraints, ArmConstants.kMinorFirstStageArmPIDOutputLimit);
+
+		setTargetArmState(state);
+	}
+
+	/**
+	 * @param targetArmState the targetArmState to set
+	 */
+	public void setTargetArmState(ArmPoses state) {
 		targetArmState = state;
 
 		if (state == ArmPoses.TUCKED) {
@@ -176,10 +198,16 @@ public class ArmSubsystem extends SubsystemBase {
 		majorArm.setTargetTheta(armStates.get(targetArmState)[0]);
 		minorArm.setTargetTheta(armStates.get(targetArmState)[1]);
 
-		minorArm.setConstraints(ArmConstants.kMinorArmConstraints, armStates.get(targetArmState)[2]);
-
 		majorArm.setReference();
 		minorArm.setReference();
+	}
+
+	public void updateOutputLimit() {
+		if (majorArm.getAtTarget(10)) {
+			minorArm.setConstraints(
+					ArmConstants.kMinorArmConstraints,
+					ArmConstants.kMinorSecondStageArmPIDOutputLimit);
+		}
 	}
 
 	// endregion
@@ -218,7 +246,7 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public double[] getTargetTheta() {
-		return new double[]{majorArm.getTargetTheta(), minorArm.getTargetTheta()};
+		return new double[] { majorArm.getTargetTheta(), minorArm.getTargetTheta() };
 	}
 
 	// endregion

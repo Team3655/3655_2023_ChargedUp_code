@@ -91,7 +91,7 @@ public class ArmSegment {
 		leftMotor.follow(rightMotor, true);
 
 		// rightMotor.set(0);
-		// leftMotor.set(.1);
+		// leftMotor.set(0);
 
 		// endregion
 	}
@@ -101,7 +101,7 @@ public class ArmSegment {
 	/** Sets the pid referance point to the target theta of the segment */
 	public void setReference() {
 		rightPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
-		//leftPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
+		leftPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
 	}
 
 	/**

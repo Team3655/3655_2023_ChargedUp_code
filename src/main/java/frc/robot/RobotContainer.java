@@ -76,12 +76,12 @@ public class RobotContainer {
 		autoBuilder.addPath("1+1 Charge Station");
 		autoBuilder.addPath("1 Human Player");
 		autoBuilder.addPath("1 Wall");
-		//autoBuilder.addPath("1 Charge");
+		autoBuilder.addPath("1 Charge");
 
 		autoChooser.setDefaultOption("Event Test", autoBuilder.getPathCommand("Event Test"));
 		autoChooser.addOption("1 Human Player", autoBuilder.getPathCommand("1 Human Player"));
 		autoChooser.addOption("1 Wall", autoBuilder.getPathCommand("1 Wall"));
-		//autoChooser.addOption("1 Charge", autoBuilder.getPathCommand("1 Charge").andThen(new BalanceCommand()));
+		autoChooser.addOption("1 Charge", autoBuilder.getPathCommand("1 Charge").andThen(new BalanceCommand()));
 		autoChooser.addOption("Charge Station", new BalanceSequence());
 		// autoChooser.addOption("1+1 Human Player", autoBuilder.getPathCommand("1+1 Human Player"));
 		// autoChooser.addOption("1+1 Charge Station", autoBuilder.getPathCommand("1+1 Charge Station"));
@@ -106,19 +106,19 @@ public class RobotContainer {
 		// region Arm Commands
 		// Schedule ArmPoseCommand when operator presses coresponding button.
 		// scoring commands
-		operatorController.button(1).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.LOW_SCORE));
-		operatorController.button(2).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.MID_SCORE));
-		operatorController.button(3).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.HIGH_SCORE));
+		operatorController.button(1).onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.LOW_SCORE));
+		operatorController.button(2).onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.MID_SCORE));
+		operatorController.button(3).onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.HIGH_SCORE));
 
 		// intaking commands
 		operatorController.button(6).onTrue(new FloorIntakeCommand());
-		operatorController.button(7).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.MID_INTAKE));
-		operatorController.button(8).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.HIGH_INTAKE));
+		operatorController.button(7).onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.MID_INTAKE));
+		operatorController.button(8).onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.HIGH_INTAKE));
 		programmerController.b().onTrue(new FloorIntakeCommand());
 
 		// tuck arms
-		operatorController.button(4).onTrue(armSubsystem.ArmPoseCommand(ArmPoses.TUCKED));
-		programmerController.y().onTrue(armSubsystem.ArmPoseCommand(ArmPoses.TUCKED));
+		operatorController.button(4).onTrue(armSubsystem.UnsequencedArmPoseCommand(ArmPoses.TUCKED));
+		programmerController.y().onTrue(armSubsystem.UnsequencedArmPoseCommand(ArmPoses.TUCKED));
 
 		// Switches sides of the robot
 		operatorController.button(9).onTrue(new ArmSwitchCommand());
@@ -147,6 +147,7 @@ public class RobotContainer {
 		// endregion
 
 		programmerController.y().whileTrue(new BalanceCommand()); // TODO: stress test balance
+		operatorController.button(12).whileTrue(new BalanceCommand());
 
 		// region Drive Commands
 		driveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));

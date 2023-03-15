@@ -33,7 +33,7 @@ public final class Constants {
 
 		// Current limits for the wheels
 		public static final int kTurnMotorCurrentLimit = 25;
-		public static final int kDriveMotorCurrentLimit = 30;
+		public static final int kDriveMotorCurrentLimit = 80;
 
 		// The max speed the modules are capable of
 		public static final double kMaxModuleSpeedMetersPerSecond = Units.feetToMeters(14.5);
@@ -44,7 +44,7 @@ public final class Constants {
 
 		public static final double kwheelCircumference = Units.inchesToMeters(4) * Math.PI;
 
-		// TODO: Set feedforward values for turning
+		// TODO: Retunr feedforward values for turning
 		public static final double ksVolts = .1;
 		public static final double kDriveFeedForward = .2;
 
@@ -80,7 +80,7 @@ public final class Constants {
 		public static final double kModuleDriveControllerD = 0;
 
 		public static final double kModuleTurningControllerP = 6.5;
-		public static final double kModuleTurningControllerI =  0; // 0.25;
+		public static final double kModuleTurningControllerI = 0; // 0.25;
 		public static final double kModuleTurningControllerD = 0; // 0.15;
 
 		// SPARK MAX Angular PID values
@@ -140,7 +140,7 @@ public final class Constants {
 			public static final PIDGains kPPDriveGains = new PIDGains(4, 0, 0);
 			public static final PIDGains kPPTurnGains = new PIDGains(5, 0, 0);
 
-			public static final double kPPMaxVelocity = 3.0;	
+			public static final double kPPMaxVelocity = 3.0;
 			public static final double kPPMaxAcceleration = 2.0;
 
 			public static final HashMap<String, Command> kPPEventMap = new HashMap<>() {
@@ -157,7 +157,7 @@ public final class Constants {
 			};
 		}
 
-		public static final double kScoreSequenceDropTime = 3; // in seconds 
+		public static final double kScoreSequenceDropTime = 3; // in seconds
 
 		public static final PIDGains kTurnCommandGains = new PIDGains(.01, 0, 0);
 		public static final double kTurnCommandMaxVelocity = 1;
@@ -166,9 +166,9 @@ public final class Constants {
 		public static final double kTurnCommandRateToleranceDegPerS = 0;
 
 		public static final double kBalnaceCommandDeadbandDeg = 2;
-		public static final PIDGains kBalanceCommandGains = new PIDGains(.01, 0, 0);
-		public static final double kMaxBalancingVelocity = 10;
-		public static final double kMaxBalancingAcceleration = 5;
+		public static final PIDGains kBalanceCommandGains = new PIDGains(.008, 0, 0);
+		public static final double kMaxBalancingVelocity = 1000;
+		public static final double kMaxBalancingAcceleration = 5000;
 
 	}
 
@@ -220,12 +220,13 @@ public final class Constants {
 		public static final int kMinorArmLength = 23;
 
 		// current limits of the arms
-		public static final int kMajorArmCurrentLimit = 8;
-		public static final int kMinorArmCurrentLimit = 15;
+		public static final int kMajorArmCurrentLimit = 5;
+		public static final int kMinorArmCurrentLimit = 8;
 
 		// speed limits for the arms
-		public static final double kMajorArmPIDOutputLimit = .3;
-		public static final double kMinorArmPIDOutputLimit = .35;
+		public static final double kMajorArmPIDOutputLimit = .8;
+		public static final double kMinorFirstStageArmPIDOutputLimit = .03;
+		public static final double kMinorSecondStageArmPIDOutputLimit = .3;
 
 		// angle limits for the arms (min will be set to -inpu
 		public static final double kMajorArmConstraints = 101;
@@ -237,8 +238,8 @@ public final class Constants {
 		public static final double kMajorArmD = 0;
 		public static final double kMajorArmIzone = 5;
 
-		public static final double kMinorArmP = 6;
-		public static final double kMinorArmI = 0.0001;	
+		public static final double kMinorArmP = 6; // TODO: retune arm pid
+		public static final double kMinorArmI = 0.0001;
 		public static final double kMinorArmD = 0;
 		public static final double kMinorArmIzone = 5;
 
@@ -255,14 +256,14 @@ public final class Constants {
 
 		public static final HashMap<ArmPoses, double[]> kArmStates = new HashMap<ArmPoses, double[]>() {
 			{
-				put(ArmPoses.TUCKED, new double[] { 0, 0, .25 });
-				put(ArmPoses.LOW_SCORE, new double[] { 0, 90, kMinorArmPIDOutputLimit });
+				put(ArmPoses.TUCKED, new double[] { 0, 0, .20 });
+				put(ArmPoses.LOW_SCORE, new double[] { 0, 90, kMinorSecondStageArmPIDOutputLimit });
 				put(ArmPoses.MID_SCORE, new double[] { 45, 28, .15 });
-				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55, .06 });
-				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98, kMinorArmPIDOutputLimit });
-				put(ArmPoses.MID_INTAKE, new double[] { 13, 33, .15 });
+				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55, .15 });
+				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98, kMinorSecondStageArmPIDOutputLimit });
+				put(ArmPoses.MID_INTAKE, new double[] { 13, 33, .25 });
 				put(ArmPoses.HIGH_INTAKE, new double[] { 95, 80, .25 });
-				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0, kMinorArmPIDOutputLimit });
+				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0, kMinorSecondStageArmPIDOutputLimit });
 			}
 
 		};
@@ -297,9 +298,8 @@ public final class Constants {
 
 		// piss values for limelight
 		public static final PIDGains LLTargetGains = new PIDGains(0.008, 0, 0);
-		
 
-		public static final PIDGains LLPuppyTurnGains = new PIDGains(0.008, 0, 0); 
+		public static final PIDGains LLPuppyTurnGains = new PIDGains(0.008, 0, 0);
 		public static final PIDGains LLPuppyDriveGains = new PIDGains(0.008, 0, 0);
 		public static final double PuppyTurnMotionSmoothing = 0.3;
 		public static final double PuppyDriveMotionSmoothing = 0.4;
