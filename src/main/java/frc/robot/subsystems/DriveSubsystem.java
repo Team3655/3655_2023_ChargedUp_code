@@ -66,8 +66,8 @@ public class DriveSubsystem extends SubsystemBase {
 				ModuleConstants.kFrontLeftTurningMotorPort,
 				ModuleConstants.kFrontLeftTurningEncoderPort,
 				ModuleConstants.kFrontLeftAngleZero,
-				ModuleConstants.kAngularPID,
-				ModuleConstants.kDrivePID);
+				ModuleConstants.kModuleTurningGains,
+				ModuleConstants.kModuleDriveGains);
 
 		frontRight = new SwerveModule(
 				"FR",
@@ -75,8 +75,8 @@ public class DriveSubsystem extends SubsystemBase {
 				ModuleConstants.kFrontRightTurningMotorPort,
 				ModuleConstants.kFrontRightTurningEncoderPort,
 				ModuleConstants.kFrontRightAngleZero,
-				ModuleConstants.kAngularPID,
-				ModuleConstants.kDrivePID);
+				ModuleConstants.kModuleTurningGains,
+				ModuleConstants.kModuleDriveGains);
 
 		rearLeft = new SwerveModule(
 				"RL",
@@ -84,8 +84,8 @@ public class DriveSubsystem extends SubsystemBase {
 				ModuleConstants.kRearLeftTurningMotorPort,
 				ModuleConstants.kRearLeftTurningEncoderPort,
 				ModuleConstants.kRearLeftAngleZero,
-				ModuleConstants.kAngularPID,
-				ModuleConstants.kDrivePID);
+				ModuleConstants.kModuleTurningGains,
+				ModuleConstants.kModuleDriveGains);
 
 		rearRight = new SwerveModule(
 				"RR",
@@ -93,8 +93,8 @@ public class DriveSubsystem extends SubsystemBase {
 				ModuleConstants.kRearRightTurningMotorPort,
 				ModuleConstants.kRearRightTurningEncoderPort,
 				ModuleConstants.kRearRightAngleZero,
-				ModuleConstants.kAngularPID,
-				ModuleConstants.kDrivePID);
+				ModuleConstants.kModuleTurningGains,
+				ModuleConstants.kModuleDriveGains);
 
 		swervePosition = new SwerveModulePosition[] {
 				frontLeft.getPosition(),

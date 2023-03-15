@@ -32,11 +32,8 @@ public final class Constants {
 	public static class ModuleConstants {
 
 		// Current limits for the wheels
-		public static final int kTurnMotorCurrentLimit = 25;
-		public static final int kDriveMotorCurrentLimit = 80;
-
-		// The max speed the modules are capable of
-		public static final double kMaxModuleSpeedMetersPerSecond = Units.feetToMeters(14.5);
+		public static final int kTurnMotorCurrentLimit = 30;
+		public static final int kDriveMotorCurrentLimit = 40;
 
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1d / 6.75;
@@ -44,10 +41,14 @@ public final class Constants {
 
 		public static final double kwheelCircumference = Units.inchesToMeters(4) * Math.PI;
 
-		// TODO: Retunr feedforward values for turning
+		// The max speed the modules are capable of
+		public static final double kMaxModuleSpeedMetersPerSecond = Units.feetToMeters(14.5);
+
+		
 		public static final double ksVolts = .1;
 		public static final double kDriveFeedForward = .2;
 
+		// TODO: Retune feedforward values for turning
 		public static final double kvTurning = .43205;
 		public static final double ksTurning = .17161; // Tuned February 2, 2023
 
@@ -75,25 +76,9 @@ public final class Constants {
 		public static final double kRearLeftAngleZero = 149.414;
 		public static final double kRearRightAngleZero = 61.699;
 
-		public static final double kModuleDriveControllerP = .1;
-		public static final double kModuleDriveControllerI = 0;
-		public static final double kModuleDriveControllerD = 0;
+		public static final PIDGains kModuleDriveGains = new PIDGains(.1, 0, 0);
 
-		public static final double kModuleTurningControllerP = 6.5;
-		public static final double kModuleTurningControllerI = 0; // 0.25;
-		public static final double kModuleTurningControllerD = 0; // 0.15;
-
-		// SPARK MAX Angular PID values
-		public static double[] kAngularPID = {
-				kModuleTurningControllerP,
-				kModuleTurningControllerI,
-				kModuleTurningControllerD };
-
-		// SPARK MAX Drive PID values
-		public static double[] kDrivePID = {
-				kModuleDriveControllerP,
-				kModuleDriveControllerI,
-				kModuleDriveControllerD };
+		public static final PIDGains kModuleTurningGains = new PIDGains(.65, .25, .15);
 	}
 
 	public static class DriveConstants {
@@ -102,6 +87,7 @@ public final class Constants {
 		public static final double kMaxSpeedMetersPerSecond = 2.5;
 		public static final double kMaxTurboMetersPerSecond = 4.5;
 
+		// this sets turning speed (keep this low)
 		public static final double kMaxRPM = 10;
 
 		public static final int kPigeonPort = 20;
@@ -113,7 +99,7 @@ public final class Constants {
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
 				new Translation2d(kWheelBase / 2, kTrackWidth / 2), // FL
-				new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // FR
+				new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // FR  
 				new Translation2d(-kWheelBase / 2, kTrackWidth / 2), // RL
 				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); // RR
 
@@ -233,14 +219,11 @@ public final class Constants {
 		public static final double kMinorArmConstraints = 180;
 
 		// Arm PID constants
-		public static final double kMajorArmP = 3;
-		public static final double kMajorArmI = 0;
-		public static final double kMajorArmD = 0;
+		// TODO: retune arm pid
+		public static final PIDGains kMajorArmGains = new PIDGains(3, 0, 0);
 		public static final double kMajorArmIzone = 5;
 
-		public static final double kMinorArmP = 6; // TODO: retune arm pid
-		public static final double kMinorArmI = 0.0001;
-		public static final double kMinorArmD = 0;
+		public static final PIDGains kMinorArmGains = new PIDGains(6, 0.0001, 0);
 		public static final double kMinorArmIzone = 5;
 
 		public static enum ArmPoses {

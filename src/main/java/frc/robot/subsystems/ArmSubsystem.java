@@ -57,9 +57,9 @@ public class ArmSubsystem extends SubsystemBase {
 				false);
 
 		majorArm.setPID(
-				ArmConstants.kMajorArmP,
-				ArmConstants.kMajorArmI,
-				ArmConstants.kMajorArmD,
+				ArmConstants.kMajorArmGains.kP,
+				ArmConstants.kMajorArmGains.kI,
+				ArmConstants.kMajorArmGains.kD,
 				ArmConstants.kMajorArmIzone);
 
 		majorArm.setConstraints(
@@ -74,9 +74,9 @@ public class ArmSubsystem extends SubsystemBase {
 				true);
 
 		minorArm.setPID(
-				ArmConstants.kMinorArmP,
-				ArmConstants.kMinorArmI,
-				ArmConstants.kMinorArmD,
+				ArmConstants.kMinorArmGains.kP,
+				ArmConstants.kMinorArmGains.kI,
+				ArmConstants.kMinorArmGains.kD,
 				ArmConstants.kMinorArmIzone);
 
 		minorArm.setConstraints(

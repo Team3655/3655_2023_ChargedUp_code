@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.TractorToolbox.TractorParts.PIDGains;
 
 public class SwerveModule extends SubsystemBase {
 	/** Creates a new SwerveModule. */
@@ -38,18 +39,11 @@ public class SwerveModule extends SubsystemBase {
 	private final RelativeEncoder driveEncoder;
 
 	private final SparkMaxPIDController drivePID;
+	private final ProfiledPIDController m_turningPIDController;
 
 	public final double angleZero;
 
 	private final String moduleName;
-
-	private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
-			ModuleConstants.kAngularPID[0],
-			ModuleConstants.kAngularPID[1],
-			ModuleConstants.kAngularPID[2],
-			new TrapezoidProfile.Constraints( // radians/s?
-					2 * Math.PI * 600, // theoretical is 5676 RPM -> 94*2pi
-					2 * Math.PI * 1200));
 
 	SimpleMotorFeedforward turnFeedForward = new SimpleMotorFeedforward(
 			ModuleConstants.ksTurning, ModuleConstants.kvTurning);
@@ -60,8 +54,8 @@ public class SwerveModule extends SubsystemBase {
 			int turningMotorChannel,
 			int absoluteEncoderPort,
 			double angleZero,
-			double[] angularPID,
-			double[] drivePID) {
+			PIDGains angularPID,
+			PIDGains drivePID) {
 
 		this.moduleName = moduleName;
 		this.angleZero = angleZero;
@@ -82,7 +76,7 @@ public class SwerveModule extends SubsystemBase {
 		// Initalize CANcoder
 		absoluteEncoder = new CANCoder(absoluteEncoderPort, Constants.kCanivoreCANBusName);
 		Timer.delay(1);
-		//absoluteEncoder.configFactoryDefault();
+		absoluteEncoder.configFactoryDefault();
 		absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 		absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
 		absoluteEncoder.configMagnetOffset(-1 * angleZero);
@@ -98,9 +92,17 @@ public class SwerveModule extends SubsystemBase {
 
 		// Initialize PID's
 		this.drivePID = driveMotor.getPIDController();
-		this.drivePID.setP(drivePID[0]);
-		this.drivePID.setI(drivePID[1]);
-		this.drivePID.setD(drivePID[2]);
+		this.drivePID.setP(drivePID.kP);
+		this.drivePID.setI(drivePID.kI);
+		this.drivePID.setD(drivePID.kD);
+
+		m_turningPIDController = new ProfiledPIDController(
+			angularPID.kP,
+			angularPID.kI,
+			angularPID.kD,
+			new TrapezoidProfile.Constraints( // radians/s?
+					2 * Math.PI * 600, // theoretical is 5676 RPM -> 94*2pi
+					2 * Math.PI * 1200));
 
 		this.drivePID.setFF(ModuleConstants.kDriveFeedForward);
 
