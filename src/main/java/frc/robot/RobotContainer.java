@@ -51,8 +51,10 @@ public class RobotContainer {
 
 	public final PathBuilder autoBuilder = new PathBuilder();
 
-	private final CommandJoystick driveJoystick = new CommandJoystick(OperatorConstants.kDriveJoystickPort);
-	private final CommandJoystick turnJoystick = new CommandJoystick(OperatorConstants.kTurnJoystickPort);
+	private final CommandJoystick driveJoystick = new CommandJoystick(
+			OperatorConstants.kDriveJoystickPort);
+	private final CommandJoystick turnJoystick = new CommandJoystick(
+			OperatorConstants.kTurnJoystickPort);
 	private final CommandGenericHID operatorController = new CommandGenericHID(
 			OperatorConstants.kOperatorControllerPort);
 	private final CommandXboxController programmerController = new CommandXboxController(
@@ -83,10 +85,6 @@ public class RobotContainer {
 		autoChooser.addOption("1 Wall", autoBuilder.getPathCommand("1 Wall"));
 		autoChooser.addOption("1 Charge", autoBuilder.getPathCommand("1 Charge").andThen(new BalanceCommand()));
 		autoChooser.addOption("Charge Station", new BalanceSequence());
-		// autoChooser.addOption("1+1 Human Player", autoBuilder.getPathCommand("1+1 Human Player"));
-		// autoChooser.addOption("1+1 Charge Station", autoBuilder.getPathCommand("1+1 Charge Station"));
-		
-
 		// endregion
 	}
 
@@ -165,9 +163,13 @@ public class RobotContainer {
 		driveSubsystem.setDefaultCommand(
 				new RunCommand(
 						() -> driveSubsystem.drive(
-								-JoystickUtils.processJoystickInput(driveJoystick.getY()) - JoystickUtils.processJoystickInput(programmerController.getLeftY()), // x axis
-								-JoystickUtils.processJoystickInput(driveJoystick.getX()) - JoystickUtils.processJoystickInput(programmerController.getLeftX()), // y axis
-								-JoystickUtils.processJoystickInput(turnJoystick.getX()) - JoystickUtils.processJoystickInput(programmerController.getRightX()), // rot axis
+								-JoystickUtils.processJoystickInput(driveJoystick.getY())
+										- JoystickUtils.processJoystickInput(programmerController.getLeftY()), // x axis
+								-JoystickUtils.processJoystickInput(driveJoystick.getX())
+										- JoystickUtils.processJoystickInput(programmerController.getLeftX()), // y axis
+								-JoystickUtils.processJoystickInput(turnJoystick.getX())
+										- JoystickUtils.processJoystickInput(programmerController.getRightX()), // rot
+																												// axis
 								driveJoystick.getHID().getRawButton(1), // turbo boolean
 								driveJoystick.getHID().getRawButton(2)), // sneak boolean
 						driveSubsystem));

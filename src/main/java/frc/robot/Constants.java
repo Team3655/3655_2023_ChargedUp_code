@@ -78,7 +78,7 @@ public final class Constants {
 
 		public static final PIDGains kModuleDriveGains = new PIDGains(.1, 0, 0);
 
-		public static final PIDGains kModuleTurningGains = new PIDGains(.65, .25, .15);
+		public static final PIDGains kModuleTurningGains = new PIDGains(6.5, .25, .15);
 	}
 
 	public static class DriveConstants {
@@ -210,9 +210,11 @@ public final class Constants {
 		public static final int kMinorArmCurrentLimit = 8;
 
 		// speed limits for the arms
-		public static final double kMajorArmPIDOutputLimit = .8;
-		public static final double kMinorFirstStageArmPIDOutputLimit = .03;
-		public static final double kMinorSecondStageArmPIDOutputLimit = .3;
+		public static final double kMajorFirstStagePIDOutputLimit = .8;
+		public static final double kMajorSecondStagePIDOutputLimit = .8;
+
+		public static final double kMinorFirstStagePIDOutputLimit = .03;
+		public static final double kMinorSecondStagePIDOutputLimit = .3;
 
 		// angle limits for the arms (min will be set to -inpu
 		public static final double kMajorArmConstraints = 101;
@@ -239,14 +241,14 @@ public final class Constants {
 
 		public static final HashMap<ArmPoses, double[]> kArmStates = new HashMap<ArmPoses, double[]>() {
 			{
-				put(ArmPoses.TUCKED, new double[] { 0, 0, .20 });
-				put(ArmPoses.LOW_SCORE, new double[] { 0, 90, kMinorSecondStageArmPIDOutputLimit });
+				put(ArmPoses.TUCKED, new double[] { 0, 0, kMinorSecondStagePIDOutputLimit });
+				put(ArmPoses.LOW_SCORE, new double[] { 0, 90, kMinorSecondStagePIDOutputLimit });
 				put(ArmPoses.MID_SCORE, new double[] { 45, 28, .15 });
 				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55, .15 });
-				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98, kMinorSecondStageArmPIDOutputLimit });
+				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98, kMinorSecondStagePIDOutputLimit });
 				put(ArmPoses.MID_INTAKE, new double[] { 13, 33, .25 });
 				put(ArmPoses.HIGH_INTAKE, new double[] { 95, 80, .25 });
-				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0, kMinorSecondStageArmPIDOutputLimit });
+				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0, kMinorSecondStagePIDOutputLimit });
 			}
 
 		};

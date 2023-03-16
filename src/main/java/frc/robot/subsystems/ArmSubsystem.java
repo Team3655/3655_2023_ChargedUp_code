@@ -62,9 +62,8 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMajorArmGains.kD,
 				ArmConstants.kMajorArmIzone);
 
-		majorArm.setConstraints(
-				ArmConstants.kMajorArmConstraints,
-				ArmConstants.kMajorArmPIDOutputLimit);
+		majorArm.setConstraints(ArmConstants.kMajorArmConstraints);
+		majorArm.setMaxOutput(ArmConstants.kMajorSecondStagePIDOutputLimit);
 
 		// minor arm defs
 		minorArm = new ArmSegment(
@@ -79,9 +78,8 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMinorArmGains.kD,
 				ArmConstants.kMinorArmIzone);
 
-		minorArm.setConstraints(
-				ArmConstants.kMinorArmConstraints,
-				ArmConstants.kMinorFirstStageArmPIDOutputLimit);
+		minorArm.setConstraints(ArmConstants.kMinorArmConstraints);
+		minorArm.setMaxOutput(ArmConstants.kMinorSecondStagePIDOutputLimit);
 		// endregion
 
 		gripper = new Gripper(ArmConstants.kLeftGripperPort, ArmConstants.kRightGripperPort);
@@ -171,14 +169,19 @@ public class ArmSubsystem extends SubsystemBase {
 	 *              LOW_INTAKE, MID_INTAKE, HIGH_INTAKE)
 	 */
 	public void setUnsequencedArmState(ArmPoses state) {
-		minorArm.setConstraints(ArmConstants.kMinorArmConstraints, armStates.get(targetArmState)[2]);
+		minorArm.setMaxOutput(armStates.get(targetArmState)[2]);
 
 		setTargetArmState(state);
 	}
 
 	public void setSequencedArmState(ArmPoses state) {
-		minorArm.setConstraints(ArmConstants.kMinorArmConstraints, ArmConstants.kMinorFirstStageArmPIDOutputLimit);
-
+		if (state != ArmPoses.TUCKED) {
+			minorArm.setMaxOutput(ArmConstants.kMinorFirstStagePIDOutputLimit);
+			majorArm.setMaxOutput(ArmConstants.kMajorSecondStagePIDOutputLimit);
+		} else {
+			minorArm.setMaxOutput(ArmConstants.kMinorSecondStagePIDOutputLimit);
+			majorArm.setMaxOutput(ArmConstants.kMajorFirstStagePIDOutputLimit);
+		}
 		setTargetArmState(state);
 	}
 
@@ -203,10 +206,9 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void updateOutputLimit() {
-		if (majorArm.getAtTarget(10)) {
-			minorArm.setConstraints(
-					ArmConstants.kMinorArmConstraints,
-					ArmConstants.kMinorSecondStageArmPIDOutputLimit);
+		if (majorArm.getAtTarget(10) || minorArm.getAtTarget(10)) {
+			minorArm.setMaxOutput(ArmConstants.kMinorSecondStagePIDOutputLimit);
+			majorArm.setMaxOutput(ArmConstants.kMajorSecondStagePIDOutputLimit);
 		}
 	}
 

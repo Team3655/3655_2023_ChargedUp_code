@@ -114,9 +114,12 @@ public class ArmSegment {
 	}
 
 	/** sets the angle constraint and the speed constraint */
-	public void setConstraints(double theta, double maxOutput) {
+	public void setConstraints(double theta) {
 		maxTheta = theta;
 		minTheta = -theta;
+	}
+
+	public void setMaxOutput(double maxOutput) {
 		rightPIDController.setOutputRange(-maxOutput, maxOutput);
 		leftPIDController.setOutputRange(-maxOutput, maxOutput);
 	}
