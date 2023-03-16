@@ -17,7 +17,7 @@ public class ArmSwitchCommand extends InstantCommand {
 	ArmSubsystem armSubsystem;
 	LimelightSubsystem limelightSubsystem;
 
-  public ArmSwitchCommand(ArmSubsystem armSubsystem, LimelightSubsystem limelightSubsystem) {
+  public ArmSwitchCommand() {
 
 	this.armSubsystem = armSubsystem;
 	this.limelightSubsystem = limelightSubsystem;
