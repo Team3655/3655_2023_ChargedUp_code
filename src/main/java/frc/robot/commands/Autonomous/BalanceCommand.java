@@ -9,7 +9,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.TractorToolbox.TractorParts.DoubleSmoother;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class BalanceCommand extends CommandBase {
@@ -17,11 +16,6 @@ public class BalanceCommand extends CommandBase {
 	private static DriveSubsystem driveSubsystem;
 
 	private final ProfiledPIDController drivePIDController;
-	private final ProfiledPIDController strafePIDController;
-
-	private final DoubleSmoother driveSmoother;
-	private final DoubleSmoother strafeSmoother;
-
 
 	/** Creates a new BalanceCommand. */
 	public BalanceCommand() {
@@ -29,19 +23,11 @@ public class BalanceCommand extends CommandBase {
 		driveSubsystem = RobotContainer.driveSubsystem;
 
 		drivePIDController = new ProfiledPIDController(
-				AutoConstants.kBalanceCommandGains.kP, 
-				AutoConstants.kBalanceCommandGains.kI, 
-				AutoConstants.kBalanceCommandGains.kD,
-				new TrapezoidProfile.Constraints(AutoConstants.kMaxBalancingVelocity, AutoConstants.kMaxBalancingAcceleration));
-
-		strafePIDController = new ProfiledPIDController(
 				AutoConstants.kBalanceCommandGains.kP,
 				AutoConstants.kBalanceCommandGains.kI,
 				AutoConstants.kBalanceCommandGains.kD,
-				new TrapezoidProfile.Constraints(AutoConstants.kMaxBalancingVelocity, AutoConstants.kMaxBalancingAcceleration));
-
-		driveSmoother = new DoubleSmoother(.1);
-		strafeSmoother = new DoubleSmoother(.1);
+				new TrapezoidProfile.Constraints(AutoConstants.kMaxBalancingVelocity,
+						AutoConstants.kMaxBalancingAcceleration));
 
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(driveSubsystem);
@@ -51,7 +37,7 @@ public class BalanceCommand extends CommandBase {
 	@Override
 	public void initialize() {
 		driveSubsystem.setFieldCentric(true);
-		
+
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -64,11 +50,7 @@ public class BalanceCommand extends CommandBase {
 
 		if (Math.abs(driveSubsystem.getRoll()) + Math.abs(driveSubsystem.getPitch()) > AutoConstants.kBalnaceCommandDeadbandDeg) {
 			driveOutput = drivePIDController.calculate(driveSubsystem.getPitch(), 0);
-			//strafeOutput = strafePIDController.calculate(driveSubsystem.getPitch(), 0);
 		}
-
-		// driveOutput = driveSmoother.smoothInput(driveOutput);
-		// strafeOutput = strafeSmoother.smoothInput(strafeOutput);
 
 		// add strafe output here to have the robot strafe while balancing
 		driveSubsystem.drive(driveOutput, 0, 0);
