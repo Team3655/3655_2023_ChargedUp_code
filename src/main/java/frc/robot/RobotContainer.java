@@ -115,8 +115,8 @@ public class RobotContainer {
 		programmerController.b().onTrue(new FloorIntakeCommand());
 
 		// tuck arms
-		operatorController.button(4).onTrue(armSubsystem.UnsequencedArmPoseCommand(ArmPoses.TUCKED));
-		programmerController.y().onTrue(armSubsystem.UnsequencedArmPoseCommand(ArmPoses.TUCKED));
+		operatorController.button(4).onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.TUCKED));
+		programmerController.y().onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.TUCKED));
 
 		// Switches sides of the robot
 		operatorController.button(9).onTrue(new ArmSwitchCommand());
