@@ -31,7 +31,7 @@ public class ArmSwitchCommand extends InstantCommand {
   @Override
   public void initialize() {
 	armSubsystem.ToggleSide();
-	limelightSubsystem.FlipLimelight(armSubsystem.getIsFront());
+	
   }
 
 }

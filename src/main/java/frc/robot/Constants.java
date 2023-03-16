@@ -117,6 +117,9 @@ public final class Constants {
 		public static double kTurnI = 0;
 		public static double kTurnD = 0;
 
+		public static double kTurnToleranceDeg = 5;
+		public static double kTurnRateToleranceDegPerS = 0;
+
 	}
 
 	/**
