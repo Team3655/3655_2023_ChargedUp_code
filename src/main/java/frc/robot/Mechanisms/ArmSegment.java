@@ -37,15 +37,15 @@ public class ArmSegment {
 
 	// endregion
 
-	public ArmSegment(int leftPort, int rightPort, double gearRatio, Boolean invertLeader) {
+	public ArmSegment(int rightPort, int leftPort, double gearRatio, Boolean invertLeader) {
 
 		targetSign = 1;
 		isRunning = true;
 
 		// region def_motors
 		// creates left and right arm motors
-		rightMotor = new CANSparkMax(leftPort, MotorType.kBrushless);
-		leftMotor = new CANSparkMax(rightPort, MotorType.kBrushless);
+		rightMotor = new CANSparkMax(rightPort, MotorType.kBrushless);
+		leftMotor = new CANSparkMax(leftPort, MotorType.kBrushless);
 
 		/**
 		 * The restoreFactoryDefaults method can be used to reset the configuration

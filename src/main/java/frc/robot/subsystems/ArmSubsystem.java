@@ -21,7 +21,7 @@ public class ArmSubsystem extends SubsystemBase {
 	ArmPoses targetArmState;
 
 	/** controls the side of the robot the arm is on */
-	private boolean isFront;
+	private boolean isFront, enableArms;
 
 	// create arms
 	private ArmSegment majorArm;
@@ -77,6 +77,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 		// the default state of the arms
 		isFront = true;
+		enableArms = true;
 
 		setSequencedArmState(ArmPoses.TUCKED);
 	}
@@ -109,7 +110,7 @@ public class ArmSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("LeftMajorOutput", majorArm.getLeftMotorOutput());
 		SmartDashboard.putNumber("RightMajorOutput", majorArm.getRightMotorOutput());
 
-		updateOutputLimit();
+		updateSequencing();
 	}
 
 	// region Commands
@@ -137,6 +138,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 	public CommandBase toggleArmMotors() {
 		return runOnce(() -> {
+			enableArms = false;
 			minorArm.toggleMotors();
 			majorArm.toggleMotors();
 		});
@@ -166,14 +168,14 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void setSequencedArmState(ArmPoses state) {
-		if (state != ArmPoses.TUCKED) {
-			minorArm.setMaxOutput(ArmConstants.kMinorFirstStagePIDOutputLimit);
-			majorArm.setMaxOutput(ArmConstants.kMajorSecondStagePIDOutputLimit);
-		} else {
-			minorArm.setMaxOutput(ArmConstants.kMinorSecondStagePIDOutputLimit);
-			majorArm.setMaxOutput(ArmConstants.kMajorFirstStagePIDOutputLimit);
-		}
+
 		setTargetArmState(state);
+
+		if (state == ArmPoses.TUCKED) {
+			majorArm.setReference();
+		} else {
+			minorArm.setReference();
+		}
 	}
 
 	/**
@@ -181,6 +183,8 @@ public class ArmSubsystem extends SubsystemBase {
 	 */
 	public void setTargetArmState(ArmPoses state) {
 		targetArmState = state;
+
+		enableArms = true;
 
 		if (state == ArmPoses.TUCKED) {
 			gripper.closeGriper();
@@ -191,15 +195,12 @@ public class ArmSubsystem extends SubsystemBase {
 		// gets the angle values from the hashmap
 		majorArm.setTargetTheta(armStates.get(targetArmState)[0]);
 		minorArm.setTargetTheta(armStates.get(targetArmState)[1]);
-
-		majorArm.setReference();
-		minorArm.setReference();
 	}
 
-	public void updateOutputLimit() {
-		if (majorArm.getAtTarget(10) || minorArm.getAtTarget(10)) {
-			minorArm.setMaxOutput(ArmConstants.kMinorSecondStagePIDOutputLimit);
-			majorArm.setMaxOutput(ArmConstants.kMajorSecondStagePIDOutputLimit);
+	public void updateSequencing() {
+		if ((majorArm.getAtTarget(10) || minorArm.getAtTarget(10)) && enableArms) {
+			minorArm.setReference();
+			majorArm.setReference();
 		}
 	}
 
