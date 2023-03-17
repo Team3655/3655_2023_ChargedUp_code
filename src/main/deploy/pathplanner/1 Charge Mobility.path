@@ -10,16 +10,15 @@
         "x": 2.784169038423545,
         "y": 2.203899450533944
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "ToggleSide",
           "ScoreHigh",
-          "ToggleSide"
+          "Tuck"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -28,15 +27,15 @@
     },
     {
       "anchorPoint": {
-        "x": 4.125098506607269,
+        "x": 6.5,
         "y": 2.2
       },
       "prevControl": {
-        "x": 3.1772995295697823,
+        "x": 5.552201022962513,
         "y": 2.2
       },
       "nextControl": null,
-      "holonomicAngle": 0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,

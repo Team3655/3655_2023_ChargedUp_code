@@ -18,7 +18,6 @@ import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.TractorToolbox.JoystickUtils;
 import frc.robot.TractorToolbox.TractorParts.PathBuilder;
-import frc.robot.commands.ArmBumpCommand;
 import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.commands.FloorIntakeCommand;
 import frc.robot.commands.LLAlignCommand;
@@ -78,12 +77,12 @@ public class RobotContainer {
 		autoBuilder.addPath("1+1 Charge Station");
 		autoBuilder.addPath("1 Human Player");
 		autoBuilder.addPath("1 Wall");
-		autoBuilder.addPath("1 Charge");
+		autoBuilder.addPath("1 Charge Mobility");
 
 		autoChooser.setDefaultOption("Event Test", autoBuilder.getPathCommand("Event Test"));
 		autoChooser.addOption("1 Human Player", autoBuilder.getPathCommand("1 Human Player"));
 		autoChooser.addOption("1 Wall", autoBuilder.getPathCommand("1 Wall"));
-		autoChooser.addOption("1 Charge", autoBuilder.getPathCommand("1 Charge").andThen(new BalanceCommand()));
+		autoChooser.addOption("1 Charge Mobility", autoBuilder.getPathCommand("1 Charge Mobility").andThen(new BalanceCommand()));
 		autoChooser.addOption("Charge Station", new BalanceSequence());
 		// endregion
 	}
@@ -124,11 +123,9 @@ public class RobotContainer {
 		operatorController.button(11).onTrue(armSubsystem.toggleArmMotors());
 		operatorController.button(13).onTrue(armSubsystem.zeroArms());
 
-		operatorController.button(18).whileTrue(new ArmBumpCommand(+5, 0));
-		operatorController.button(20).whileTrue(new ArmBumpCommand(-5, 0));
+		operatorController.button(22).onTrue(new InstantCommand(() -> armSubsystem.closeGriper()));
+		operatorController.button(23).onTrue(new InstantCommand(() -> armSubsystem.openGriper()));
 
-		operatorController.button(17).whileTrue(new ArmBumpCommand(0, +5));
-		operatorController.button(19).whileTrue(new ArmBumpCommand(0, -5));
 		// endregion
 
 		// Sucking is set to be the defaut state of the intake

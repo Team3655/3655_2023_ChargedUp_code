@@ -32,8 +32,8 @@ public final class Constants {
 	public static class ModuleConstants {
 
 		// Current limits for the wheels
-		public static final int kTurnMotorCurrentLimit = 30;
-		public static final int kDriveMotorCurrentLimit = 40;
+		public static final int kTurnMotorCurrentLimit = 25;
+		public static final int kDriveMotorCurrentLimit = 35;
 
 		// Constants set for the _SDS MK4i_
 		public static final double kdriveGearRatio = 1d / 6.75;
@@ -44,7 +44,6 @@ public final class Constants {
 		// The max speed the modules are capable of
 		public static final double kMaxModuleSpeedMetersPerSecond = Units.feetToMeters(14.5);
 
-		
 		public static final double ksVolts = .1;
 		public static final double kDriveFeedForward = .2;
 
@@ -99,7 +98,7 @@ public final class Constants {
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
 				new Translation2d(kWheelBase / 2, kTrackWidth / 2), // FL
-				new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // FR  
+				new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // FR
 				new Translation2d(-kWheelBase / 2, kTrackWidth / 2), // RL
 				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); // RR
 
@@ -138,7 +137,7 @@ public final class Constants {
 					put("IntakeDown", new IntakeDownSequence());
 					put("ToggleSide", new ArmSwitchCommand());
 					put("Suck", new SuckCommand(true, 250));
-					put("Drop", new SuckCommand(false, 1000));
+					put("Drop", new SuckCommand(false, 500));
 				}
 			};
 		}
@@ -155,7 +154,6 @@ public final class Constants {
 		public static final PIDGains kBalanceCommandGains = new PIDGains(.008, 0, 0);
 		public static final double kMaxBalancingVelocity = 1000;
 		public static final double kMaxBalancingAcceleration = 5000;
-
 
 	}
 
@@ -211,11 +209,8 @@ public final class Constants {
 		public static final int kMinorArmCurrentLimit = 8;
 
 		// speed limits for the arms
-		public static final double kMajorFirstStagePIDOutputLimit = .8;
-		public static final double kMajorSecondStagePIDOutputLimit = .8;
-
-		public static final double kMinorFirstStagePIDOutputLimit = .03;
-		public static final double kMinorSecondStagePIDOutputLimit = .3;
+		public static final double kMajorPIDOutputLimit = .65;
+		public static final double kMinorPIDOutputLimit = .3;
 
 		// angle limits for the arms (min will be set to -inpu
 		public static final double kMajorArmConstraints = 101;
@@ -242,14 +237,14 @@ public final class Constants {
 
 		public static final HashMap<ArmPoses, double[]> kArmStates = new HashMap<ArmPoses, double[]>() {
 			{
-				put(ArmPoses.TUCKED, new double[] { 0, 0, kMinorSecondStagePIDOutputLimit });
-				put(ArmPoses.LOW_SCORE, new double[] { 0, 90, kMinorSecondStagePIDOutputLimit });
-				put(ArmPoses.MID_SCORE, new double[] { 45, 28, .15 });
-				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55, .15 });
-				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98, kMinorSecondStagePIDOutputLimit });
-				put(ArmPoses.MID_INTAKE, new double[] { 13, 33, .25 });
-				put(ArmPoses.HIGH_INTAKE, new double[] { 95, 80, .25 });
-				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0, kMinorSecondStagePIDOutputLimit });
+				put(ArmPoses.TUCKED, new double[] { 0, 0 });
+				put(ArmPoses.LOW_SCORE, new double[] { 0, 90 });
+				put(ArmPoses.MID_SCORE, new double[] { 45, 28 });
+				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55 });
+				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98 });
+				put(ArmPoses.MID_INTAKE, new double[] { 13, 33 });
+				put(ArmPoses.HIGH_INTAKE, new double[] { 95, 80 });
+				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0 });
 			}
 
 		};

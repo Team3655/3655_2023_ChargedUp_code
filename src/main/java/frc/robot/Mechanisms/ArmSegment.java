@@ -80,12 +80,12 @@ public class ArmSegment {
 		leftEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
 
 		// Sets the left motor to be inverted if it needs to be
-		/*if (invertLeft) {
+		if (invertLeader) {
 			leftMotor.setInverted(true);
 		} else {
 			rightMotor.setInverted(true);
 		}
-		*/
+		
 
 		rightMotor.setInverted(invertLeader);
 		leftMotor.follow(rightMotor, true);
@@ -101,7 +101,7 @@ public class ArmSegment {
 	/** Sets the pid referance point to the target theta of the segment */
 	public void setReference() {
 		rightPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
-		leftPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
+		// leftPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
 	}
 
 	/**
@@ -212,7 +212,7 @@ public class ArmSegment {
 
 	/** Returns the actual angle of the real arm (not the same as the target) */
 	public double getRealTheta() {
-		return Math.toDegrees((rightEncoder.getPosition() + leftEncoder.getPosition()) / 2);
+		return Math.toDegrees(rightEncoder.getPosition());
 	}
 
 	public double getLeftRealTheta() {

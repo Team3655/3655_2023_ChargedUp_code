@@ -22,6 +22,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 	/** controls the side of the robot the arm is on */
 	private boolean isFront;
+	private boolean enableArms;
 
 	// create arms
 	private ArmSegment majorArm;
@@ -40,7 +41,6 @@ public class ArmSubsystem extends SubsystemBase {
 				double x = 0;
 				x = x + armStates.get(pose)[0];
 				x = x + armStates.get(pose)[1];
-				x = x + armStates.get(pose)[2];
 			} catch (Exception exception) {
 				throw new IndexOutOfBoundsException(
 						"NOT ALL ARM POSES HAVE A VALUE IN THE HASHMAP! THIS WILL RESLUT IN CRASHING IF NOT RESOLVED!");
@@ -63,7 +63,7 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMajorArmIzone);
 
 		majorArm.setConstraints(ArmConstants.kMajorArmConstraints);
-		majorArm.setMaxOutput(ArmConstants.kMajorSecondStagePIDOutputLimit);
+		majorArm.setMaxOutput(ArmConstants.kMajorPIDOutputLimit);
 
 		// minor arm defs
 		minorArm = new ArmSegment(
@@ -79,7 +79,7 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMinorArmIzone);
 
 		minorArm.setConstraints(ArmConstants.kMinorArmConstraints);
-		minorArm.setMaxOutput(ArmConstants.kMinorSecondStagePIDOutputLimit);
+		minorArm.setMaxOutput(ArmConstants.kMinorPIDOutputLimit);
 		// endregion
 
 		gripper = new Gripper(ArmConstants.kLeftGripperPort, ArmConstants.kRightGripperPort);
@@ -118,7 +118,7 @@ public class ArmSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("LeftMajorOutput", majorArm.getLeftMotorOutput());
 		SmartDashboard.putNumber("RightMajorOutput", majorArm.getRightMotorOutput());
 
-		updateOutputLimit();
+		updateSequencing();
 	}
 
 	// region Commands
@@ -146,6 +146,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 	public CommandBase toggleArmMotors() {
 		return runOnce(() -> {
+			enableArms = false;
 			minorArm.toggleMotors();
 			majorArm.toggleMotors();
 		});
@@ -169,20 +170,20 @@ public class ArmSubsystem extends SubsystemBase {
 	 *              LOW_INTAKE, MID_INTAKE, HIGH_INTAKE)
 	 */
 	public void setUnsequencedArmState(ArmPoses state) {
-		minorArm.setMaxOutput(armStates.get(targetArmState)[2]);
-
 		setTargetArmState(state);
+		majorArm.setReference();
+		minorArm.setReference();
 	}
 
 	public void setSequencedArmState(ArmPoses state) {
-		if (state != ArmPoses.TUCKED) {
-			minorArm.setMaxOutput(ArmConstants.kMinorFirstStagePIDOutputLimit);
-			majorArm.setMaxOutput(ArmConstants.kMajorSecondStagePIDOutputLimit);
-		} else {
-			minorArm.setMaxOutput(ArmConstants.kMinorSecondStagePIDOutputLimit);
-			majorArm.setMaxOutput(ArmConstants.kMajorFirstStagePIDOutputLimit);
-		}
+
 		setTargetArmState(state);
+
+		if (state == ArmPoses.TUCKED) {
+			minorArm.setReference();
+		} else {
+			majorArm.setReference();
+		}
 	}
 
 	/**
@@ -190,6 +191,7 @@ public class ArmSubsystem extends SubsystemBase {
 	 */
 	public void setTargetArmState(ArmPoses state) {
 		targetArmState = state;
+		enableArms = true;
 
 		if (state == ArmPoses.TUCKED) {
 			gripper.closeGriper();
@@ -197,18 +199,16 @@ public class ArmSubsystem extends SubsystemBase {
 			// gripper.openGriper();
 		}
 
+		// get minor speed from map
 		// gets the angle values from the hashmap
 		majorArm.setTargetTheta(armStates.get(targetArmState)[0]);
 		minorArm.setTargetTheta(armStates.get(targetArmState)[1]);
-
-		majorArm.setReference();
-		minorArm.setReference();
 	}
 
-	public void updateOutputLimit() {
-		if (majorArm.getAtTarget(10) || minorArm.getAtTarget(10)) {
-			minorArm.setMaxOutput(ArmConstants.kMinorSecondStagePIDOutputLimit);
-			majorArm.setMaxOutput(ArmConstants.kMajorSecondStagePIDOutputLimit);
+	public void updateSequencing() {
+		if ((majorArm.getAtTarget(10) || minorArm.getAtTarget(10)) && enableArms) {
+			majorArm.setReference();
+			minorArm.setReference();
 		}
 	}
 
