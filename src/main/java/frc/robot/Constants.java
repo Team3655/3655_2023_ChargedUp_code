@@ -242,14 +242,14 @@ public final class Constants {
 
 		public static final HashMap<ArmPoses, double[]> kArmStates = new HashMap<ArmPoses, double[]>() {
 			{
-				put(ArmPoses.TUCKED, new double[] { 0, 0, kMinorSecondStagePIDOutputLimit });
-				put(ArmPoses.LOW_SCORE, new double[] { 0, 90, kMinorSecondStagePIDOutputLimit });
-				put(ArmPoses.MID_SCORE, new double[] { 45, 28, .15 });
-				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55, .15 });
-				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98, kMinorSecondStagePIDOutputLimit });
-				put(ArmPoses.MID_INTAKE, new double[] { 13, 33, .25 });
-				put(ArmPoses.HIGH_INTAKE, new double[] { 95, 80, .25 });
-				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0, kMinorSecondStagePIDOutputLimit });
+				put(ArmPoses.TUCKED, new double[] { 0, 0 });
+				put(ArmPoses.LOW_SCORE, new double[] { 0, 90 });
+				put(ArmPoses.MID_SCORE, new double[] { 45, 28 });
+				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55 });
+				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98 });
+				put(ArmPoses.MID_INTAKE, new double[] { 13, 33 });
+				put(ArmPoses.HIGH_INTAKE, new double[] { 95, 80 });
+				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0 });
 			}
 
 		};

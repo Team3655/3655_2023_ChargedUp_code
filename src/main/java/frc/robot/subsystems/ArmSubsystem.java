@@ -40,7 +40,6 @@ public class ArmSubsystem extends SubsystemBase {
 				double x = 0;
 				x = x + armStates.get(pose)[0];
 				x = x + armStates.get(pose)[1];
-				x = x + armStates.get(pose)[2];
 			} catch (Exception exception) {
 				throw new IndexOutOfBoundsException(
 						"NOT ALL ARM POSES HAVE A VALUE IN THE HASHMAP! THIS WILL RESLUT IN CRASHING IF NOT RESOLVED!");
@@ -56,11 +55,7 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMajorArmTicks,
 				false);
 
-		majorArm.setPID(
-				ArmConstants.kMajorArmGains.kP,
-				ArmConstants.kMajorArmGains.kI,
-				ArmConstants.kMajorArmGains.kD,
-				ArmConstants.kMajorArmIzone);
+		majorArm.setPID(ArmConstants.kMajorArmGains);
 
 		majorArm.setConstraints(ArmConstants.kMajorArmConstraints);
 		majorArm.setMaxOutput(ArmConstants.kMajorSecondStagePIDOutputLimit);
@@ -72,11 +67,7 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMinorArmTicks,
 				true);
 
-		minorArm.setPID(
-				ArmConstants.kMinorArmGains.kP,
-				ArmConstants.kMinorArmGains.kI,
-				ArmConstants.kMinorArmGains.kD,
-				ArmConstants.kMinorArmIzone);
+		minorArm.setPID(ArmConstants.kMinorArmGains);
 
 		minorArm.setConstraints(ArmConstants.kMinorArmConstraints);
 		minorArm.setMaxOutput(ArmConstants.kMinorSecondStagePIDOutputLimit);
