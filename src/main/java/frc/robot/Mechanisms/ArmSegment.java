@@ -8,6 +8,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
+import frc.robot.TractorToolbox.TractorParts.PIDGains;
+
 public class ArmSegment {
 
 	// region properties
@@ -16,7 +18,7 @@ public class ArmSegment {
 	private CANSparkMax rightMotor, leftMotor;
 
 	/** PID controllers for the segment */
-	public SparkMaxPIDController rightPIDController, leftPIDController;
+	public SparkMaxPIDController rightPIDController;
 
 	/** Encoders for the segment */
 	private RelativeEncoder rightEncoder, leftEncoder;
@@ -35,15 +37,15 @@ public class ArmSegment {
 
 	// endregion
 
-	public ArmSegment(int leftPort, int rightPort, double gearRatio, Boolean invertLeader) {
+	public ArmSegment(int rightPort, int leftPort, double gearRatio, Boolean invertLeader) {
 
 		targetSign = 1;
 		isRunning = true;
 
 		// region def_motors
 		// creates left and right arm motors
-		rightMotor = new CANSparkMax(leftPort, MotorType.kBrushless);
-		leftMotor = new CANSparkMax(rightPort, MotorType.kBrushless);
+		rightMotor = new CANSparkMax(rightPort, MotorType.kBrushless);
+		leftMotor = new CANSparkMax(leftPort, MotorType.kBrushless);
 
 		/**
 		 * The restoreFactoryDefaults method can be used to reset the configuration
@@ -63,13 +65,10 @@ public class ArmSegment {
 		 * CANSparkMax object
 		 */
 		rightPIDController = rightMotor.getPIDController();
-		leftPIDController = leftMotor.getPIDController();
 
 		rightPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
-		leftPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
 
 		rightPIDController.setSmartMotionMaxAccel(5, 0);
-		leftPIDController.setSmartMotionMaxAccel(5, 0);
 
 		// Encoder object created to display position values
 		rightEncoder = rightMotor.getEncoder();
@@ -78,14 +77,6 @@ public class ArmSegment {
 		// Tells the motors to automatically convert degrees to rotations
 		rightEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
 		leftEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
-
-		// Sets the left motor to be inverted if it needs to be
-		if (invertLeader) {
-			leftMotor.setInverted(true);
-		} else {
-			rightMotor.setInverted(true);
-		}
-		
 
 		rightMotor.setInverted(invertLeader);
 		leftMotor.follow(rightMotor, true);
@@ -101,7 +92,6 @@ public class ArmSegment {
 	/** Sets the pid referance point to the target theta of the segment */
 	public void setReference() {
 		rightPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
-		// leftPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
 	}
 
 	/**
@@ -121,7 +111,6 @@ public class ArmSegment {
 
 	public void setMaxOutput(double maxOutput) {
 		rightPIDController.setOutputRange(-maxOutput, maxOutput);
-		leftPIDController.setOutputRange(-maxOutput, maxOutput);
 	}
 
 	/**
@@ -153,22 +142,14 @@ public class ArmSegment {
 	}
 
 	/**
-	 * sets the PID values for the arm segment
+	 * Sets the pis gains of the arms
 	 * 
-	 * @param P Just look up a PID loop
-	 * @param I Seriously hurry up!
-	 * @param D Don't make me wait on behalf of your ignorance
+	 * @param inputGains the gains to be set
 	 */
-	public void setPID(double P, double I, double D, double Izone) {
-		rightPIDController.setP(P);
-		rightPIDController.setI(I);
-		rightPIDController.setD(D);
-		rightPIDController.setIZone(Izone);
-
-		leftPIDController.setP(P);
-		leftPIDController.setI(I);
-		leftPIDController.setD(D);
-		rightPIDController.setIZone(Izone);
+	public void setPID(PIDGains inputGains) {
+		rightPIDController.setP(inputGains.kP);
+		rightPIDController.setI(inputGains.kI);
+		rightPIDController.setD(inputGains.kD);
 	}
 
 	/**

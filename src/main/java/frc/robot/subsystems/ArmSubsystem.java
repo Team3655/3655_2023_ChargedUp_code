@@ -56,11 +56,7 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMajorArmTicks,
 				false);
 
-		majorArm.setPID(
-				ArmConstants.kMajorArmGains.kP,
-				ArmConstants.kMajorArmGains.kI,
-				ArmConstants.kMajorArmGains.kD,
-				ArmConstants.kMajorArmIzone);
+		majorArm.setPID(ArmConstants.kMajorArmGains);
 
 		majorArm.setConstraints(ArmConstants.kMajorArmConstraints);
 		majorArm.setMaxOutput(ArmConstants.kMajorPIDOutputLimit);
@@ -72,11 +68,7 @@ public class ArmSubsystem extends SubsystemBase {
 				ArmConstants.kMinorArmTicks,
 				true);
 
-		minorArm.setPID(
-				ArmConstants.kMinorArmGains.kP,
-				ArmConstants.kMinorArmGains.kI,
-				ArmConstants.kMinorArmGains.kD,
-				ArmConstants.kMinorArmIzone);
+		minorArm.setPID(ArmConstants.kMinorArmGains);
 
 		minorArm.setConstraints(ArmConstants.kMinorArmConstraints);
 		minorArm.setMaxOutput(ArmConstants.kMinorPIDOutputLimit);
@@ -86,6 +78,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 		// the default state of the arms
 		isFront = true;
+		enableArms = true;
 
 		setSequencedArmState(ArmPoses.TUCKED);
 	}
