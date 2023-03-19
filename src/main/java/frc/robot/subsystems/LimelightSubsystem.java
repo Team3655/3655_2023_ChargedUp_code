@@ -4,31 +4,19 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LimelightConstants;
 import frc.robot.Mechanisms.Limelight;
 
 public class LimelightSubsystem extends SubsystemBase {
 
 	public Limelight limelight;
-	private Servo LimeLightFlipper;
 
 	/** Creates a new LimelightSubsystem */
 	public LimelightSubsystem() {
 		limelight = new Limelight();
-		limelight.setLedMode(0);
-		LimeLightFlipper = new Servo(LimelightConstants.kServoPort);
-		LimeLightFlipper.set(LimelightConstants.kServoFrontPose);
+		limelight.setLedMode(1);
 	}
 
-	public void FlipLimelight(boolean isFront) {
-		if (isFront) {
-			LimeLightFlipper.set(LimelightConstants.kServoFrontPose);
-		} else {
-			LimeLightFlipper.set(LimelightConstants.kServoBackpose);
-		}
-	}
 
 	public boolean exampleCondition() {
 		// Query some boolean state, such as a digital sensor.

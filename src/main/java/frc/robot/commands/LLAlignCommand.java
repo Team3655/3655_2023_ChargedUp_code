@@ -37,13 +37,13 @@ public class LLAlignCommand extends CommandBase {
 			LimelightConstants.LLAlignStrafeGains.kP,
 			LimelightConstants.LLAlignStrafeGains.kI,
 			LimelightConstants.LLAlignStrafeGains.kD);
-		LLStrafePIDController.setTolerance(0.5);
+		LLStrafePIDController.setTolerance(0.2);
 
 		LLDrivePIDController = new PIDController(
 			LimelightConstants.LLAlignDriveGains.kP,
 			LimelightConstants.LLAlignDriveGains.kI,
 			LimelightConstants.LLAlignDriveGains.kD);
-		LLDrivePIDController.setTolerance(0.05);
+		LLDrivePIDController.setTolerance(0.15);
 
 		strafeOutputSmoother = new DoubleSmoother(LimelightConstants.AlignStrafeMotionSmoothing);
 		driveOutputSmoother = new DoubleSmoother(LimelightConstants.AlignDriveMotionSmoothing);
@@ -63,12 +63,12 @@ public class LLAlignCommand extends CommandBase {
 	public void execute() {
 		if (limelight.hasValidTarget()) {
 			double strafePIDOutput = LLStrafePIDController.calculate(limelight.getX(), 0);
-			double drivePIDOutput = LLDrivePIDController.calculate(limelight.getArea(), .35);
+			double drivePIDOutput = LLDrivePIDController.calculate(limelight.getY(), 1);
 
 			double strafeOutput = strafeOutputSmoother.smoothInput(strafePIDOutput);
 			double driveOutput = driveOutputSmoother.smoothInput(drivePIDOutput);
 			
-			driveSubsystem.drive(-driveOutput, -strafeOutput, 0);
+			driveSubsystem.drive(-driveOutput, strafeOutput, 0);
 
 		} else {
 			driveSubsystem.drive(0, 0, 0);
@@ -78,7 +78,7 @@ public class LLAlignCommand extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		//limelight.setLedMode(1);
+		limelight.setLedMode(1);
 	}
 
 	// Returns true when the command should end.

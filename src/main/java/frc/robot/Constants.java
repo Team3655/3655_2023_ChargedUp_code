@@ -295,9 +295,9 @@ public final class Constants {
 		public static final double PuppyDriveMotionSmoothing = 0.4;
 
 		public static final PIDGains LLAlignStrafeGains = new PIDGains(.04, 0.0015, 0.001);
-		public static final PIDGains LLAlignDriveGains = new PIDGains(.8, 0.0003, 0.0005);
+		public static final PIDGains LLAlignDriveGains = new PIDGains(.025, 0.0015, 0.0005);
 		public static final double AlignDriveMotionSmoothing = .35;
-		public static final double AlignStrafeMotionSmoothing = .25;
+		public static final double AlignStrafeMotionSmoothing = .2;
 
 	}
 
