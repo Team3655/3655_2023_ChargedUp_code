@@ -82,7 +82,8 @@ public class RobotContainer {
 		autoChooser.setDefaultOption("Event Test", autoBuilder.getPathCommand("Event Test"));
 		autoChooser.addOption("1 Human Player", autoBuilder.getPathCommand("1 Human Player"));
 		autoChooser.addOption("1 Wall", autoBuilder.getPathCommand("1 Wall"));
-		autoChooser.addOption("1 Charge Mobility", autoBuilder.getPathCommand("1 Charge Mobility").andThen(new BalanceCommand()));
+		autoChooser.addOption("1 Charge Mobility",
+				autoBuilder.getPathCommand("1 Charge Mobility").andThen(new BalanceCommand()));
 		autoChooser.addOption("Charge Station", new BalanceSequence());
 		// endregion
 	}
@@ -129,9 +130,10 @@ public class RobotContainer {
 		// endregion
 
 		// Sucking is set to be the defaut state of the intake
-		operatorController.button(10).onTrue(intakeSubsystem.stopSucking()).onFalse(intakeSubsystem.startSucking());
-		operatorController.button(21).onTrue(intakeSubsystem.stopSucking());
-		operatorController.button(5).onTrue(intakeSubsystem.toggleSideSucker());
+		operatorController.button(5).onTrue(intakeSubsystem.stopSuckingCommand()).onFalse(intakeSubsystem.startSuckingCommand());
+		operatorController.button(10).onTrue(intakeSubsystem.stopSuckingCommand()).onFalse(intakeSubsystem.startSuckingCommand());
+		operatorController.button(21).onTrue(intakeSubsystem.stopSuckingCommand());
+		// operatorController.button(10).onTrue(intakeSubsystem.toggleDumpValve());
 
 		// region Targeting Commmands
 		driveJoystick.button(3).whileTrue(new LLAlignCommand());

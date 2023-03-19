@@ -253,14 +253,19 @@ public final class Constants {
 
 	public static class IntakeConstants {
 
-		// NEO 550 Sucker motor CAN ID's
+		public static final int kPnemnaticHubPort = 50;
+
+		// NEO Sucker motor CAN ID's
 		public static final int kSideSuckerPort = 17;
-		public static final int kMainSuckerPort = 18;
+		public static final int kCenterSuckerPort = 18;
 
-		public static final int kMainSuckerCurrentLimit = 10;
-		public static final int kMainSuckerStallCurrentLimit = 12;
+		public static final int kSideSolenoidPort = 1;
+		public static final int kCenterSolenoidPort = 0;
 
-		public static final double kMainSuckerSetpoint = 0.5;
+		public static final int kCenterSuckerCurrentLimit = 8;
+		public static final int kSideSuckerCurrentLimit = 5;
+
+		public static final double kCenterSuckerSetpoint = 0.5;
 		public static final int kHasPieceThreshold = 1000;
 
 	}

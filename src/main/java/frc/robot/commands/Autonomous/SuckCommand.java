@@ -42,16 +42,16 @@ public class SuckCommand extends CommandBase {
 	@Override
 	public void execute() {
 		if (suck) {
-			intakeSubsystem.startstartSucking();
+			intakeSubsystem.startSucking();
 		} else {
-			intakeSubsystem.stopstopSucking();
+			intakeSubsystem.stopSucking();
 		}
 	}
 
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		intakeSubsystem.startstartSucking();
+		intakeSubsystem.startSucking();
 	}
 
 	// Returns true when the command should end.

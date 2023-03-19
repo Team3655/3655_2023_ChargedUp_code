@@ -4,56 +4,41 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.ColorSensorV3;
-import com.revrobotics.RelativeEncoder;
-
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Mechanisms.Vaccum;
 
 public class IntakeSubsystem extends SubsystemBase {
-	
-	/** Motors for the Suckers */
-	private CANSparkMax mainSucker;
 
-	/** Encoders for Sucker motors */
-	private RelativeEncoder mainEncoder;
+	private Vaccum centerSucker;
+	private Vaccum sideSucker;
 
-	/** Color sensor for detectng which type of piece is held */
-	private ColorSensorV3 colorSense;
-
-	/** power distribution hub, used for switching the solenoid */
-	private PowerDistribution pdh;
+	private PneumaticHub pneumaticHub;
+	private Solenoid centerSolenoid;
+	private Solenoid sideSolenoid;
 
 	/** Creates a new IntakeSubsystem. */
 	public IntakeSubsystem() {
 
-		pdh = new PowerDistribution(1, ModuleType.kRev);
+		pneumaticHub = new PneumaticHub(IntakeConstants.kPnemnaticHubPort);
 
-		// Give Sucker motors their id's
-		mainSucker = new CANSparkMax(IntakeConstants.kMainSuckerPort, MotorType.kBrushless);
+		centerSolenoid = pneumaticHub.makeSolenoid(IntakeConstants.kCenterSolenoidPort);
+		sideSolenoid = pneumaticHub.makeSolenoid(IntakeConstants.kSideSolenoidPort);
 
-		/**
-		 * The restoreFactoryDefaults method can be used to reset the configuration
-		 * parameters in the SPARK MAX to their factory default state. If no argument is
-		 * passed, these parameters will not persist between power cycles
-		 */
-		mainSucker.restoreFactoryDefaults();
+		centerSucker = new Vaccum(
+				IntakeConstants.kCenterSuckerPort,
+				IntakeConstants.kCenterSuckerCurrentLimit,
+				true,
+				centerSolenoid);
 
-		// set current limits
-		mainSucker.setSmartCurrentLimit(IntakeConstants.kMainSuckerCurrentLimit);
-		mainSucker.setSecondaryCurrentLimit(IntakeConstants.kMainSuckerStallCurrentLimit);
-
-		// sets motor default idle mode
-		mainSucker.setIdleMode(IdleMode.kBrake);
-		
-		mainSucker.set(IntakeConstants.kMainSuckerSetpoint);
+		sideSucker = new Vaccum(
+				IntakeConstants.kSideSuckerPort,
+				IntakeConstants.kSideSuckerCurrentLimit,
+				true,
+				sideSolenoid);
 	}
 
 	@Override
@@ -62,93 +47,24 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	// region commands
-	public CommandBase stopSucking() {
-		return runOnce(
-				() -> {
-					mainSucker.set(0);
-					enableSideSucker();
-				});
+	public InstantCommand startSuckingCommand() {
+		return new InstantCommand(
+				() -> startSucking());
 	}
 
-	public void stopstopSucking() {
-		mainSucker.set(0);
-		enableSideSucker();
+	public void startSucking() {
+		centerSucker.suck(IntakeConstants.kCenterSuckerSetpoint);
+		// sideSucker.suck(IntakeConstants.kCenterSuckerSetpoint);
 	}
 
-	public CommandBase startSucking() {
-		return runOnce(
-				() -> {
-					mainSucker.set(IntakeConstants.kMainSuckerSetpoint);
-					disableSideSucker();
-				});
+	public InstantCommand stopSuckingCommand() {
+		return new InstantCommand(
+				() -> stopSucking());
 	}
 
-	public void startstartSucking() {
-		mainSucker.set(IntakeConstants.kMainSuckerSetpoint);
-		disableSideSucker();
+	public void stopSucking() {
+		centerSucker.drop();
+		sideSucker.drop();
 	}
 
-	public CommandBase toggleSideSucker() {
-		return runOnce(
-				() -> {
-					if (pdh.getSwitchableChannel()) {
-						disableSideSucker();
-					} else {
-						enableSideSucker();
-					}
-				});
-	}
-
-	public void disableSideSucker() {
-		pdh.setSwitchableChannel(false);
-	}
-
-	public void enableSideSucker() {
-		pdh.setSwitchableChannel(true);
-	}
-
-	// endregion
-
-	// region getters
-	/**
-	 * Checks if the robot is holding a game piece by using the output of the motor
-	 *
-	 * @return True if the robot is holding a piece
-	 */
-	public boolean getHasPiece() {
-
-		if (mainEncoder.getVelocity() < IntakeConstants.kHasPieceThreshold) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Checks if the robot is holding a Cone by using the color sensor and
-	 * getHasPiece()
-	 * 
-	 * @return True if the robot is holding a cone
-	 */
-	public boolean getHasCone() {
-		if (getHasPiece() && colorSense.getColor() == Color.kYellow) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Checks if the robot is holding a Cube by using the color sensor and
-	 * getHasPiece()
-	 * 
-	 * @return True if the robot is holding a Cube
-	 */
-	public boolean getHasCube() {
-		if (getHasPiece() && colorSense.getColor() == Color.kPurple) {
-			return true;
-		}
-		return false;
-	}
-
-	// endregion
 }
