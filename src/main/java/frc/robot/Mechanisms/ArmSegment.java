@@ -34,7 +34,6 @@ public class ArmSegment {
 
 	private boolean isRunning;
 
-
 	// endregion
 
 	public ArmSegment(int rightPort, int leftPort, double gearRatio, Boolean invertLeader) {
@@ -59,17 +58,6 @@ public class ArmSegment {
 		rightMotor.setIdleMode(IdleMode.kCoast);
 		leftMotor.setIdleMode(IdleMode.kCoast);
 
-		/**
-		 * In order to use PID functionality for a controller, a SparkMaxPIDController
-		 * object is constructed by calling the getPIDController() method on an existing
-		 * CANSparkMax object
-		 */
-		rightPIDController = rightMotor.getPIDController();
-
-		rightPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
-
-		rightPIDController.setSmartMotionMaxAccel(5, 0);
-
 		// Encoder object created to display position values
 		rightEncoder = rightMotor.getEncoder();
 		leftEncoder = leftMotor.getEncoder();
@@ -77,6 +65,19 @@ public class ArmSegment {
 		// Tells the motors to automatically convert degrees to rotations
 		rightEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
 		leftEncoder.setPositionConversionFactor((2 * Math.PI) / gearRatio);
+		rightEncoder.setVelocityConversionFactor((2 * Math.PI) / gearRatio);
+		leftEncoder.setVelocityConversionFactor((2 * Math.PI) / gearRatio);
+
+		/**
+		 * In order to use PID functionality for a controller, a SparkMaxPIDController
+		 * object is constructed by calling the getPIDController() method on an existing
+		 * CANSparkMax object
+		 */
+		rightPIDController = rightMotor.getPIDController();
+
+		rightPIDController.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
+
+		rightPIDController.setSmartMotionAllowedClosedLoopError(0, 0);
 
 		rightMotor.setInverted(invertLeader);
 		leftMotor.follow(rightMotor, true);
@@ -91,7 +92,7 @@ public class ArmSegment {
 
 	/** Sets the pid referance point to the target theta of the segment */
 	public void setReference() {
-		rightPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kPosition);
+		rightPIDController.setReference(targetTheta * targetSign, CANSparkMax.ControlType.kSmartMotion);
 	}
 
 	/**
@@ -111,6 +112,12 @@ public class ArmSegment {
 
 	public void setMaxOutput(double maxOutput) {
 		rightPIDController.setOutputRange(-maxOutput, maxOutput);
+	}
+
+	public void setTrapazoidalConstraints(double maxVel, double maxAccel) {
+		rightPIDController.setSmartMotionMaxVelocity(maxVel, 0);
+		rightPIDController.setSmartMotionMinOutputVelocity(0, 0);
+		rightPIDController.setSmartMotionMaxAccel(maxAccel, 0);
 	}
 
 	/**

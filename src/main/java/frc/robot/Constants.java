@@ -209,20 +209,24 @@ public final class Constants {
 		public static final int kMinorArmCurrentLimit = 8;
 
 		// speed limits for the arms
-		public static final double kMajorPIDOutputLimit = .65;
-		public static final double kMinorPIDOutputLimit = .3;
+		public static final double kMajorPIDOutputLimit = 1;
+		public static final double kMinorPIDOutputLimit = 1;
 
-		// angle limits for the arms (min will be set to -inpu
+		public static final double kMaxMajorVelRadiansPerSec = (Math.PI * 8) * 60;
+		public static final double kMaxMajorAccelRadiansPerSec = (Math.PI * 6 * 60);
+
+		
+		public static final double kMaxMinorVelRadiansPerSec = (Math.PI * 8) * 60;
+		public static final double kMaxMinorAccelRadiansPerSec = (Math.PI * 6 * 60);
+
+		// angle limits for the arms
 		public static final double kMajorArmConstraints = 101;
 		public static final double kMinorArmConstraints = 180;
 
 		// Arm PID constants
-		// TODO: retune arm pid
-		public static final PIDGains kMajorArmGains = new PIDGains(3, 0, 0);
-		public static final double kMajorArmIzone = 5;
+		public static final PIDGains kMajorArmGains = new PIDGains(0.0035, 0, 0.0005);
 
-		public static final PIDGains kMinorArmGains = new PIDGains(6, 0.0001, 0);
-		public static final double kMinorArmIzone = 5;
+		public static final PIDGains kMinorArmGains = new PIDGains(0.0015, 0, 0.0005);
 
 		public static enum ArmPoses {
 			TUCKED,

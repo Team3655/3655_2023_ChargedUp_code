@@ -60,6 +60,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 		majorArm.setConstraints(ArmConstants.kMajorArmConstraints);
 		majorArm.setMaxOutput(ArmConstants.kMajorPIDOutputLimit);
+		majorArm.setTrapazoidalConstraints(ArmConstants.kMaxMajorVelRadiansPerSec, ArmConstants.kMaxMajorAccelRadiansPerSec);
 
 		// minor arm defs
 		minorArm = new ArmSegment(
@@ -72,6 +73,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 		minorArm.setConstraints(ArmConstants.kMinorArmConstraints);
 		minorArm.setMaxOutput(ArmConstants.kMinorPIDOutputLimit);
+		minorArm.setTrapazoidalConstraints(ArmConstants.kMaxMinorVelRadiansPerSec, ArmConstants.kMaxMinorAccelRadiansPerSec);
 		// endregion
 
 		gripper = new Gripper(ArmConstants.kLeftGripperPort, ArmConstants.kRightGripperPort);
@@ -199,7 +201,7 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void updateSequencing() {
-		if ((majorArm.getAtTarget(10) || minorArm.getAtTarget(10)) && enableArms) {
+		if ((majorArm.getAtTarget(30) || minorArm.getAtTarget(30)) && enableArms) {
 			majorArm.setReference();
 			minorArm.setReference();
 		}
