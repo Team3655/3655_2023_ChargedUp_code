@@ -122,7 +122,7 @@ public final class Constants {
 
 			// PID constants for path planner (these control drive direction not reaching
 			// target wheel speeds)
-			public static final PIDGains kPPDriveGains = new PIDGains(4, 0, 0);
+			public static final PIDGains kPPDriveGains = new PIDGains(5, 0, 0);
 			public static final PIDGains kPPTurnGains = new PIDGains(5, 0, 0);
 
 			public static final double kPPMaxVelocity = 3.0;
@@ -136,8 +136,8 @@ public final class Constants {
 					put("ScoreLow", new ScoreSequence(ArmPoses.LOW_SCORE));
 					put("IntakeDown", new IntakeDownSequence());
 					put("ToggleSide", new ArmSwitchCommand());
-					put("Suck", new SuckCommand(true, 250));
-					put("Drop", new SuckCommand(false, 500));
+					put("Suck", new SuckCommand(true, 125));
+					put("Drop", new SuckCommand(false, 350));
 				}
 			};
 		}

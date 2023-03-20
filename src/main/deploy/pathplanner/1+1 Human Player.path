@@ -3,67 +3,12 @@
     {
       "anchorPoint": {
         "x": 1.78,
-        "y": 4.43
+        "y": 4.95
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6569126129705247,
-        "y": 5.013014812354411
-      },
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [
-          "Suck500",
-          "ToggleSide",
-          "ScoreHigh",
-          "ToggleSide"
-        ],
-        "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 6.9,
-        "y": 4.55
-      },
-      "prevControl": {
-        "x": 5.596963332136444,
-        "y": 4.55
-      },
-      "nextControl": {
-        "x": 5.596963332136444,
-        "y": 4.55
-      },
-      "holonomicAngle": 0,
-      "isReversal": true,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": true,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 2.6862833212845914,
-        "y": 5.0
-      },
-      "prevControl": {
-        "x": 3.0849062384360897,
-        "y": 5.0
-      },
-      "nextControl": {
-        "x": 2.2763049684082186,
-        "y": 5.0
+        "x": 1.9367637403421316,
+        "y": 4.610656271345839
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -71,6 +16,34 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
+        "names": [
+          "Suck",
+          "ScoreHigh"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.232524074371124,
+        "y": 4.58
+      },
+      "prevControl": {
+        "x": 5.600447292363002,
+        "y": 4.58
+      },
+      "nextControl": {
+        "x": 6.469932881301894,
+        "y": 4.58
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": 1.0,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
         "names": [],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -79,50 +52,75 @@
     },
     {
       "anchorPoint": {
-        "x": 1.6,
-        "y": 5.03
+        "x": 6.84,
+        "y": 4.58
       },
       "prevControl": {
-        "x": 2.2208613887627147,
-        "y": 5.03
+        "x": 6.197471744910193,
+        "y": 4.58
+      },
+      "nextControl": {
+        "x": 6.197471744910193,
+        "y": 4.58
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "before",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.66,
+        "y": 4.448718819746186
+      },
+      "prevControl": {
+        "x": 2.6061555965953227,
+        "y": 4.990278349036166
       },
       "nextControl": null,
-      "holonomicAngle": 178.0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [
+          "ScoreHigh",
           "Tuck"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "none",
+        "waitBehavior": "before",
         "waitTime": 0
       }
     }
   ],
   "maxVelocity": 3.0,
-  "maxAcceleration": 3.0,
+  "maxAcceleration": 2.0,
   "isReversed": null,
   "markers": [
     {
-      "position": 0.15,
+      "position": 0.45090909090907355,
       "names": [
         "IntakeDown"
       ]
     },
     {
-      "position": 1.01,
+      "position": 0.15272727272727632,
       "names": [
-        "Tuck"
+        "ToggleSide"
       ]
     },
     {
-      "position": 2.0,
+      "position": 2.15,
       "names": [
-        "event",
-        "ScoreHigh"
+        "ToggleSide"
       ]
     }
   ]

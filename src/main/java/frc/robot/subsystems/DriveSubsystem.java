@@ -5,11 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,12 +19,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
-import frc.robot.Constants.AutoConstants.PathPLannerConstants;
 import frc.robot.Mechanisms.SwerveModule;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
@@ -291,54 +284,5 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	// endregion
-
-	/**************************************************************************/
-
-	public CommandBase followWithCommands(PathPlannerTrajectory trajectory, boolean isFirstPath) {
-		return new FollowPathWithEvents(
-			followTrajectoryCommand(trajectory, isFirstPath), 
-			trajectory.getMarkers(), 
-			PathPLannerConstants.kPPEventMap);
-	}
-
-	public SequentialCommandGroup followTrajectoryCommand(PathPlannerTrajectory trajectory, boolean isFirstPath) {
-
-		PIDController xPIDController = new PIDController(
-				PathPLannerConstants.kPPDriveGains.kP,
-				PathPLannerConstants.kPPDriveGains.kI,
-				PathPLannerConstants.kPPDriveGains.kD);
-
-		PIDController yPIDController = new PIDController(
-				PathPLannerConstants.kPPDriveGains.kP,
-				PathPLannerConstants.kPPDriveGains.kI,
-				PathPLannerConstants.kPPDriveGains.kD);
-
-		PIDController rotationPIDController = new PIDController(
-				PathPLannerConstants.kPPTurnGains.kP,
-				PathPLannerConstants.kPPTurnGains.kI,
-				PathPLannerConstants.kPPTurnGains.kD);
-
-		rotationPIDController.enableContinuousInput(-Math.PI, Math.PI);
-
-		return new SequentialCommandGroup(
-				new InstantCommand(() -> {
-					// Reset odometry for the first path you run during auto
-					if (isFirstPath) {
-						this.zeroHeading();
-						this.resetOdometry(trajectory.getInitialHolonomicPose());
-					}
-				}),
-				new PPSwerveControllerCommand(
-						trajectory,
-						this::getPose, // Pose supplier
-						DriveConstants.kDriveKinematics, // SwerveDriveKinematics
-						xPIDController, // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-						yPIDController, // Y controller (usually the same values as X controller)
-						rotationPIDController, // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-						this::setModuleStates, // Module states consumer
-						true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-						this // Requires this drive subsystem
-				));
-	}
 
 }

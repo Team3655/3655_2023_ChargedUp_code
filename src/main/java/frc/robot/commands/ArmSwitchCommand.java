@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.RobotContainer;
@@ -20,10 +19,9 @@ public class ArmSwitchCommand extends SequentialCommandGroup {
 	private static ArmSubsystem armSubsystem;
 	// private static LimelightSubsystem limelightSubsystem;
 
-  public ArmSwitchCommand() {
+	public ArmSwitchCommand() {
 
 		armSubsystem = RobotContainer.armSubsystem;
-		//limelightSubsystem = RobotContainer.limelightSubsystem;
 
 		// ArmPoses prevArmPose = armSubsystem.getArmState();
 		System.out.println(armSubsystem.getArmState());
@@ -31,8 +29,8 @@ public class ArmSwitchCommand extends SequentialCommandGroup {
 		// Add your commands in the addCommands() call, e.g.
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(
-				new ArmPoseCommand(ArmPoses.TUCKED),
-				new PrintCommand("SWITCHING SIDES!!!!!!!!!!!!!!!!!"),
-				new InstantCommand(() -> armSubsystem.ToggleSide()));
+				new InstantCommand(() -> armSubsystem.ToggleSide()),
+				new ArmPoseCommand(ArmPoses.TUCKED));
+
 	}
 }
