@@ -30,9 +30,9 @@ public class LLTargetCommand extends CommandBase {
 		limelight = limelightSubsystem.limelight;
 
 		LLTargetpidController = new PIDController(
-				LimelightConstants.LLTargetGains.kP,
-				LimelightConstants.LLTargetGains.kI,
-				LimelightConstants.LLTargetGains.kD);
+				LimelightConstants.kLLTargetGains.kP,
+				LimelightConstants.kLLTargetGains.kI,
+				LimelightConstants.kLLTargetGains.kD);
 		LLTargetpidController.setTolerance(0);
 
 		// Use addRequirements() here to declare subsystem dependencies.

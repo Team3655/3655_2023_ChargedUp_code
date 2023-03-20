@@ -37,18 +37,18 @@ public class LLPuppydogCommand extends CommandBase {
 		limelight = limelightSubsystem.limelight;
 
 		LLTargetpidController = new ProfiledPIDController(
-				LimelightConstants.LLPuppyTurnGains.kP,
-				LimelightConstants.LLPuppyTurnGains.kI,
-				LimelightConstants.LLPuppyTurnGains.kD,
+				LimelightConstants.kLLPuppyTurnGains.kP,
+				LimelightConstants.kLLPuppyTurnGains.kI,
+				LimelightConstants.kLLPuppyTurnGains.kD,
 				new TrapezoidProfile.Constraints(40, 40));
 
 		LLDrivepidController = new PIDController(
-				LimelightConstants.LLPuppyDriveGains.kP,
-				LimelightConstants.LLPuppyDriveGains.kI,
-				LimelightConstants.LLPuppyDriveGains.kD);
+				LimelightConstants.kLLPuppyDriveGains.kP,
+				LimelightConstants.kLLPuppyDriveGains.kI,
+				LimelightConstants.kLLPuppyDriveGains.kD);
 
-		turnOutputSmoother = new DoubleSmoother(LimelightConstants.PuppyTurnMotionSmoothing);
-		driveOutputSmoother = new DoubleSmoother(LimelightConstants.PuppyDriveMotionSmoothing);
+		turnOutputSmoother = new DoubleSmoother(LimelightConstants.kPuppyTurnMotionSmoothing);
+		driveOutputSmoother = new DoubleSmoother(LimelightConstants.kPuppyDriveMotionSmoothing);
 
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(limelightSubsystem, driveSubsystem);

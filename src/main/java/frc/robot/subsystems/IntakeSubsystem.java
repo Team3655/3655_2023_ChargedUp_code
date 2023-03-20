@@ -54,7 +54,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	public void startSucking() {
 		centerSucker.suck(IntakeConstants.kCenterSuckerSetpoint);
-		// sideSucker.suck(IntakeConstants.kCenterSuckerSetpoint);
+		sideSucker.suck(IntakeConstants.kCenterSuckerSetpoint);
 	}
 
 	public InstantCommand stopSuckingCommand() {

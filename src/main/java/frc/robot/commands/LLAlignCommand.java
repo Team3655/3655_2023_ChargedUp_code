@@ -20,11 +20,13 @@ public class LLAlignCommand extends CommandBase {
 
 	Limelight limelight;
 
-	PIDController LLStrafePIDController;
-	PIDController LLDrivePIDController;
+	PIDController StrafePIDController;
+	PIDController DrivePIDController;
+	PIDController TurnPIDController;
 
 	DoubleSmoother driveOutputSmoother;
 	DoubleSmoother strafeOutputSmoother;
+	DoubleSmoother turnOutputSmoother;
 
 	/** Creates a new LLTargetCommand. */
 	public LLAlignCommand() {
@@ -33,20 +35,27 @@ public class LLAlignCommand extends CommandBase {
 		limelightSubsystem = RobotContainer.limelightSubsystem;
 		limelight = limelightSubsystem.limelight;
 
-		LLStrafePIDController = new PIDController(
-			LimelightConstants.LLAlignStrafeGains.kP,
-			LimelightConstants.LLAlignStrafeGains.kI,
-			LimelightConstants.LLAlignStrafeGains.kD);
-		LLStrafePIDController.setTolerance(0.2);
+		StrafePIDController = new PIDController(
+			LimelightConstants.kLLAlignStrafeGains.kP,
+			LimelightConstants.kLLAlignStrafeGains.kI,
+			LimelightConstants.kLLAlignStrafeGains.kD);
+		StrafePIDController.setTolerance(0.2);
 
-		LLDrivePIDController = new PIDController(
-			LimelightConstants.LLAlignDriveGains.kP,
-			LimelightConstants.LLAlignDriveGains.kI,
-			LimelightConstants.LLAlignDriveGains.kD);
-		LLDrivePIDController.setTolerance(0.15);
+		DrivePIDController = new PIDController(
+			LimelightConstants.kLLAlignDriveGains.kP,
+			LimelightConstants.kLLAlignDriveGains.kI,
+			LimelightConstants.kLLAlignDriveGains.kD);
+		DrivePIDController.setTolerance(0.15);
 
-		strafeOutputSmoother = new DoubleSmoother(LimelightConstants.AlignStrafeMotionSmoothing);
-		driveOutputSmoother = new DoubleSmoother(LimelightConstants.AlignDriveMotionSmoothing);
+		TurnPIDController = new PIDController(
+			LimelightConstants.kLLAlignTurnGains.kP,
+			LimelightConstants.kLLAlignTurnGains.kI, 
+			LimelightConstants.kLLAlignTurnGains.kD);
+		DrivePIDController.setTolerance(1);
+
+		strafeOutputSmoother = new DoubleSmoother(LimelightConstants.kAlignStrafeMotionSmoothing);
+		driveOutputSmoother = new DoubleSmoother(LimelightConstants.kAlignDriveMotionSmoothing);
+		turnOutputSmoother = new DoubleSmoother(LimelightConstants.kAlignDriveMotionSmoothing);
 
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(limelightSubsystem, driveSubsystem);
@@ -61,17 +70,21 @@ public class LLAlignCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		if (limelight.hasValidTarget()) {
-			double strafePIDOutput = LLStrafePIDController.calculate(limelight.getX(), 0);
-			double drivePIDOutput = LLDrivePIDController.calculate(limelight.getY(), 1);
 
+		double turnPIDOutput = TurnPIDController.calculate(driveSubsystem.getHeading360(), 180);
+		double turnOutput = driveOutputSmoother.smoothInput(turnPIDOutput);
+
+		if (limelight.hasValidTarget()) {
+			double strafePIDOutput = StrafePIDController.calculate(limelight.getX(), 0);
+			double drivePIDOutput = DrivePIDController.calculate(limelight.getY(), 1);
+			
 			double strafeOutput = strafeOutputSmoother.smoothInput(strafePIDOutput);
 			double driveOutput = driveOutputSmoother.smoothInput(drivePIDOutput);
 			
 			driveSubsystem.drive(-driveOutput, strafeOutput, 0);
 
 		} else {
-			driveSubsystem.drive(0, 0, 0);
+			driveSubsystem.drive(0, 0, turnOutput);
 		}
 	}
 

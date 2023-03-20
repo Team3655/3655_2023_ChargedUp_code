@@ -216,17 +216,17 @@ public final class Constants {
 		public static final double kMaxMajorAccelRadiansPerSec = (Math.PI * 6 * 60);
 
 		
-		public static final double kMaxMinorVelRadiansPerSec = (Math.PI * 8) * 60;
-		public static final double kMaxMinorAccelRadiansPerSec = (Math.PI * 6 * 60);
+		public static final double kMaxMinorVelRadiansPerSec = (Math.PI * 9) * 60;
+		public static final double kMaxMinorAccelRadiansPerSec = (Math.PI * 8) * 60;
 
 		// angle limits for the arms
 		public static final double kMajorArmConstraints = 101;
 		public static final double kMinorArmConstraints = 180;
 
 		// Arm PID constants
-		public static final PIDGains kMajorArmGains = new PIDGains(0.0035, 0, 0.0005);
+		public static final PIDGains kMajorArmGains = new PIDGains(0.0035, 0.0000025, 0.002);
 
-		public static final PIDGains kMinorArmGains = new PIDGains(0.0015, 0, 0.0005);
+		public static final PIDGains kMinorArmGains = new PIDGains(0.002, 0.0000008, 0.001);
 
 		public static enum ArmPoses {
 			TUCKED,
@@ -287,17 +287,19 @@ public final class Constants {
 		public static final double kServoBackpose = 0;
 
 		// piss values for limelight
-		public static final PIDGains LLTargetGains = new PIDGains(0.008, 0, 0);
+		public static final PIDGains kLLTargetGains = new PIDGains(0.008, 0, 0);
 
-		public static final PIDGains LLPuppyTurnGains = new PIDGains(0.008, 0, 0);
-		public static final PIDGains LLPuppyDriveGains = new PIDGains(0.008, 0, 0);
-		public static final double PuppyTurnMotionSmoothing = 0.3;
-		public static final double PuppyDriveMotionSmoothing = 0.4;
+		public static final PIDGains kLLPuppyTurnGains = new PIDGains(0.008, 0, 0);
+		public static final PIDGains kLLPuppyDriveGains = new PIDGains(0.008, 0, 0);
+		public static final double kPuppyTurnMotionSmoothing = 0.3;
+		public static final double kPuppyDriveMotionSmoothing = 0.4;
 
-		public static final PIDGains LLAlignStrafeGains = new PIDGains(.04, 0.0015, 0.001);
-		public static final PIDGains LLAlignDriveGains = new PIDGains(.025, 0.0015, 0.0005);
-		public static final double AlignDriveMotionSmoothing = .35;
-		public static final double AlignStrafeMotionSmoothing = .2;
+		public static final PIDGains kLLAlignStrafeGains = new PIDGains(.04, 0.0015, 0.001);
+		public static final PIDGains kLLAlignDriveGains = new PIDGains(.025, 0.0015, 0.0005);
+		public static final PIDGains kLLAlignTurnGains = new PIDGains(.004, 0.0001, 0);
+		public static final double kAlignDriveMotionSmoothing = .35;
+		public static final double kAlignStrafeMotionSmoothing = .2;
+		public static final double kAlignTurnMotionSmoothing = 0;
 
 	}
 
