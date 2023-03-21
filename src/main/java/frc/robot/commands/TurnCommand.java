@@ -4,8 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
@@ -17,20 +16,20 @@ import frc.robot.subsystems.DriveSubsystem;
 public class TurnCommand extends CommandBase {
 
 	private static DriveSubsystem driveSubsystem;
-	private static ProfiledPIDController turnPIDController;
+	private static PIDController turnPIDController;
+	private double targetAngleDegrees;
 
 	/** Creates a new ProfiledTurnCommand. */
 	public TurnCommand(double targetAngleDegrees) {
 
 		driveSubsystem = RobotContainer.driveSubsystem;
+		this.targetAngleDegrees = targetAngleDegrees;
 
-		turnPIDController = new ProfiledPIDController(
+		turnPIDController = new PIDController(
 				// The PID gains
 				AutoConstants.kTurnCommandGains.kP,
 				AutoConstants.kTurnCommandGains.kI,
-				AutoConstants.kTurnCommandGains.kD,
-				// The motion profile constraints
-				new TrapezoidProfile.Constraints(360, 75));
+				AutoConstants.kTurnCommandGains.kD);
 
 		turnPIDController.enableContinuousInput(-180, 180);
 
@@ -38,7 +37,7 @@ public class TurnCommand extends CommandBase {
 				AutoConstants.kTurnCommandToleranceDeg,
 				AutoConstants.kTurnCommandRateToleranceDegPerS);
 
-		turnPIDController.setGoal(targetAngleDegrees);
+		turnPIDController.setSetpoint(this.targetAngleDegrees);
 
 		addRequirements(driveSubsystem);
 	}
@@ -51,8 +50,12 @@ public class TurnCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		double turnOutput = turnPIDController.calculate(driveSubsystem.getHeading360());
-		driveSubsystem.drive(0, 0, turnOutput);
+		if (!turnPIDController.atSetpoint()) {
+			double turnOutput = turnPIDController.calculate(driveSubsystem.getHeading());
+			driveSubsystem.drive(0, 0, turnOutput);
+		} else {
+			driveSubsystem.drive(0, 0, 0);
+		}
 	}
 
 	// Called once the command ends or is interrupted.
@@ -65,6 +68,6 @@ public class TurnCommand extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return turnPIDController.atGoal();
+		return turnPIDController.atSetpoint();
 	}
 }

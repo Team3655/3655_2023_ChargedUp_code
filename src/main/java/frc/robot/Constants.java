@@ -144,14 +144,14 @@ public final class Constants {
 
 		public static final double kScoreSequenceDropTime = 3; // in seconds
 
-		public static final PIDGains kTurnCommandGains = new PIDGains(.01, 0, 0);
+		public static final PIDGains kTurnCommandGains = new PIDGains(.004, 0.0003, 0);
 		public static final double kTurnCommandMaxVelocity = 1;
 		public static final double kTurnCommandMaxAcceleration = 1;
-		public static final double kTurnCommandToleranceDeg = 1;
+		public static final double kTurnCommandToleranceDeg = 0.5;
 		public static final double kTurnCommandRateToleranceDegPerS = 0;
 
 		public static final double kBalnaceCommandDeadbandDeg = 2;
-		public static final PIDGains kBalanceCommandGains = new PIDGains(.008, 0, 0);
+		public static final PIDGains kBalanceCommandGains = new PIDGains(.006, 0, 0);
 		public static final double kMaxBalancingVelocity = 1000;
 		public static final double kMaxBalancingAcceleration = 5000;
 
@@ -247,7 +247,7 @@ public final class Constants {
 				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55 });
 				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98 });
 				put(ArmPoses.MID_INTAKE, new double[] { 13, 33 });
-				put(ArmPoses.HIGH_INTAKE, new double[] { 95, 80 });
+				put(ArmPoses.HIGH_INTAKE, new double[] { 100, 80 });
 				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0 });
 			}
 
@@ -296,7 +296,7 @@ public final class Constants {
 
 		public static final PIDGains kLLAlignStrafeGains = new PIDGains(.04, 0.0015, 0.001);
 		public static final PIDGains kLLAlignDriveGains = new PIDGains(.025, 0.0015, 0.0005);
-		public static final PIDGains kLLAlignTurnGains = new PIDGains(.004, 0.0001, 0);
+		public static final PIDGains kLLAlignTurnGains = new PIDGains(.004, 0.0006, 0);
 		public static final double kAlignDriveMotionSmoothing = .35;
 		public static final double kAlignStrafeMotionSmoothing = .2;
 		public static final double kAlignTurnMotionSmoothing = 0;

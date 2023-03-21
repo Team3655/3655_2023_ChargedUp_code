@@ -22,11 +22,9 @@ public class LLAlignCommand extends CommandBase {
 
 	PIDController StrafePIDController;
 	PIDController DrivePIDController;
-	PIDController TurnPIDController;
 
 	DoubleSmoother driveOutputSmoother;
 	DoubleSmoother strafeOutputSmoother;
-	DoubleSmoother turnOutputSmoother;
 
 	/** Creates a new LLTargetCommand. */
 	public LLAlignCommand() {
@@ -47,15 +45,8 @@ public class LLAlignCommand extends CommandBase {
 			LimelightConstants.kLLAlignDriveGains.kD);
 		DrivePIDController.setTolerance(0.15);
 
-		TurnPIDController = new PIDController(
-			LimelightConstants.kLLAlignTurnGains.kP,
-			LimelightConstants.kLLAlignTurnGains.kI, 
-			LimelightConstants.kLLAlignTurnGains.kD);
-		DrivePIDController.setTolerance(1);
-
 		strafeOutputSmoother = new DoubleSmoother(LimelightConstants.kAlignStrafeMotionSmoothing);
 		driveOutputSmoother = new DoubleSmoother(LimelightConstants.kAlignDriveMotionSmoothing);
-		turnOutputSmoother = new DoubleSmoother(LimelightConstants.kAlignDriveMotionSmoothing);
 
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(limelightSubsystem, driveSubsystem);
@@ -71,8 +62,6 @@ public class LLAlignCommand extends CommandBase {
 	@Override
 	public void execute() {
 
-		double turnPIDOutput = TurnPIDController.calculate(driveSubsystem.getHeading360(), 180);
-		double turnOutput = driveOutputSmoother.smoothInput(turnPIDOutput);
 
 		if (limelight.hasValidTarget()) {
 			double strafePIDOutput = StrafePIDController.calculate(limelight.getX(), 0);
@@ -84,7 +73,7 @@ public class LLAlignCommand extends CommandBase {
 			driveSubsystem.drive(-driveOutput, strafeOutput, 0);
 
 		} else {
-			driveSubsystem.drive(0, 0, turnOutput);
+			driveSubsystem.drive(0, 0, 0);
 		}
 	}
 
