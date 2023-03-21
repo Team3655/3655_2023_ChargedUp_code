@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Mechanisms.Vaccum;
 
@@ -44,6 +46,10 @@ public class IntakeSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+		SmartDashboard.putNumber("Center Sucker RPM", centerSucker.getRPM());
+		SmartDashboard.putNumber("Side Sucker RPM", sideSucker.getRPM());
+		SmartDashboard.putNumber("Center Sucker Current Draw", centerSucker.getMotorCurrentDraw());
+		SmartDashboard.putNumber("Side Sucker Current Draw", sideSucker.getMotorCurrentDraw());
 	}
 
 	// region commands
