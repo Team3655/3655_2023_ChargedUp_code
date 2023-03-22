@@ -220,7 +220,7 @@ public final class Constants {
 		public static final double kMaxMinorAccelRadiansPerSec = (Math.PI * 8) * 60;
 
 		// angle limits for the arms
-		public static final double kMajorArmConstraints = 101;
+		public static final double kMajorArmConstraints = 110;
 		public static final double kMinorArmConstraints = 180;
 
 		// Arm PID constants
@@ -247,7 +247,7 @@ public final class Constants {
 				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55 });
 				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98 });
 				put(ArmPoses.MID_INTAKE, new double[] { 13, 33 });
-				put(ArmPoses.HIGH_INTAKE, new double[] { 100, 80 });
+				put(ArmPoses.HIGH_INTAKE, new double[] { 105, 85 });
 				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0 });
 			}
 
@@ -266,11 +266,12 @@ public final class Constants {
 		public static final int kSideSolenoidPort = 1;
 		public static final int kCenterSolenoidPort = 0;
 
-		public static final int kCenterSuckerCurrentLimit = 8;
+		public static final int kCenterSuckerCurrentLimit = 6;
 		public static final int kSideSuckerCurrentLimit = 5;
 
 		public static final double kCenterSuckerSetpoint = 0.5;
-		public static final int kHasPieceThreshold = 1000;
+		public static final int kHasCubeThreshold = 2700;
+		public static final int kHasConeThreshold = 2700;
 
 	}
 

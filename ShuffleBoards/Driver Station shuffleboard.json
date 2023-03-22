@@ -154,13 +154,6 @@
               "_children": [
                 {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/FL D V Conversion",
-                  "_title": "FL D V Conversion",
-                  "_glyph": 148,
-                  "_showGlyph": false
-                },
-                {
-                  "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/FR D V Conversion",
                   "_title": "FR D V Conversion",
                   "_glyph": 148,
@@ -177,6 +170,13 @@
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/RR D V Conversion",
                   "_title": "RR D V Conversion",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/FL D V Conversion",
+                  "_title": "FL D V Conversion",
                   "_glyph": 148,
                   "_showGlyph": false
                 }

@@ -50,6 +50,9 @@ public class IntakeSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Side Sucker RPM", sideSucker.getRPM());
 		SmartDashboard.putNumber("Center Sucker Current Draw", centerSucker.getMotorCurrentDraw());
 		SmartDashboard.putNumber("Side Sucker Current Draw", sideSucker.getMotorCurrentDraw());
+		SmartDashboard.putBoolean("Has CUBE", getHasCube());
+		SmartDashboard.putBoolean("Has CONE", getHasCone()); 
+
 	}
 
 	// region commands
@@ -72,5 +75,20 @@ public class IntakeSubsystem extends SubsystemBase {
 		centerSucker.drop();
 		sideSucker.drop();
 	}
+
+	public boolean getHasCube() {
+		if (sideSucker.getRPM() < IntakeConstants.kHasCubeThreshold && sideSucker.getRPM() > 10) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean getHasCone() {
+		if (centerSucker.getRPM() < IntakeConstants.kHasConeThreshold && centerSucker.getRPM() > 10) {
+			return true;
+		}
+		return false;
+	}
+
 
 }
