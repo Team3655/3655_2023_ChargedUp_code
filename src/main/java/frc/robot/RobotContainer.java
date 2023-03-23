@@ -18,11 +18,14 @@ import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.TractorToolbox.JoystickUtils;
 import frc.robot.TractorToolbox.TractorParts.PathBuilder;
+import frc.robot.commands.ArmPoseCommand;
 import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.commands.FloorIntakeCommand;
 import frc.robot.commands.LLAlignCommand;
 import frc.robot.commands.TurnCommand;
 import frc.robot.commands.Autonomous.BalanceCommand;
+import frc.robot.commands.Autonomous.ScoreSequence;
+import frc.robot.commands.Autonomous.SuckCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -47,7 +50,7 @@ public class RobotContainer {
 	public static final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
 	public static final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
-	public final PathBuilder autoBuilder = new PathBuilder();
+	public final static PathBuilder autoBuilder = new PathBuilder();
 
 	private final CommandJoystick driveJoystick = new CommandJoystick(
 			OperatorConstants.kDriveJoystickPort);
@@ -77,7 +80,9 @@ public class RobotContainer {
 		autoBuilder.addPath("1 Charge Mobility");
 		autoBuilder.addPath("1+1 Human Player");
 
-		autoChooser.setDefaultOption("Event Test", autoBuilder.getPathCommand("Event Test"));
+		
+		autoChooser.setDefaultOption("ScoreHigh", new SuckCommand(true, 100).andThen(new ScoreSequence(ArmPoses.HIGH_SCORE).andThen(new ArmPoseCommand(ArmPoses.TUCKED))));
+		autoChooser.addOption("Event Test", autoBuilder.getPathCommand("Event Test"));
 		autoChooser.addOption("1 Human Player", autoBuilder.getPathCommand("1 Human Player"));
 		autoChooser.addOption("1 Wall", autoBuilder.getPathCommand("1 Wall"));
 		autoChooser.addOption("1+1 Human Player", autoBuilder.getPathCommand("1+1 Human Player"));

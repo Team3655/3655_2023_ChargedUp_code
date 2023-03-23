@@ -24,6 +24,7 @@ public class Vaccum {
 		pumpMotor = new CANSparkMax(pumpID, MotorType.kBrushless);
 		pumpMotor.restoreFactoryDefaults();
 		pumpMotor.setSmartCurrentLimit(currentLimit);
+		pumpMotor.setSecondaryCurrentLimit(currentLimit);
 
 		pumpEncoder = pumpMotor.getEncoder();
 
