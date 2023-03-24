@@ -78,16 +78,19 @@ public class RobotContainer {
 		autoBuilder.addPath("1 Human Player");
 		autoBuilder.addPath("1 Wall");
 		autoBuilder.addPath("1 Charge Mobility");
+		autoBuilder.addPath("1 Charge");
 		autoBuilder.addPath("1+1 Human Player");
 
-		
-		autoChooser.setDefaultOption("ScoreHigh", new SuckCommand(true, 100).andThen(new ScoreSequence(ArmPoses.HIGH_SCORE).andThen(new ArmPoseCommand(ArmPoses.TUCKED))));
+		autoChooser.setDefaultOption("ScoreHigh", new SuckCommand(true, 100)
+				.andThen(new ScoreSequence(ArmPoses.HIGH_SCORE).andThen(new ArmPoseCommand(ArmPoses.TUCKED))));
 		autoChooser.addOption("Event Test", autoBuilder.getPathCommand("Event Test"));
 		autoChooser.addOption("1 Human Player", autoBuilder.getPathCommand("1 Human Player"));
 		autoChooser.addOption("1 Wall", autoBuilder.getPathCommand("1 Wall"));
 		autoChooser.addOption("1+1 Human Player", autoBuilder.getPathCommand("1+1 Human Player"));
 		autoChooser.addOption("1 Charge Mobility",
 				autoBuilder.getPathCommand("1 Charge Mobility").andThen(new BalanceCommand()));
+		autoChooser.addOption("1 Charge",
+				autoBuilder.getPathCommand("1 Charge").andThen(new BalanceCommand()));
 		// endregion
 	}
 
@@ -133,8 +136,10 @@ public class RobotContainer {
 		// endregion
 
 		// Sucking is set to be the defaut state of the intake
-		operatorController.button(5).onTrue(intakeSubsystem.stopSuckingCommand()).onFalse(intakeSubsystem.startSuckingCommand());
-		operatorController.button(10).onTrue(intakeSubsystem.stopSuckingCommand()).onFalse(intakeSubsystem.startSuckingCommand());
+		operatorController.button(5).onTrue(intakeSubsystem.stopSuckingCommand())
+				.onFalse(intakeSubsystem.startSuckingCommand());
+		operatorController.button(10).onTrue(intakeSubsystem.stopSuckingCommand())
+				.onFalse(intakeSubsystem.startSuckingCommand());
 		operatorController.button(21).onTrue(intakeSubsystem.stopSuckingCommand());
 		// operatorController.button(10).onTrue(intakeSubsystem.toggleDumpValve());
 
