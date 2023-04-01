@@ -182,9 +182,6 @@ public final class Constants {
 		public static final int kRightMinorArmPort = 15;
 		public static final int kLeftMinorArmPort = 16;
 
-		public static final int kLeftGripperPort = 0;
-		public static final int kRightGripperPort = 1;
-
 		public static final int kMajorArmGearBoxRatio = 100;
 		public static final int kMinorArmGearBoxRatio = 100;
 
@@ -239,7 +236,7 @@ public final class Constants {
 			DRIVER_CONTROL
 		}
 
-		public static final HashMap<ArmPoses, double[]> kArmStates = new HashMap<ArmPoses, double[]>() {
+		public static final HashMap<ArmPoses, double[]> kArmStatesMap = new HashMap<ArmPoses, double[]>() {
 			{
 				put(ArmPoses.TUCKED, new double[] { 0, 0 });
 				put(ArmPoses.LOW_SCORE, new double[] { 0, 90 });
@@ -257,21 +254,41 @@ public final class Constants {
 
 	public static class IntakeConstants {
 
+		public static final int kRightIntakeWheelPort = 8;
+		public static final int kLeftIntakeWheelPort = 9;
+
 		public static final int kPnemnaticHubPort = 50;
 
-		// NEO Sucker motor CAN ID's
-		public static final int kSideSuckerPort = 17;
-		public static final int kCenterSuckerPort = 18;
-
-		public static final int kSideSolenoidPort = 1;
 		public static final int kCenterSolenoidPort = 0;
 
+		// NEO Sucker motor CAN ID's
+		public static final int kCenterSuckerPort = 18;
+
 		public static final int kCenterSuckerCurrentLimit = 8;
-		public static final int kSideSuckerCurrentLimit = 6;
 
 		public static final double kCenterSuckerSetpoint = 0.5;
-		public static final int kHasCubeThreshold = 2400;
-		public static final int kHasConeThreshold = 2750;
+		public static final int kHasConeThreshold = 2825;
+
+		public static enum kIntakeStates {
+			IDLE,
+			INTAKE,
+			OUTTAKE,
+			DISABLED
+		}
+
+		public static final HashMap<ArmPoses, kIntakeStates> kArmStateToIntakeStateMap = new HashMap<ArmPoses, kIntakeStates>() {
+			{
+				put(ArmPoses.TUCKED, kIntakeStates.IDLE);
+				put(ArmPoses.LOW_SCORE, kIntakeStates.IDLE);
+				put(ArmPoses.MID_SCORE, kIntakeStates.IDLE);
+				put(ArmPoses.HIGH_SCORE, kIntakeStates.IDLE);
+				put(ArmPoses.LOW_INTAKE, kIntakeStates.INTAKE);
+				put(ArmPoses.MID_INTAKE, kIntakeStates.INTAKE);
+				put(ArmPoses.HIGH_INTAKE, kIntakeStates.INTAKE);
+				put(ArmPoses.DRIVER_CONTROL, kIntakeStates.INTAKE);
+			}
+
+		};
 
 	}
 

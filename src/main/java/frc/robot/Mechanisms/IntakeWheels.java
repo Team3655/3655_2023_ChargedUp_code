@@ -7,24 +7,33 @@ package frc.robot.Mechanisms;
 import edu.wpi.first.wpilibj.Servo;
 
 /** Add your docs here. */
-public class Gripper {
+public class IntakeWheels {
 
 	private Servo rightServo, leftServo;
 
-	public Gripper(int rightPort, int leftPort) {
+	public IntakeWheels(int rightPort, int leftPort) {
 		rightServo = new Servo(rightPort);
 		leftServo = new Servo(leftPort);
-		closeGriper();
 	}
 
-	public void openGriper() {
-		rightServo.set(1);
-		leftServo.set(0);
-	}
-
-	public void closeGriper() {
-		rightServo.set(0);
+	// region setters
+	public void Intake() {
+		rightServo.set(-1);
 		leftServo.set(1);
 	}
 
+	public void OutTake() {
+		rightServo.set(1);
+		leftServo.set(-1);
+	}
+
+	public void disable() {
+		rightServo.setDisabled();
+		leftServo.setDisabled();
+	}
+	// endregion
+
+	// region getters 
+	
+	// endregion
 }

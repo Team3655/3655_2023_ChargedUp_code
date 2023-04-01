@@ -4,23 +4,25 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.IntakeConstants.kIntakeStates;
+import frc.robot.Mechanisms.IntakeWheels;
 import frc.robot.Mechanisms.Vaccum;
 
 public class IntakeSubsystem extends SubsystemBase {
 
 	private Vaccum centerSucker;
-	private Vaccum sideSucker;
 
 	private PneumaticHub pneumaticHub;
 	private Solenoid centerSolenoid;
-	private Solenoid sideSolenoid;
+
+	private IntakeWheels gripper;
 
 	/** Creates a new IntakeSubsystem. */
 	public IntakeSubsystem() {
@@ -28,7 +30,6 @@ public class IntakeSubsystem extends SubsystemBase {
 		pneumaticHub = new PneumaticHub(IntakeConstants.kPnemnaticHubPort);
 
 		centerSolenoid = pneumaticHub.makeSolenoid(IntakeConstants.kCenterSolenoidPort);
-		sideSolenoid = pneumaticHub.makeSolenoid(IntakeConstants.kSideSolenoidPort);
 
 		centerSucker = new Vaccum(
 				IntakeConstants.kCenterSuckerPort,
@@ -36,50 +37,74 @@ public class IntakeSubsystem extends SubsystemBase {
 				true,
 				centerSolenoid);
 
-		sideSucker = new Vaccum(
-				IntakeConstants.kSideSuckerPort,
-				IntakeConstants.kSideSuckerCurrentLimit,
-				true,
-				sideSolenoid);
+
+		gripper = new IntakeWheels(IntakeConstants.kRightIntakeWheelPort, IntakeConstants.kLeftIntakeWheelPort);
 	}
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
 		SmartDashboard.putNumber("Center Sucker RPM", centerSucker.getRPM());
-		SmartDashboard.putNumber("Side Sucker RPM", sideSucker.getRPM());
 		SmartDashboard.putNumber("Center Sucker Current Draw", centerSucker.getMotorCurrentDraw());
-		SmartDashboard.putNumber("Side Sucker Current Draw", sideSucker.getMotorCurrentDraw());
 		SmartDashboard.putBoolean("Has CUBE", getHasCube());
 		SmartDashboard.putBoolean("Has CONE", getHasCone()); 
 
 	}
 
 	// region commands
-	public InstantCommand startSuckingCommand() {
-		return new InstantCommand(
-				() -> startSucking());
-	}
 
 	public void startSucking() {
 		centerSucker.suck(IntakeConstants.kCenterSuckerSetpoint);
-		sideSucker.suck(IntakeConstants.kCenterSuckerSetpoint);
-	}
-
-	public InstantCommand stopSuckingCommand() {
-		return new InstantCommand(
-				() -> stopSucking());
 	}
 
 	public void stopSucking() {
 		centerSucker.drop();
-		sideSucker.drop();
+	}
+
+	public void intakeGripper() {
+		gripper.Intake();
+	}
+
+	public void outtakeGripper() {
+		gripper.OutTake();
+	}
+
+	public void disableGripper() {
+		gripper.disable();
+	}
+
+	public void setIntakeState(kIntakeStates state) {
+		switch (state) {
+
+			case IDLE:
+				startSucking();
+				disableGripper();
+				break;
+
+			case INTAKE:
+				startSucking();
+				intakeGripper();
+				break;
+
+			case OUTTAKE:
+				stopSucking();
+				outtakeGripper();
+				break;
+
+			case DISABLED:
+				stopSucking();
+				disableGripper();
+				break;
+
+		}
+	}
+
+	public void updateIntakeFromArmPose(ArmPoses armPose) {
+		
 	}
 
 	public boolean getHasCube() {
-		if (sideSucker.getRPM() < IntakeConstants.kHasCubeThreshold && sideSucker.getRPM() > 10) {
-			return true;
-		}
+		// TODO: new getHasCube
 		return false;
 	}
 

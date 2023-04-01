@@ -110,29 +110,25 @@ public class RobotContainer {
 		// region Arm Commands
 		// Schedule ArmPoseCommand when operator presses coresponding button.
 		// scoring commands
-		operatorController.button(1).onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.LOW_SCORE));
-		operatorController.button(2).onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.MID_SCORE));
-		operatorController.button(3).onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.HIGH_SCORE));
+		operatorController.button(1).onTrue(new ArmPoseCommand(ArmPoses.LOW_SCORE));
+		operatorController.button(2).onTrue(new ArmPoseCommand(ArmPoses.MID_SCORE));
+		operatorController.button(3).onTrue(new ArmPoseCommand(ArmPoses.HIGH_SCORE));
 
 		// intaking commands
 		operatorController.button(6).onTrue(new FloorIntakeCommand());
-		operatorController.button(7).onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.MID_INTAKE));
-		operatorController.button(8).onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.HIGH_INTAKE));
+		operatorController.button(7).onTrue(new ArmPoseCommand(ArmPoses.MID_INTAKE));
+		operatorController.button(8).onTrue(new ArmPoseCommand(ArmPoses.HIGH_INTAKE));
 		programmerController.b().onTrue(new FloorIntakeCommand());
 
 		// tuck arms
-		operatorController.button(4).onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.TUCKED));
-		programmerController.y().onTrue(armSubsystem.SequencedArmPoseCommand(ArmPoses.TUCKED));
+		operatorController.button(4).onTrue(new ArmPoseCommand(ArmPoses.TUCKED));
+		programmerController.y().onTrue(new ArmPoseCommand(ArmPoses.TUCKED));
 
 		// Switches sides of the robot
 		operatorController.button(9).onTrue(new ArmSwitchCommand());
 
 		operatorController.button(11).onTrue(armSubsystem.toggleArmMotors());
 		operatorController.button(13).onTrue(armSubsystem.zeroArms());
-
-		operatorController.button(22).onTrue(new InstantCommand(() -> armSubsystem.closeGriper()));
-		operatorController.button(23).onTrue(new InstantCommand(() -> armSubsystem.openGriper()));
-
 		// endregion
 
 		// Sucking is set to be the defaut state of the intake
@@ -140,18 +136,18 @@ public class RobotContainer {
 				.onFalse(intakeSubsystem.startSuckingCommand());
 		operatorController.button(10).onTrue(intakeSubsystem.stopSuckingCommand())
 				.onFalse(intakeSubsystem.startSuckingCommand());
-		operatorController.button(21).onTrue(intakeSubsystem.stopSuckingCommand());
+		operatorController.button(21).onTrue(intakeSubsystem.disableCommand());
 		// operatorController.button(10).onTrue(intakeSubsystem.toggleDumpValve());
 
 		// region Targeting Commmands
 		driveJoystick.button(3).whileTrue(new LLAlignCommand());
 		driveJoystick.button(4).whileTrue(new TurnCommand(180));
-		driveJoystick.button(5).whileTrue(new TurnCommand(180));
+		driveJoystick.button(5).whileTrue(new BalanceCommand());
 		programmerController.a().whileTrue(new LLAlignCommand());
 		programmerController.x().whileTrue(new TurnCommand(180));
 		// endregion
 
-		programmerController.y().whileTrue(new BalanceCommand()); // TODO: stress test balance
+		// programmerController.y().whileTrue(new BalanceCommand()); // TODO: stress test balance
 		operatorController.button(12).whileTrue(new BalanceCommand());
 
 		// region Drive Commands
