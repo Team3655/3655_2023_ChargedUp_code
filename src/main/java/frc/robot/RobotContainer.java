@@ -116,6 +116,7 @@ public class RobotContainer {
 
 		// intaking commands
 		operatorController.button(6).onTrue(new FloorIntakeCommand());
+		driveJoystick.button(2).onTrue(new FloorIntakeCommand());
 		operatorController.button(7).onTrue(new ArmPoseCommand(ArmPoses.MID_INTAKE));
 		operatorController.button(8).onTrue(new ArmPoseCommand(ArmPoses.HIGH_INTAKE));
 		programmerController.b().onTrue(new FloorIntakeCommand());
@@ -132,12 +133,15 @@ public class RobotContainer {
 		// endregion
 
 		// Sucking is set to be the defaut state of the intake
-		operatorController.button(5).onTrue(intakeSubsystem.stopSuckingCommand())
-				.onFalse(intakeSubsystem.startSuckingCommand());
-		operatorController.button(10).onTrue(intakeSubsystem.stopSuckingCommand())
-				.onFalse(intakeSubsystem.startSuckingCommand());
+		operatorController.button(5).onTrue(
+				intakeSubsystem.outtakeCommand())
+				.onFalse(intakeSubsystem.idleCommand());
+
+		operatorController.button(10).onTrue(
+				intakeSubsystem.outtakeCommand())
+				.onFalse(intakeSubsystem.idleCommand());
+
 		operatorController.button(21).onTrue(intakeSubsystem.disableCommand());
-		// operatorController.button(10).onTrue(intakeSubsystem.toggleDumpValve());
 
 		// region Targeting Commmands
 		driveJoystick.button(3).whileTrue(new LLAlignCommand());
@@ -147,7 +151,8 @@ public class RobotContainer {
 		programmerController.x().whileTrue(new TurnCommand(180));
 		// endregion
 
-		// programmerController.y().whileTrue(new BalanceCommand()); // TODO: stress test balance
+		// programmerController.y().whileTrue(new BalanceCommand()); // TODO: stress
+		// test balance
 		operatorController.button(12).whileTrue(new BalanceCommand());
 
 		// region Drive Commands

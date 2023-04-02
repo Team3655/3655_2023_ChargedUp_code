@@ -122,16 +122,17 @@ public final class Constants {
 
 			// PID constants for path planner (these control drive direction not reaching
 			// target wheel speeds)
-			public static final PIDGains kPPDriveGains = new PIDGains(5, 0, 0);
+			public static final PIDGains kPPDriveGains = new PIDGains(8.5, 0, 0);
 			public static final PIDGains kPPTurnGains = new PIDGains(5, 0, 0);
 
-			public static final double kPPMaxVelocity = 3.0;
-			public static final double kPPMaxAcceleration = 2.0;
+			public static final double kPPMaxVelocity = 3.75;
+			public static final double kPPMaxAcceleration = 2.8;
 
 			public static final HashMap<String, Command> kPPEventMap = new HashMap<>() {
 				{
 					put("Tuck", new ArmPoseCommand(ArmPoses.TUCKED));
 					put("ScoreHigh", new ScoreSequence(ArmPoses.HIGH_SCORE));
+					put("ScoreCubeHigh", new ScoreSequence(ArmPoses.HIGH_INTAKE));
 					put("ScoreMid", new ScoreSequence(ArmPoses.MID_SCORE));
 					put("ScoreLow", new ScoreSequence(ArmPoses.LOW_SCORE));
 					put("IntakeDown", new IntakeDownSequence());

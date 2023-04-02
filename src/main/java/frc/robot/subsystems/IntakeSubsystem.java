@@ -53,6 +53,22 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	// region commands
 
+	public InstantCommand intakeCommand() {
+		return new InstantCommand(() -> setIntakeState(kIntakeStates.INTAKE));
+	}
+
+	public InstantCommand outtakeCommand() {
+		return new InstantCommand(() -> setIntakeState(kIntakeStates.OUTTAKE));
+	}
+
+	public InstantCommand idleCommand() {
+		return new InstantCommand(() -> setIntakeState(kIntakeStates.IDLE));
+	}
+
+	public InstantCommand disableCommand() {
+		return new InstantCommand(() -> setIntakeState(kIntakeStates.DISABLED));
+	}
+
 	public void startSucking() {
 		centerSucker.suck(IntakeConstants.kCenterSuckerSetpoint);
 	}
@@ -100,7 +116,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	public void updateIntakeFromArmPose(ArmPoses armPose) {
-		
+		setIntakeState(IntakeConstants.kArmStateToIntakeStateMap.get(armPose));
 	}
 
 	public boolean getHasCube() {
