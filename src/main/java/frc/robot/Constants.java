@@ -260,7 +260,8 @@ public final class Constants {
 
 		public static final int kPnemnaticHubPort = 50;
 
-		public static final int kCenterSolenoidPort = 0;
+		public static final int kCenterDumpSolenoidPort = 0;
+		public static final int kCenterSealerSolenoidPort = 1;
 
 		// NEO Sucker motor CAN ID's
 		public static final int kCenterSuckerPort = 18;

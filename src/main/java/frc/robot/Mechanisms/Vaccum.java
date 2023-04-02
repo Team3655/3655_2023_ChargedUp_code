@@ -17,9 +17,10 @@ public class Vaccum {
 	private CANSparkMax pumpMotor;
 	private RelativeEncoder pumpEncoder;
 
-	private Solenoid dumpValve;
+	private Solenoid dumpValveSolenoid;
+	private Solenoid sealerSolenoid;
 
-	public Vaccum(int pumpID, int currentLimit, boolean breakMode, Solenoid dumpValve) {
+	public Vaccum(int pumpID, int currentLimit, boolean breakMode, Solenoid dumpValve, Solenoid sealerSolenoid) {
 
 		pumpMotor = new CANSparkMax(pumpID, MotorType.kBrushless);
 		pumpMotor.restoreFactoryDefaults();
@@ -34,18 +35,21 @@ public class Vaccum {
 			pumpMotor.setIdleMode(IdleMode.kCoast);
 		}
 
-		this.dumpValve = dumpValve;
+		this.dumpValveSolenoid = dumpValve;
+		this.sealerSolenoid = sealerSolenoid;
 	}
 
 
 	// region: setters
 	public void suck(double suckSpeed) {
-		dumpValve.set(false);
+		dumpValveSolenoid.set(false);
+		sealerSolenoid.set(true);
 		pumpMotor.set(suckSpeed);
 	}
 
 	public void drop() {
-		dumpValve.set(true);
+		dumpValveSolenoid.set(true);
+		sealerSolenoid.set(false);
 		pumpMotor.stopMotor();
 	}
 	// endregion

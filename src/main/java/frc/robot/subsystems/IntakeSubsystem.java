@@ -20,7 +20,8 @@ public class IntakeSubsystem extends SubsystemBase {
 	private Vaccum centerSucker;
 
 	private PneumaticHub pneumaticHub;
-	private Solenoid centerSolenoid;
+	private Solenoid centerDumpSolenoid;
+	private Solenoid centerSealerSolenoid;
 
 	private IntakeWheels gripper;
 
@@ -29,13 +30,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
 		pneumaticHub = new PneumaticHub(IntakeConstants.kPnemnaticHubPort);
 
-		centerSolenoid = pneumaticHub.makeSolenoid(IntakeConstants.kCenterSolenoidPort);
+		centerDumpSolenoid = pneumaticHub.makeSolenoid(IntakeConstants.kCenterDumpSolenoidPort);
+		centerSealerSolenoid = pneumaticHub.makeSolenoid(IntakeConstants.kCenterSealerSolenoidPort);
 
 		centerSucker = new Vaccum(
 				IntakeConstants.kCenterSuckerPort,
 				IntakeConstants.kCenterSuckerCurrentLimit,
 				true,
-				centerSolenoid);
+				centerDumpSolenoid,
+				centerSealerSolenoid);
 
 
 		gripper = new IntakeWheels(IntakeConstants.kRightIntakeWheelPort, IntakeConstants.kLeftIntakeWheelPort);
