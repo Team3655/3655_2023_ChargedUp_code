@@ -122,21 +122,22 @@ public final class Constants {
 
 			// PID constants for path planner (these control drive direction not reaching
 			// target wheel speeds)
-			public static final PIDGains kPPDriveGains = new PIDGains(5, 0, 0);
+			public static final PIDGains kPPDriveGains = new PIDGains(8.5, 0, 0);
 			public static final PIDGains kPPTurnGains = new PIDGains(5, 0, 0);
 
-			public static final double kPPMaxVelocity = 3.0;
-			public static final double kPPMaxAcceleration = 2.0;
+			public static final double kPPMaxVelocity = 3.75;
+			public static final double kPPMaxAcceleration = 2.8;
 
 			public static final HashMap<String, Command> kPPEventMap = new HashMap<>() {
 				{
 					put("Tuck", new ArmPoseCommand(ArmPoses.TUCKED));
 					put("ScoreHigh", new ScoreSequence(ArmPoses.HIGH_SCORE));
+					put("ScoreCubeHigh", new ScoreSequence(ArmPoses.HIGH_INTAKE));
 					put("ScoreMid", new ScoreSequence(ArmPoses.MID_SCORE));
 					put("ScoreLow", new ScoreSequence(ArmPoses.LOW_SCORE));
 					put("IntakeDown", new IntakeDownSequence());
 					put("ToggleSide", new ArmSwitchCommand());
-					put("Suck", new SuckCommand(true, 125));
+					put("Suck", new SuckCommand(true, 1000));
 					put("Drop", new SuckCommand(false, 350));
 				}
 			};
@@ -181,9 +182,6 @@ public final class Constants {
 		public static final int kLeftMajorArmPort = 14;
 		public static final int kRightMinorArmPort = 15;
 		public static final int kLeftMinorArmPort = 16;
-
-		public static final int kLeftGripperPort = 0;
-		public static final int kRightGripperPort = 1;
 
 		public static final int kMajorArmGearBoxRatio = 100;
 		public static final int kMinorArmGearBoxRatio = 100;
@@ -239,7 +237,7 @@ public final class Constants {
 			DRIVER_CONTROL
 		}
 
-		public static final HashMap<ArmPoses, double[]> kArmStates = new HashMap<ArmPoses, double[]>() {
+		public static final HashMap<ArmPoses, double[]> kArmStatesMap = new HashMap<ArmPoses, double[]>() {
 			{
 				put(ArmPoses.TUCKED, new double[] { 0, 0 });
 				put(ArmPoses.LOW_SCORE, new double[] { 0, 90 });
@@ -247,7 +245,7 @@ public final class Constants {
 				put(ArmPoses.HIGH_SCORE, new double[] { 100, 55 });
 				put(ArmPoses.LOW_INTAKE, new double[] { -10, 98 });
 				put(ArmPoses.MID_INTAKE, new double[] { 13, 33 });
-				put(ArmPoses.HIGH_INTAKE, new double[] { 100, 85 });
+				put(ArmPoses.HIGH_INTAKE, new double[] { 105, 87 });
 				put(ArmPoses.DRIVER_CONTROL, new double[] { 0, 0 });
 			}
 
@@ -257,21 +255,41 @@ public final class Constants {
 
 	public static class IntakeConstants {
 
+		public static final int kRightIntakeWheelPort = 8;
+		public static final int kLeftIntakeWheelPort = 9;
+
 		public static final int kPnemnaticHubPort = 50;
 
-		// NEO Sucker motor CAN ID's
-		public static final int kSideSuckerPort = 17;
-		public static final int kCenterSuckerPort = 18;
-
-		public static final int kSideSolenoidPort = 1;
 		public static final int kCenterSolenoidPort = 0;
 
-		public static final int kCenterSuckerCurrentLimit = 6;
-		public static final int kSideSuckerCurrentLimit = 4;
+		// NEO Sucker motor CAN ID's
+		public static final int kCenterSuckerPort = 18;
+
+		public static final int kCenterSuckerCurrentLimit = 8;
 
 		public static final double kCenterSuckerSetpoint = 0.5;
-		public static final int kHasCubeThreshold = 2400;
-		public static final int kHasConeThreshold = 2750;
+		public static final int kHasConeThreshold = 2825;
+
+		public static enum kIntakeStates {
+			IDLE,
+			INTAKE,
+			OUTTAKE,
+			DISABLED
+		}
+
+		public static final HashMap<ArmPoses, kIntakeStates> kArmStateToIntakeStateMap = new HashMap<ArmPoses, kIntakeStates>() {
+			{
+				put(ArmPoses.TUCKED, kIntakeStates.IDLE);
+				put(ArmPoses.LOW_SCORE, kIntakeStates.IDLE);
+				put(ArmPoses.MID_SCORE, kIntakeStates.IDLE);
+				put(ArmPoses.HIGH_SCORE, kIntakeStates.IDLE);
+				put(ArmPoses.LOW_INTAKE, kIntakeStates.INTAKE);
+				put(ArmPoses.MID_INTAKE, kIntakeStates.INTAKE);
+				put(ArmPoses.HIGH_INTAKE, kIntakeStates.INTAKE);
+				put(ArmPoses.DRIVER_CONTROL, kIntakeStates.INTAKE);
+			}
+
+		};
 
 	}
 

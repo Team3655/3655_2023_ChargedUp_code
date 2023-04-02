@@ -14,7 +14,7 @@ public class LimelightSubsystem extends SubsystemBase {
 	/** Creates a new LimelightSubsystem */
 	public LimelightSubsystem() {
 		limelight = new Limelight();
-		limelight.setLedMode(1);
+		// limelight.setLedMode(1);
 	}
 
 

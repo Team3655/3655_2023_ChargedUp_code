@@ -9,16 +9,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.Mechanisms.ArmSegment;
-import frc.robot.Mechanisms.Gripper;
 
 public class ArmSubsystem extends SubsystemBase {
 
 	// region properties
 
-	public HashMap<ArmPoses, double[]> armStates = ArmConstants.kArmStates;
+	public HashMap<ArmPoses, double[]> armStates = ArmConstants.kArmStatesMap;
 
 	/** used to track the state of the arm */
-	ArmPoses targetArmState;
+	private ArmPoses targetArmState;
 
 	/** controls the side of the robot the arm is on */
 	private boolean isFront;
@@ -27,9 +26,6 @@ public class ArmSubsystem extends SubsystemBase {
 	// create arms
 	private ArmSegment majorArm;
 	private ArmSegment minorArm;
-
-	// create gripper
-	private Gripper gripper;
 
 	// endregion
 
@@ -75,8 +71,6 @@ public class ArmSubsystem extends SubsystemBase {
 		minorArm.setMaxOutput(ArmConstants.kMinorPIDOutputLimit);
 		minorArm.setTrapazoidalConstraints(ArmConstants.kMaxMinorVelRadiansPerSec, ArmConstants.kMaxMinorAccelRadiansPerSec);
 		// endregion
-
-		gripper = new Gripper(ArmConstants.kLeftGripperPort, ArmConstants.kRightGripperPort);
 
 		// the default state of the arms
 		isFront = true;
@@ -188,12 +182,6 @@ public class ArmSubsystem extends SubsystemBase {
 		targetArmState = state;
 		enableArms = true;
 
-		if (state == ArmPoses.TUCKED) {
-			gripper.closeGriper();
-		} else {
-			// gripper.openGriper();
-		}
-
 		// get minor speed from map
 		// gets the angle values from the hashmap
 		majorArm.setTargetTheta(armStates.get(targetArmState)[0]);
@@ -224,14 +212,6 @@ public class ArmSubsystem extends SubsystemBase {
 	/** ruturns true if the target dominant side of the robot is front */
 	public boolean getIsFront() {
 		return isFront;
-	}
-
-	public void openGriper() {
-		gripper.openGriper();
-	}
-
-	public void closeGriper() {
-		gripper.closeGriper();
 	}
 
 	public boolean getAtTarget(double deadBand) {

@@ -17,7 +17,9 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "ScoreHigh"
+          "Suck",
+          "ScoreHigh",
+          "Tuck"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -26,11 +28,11 @@
     },
     {
       "anchorPoint": {
-        "x": 4.15,
+        "x": 4.4,
         "y": 2.2
       },
       "prevControl": {
-        "x": 3.2022010229625133,
+        "x": 3.4522010229625133,
         "y": 2.2
       },
       "nextControl": null,

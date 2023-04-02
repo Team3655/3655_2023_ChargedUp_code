@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.78,
-        "y": 0.51
+        "x": 1.7841690384235467,
+        "y": 1.06
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7799999999999994,
-        "y": 0.51
+        "x": 3.1202117105088916,
+        "y": 0.5595392387365979
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -18,9 +18,8 @@
       "stopEvent": {
         "names": [
           "Suck",
-          "ToggleSide",
           "ScoreHigh",
-          "ToggleSide"
+          "Tuck"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -43,9 +42,7 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "Tuck"
-        ],
+        "names": [],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -55,12 +52,5 @@
   "maxVelocity": 3.0,
   "maxAcceleration": 2.0,
   "isReversed": null,
-  "markers": [
-    {
-      "position": 0.5963636363636066,
-      "names": [
-        "IntakeDown"
-      ]
-    }
-  ]
+  "markers": []
 }

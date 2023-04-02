@@ -17,6 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
+          "Suck",
           "ScoreHigh",
           "Tuck"
         ],
@@ -27,15 +28,15 @@
     },
     {
       "anchorPoint": {
-        "x": 6.7,
+        "x": 6.9,
         "y": 2.2
       },
       "prevControl": {
-        "x": 5.752201022962513,
+        "x": 5.952201022962513,
         "y": 2.2
       },
       "nextControl": {
-        "x": 5.752201022962513,
+        "x": 5.952201022962513,
         "y": 2.2
       },
       "holonomicAngle": 180.0,

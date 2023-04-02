@@ -9,15 +9,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ArmConstants.ArmPoses;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class ArmPoseCommand extends CommandBase {
 
 	private static ArmSubsystem armSubsystem;
+	private static IntakeSubsystem intakeSubsystem;
 	private ArmPoses armPose;
 
 	/** Creates a new ArmPoseCommand. */
 	public ArmPoseCommand(ArmPoses armPose) {
 		armSubsystem = RobotContainer.armSubsystem;
+		intakeSubsystem = RobotContainer.intakeSubsystem;
 		this.armPose = armPose;
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(armSubsystem);
@@ -25,8 +28,9 @@ public class ArmPoseCommand extends CommandBase {
 
 	// Called when the command is initially scheduled.
 	@Override
-	public void initialize() {
+	public void initialize() { 
 		armSubsystem.setSequencedArmState(armPose);
+		intakeSubsystem.updateIntakeFromArmPose(armPose);
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
