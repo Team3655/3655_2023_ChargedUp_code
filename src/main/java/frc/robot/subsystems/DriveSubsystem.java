@@ -273,6 +273,10 @@ public class DriveSubsystem extends SubsystemBase {
 		gyro.reset();
 	}
 
+	public void setHeading(double heading) {
+		gyro.setYaw(heading);
+	}
+
 	public CommandBase toggleFieldCentric() {
 		return runOnce(() -> {
 			fieldRelative = !fieldRelative;

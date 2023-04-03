@@ -24,7 +24,6 @@ public class Robot extends TimedRobot {
 	private Command autonomousCommand;
 
 	private RobotContainer robotContainer;
-	// private ArmSubsystem m_ArmSubsystem;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -73,6 +72,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		autonomousCommand = robotContainer.getAutonomousCommand();
+
+		RobotContainer.driveSubsystem.setHeading(180);
 
 		// schedule the autonomous command (example)
 		if (autonomousCommand != null) {
