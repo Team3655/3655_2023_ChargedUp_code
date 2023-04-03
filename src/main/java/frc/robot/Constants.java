@@ -125,19 +125,20 @@ public final class Constants {
 			public static final PIDGains kPPDriveGains = new PIDGains(8.5, 0, 0);
 			public static final PIDGains kPPTurnGains = new PIDGains(5, 0, 0);
 
-			public static final double kPPMaxVelocity = 3.75;
-			public static final double kPPMaxAcceleration = 2.8;
+			public static final double kPPMaxVelocity = 3.00;
+			public static final double kPPMaxAcceleration = 2.50;
 
 			public static final HashMap<String, Command> kPPEventMap = new HashMap<>() {
 				{
 					put("Tuck", new ArmPoseCommand(ArmPoses.TUCKED));
 					put("ScoreHigh", new ScoreSequence(ArmPoses.HIGH_SCORE));
+					put("ArmHighCube", new ArmPoseCommand(ArmPoses.HIGH_INTAKE));
 					put("ScoreCubeHigh", new ScoreSequence(ArmPoses.HIGH_INTAKE));
 					put("ScoreMid", new ScoreSequence(ArmPoses.MID_SCORE));
 					put("ScoreLow", new ScoreSequence(ArmPoses.LOW_SCORE));
 					put("IntakeDown", new IntakeDownSequence());
 					put("ToggleSide", new ArmSwitchCommand());
-					put("Suck", new SuckCommand(true, 1000));
+					put("Suck", new SuckCommand(true, 100));
 					put("Drop", new SuckCommand(false, 350));
 				}
 			};
@@ -280,7 +281,7 @@ public final class Constants {
 
 		public static final HashMap<ArmPoses, kIntakeStates> kArmStateToIntakeStateMap = new HashMap<ArmPoses, kIntakeStates>() {
 			{
-				put(ArmPoses.TUCKED, kIntakeStates.IDLE);
+				put(ArmPoses.TUCKED, kIntakeStates.INTAKE);
 				put(ArmPoses.LOW_SCORE, kIntakeStates.IDLE);
 				put(ArmPoses.MID_SCORE, kIntakeStates.IDLE);
 				put(ArmPoses.HIGH_SCORE, kIntakeStates.IDLE);

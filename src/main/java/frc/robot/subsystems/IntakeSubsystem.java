@@ -25,6 +25,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	private IntakeWheels gripper;
 
+	private kIntakeStates currentIntakeState;
+
 	/** Creates a new IntakeSubsystem. */
 	public IntakeSubsystem() {
 
@@ -32,6 +34,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
 		centerDumpSolenoid = pneumaticHub.makeSolenoid(IntakeConstants.kCenterDumpSolenoidPort);
 		centerSealerSolenoid = pneumaticHub.makeSolenoid(IntakeConstants.kCenterSealerSolenoidPort);
+
+		currentIntakeState = kIntakeStates.DISABLED;
 
 		centerSucker = new Vaccum(
 				IntakeConstants.kCenterSuckerPort,
@@ -93,7 +97,10 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	public void setIntakeState(kIntakeStates state) {
-		switch (state) {
+
+		currentIntakeState = state;
+
+		switch (currentIntakeState) {
 
 			case IDLE:
 				startSucking();
@@ -119,7 +126,9 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	public void updateIntakeFromArmPose(ArmPoses armPose) {
-		setIntakeState(IntakeConstants.kArmStateToIntakeStateMap.get(armPose));
+		//if (currentIntakeState != kIntakeStates.DISABLED) {
+			setIntakeState(IntakeConstants.kArmStateToIntakeStateMap.get(armPose));
+		//}
 	}
 
 	public boolean getHasCube() {

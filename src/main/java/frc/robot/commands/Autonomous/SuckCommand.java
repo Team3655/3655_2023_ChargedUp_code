@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.RobotContainer;
+import frc.robot.Constants.IntakeConstants.kIntakeStates;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class SuckCommand extends CommandBase {
@@ -42,9 +43,9 @@ public class SuckCommand extends CommandBase {
 	@Override
 	public void execute() {
 		if (suck) {
-			intakeSubsystem.startSucking();
+			intakeSubsystem.setIntakeState(kIntakeStates.INTAKE);
 		} else {
-			intakeSubsystem.stopSucking();
+			intakeSubsystem.setIntakeState(kIntakeStates.OUTTAKE);
 		}
 	}
 

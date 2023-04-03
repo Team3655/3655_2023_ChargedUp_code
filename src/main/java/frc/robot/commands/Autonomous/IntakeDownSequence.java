@@ -27,5 +27,6 @@ public class IntakeDownSequence extends SequentialCommandGroup {
 		addCommands(
 				new InstantCommand(() -> intakeSubsystem.startSucking()),
 				new FloorIntakeCommand());
+				intakeSubsystem.intakeCommand();
 	}
 }

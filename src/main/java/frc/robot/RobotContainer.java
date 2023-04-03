@@ -80,6 +80,8 @@ public class RobotContainer {
 		autoBuilder.addPath("1 Charge Mobility");
 		autoBuilder.addPath("1 Charge");
 		autoBuilder.addPath("1+1 Human Player");
+		autoBuilder.addPath("1+1 Human Player V2");
+		autoBuilder.addPath("1+1.5 Human Player");
 
 		autoChooser.setDefaultOption("ScoreHigh", new SuckCommand(true, 100)
 				.andThen(new ScoreSequence(ArmPoses.HIGH_SCORE).andThen(new ArmPoseCommand(ArmPoses.TUCKED))));
@@ -87,6 +89,8 @@ public class RobotContainer {
 		autoChooser.addOption("1 Human Player", autoBuilder.getPathCommand("1 Human Player"));
 		autoChooser.addOption("1 Wall", autoBuilder.getPathCommand("1 Wall"));
 		autoChooser.addOption("1+1 Human Player", autoBuilder.getPathCommand("1+1 Human Player"));
+		autoChooser.addOption("1+1 Human Player V2", autoBuilder.getPathCommand("1+1 Human Player V2"));
+		autoChooser.addOption("1+1.5 Human Player", autoBuilder.getPathCommand("1+1.5 Human Player"));
 		autoChooser.addOption("1 Charge Mobility",
 				autoBuilder.getPathCommand("1 Charge Mobility").andThen(new BalanceCommand()));
 		autoChooser.addOption("1 Charge",
