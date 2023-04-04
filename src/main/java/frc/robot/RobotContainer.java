@@ -114,7 +114,7 @@ public class RobotContainer {
 		// region Arm Commands
 		// Schedule ArmPoseCommand when operator presses coresponding button.
 		// scoring commands
-		operatorController.button(1).onTrue(new ArmPoseCommand(ArmPoses.LOW_SCORE));
+		operatorController.button(1).onTrue(new FloorIntakeCommand());
 		operatorController.button(2).onTrue(new ArmPoseCommand(ArmPoses.MID_SCORE));
 		operatorController.button(3).onTrue(new ArmPoseCommand(ArmPoses.HIGH_SCORE));
 

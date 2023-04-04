@@ -23,13 +23,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.TractorToolbox.TractorParts.PIDGains;
 
-public class SwerveModule extends SubsystemBase {
+public class SwerveModule {
 	/** Creates a new SwerveModule. */
 
 	private final CANSparkMax driveMotor;
@@ -183,10 +182,4 @@ public class SwerveModule extends SubsystemBase {
 		absoluteEncoder.clearStickyFaults();
 	}
 
-	@Override
-	public void periodic() {
-
-		// This method will be called once per scheduler run
-
-	}
 }
