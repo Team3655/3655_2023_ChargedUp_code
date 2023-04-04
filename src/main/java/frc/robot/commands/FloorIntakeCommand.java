@@ -16,6 +16,7 @@ public class FloorIntakeCommand extends SequentialCommandGroup {
 		// Add your commands in the addCommands() call, e.g.
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(
+				new ArmPoseCommand(ArmPoses.TUCKED),
 				new ArmPoseCommand(ArmPoses.LOW_SCORE),
 				new ArmPoseCommand(ArmPoses.LOW_INTAKE));
 	}
