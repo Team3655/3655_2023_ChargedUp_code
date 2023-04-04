@@ -43,13 +43,13 @@ public class Vaccum {
 	// region: setters
 	public void suck(double suckSpeed) {
 		dumpValveSolenoid.set(false);
-		sealerSolenoid.set(true);
+		sealerSolenoid.set(false);
 		pumpMotor.set(suckSpeed);
 	}
 
 	public void drop() {
 		dumpValveSolenoid.set(true);
-		sealerSolenoid.set(false);
+		sealerSolenoid.set(true);
 		pumpMotor.stopMotor();
 	}
 	// endregion
