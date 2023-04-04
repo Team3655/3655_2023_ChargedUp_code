@@ -64,13 +64,13 @@ public class LLAlignCommand extends CommandBase {
 
 
 		if (limelight.hasValidTarget()) {
-			double strafePIDOutput = StrafePIDController.calculate(limelight.getX(), 0);
-			double drivePIDOutput = DrivePIDController.calculate(limelight.getY(), 1);
+			double strafePIDOutput = StrafePIDController.calculate(limelight.getX(), -0);
+			double drivePIDOutput = DrivePIDController.calculate(limelight.getY(), -1);
 			
 			double strafeOutput = strafeOutputSmoother.smoothInput(strafePIDOutput);
 			double driveOutput = driveOutputSmoother.smoothInput(drivePIDOutput);
 			
-			driveSubsystem.drive(-driveOutput, strafeOutput, 0);
+			driveSubsystem.drive(driveOutput, -strafeOutput, 0);
 
 		} else {
 			driveSubsystem.drive(0, 0, 0);
@@ -80,7 +80,7 @@ public class LLAlignCommand extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		//limelight.setLedMode(1);
+		// limelight.setLedMode(1);
 	}
 
 	// Returns true when the command should end.

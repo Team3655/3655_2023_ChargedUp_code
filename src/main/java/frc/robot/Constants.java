@@ -317,10 +317,8 @@ public final class Constants {
 
 		public static final PIDGains kLLAlignStrafeGains = new PIDGains(.04, 0.0015, 0.001);
 		public static final PIDGains kLLAlignDriveGains = new PIDGains(.025, 0.0015, 0.0005);
-		public static final PIDGains kLLAlignTurnGains = new PIDGains(.004, 0.0006, 0);
-		public static final double kAlignDriveMotionSmoothing = .35;
-		public static final double kAlignStrafeMotionSmoothing = .2;
-		public static final double kAlignTurnMotionSmoothing = 0;
+		public static final double kAlignDriveMotionSmoothing = 0;
+		public static final double kAlignStrafeMotionSmoothing = 0;
 
 	}
 

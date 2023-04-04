@@ -130,7 +130,7 @@ public class RobotContainer {
 		programmerController.y().onTrue(new ArmPoseCommand(ArmPoses.TUCKED));
 
 		// Switches sides of the robot
-		operatorController.button(9).onTrue(new ArmSwitchCommand());
+		operatorController.button(18).onTrue(new ArmSwitchCommand());
 
 		operatorController.button(11).onTrue(armSubsystem.toggleArmMotors());
 		operatorController.button(13).onTrue(armSubsystem.zeroArms());
@@ -194,6 +194,7 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
+		driveSubsystem.setHeading(180);
 		// An example command will be run in autonomous
 		return autoChooser.getSelected();
 	}
