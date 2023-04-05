@@ -57,7 +57,6 @@ public class LLPuppydogCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		driveSubsystem.setFieldCentric(false);
 		limelight.setLedMode(0);
 	}
 
@@ -71,16 +70,15 @@ public class LLPuppydogCommand extends CommandBase {
 			double turnOutput = turnOutputSmoother.smoothInput(turnPIDOutput);
 			double driveOutput = driveOutputSmoother.smoothInput(drivePIDOutput);
 
-			driveSubsystem.drive(driveOutput, 0, -turnOutput);
+			driveSubsystem.robotCentricDrive(driveOutput, 0, -turnOutput);
 		} else {
-			driveSubsystem.drive(0, 0, 0);
+			driveSubsystem.robotCentricDrive(0, 0, 0);
 		}
 	}
 
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		driveSubsystem.setFieldCentric(true);
 		limelight.setLedMode(1);
 	}
 
