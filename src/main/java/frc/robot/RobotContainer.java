@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -120,7 +121,6 @@ public class RobotContainer {
 
 		// intaking commands
 		operatorController.button(6).onTrue(new FloorIntakeCommand());
-		driveJoystick.button(2).onTrue(new FloorIntakeCommand());
 		operatorController.button(7).onTrue(new ArmPoseCommand(ArmPoses.MID_INTAKE));
 		operatorController.button(8).onTrue(new ArmPoseCommand(ArmPoses.HIGH_INTAKE));
 		programmerController.b().onTrue(new FloorIntakeCommand());
@@ -194,7 +194,9 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		driveSubsystem.setHeading(180);
+
+		// driveSubsystem.setHeading(180);
+		Timer.delay(0.1);
 		// An example command will be run in autonomous
 		return autoChooser.getSelected();
 	}
