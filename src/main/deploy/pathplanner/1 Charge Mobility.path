@@ -18,7 +18,7 @@
       "stopEvent": {
         "names": [
           "Suck",
-          "ScoreHigh",
+          "ScoreCubeHigh",
           "Tuck"
         ],
         "executionBehavior": "sequential",
@@ -47,17 +47,17 @@
       "stopEvent": {
         "names": [],
         "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
+        "waitBehavior": "before",
+        "waitTime": 0.5
       }
     },
     {
       "anchorPoint": {
-        "x": 3.7,
+        "x": 3.3,
         "y": 2.2
       },
       "prevControl": {
-        "x": 4.723971499210187,
+        "x": 4.323971499210186,
         "y": 2.2
       },
       "nextControl": null,

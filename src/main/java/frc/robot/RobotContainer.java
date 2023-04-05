@@ -195,7 +195,7 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 
-		// driveSubsystem.setHeading(180);
+		driveSubsystem.setHeading(180);
 		Timer.delay(0.1);
 		// An example command will be run in autonomous
 		return autoChooser.getSelected();
