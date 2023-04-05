@@ -252,16 +252,8 @@ public class DriveSubsystem extends SubsystemBase {
 				fieldRelative
 						? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
 						: new ChassisSpeeds(xSpeed, ySpeed, rot));
-
-		SwerveDriveKinematics.desaturateWheelSpeeds(
-				swerveModuleStates,
-				maxSpeed);
-
-		frontLeft.setDesiredState(swerveModuleStates[0]);
-		frontRight.setDesiredState(swerveModuleStates[1]);
-		rearLeft.setDesiredState(swerveModuleStates[2]);
-		rearRight.setDesiredState(swerveModuleStates[3]);
-
+						
+		setModuleStates(swerveModuleStates);
 	}
 
 	public void setModuleStates(SwerveModuleState[] desiredStates) {
