@@ -7,17 +7,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.ArmConstants.ArmPoses;
+import frc.robot.Constants.ArmConstants.kArmPoses;
 import frc.robot.Mechanisms.ArmSegment;
 
 public class ArmSubsystem extends SubsystemBase {
 
 	// region properties
 
-	public HashMap<ArmPoses, double[]> armStates = ArmConstants.kArmStatesMap;
+	public HashMap<kArmPoses, double[]> armStates = ArmConstants.kArmStatesMap;
 
 	/** used to track the state of the arm */
-	private ArmPoses targetArmState;
+	private kArmPoses targetArmState;
 
 	/** controls the side of the robot the arm is on */
 	private boolean isFront;
@@ -32,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase {
 	public ArmSubsystem() {
 
 		// this will cause the code to fail to run if the hashmap is not full
-		for (ArmPoses pose : ArmPoses.values()) {
+		for (kArmPoses pose : kArmPoses.values()) {
 			try {
 				double x = 0;
 				x = x + armStates.get(pose)[0];
@@ -76,7 +76,7 @@ public class ArmSubsystem extends SubsystemBase {
 		isFront = true;
 		enableArms = true;
 
-		setSequencedArmState(ArmPoses.TUCKED);
+		setSequencedArmState(kArmPoses.TUCKED);
 	}
 
 	@Override
@@ -112,13 +112,13 @@ public class ArmSubsystem extends SubsystemBase {
 
 	// region Commands
 
-	public CommandBase UnsequencedArmPoseCommand(final ArmPoses state) {
+	public CommandBase UnsequencedArmPoseCommand(final kArmPoses state) {
 		return runOnce(() -> {
 			setUnsequencedArmState(state);
 		});
 	}
 
-	public CommandBase SequencedArmPoseCommand(final ArmPoses state) {
+	public CommandBase SequencedArmPoseCommand(final kArmPoses state) {
 		return runOnce(() -> {
 			setSequencedArmState(state);
 		});
@@ -158,17 +158,17 @@ public class ArmSubsystem extends SubsystemBase {
 	 * @param state can be (LOW_SCORE, MID_SCORE, HIGH_SCORE,
 	 *              LOW_INTAKE, MID_INTAKE, HIGH_INTAKE)
 	 */
-	public void setUnsequencedArmState(ArmPoses state) {
+	public void setUnsequencedArmState(kArmPoses state) {
 		setTargetArmState(state);
 		majorArm.setReference();
 		minorArm.setReference();
 	}
 
-	public void setSequencedArmState(ArmPoses state) {
+	public void setSequencedArmState(kArmPoses state) {
 
 		setTargetArmState(state);
 
-		if (state == ArmPoses.TUCKED) {
+		if (state == kArmPoses.TUCKED) {
 			minorArm.setReference();
 		} else {
 			majorArm.setReference();
@@ -178,7 +178,7 @@ public class ArmSubsystem extends SubsystemBase {
 	/**
 	 * @param targetArmState the targetArmState to set
 	 */
-	public void setTargetArmState(ArmPoses state) {
+	public void setTargetArmState(kArmPoses state) {
 		targetArmState = state;
 		enableArms = true;
 
@@ -205,7 +205,7 @@ public class ArmSubsystem extends SubsystemBase {
 	 * @return armState: can be (LOW_SCORE, MID_SCORE, HIGH_SCORE, LOW_INTAKE,
 	 *         MID_INTAKE, HIGH_INTAKE)
 	 */
-	public ArmPoses getArmState() {
+	public kArmPoses getArmState() {
 		return targetArmState;
 	}
 

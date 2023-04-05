@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ArmConstants.ArmPoses;
+import frc.robot.Constants.ArmConstants.kArmPoses;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakeConstants.kIntakeStates;
 import frc.robot.Mechanisms.IntakeWheels;
@@ -125,10 +125,8 @@ public class IntakeSubsystem extends SubsystemBase {
 		}
 	}
 
-	public void updateIntakeFromArmPose(ArmPoses armPose) {
-		//if (currentIntakeState != kIntakeStates.DISABLED) {
-			setIntakeState(IntakeConstants.kArmStateToIntakeStateMap.get(armPose));
-		//}
+	public void updateIntakeFromArmPose(kArmPoses armPose) {
+		setIntakeState(IntakeConstants.kArmStateToIntakeStateMap.get(armPose));
 	}
 
 	public boolean getHasCube() {

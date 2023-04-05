@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import frc.robot.Constants.ArmConstants.ArmPoses;
+import frc.robot.Constants.ArmConstants.kArmPoses;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -15,10 +15,10 @@ public class ArmPoseCommand extends CommandBase {
 
 	private static ArmSubsystem armSubsystem;
 	private static IntakeSubsystem intakeSubsystem;
-	private ArmPoses armPose;
+	private kArmPoses armPose;
 
 	/** Creates a new ArmPoseCommand. */
-	public ArmPoseCommand(ArmPoses armPose) {
+	public ArmPoseCommand(kArmPoses armPose) {
 		armSubsystem = RobotContainer.armSubsystem;
 		intakeSubsystem = RobotContainer.intakeSubsystem;
 		this.armPose = armPose;

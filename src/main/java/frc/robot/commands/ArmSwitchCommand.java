@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.RobotContainer;
-import frc.robot.Constants.ArmConstants.ArmPoses;
+import frc.robot.Constants.ArmConstants.kArmPoses;
 import frc.robot.subsystems.ArmSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -30,7 +30,7 @@ public class ArmSwitchCommand extends SequentialCommandGroup {
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(
 				new InstantCommand(() -> armSubsystem.ToggleSide()),
-				new ArmPoseCommand(ArmPoses.TUCKED));
+				new ArmPoseCommand(kArmPoses.TUCKED));
 
 	}
 }

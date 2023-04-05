@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-import frc.robot.Constants.ArmConstants.ArmPoses;
+import frc.robot.Constants.ArmConstants.kArmPoses;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.TractorToolbox.JoystickUtils;
 import frc.robot.TractorToolbox.TractorParts.PathBuilder;
@@ -85,7 +85,7 @@ public class RobotContainer {
 		autoBuilder.addPath("1+1.5 Human Player");
 
 		autoChooser.setDefaultOption("ScoreHigh", new SuckCommand(true, 100)
-				.andThen(new ScoreSequence(ArmPoses.HIGH_SCORE).andThen(new ArmPoseCommand(ArmPoses.TUCKED))));
+				.andThen(new ScoreSequence(kArmPoses.HIGH_SCORE).andThen(new ArmPoseCommand(kArmPoses.TUCKED))));
 		autoChooser.addOption("Event Test", autoBuilder.getPathCommand("Event Test"));
 		autoChooser.addOption("1 Human Player", autoBuilder.getPathCommand("1 Human Player"));
 		autoChooser.addOption("1 Wall", autoBuilder.getPathCommand("1 Wall"));
@@ -116,18 +116,18 @@ public class RobotContainer {
 		// Schedule ArmPoseCommand when operator presses coresponding button.
 		// scoring commands
 		operatorController.button(1).onTrue(new FloorIntakeCommand());
-		operatorController.button(2).onTrue(new ArmPoseCommand(ArmPoses.MID_SCORE));
-		operatorController.button(3).onTrue(new ArmPoseCommand(ArmPoses.HIGH_SCORE));
+		operatorController.button(2).onTrue(new ArmPoseCommand(kArmPoses.MID_SCORE));
+		operatorController.button(3).onTrue(new ArmPoseCommand(kArmPoses.HIGH_SCORE));
 
 		// intaking commands
 		operatorController.button(6).onTrue(new FloorIntakeCommand());
-		operatorController.button(7).onTrue(new ArmPoseCommand(ArmPoses.MID_INTAKE));
-		operatorController.button(8).onTrue(new ArmPoseCommand(ArmPoses.HIGH_INTAKE));
+		operatorController.button(7).onTrue(new ArmPoseCommand(kArmPoses.MID_INTAKE));
+		operatorController.button(8).onTrue(new ArmPoseCommand(kArmPoses.HIGH_INTAKE));
 		programmerController.b().onTrue(new FloorIntakeCommand());
 
 		// tuck arms
-		operatorController.button(4).onTrue(new ArmPoseCommand(ArmPoses.TUCKED));
-		programmerController.y().onTrue(new ArmPoseCommand(ArmPoses.TUCKED));
+		operatorController.button(4).onTrue(new ArmPoseCommand(kArmPoses.TUCKED));
+		programmerController.y().onTrue(new ArmPoseCommand(kArmPoses.TUCKED));
 
 		// Switches sides of the robot
 		operatorController.button(18).onTrue(new ArmSwitchCommand());
