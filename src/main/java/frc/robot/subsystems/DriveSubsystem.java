@@ -203,6 +203,18 @@ public class DriveSubsystem extends SubsystemBase {
 
 	// region setter
 
+	public void lockWheels() {
+		double rot = DriveConstants.kMaxRPM;
+
+		var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+				new ChassisSpeeds(0, 0, rot));
+
+		SwerveDriveKinematics.desaturateWheelSpeeds(
+				swerveModuleStates, 0);
+
+		setModuleStates(swerveModuleStates);
+	}
+
 	public void robotCentricDrive(double xSpeed, double ySpeed, double rot) {
 		setFieldCentric(false);
 		drive(xSpeed, ySpeed, rot);
