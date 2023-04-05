@@ -206,7 +206,7 @@ public class DriveSubsystem extends SubsystemBase {
 	public void lockWheels() {
 		double rot = DriveConstants.kMaxRPM;
 
-		var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+		SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
 				new ChassisSpeeds(0, 0, rot));
 
 		SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -248,7 +248,7 @@ public class DriveSubsystem extends SubsystemBase {
 			rot *= DriveConstants.kMaxRPM;
 		}
 
-		var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+		SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
 				fieldRelative
 						? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
 						: new ChassisSpeeds(xSpeed, ySpeed, rot));
@@ -263,7 +263,6 @@ public class DriveSubsystem extends SubsystemBase {
 		frontRight.setDesiredState(desiredStates[1]);
 		rearLeft.setDesiredState(desiredStates[2]);
 		rearRight.setDesiredState(desiredStates[3]);
-
 	}
 
 	public void resetEncoders() {
