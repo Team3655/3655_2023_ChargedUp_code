@@ -102,150 +102,22 @@
     },
     {
       "anchorPoint": {
-        "x": 5.7,
-        "y": 0.85
+        "x": 6.200897213824502,
+        "y": 0.924179893472571
       },
       "prevControl": {
-        "x": 5.075100351211118,
-        "y": 0.7832374159118071
-      },
-      "nextControl": {
-        "x": 6.901603583393566,
-        "y": 0.9783760687535437
-      },
-      "holonomicAngle": 180.0,
-      "isReversal": false,
-      "velOverride": 2.0,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 6.8,
-        "y": 0.9044599216375168
-      },
-      "prevControl": {
-        "x": 5.992807552281771,
-        "y": 0.9044599216375139
-      },
-      "nextControl": {
-        "x": 5.992807552281771,
-        "y": 0.9044599216375139
-      },
-      "holonomicAngle": 180.0,
-      "isReversal": true,
-      "velOverride": 2.0,
-      "isLocked": false,
-      "isStopPoint": true,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0.25
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 5.282894082126386,
-        "y": 0.8
-      },
-      "prevControl": {
-        "x": 5.7613998061229275,
-        "y": 0.7999999999999998
-      },
-      "nextControl": {
-        "x": 4.3588632973075825,
-        "y": 0.8000000000000003
-      },
-      "holonomicAngle": 180.0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 3.9093003734992635,
-        "y": 0.8042008171553179
-      },
-      "prevControl": {
-        "x": 5.4493826476301095,
-        "y": 0.8042008171553177
-      },
-      "nextControl": {
-        "x": 2.3692180993684175,
-        "y": 0.8042008171553181
-      },
-      "holonomicAngle": null,
-      "isReversal": false,
-      "velOverride": 0.15,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 2.6,
-        "y": 0.8032335507413217
-      },
-      "prevControl": {
-        "x": 2.977766801518604,
-        "y": 0.8032335507413216
-      },
-      "nextControl": {
-        "x": 1.9645013631844246,
-        "y": 0.8032335507413219
-      },
-      "holonomicAngle": 180.0,
-      "isReversal": false,
-      "velOverride": 0.75,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 1.65,
-        "y": 1.07
-      },
-      "prevControl": {
-        "x": 2.2605121074315573,
-        "y": 0.9370266943649657
+        "x": 5.57599756503562,
+        "y": 0.8574173093843781
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
       "isReversal": false,
-      "velOverride": null,
+      "velOverride": 2.0,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "ScoreCubeHigh",
-          "Tuck"
-        ],
-        "executionBehavior": "sequential",
+        "names": [],
+        "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -271,24 +143,6 @@
       "position": 2.5,
       "names": [
         "IntakeDown"
-      ]
-    },
-    {
-      "position": 5.4,
-      "names": [
-        "Tuck"
-      ]
-    },
-    {
-      "position": 5.7,
-      "names": [
-        "ToggleSide"
-      ]
-    },
-    {
-      "position": 8.0,
-      "names": [
-        "ArmHighCube"
       ]
     }
   ]

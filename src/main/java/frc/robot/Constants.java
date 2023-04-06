@@ -269,7 +269,7 @@ public final class Constants {
 
 		public static final int kCenterSuckerCurrentLimit = 8;
 
-		public static final double kCenterSuckerSetpoint = 0.5;
+		public static final double kCenterSuckerSetpoint = 0.75;
 		public static final int kHasConeThreshold = 2825;
 
 		public static enum kIntakeStates {

@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.LimelightConstants;
@@ -64,6 +65,9 @@ public class LLAlignCommand extends CommandBase {
 
 
 		if (limelight.hasValidTarget()) {
+
+			SmartDashboard.putNumber("LL TX", limelight.getX());
+
 			double strafePIDOutput = StrafePIDController.calculate(limelight.getX(), -0);
 			double drivePIDOutput = DrivePIDController.calculate(limelight.getY(), -1);
 			
