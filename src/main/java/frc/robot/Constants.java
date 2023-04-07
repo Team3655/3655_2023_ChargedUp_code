@@ -70,7 +70,7 @@ public final class Constants {
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// Offset angle for absolute encoders (find this using CTRE client)
-		public static final double kFrontLeftAngleZero = 39.287;
+		public static final double kFrontLeftAngleZero = 35.508;
 		public static final double kFrontRightAngleZero = 121.113;
 		public static final double kRearLeftAngleZero = 148.008;
 		public static final double kRearRightAngleZero = 60.557;
