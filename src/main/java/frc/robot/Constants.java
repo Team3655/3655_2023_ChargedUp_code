@@ -83,8 +83,8 @@ public final class Constants {
 	public static class DriveConstants {
 
 		public static final double kMaxSneakMetersPerSecond = 1.0;
-		public static final double kMaxSpeedMetersPerSecond = 2.5;
-		public static final double kMaxTurboMetersPerSecond = 4.5;
+		public static final double kMaxSpeedMetersPerSecond = 4.5;
+		public static final double kMaxTurboMetersPerSecond = 8.0;
 
 		// this sets turning speed (keep this low)
 		public static final double kMaxRPM = 10;

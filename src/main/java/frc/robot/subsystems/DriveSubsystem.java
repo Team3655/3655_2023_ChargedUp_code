@@ -222,7 +222,7 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	public void drive(double xSpeed, double ySpeed, double rot) {
-		drive(xSpeed, ySpeed, rot, true, false);
+		drive(xSpeed, ySpeed, rot, false, false);
 	}
 
 	public void drive(double xSpeed, double ySpeed, double rot, boolean isTurbo, boolean isSneak) {
@@ -257,7 +257,7 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	public void setModuleStates(SwerveModuleState[] desiredStates) {
-		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kMaxTurboMetersPerSecond);
+		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, ModuleConstants.kMaxModuleSpeedMetersPerSecond);
 
 		frontLeft.setDesiredState(desiredStates[0]);
 		frontRight.setDesiredState(desiredStates[1]);
