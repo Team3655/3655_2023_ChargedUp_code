@@ -12,12 +12,15 @@ import frc.robot.Constants.ArmConstants.kArmPoses;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class FloorIntakeCommand extends SequentialCommandGroup {
 	/** Creates a new FloorIntakeCommand. */
-	public FloorIntakeCommand() {
+	public FloorIntakeCommand(boolean isIntake) {
 		// Add your commands in the addCommands() call, e.g.
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(
 				new ArmPoseCommand(kArmPoses.TUCKED),
-				new ArmPoseCommand(kArmPoses.LOW_SCORE),
-				new ArmPoseCommand(kArmPoses.LOW_INTAKE));
+				new ArmPoseCommand(kArmPoses.LOW_SCORE));
+
+		if (isIntake) {
+			addCommands(new ArmPoseCommand(kArmPoses.LOW_INTAKE));
+		}
 	}
 }

@@ -125,7 +125,7 @@ public final class Constants {
 			public static final PIDGains kPPDriveGains = new PIDGains(8.5, 0, 0);
 			public static final PIDGains kPPTurnGains = new PIDGains(3.5, 0, 0);
 
-			public static final double kPPMaxVelocity = 3.00;
+			public static final double kPPMaxVelocity = 4.00;
 			public static final double kPPMaxAcceleration = 2.50;
 
 			public static final HashMap<String, Command> kPPEventMap = new HashMap<>() {
@@ -241,8 +241,8 @@ public final class Constants {
 		public static final HashMap<kArmPoses, double[]> kArmStatesMap = new HashMap<kArmPoses, double[]>() {
 			{
 				put(kArmPoses.TUCKED, new double[] { 0, 0 });
-				put(kArmPoses.LOW_SCORE, new double[] { 0, 90 });
-				put(kArmPoses.MID_SCORE, new double[] { 45, 28 });
+				put(kArmPoses.LOW_SCORE, new double[] { 0, 80 });
+				put(kArmPoses.MID_SCORE, new double[] { 20, 36 });
 				put(kArmPoses.HIGH_SCORE, new double[] { 100, 55 });
 				put(kArmPoses.LOW_INTAKE, new double[] { -10, 98 });
 				put(kArmPoses.MID_INTAKE, new double[] { 13, 33 });

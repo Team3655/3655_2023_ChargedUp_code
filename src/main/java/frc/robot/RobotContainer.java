@@ -81,7 +81,7 @@ public class RobotContainer {
 		autoBuilder.addPath("1 Charge Mobility");
 		autoBuilder.addPath("1 Charge");
 		autoBuilder.addPath("1+1 Human Player");
-		autoBuilder.addPath("1+1 Human Player V2");
+		autoBuilder.addPath("1+2 Human Player");
 		autoBuilder.addPath("1+1.5 Human Player");
 
 		autoChooser.setDefaultOption("ScoreHigh", new SuckCommand(true, 100)
@@ -90,7 +90,7 @@ public class RobotContainer {
 		autoChooser.addOption("1 Human Player", autoBuilder.getPathCommand("1 Human Player"));
 		autoChooser.addOption("1 Wall", autoBuilder.getPathCommand("1 Wall"));
 		autoChooser.addOption("1+1 Human Player", autoBuilder.getPathCommand("1+1 Human Player"));
-		autoChooser.addOption("1+1 Human Player V2", autoBuilder.getPathCommand("1+1 Human Player V2"));
+		autoChooser.addOption("1+2 Human Player", autoBuilder.getPathCommand("1+2 Human Player"));
 		autoChooser.addOption("1+1.5 Human Player", autoBuilder.getPathCommand("1+1.5 Human Player"));
 		autoChooser.addOption("1 Charge Mobility",
 				autoBuilder.getPathCommand("1 Charge Mobility").andThen(new BalanceCommand()));
@@ -115,15 +115,15 @@ public class RobotContainer {
 		// region Arm Commands
 		// Schedule ArmPoseCommand when operator presses coresponding button.
 		// scoring commands
-		operatorController.button(1).onTrue(new FloorIntakeCommand());
+		operatorController.button(1).onTrue(new FloorIntakeCommand(false));
 		operatorController.button(2).onTrue(new ArmPoseCommand(kArmPoses.MID_SCORE));
 		operatorController.button(3).onTrue(new ArmPoseCommand(kArmPoses.HIGH_SCORE));
 
 		// intaking commands
-		operatorController.button(6).onTrue(new FloorIntakeCommand());
+		operatorController.button(6).onTrue(new FloorIntakeCommand(true));
 		operatorController.button(7).onTrue(new ArmPoseCommand(kArmPoses.MID_INTAKE));
 		operatorController.button(8).onTrue(new ArmPoseCommand(kArmPoses.HIGH_INTAKE));
-		programmerController.b().onTrue(new FloorIntakeCommand());
+		programmerController.b().onTrue(new FloorIntakeCommand(true));
 
 		// tuck arms
 		operatorController.button(4).onTrue(new ArmPoseCommand(kArmPoses.TUCKED));
