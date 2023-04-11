@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -16,6 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -23,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
 import frc.robot.Mechanisms.SwerveModule;
+import frc.robot.TractorToolbox.LimelightHelpers;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 
@@ -49,6 +52,8 @@ public class DriveSubsystem extends SubsystemBase {
 	private ProfiledPIDController gyroTurnPidController;
 
 	private Field2d field;
+
+	private SwerveDrivePoseEstimator poseEstimator;
 
 	/** Creates a new DriveSubsystem. */
 	public DriveSubsystem() {
@@ -117,24 +122,20 @@ public class DriveSubsystem extends SubsystemBase {
 		gyroTurnPidController.enableContinuousInput(-180, 180);
 		gyroTurnPidController.setTolerance(DriveConstants.kGyroTurnTolerance);
 
+		poseEstimator = new SwerveDrivePoseEstimator(
+				DriveConstants.kDriveKinematics,
+				gyro.getRotation2d(),
+				swervePosition,
+				new Pose2d());
+
 		targetRotationDegrees = 0;
 	}
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		swervePosition = new SwerveModulePosition[] {
-				frontLeft.getPosition(),
-				frontRight.getPosition(),
-				rearLeft.getPosition(),
-				rearRight.getPosition()
-		};
-
-		odometry.update(
-				Rotation2d.fromDegrees(getHeading()),
-				swervePosition);
-
-		field.setRobotPose(odometry.getPoseMeters());
+		
+		updateOdometry();
 
 		if (DriverStation.isDisabled()) {
 			// frontLeft.resetEncoders();
@@ -252,7 +253,7 @@ public class DriveSubsystem extends SubsystemBase {
 				fieldRelative
 						? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
 						: new ChassisSpeeds(xSpeed, ySpeed, rot));
-						
+
 		setModuleStates(swerveModuleStates);
 	}
 
@@ -263,6 +264,30 @@ public class DriveSubsystem extends SubsystemBase {
 		frontRight.setDesiredState(desiredStates[1]);
 		rearLeft.setDesiredState(desiredStates[2]);
 		rearRight.setDesiredState(desiredStates[3]);
+	}
+
+	public void updateOdometry() {
+		swervePosition = new SwerveModulePosition[] {
+				frontLeft.getPosition(),
+				frontRight.getPosition(),
+				rearLeft.getPosition(),
+				rearRight.getPosition()
+		};
+
+		odometry.update(
+				Rotation2d.fromDegrees(getHeading()),
+				swervePosition);
+
+		poseEstimator.update(gyro.getRotation2d(), swervePosition);
+
+		if (LimelightHelpers.getTV("")) {
+			Pose2d llPose2d = LimelightHelpers.getBotPose2d_wpiBlue("");
+			poseEstimator.addVisionMeasurement(
+				llPose2d, 
+				Timer.getFPGATimestamp() - LimelightHelpers.getLatency_Capture("") - LimelightHelpers.getLatency_Pipeline(""));
+		}
+
+		field.setRobotPose(odometry.getPoseMeters());
 	}
 
 	public void resetEncoders() {
