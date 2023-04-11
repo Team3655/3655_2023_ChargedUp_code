@@ -75,6 +75,7 @@ public class ArmSegment {
 		 */
 		rightPIDController = rightMotor.getPIDController();
 
+		// tells the pid controller on the arms to use trapezoidal constraints 
 		rightPIDController.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
 
 		rightPIDController.setSmartMotionAllowedClosedLoopError(0, 0);
@@ -110,10 +111,21 @@ public class ArmSegment {
 		minTheta = -theta;
 	}
 
+	/**
+	 * sets the maximum output of the pid controller
+	 * 
+	 * @param maxOutput the max value that can be sent to the motor (0 - 1)
+	 */
 	public void setMaxOutput(double maxOutput) {
 		rightPIDController.setOutputRange(-maxOutput, maxOutput);
 	}
 
+	/**
+	 * Used to set the maximum velocity and acceleration of the arm
+	 * 
+	 * @param maxVel the max velocity of the arm in radians per minute
+	 * @param maxAccel the max velocity of the arm in radians per minute
+ 	 */
 	public void setTrapazoidalConstraints(double maxVel, double maxAccel) {
 		rightPIDController.setSmartMotionMaxVelocity(maxVel, 0);
 		rightPIDController.setSmartMotionMinOutputVelocity(0, 0);
@@ -171,6 +183,7 @@ public class ArmSegment {
 		leftMotor.setSecondaryCurrentLimit(limit + 3);
 	}
 
+	/** used to disable the motors for rezeroing */
 	public void toggleMotors() {
 		isRunning = !isRunning;
 
@@ -182,6 +195,7 @@ public class ArmSegment {
 		}
 	}
 
+	/** resets the zeros of the arms to their current positions */
 	public void resetZeros() {
 		rightEncoder.setPosition(0);
 		leftEncoder.setPosition(0);
@@ -192,7 +206,7 @@ public class ArmSegment {
 	// region: getters
 
 	/**
-	 * @return the m_targetTheta
+	 * @return the targetTheta
 	 */
 	public double getTargetTheta() {
 		return targetTheta;
@@ -227,6 +241,9 @@ public class ArmSegment {
 		return false;
 	}
 
+	/**
+	 * @return the total power draw of the arm in amps
+	 */
 	public double getPowerDraw() {
 		return rightMotor.getOutputCurrent() + leftMotor.getOutputCurrent();
 	}

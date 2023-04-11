@@ -17,16 +17,20 @@ public class IntakeWheels {
 	}
 
 	// region setters
+
+	/** sets both intake wheels to be drivin inward for intaking a piece */
 	public void Intake() {
 		rightServo.set(-1);
 		leftServo.set(1);
 	}
 
+	/** sets both intake wheels to be drivin outward for releasing a piece */
 	public void OutTake() {
 		rightServo.set(1);
 		leftServo.set(-1);
 	}
 
+	/** stops both wheels to reduce power draw and noise */
 	public void disable() {
 		rightServo.setDisabled();
 		leftServo.setDisabled();

@@ -48,7 +48,9 @@ public class BalanceCommand extends CommandBase {
 
 		double driveOutput = 0;
 
+		// checks to see if the charge station is close to balanced
 		if (Math.abs(driveSubsystem.getRoll()) + Math.abs(driveSubsystem.getPitch()) > AutoConstants.kBalnaceCommandDeadbandDeg) {
+			// sets driveoutput to the output of the pid controller if the station is not balanced 
 			driveOutput = drivePIDController.calculate(driveSubsystem.getPitch(), 0);
 		}
 
@@ -59,6 +61,8 @@ public class BalanceCommand extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
+		// turns the wheels when the command ends
+		driveSubsystem.drive(0, 0, 0.001);
 	}
 
 	// Returns true when the command should end.
