@@ -12,7 +12,7 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.IntakeConstants.kIntakeStates;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class SuckCommand extends CommandBase {
+public class IntakeCommand extends CommandBase {
 
 	private IntakeSubsystem intakeSubsystem;
 	private Timer timer;
@@ -21,7 +21,7 @@ public class SuckCommand extends CommandBase {
 	private boolean suck;
 
 	/** Creates a new SuckCommand. */
-	public SuckCommand(boolean suck, double timeMilis) {
+	public IntakeCommand(boolean suck, double timeMilis) {
 
 		intakeSubsystem = RobotContainer.intakeSubsystem;
 

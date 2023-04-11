@@ -26,7 +26,7 @@ import frc.robot.commands.LLAlignCommand;
 import frc.robot.commands.TurnCommand;
 import frc.robot.commands.Autonomous.BalanceCommand;
 import frc.robot.commands.Autonomous.ScoreSequence;
-import frc.robot.commands.Autonomous.SuckCommand;
+import frc.robot.commands.Autonomous.IntakeCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -84,7 +84,7 @@ public class RobotContainer {
 		autoBuilder.addPath("1+2 Human Player");
 		autoBuilder.addPath("1+1.5 Human Player");
 
-		autoChooser.setDefaultOption("ScoreHigh", new SuckCommand(true, 100)
+		autoChooser.setDefaultOption("ScoreHigh", new IntakeCommand(true, 100)
 				.andThen(new ScoreSequence(kArmPoses.HIGH_SCORE).andThen(new ArmPoseCommand(kArmPoses.TUCKED))));
 		autoChooser.addOption("Event Test", autoBuilder.getPathCommand("Event Test"));
 		autoChooser.addOption("1 Human Player", autoBuilder.getPathCommand("1 Human Player"));

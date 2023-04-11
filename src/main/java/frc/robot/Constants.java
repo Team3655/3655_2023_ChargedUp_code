@@ -16,7 +16,7 @@ import frc.robot.commands.ArmPoseCommand;
 import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.commands.Autonomous.IntakeDownSequence;
 import frc.robot.commands.Autonomous.ScoreSequence;
-import frc.robot.commands.Autonomous.SuckCommand;
+import frc.robot.commands.Autonomous.IntakeCommand;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -138,8 +138,8 @@ public final class Constants {
 					put("ScoreLow", new ScoreSequence(kArmPoses.LOW_SCORE));
 					put("IntakeDown", new IntakeDownSequence());
 					put("ToggleSide", new ArmSwitchCommand());
-					put("Suck", new SuckCommand(true, 100));
-					put("Drop", new SuckCommand(false, 350));
+					put("Suck", new IntakeCommand(true, 100));
+					put("Drop", new IntakeCommand(false, 350));
 				}
 			};
 		}
