@@ -32,7 +32,7 @@ public class PathBuilder {
 		driveSubsystem = RobotContainer.driveSubsystem;
 
 		autoBuilder = new SwerveAutoBuilder(
-				driveSubsystem::getPose,
+				driveSubsystem::getPoseEstimatorPose2d,
 				driveSubsystem::resetOdometry,
 				DriveConstants.kDriveKinematics,
 				new PIDConstants(

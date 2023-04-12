@@ -5,49 +5,50 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
+
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Mechanisms.Limelight;
+import frc.robot.RobotContainer;
 import frc.robot.TractorToolbox.TractorParts.DoubleSmoother;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
-public class LLAlignCommand extends CommandBase {
+public class LLTargetCubeCommand extends CommandBase {
 
 	private static LimelightSubsystem limelightSubsystem;
 	private static DriveSubsystem driveSubsystem;
 
 	Limelight limelight;
 
-	PIDController StrafePIDController;
-	PIDController DrivePIDController;
+	ProfiledPIDController LLTargetpidController;
+	PIDController LLDrivepidController;
 
 	DoubleSmoother driveOutputSmoother;
-	DoubleSmoother strafeOutputSmoother;
+	DoubleSmoother turnOutputSmoother;
 
 	/** Creates a new LLTargetCommand. */
-	public LLAlignCommand() {
-
+	public LLTargetCubeCommand() {
+		
 		driveSubsystem = RobotContainer.driveSubsystem;
 		limelightSubsystem = RobotContainer.limelightSubsystem;
 		limelight = limelightSubsystem.limelight;
 
-		StrafePIDController = new PIDController(
-			LimelightConstants.kLLAlignStrafeGains.kP,
-			LimelightConstants.kLLAlignStrafeGains.kI,
-			LimelightConstants.kLLAlignStrafeGains.kD);
-		StrafePIDController.setTolerance(0.2);
+		LLTargetpidController = new ProfiledPIDController(
+				LimelightConstants.kLLPuppyTurnGains.kP,
+				LimelightConstants.kLLPuppyTurnGains.kI,
+				LimelightConstants.kLLPuppyTurnGains.kD,
+				new TrapezoidProfile.Constraints(40, 40));
 
-		DrivePIDController = new PIDController(
-			LimelightConstants.kLLAlignDriveGains.kP,
-			LimelightConstants.kLLAlignDriveGains.kI,
-			LimelightConstants.kLLAlignDriveGains.kD);
-		DrivePIDController.setTolerance(0.15);
+		LLDrivepidController = new PIDController(
+				LimelightConstants.kLLPuppyDriveGains.kP,
+				LimelightConstants.kLLPuppyDriveGains.kI,
+				LimelightConstants.kLLPuppyDriveGains.kD);
 
-		strafeOutputSmoother = new DoubleSmoother(LimelightConstants.kAlignStrafeMotionSmoothing);
-		driveOutputSmoother = new DoubleSmoother(LimelightConstants.kAlignDriveMotionSmoothing);
+		turnOutputSmoother = new DoubleSmoother(LimelightConstants.kPuppyTurnMotionSmoothing);
+		driveOutputSmoother = new DoubleSmoother(LimelightConstants.kPuppyDriveMotionSmoothing);
 
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(limelightSubsystem, driveSubsystem);
@@ -56,26 +57,21 @@ public class LLAlignCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		limelight.setLedMode(3);
+		limelight.setLedMode(0);
+		driveSubsystem.setFieldCentric(false);
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-
-
 		if (limelight.hasValidTarget()) {
+			double turnPIDOutput = LLTargetpidController.calculate(limelight.getX(), 0);
+			//double drivePIDOutput = LLDrivepidController.calculate(limelight.getArea(), .5);
 
-			SmartDashboard.putNumber("LL TX", limelight.getX());
+			double turnOutput = turnOutputSmoother.smoothInput(turnPIDOutput);
+			//double driveOutput = driveOutputSmoother.smoothInput(drivePIDOutput);
 
-			double strafePIDOutput = StrafePIDController.calculate(limelight.getX(), -0);
-			double drivePIDOutput = DrivePIDController.calculate(limelight.getY(), -1);
-			
-			double strafeOutput = strafeOutputSmoother.smoothInput(strafePIDOutput);
-			double driveOutput = driveOutputSmoother.smoothInput(drivePIDOutput);
-			
-			driveSubsystem.drive(driveOutput, -strafeOutput, 0);
-
+			driveSubsystem.drive(.2, turnOutput, 0); //swapped y and rot
 		} else {
 			driveSubsystem.drive(0, 0, 0);
 		}
@@ -84,7 +80,8 @@ public class LLAlignCommand extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		limelight.setLedMode(0);
+		limelight.setLedMode(1);
+		driveSubsystem.setFieldCentric(true);
 	}
 
 	// Returns true when the command should end.

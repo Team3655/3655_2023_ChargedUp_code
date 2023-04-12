@@ -23,6 +23,7 @@ import frc.robot.commands.ArmPoseCommand;
 import frc.robot.commands.ArmSwitchCommand;
 import frc.robot.commands.FloorIntakeCommand;
 import frc.robot.commands.LLAlignCommand;
+import frc.robot.commands.LLTargetCubeCommand;
 import frc.robot.commands.TurnCommand;
 import frc.robot.commands.Autonomous.BalanceCommand;
 import frc.robot.commands.Autonomous.ScoreSequence;
@@ -83,10 +84,12 @@ public class RobotContainer {
 		autoBuilder.addPath("1+1 Human Player");
 		autoBuilder.addPath("1+2 Human Player");
 		autoBuilder.addPath("1+1.5 Human Player");
+		autoBuilder.addPath("Square");
 
 		autoChooser.setDefaultOption("ScoreHigh", new IntakeCommand(true, 100)
 				.andThen(new ScoreSequence(kArmPoses.HIGH_SCORE).andThen(new ArmPoseCommand(kArmPoses.TUCKED))));
 		autoChooser.addOption("Event Test", autoBuilder.getPathCommand("Event Test"));
+		autoChooser.addOption("Square", autoBuilder.getPathCommand("Square"));
 		autoChooser.addOption("1 Human Player", autoBuilder.getPathCommand("1 Human Player"));
 		autoChooser.addOption("1 Wall", autoBuilder.getPathCommand("1 Wall"));
 		autoChooser.addOption("1+1 Human Player", autoBuilder.getPathCommand("1+1 Human Player"));
@@ -151,6 +154,7 @@ public class RobotContainer {
 		driveJoystick.button(3).whileTrue(new LLAlignCommand());
 		driveJoystick.button(4).whileTrue(new TurnCommand(180));
 		driveJoystick.button(5).whileTrue(new BalanceCommand());
+		driveJoystick.button(6).whileTrue(new LLTargetCubeCommand());
 		programmerController.a().whileTrue(new LLAlignCommand());
 		programmerController.x().whileTrue(new TurnCommand(180));
 		// endregion

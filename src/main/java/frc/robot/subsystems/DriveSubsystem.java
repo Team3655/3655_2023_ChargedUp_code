@@ -194,6 +194,10 @@ public class DriveSubsystem extends SubsystemBase {
 		return odometry.getPoseMeters();
 	}
 
+	public Pose2d getPoseEstimatorPose2d() {
+		return poseEstimator.getEstimatedPosition();
+	}
+
 	public void resetOdometry(Pose2d pose) {
 		odometry.resetPosition(
 				gyro.getRotation2d(),
@@ -281,7 +285,7 @@ public class DriveSubsystem extends SubsystemBase {
 		poseEstimator.update(gyro.getRotation2d(), swervePosition);
 
 		if (LimelightHelpers.getTV("")) {
-			Pose2d llPose2d = LimelightHelpers.getBotPose2d_wpiBlue("");
+			Pose2d llPose2d = LimelightHelpers.getBotPose2d_wpiRed("");
 			poseEstimator.addVisionMeasurement(
 				llPose2d, 
 				Timer.getFPGATimestamp() - LimelightHelpers.getLatency_Capture("") - LimelightHelpers.getLatency_Pipeline(""));

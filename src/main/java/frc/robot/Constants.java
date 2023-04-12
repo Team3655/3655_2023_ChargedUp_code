@@ -309,7 +309,7 @@ public final class Constants {
 		// piss values for limelight
 		public static final PIDGains kLLTargetGains = new PIDGains(0.008, 0, 0);
 
-		public static final PIDGains kLLPuppyTurnGains = new PIDGains(0.008, 0, 0);
+		public static final PIDGains kLLPuppyTurnGains = new PIDGains(0.025, 0, 0); //.008
 		public static final PIDGains kLLPuppyDriveGains = new PIDGains(0.008, 0, 0);
 		public static final double kPuppyTurnMotionSmoothing = 0.3;
 		public static final double kPuppyDriveMotionSmoothing = 0.4;
