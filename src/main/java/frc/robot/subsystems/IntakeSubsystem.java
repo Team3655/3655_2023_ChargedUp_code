@@ -14,6 +14,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakeConstants.kIntakeStates;
 import frc.robot.Mechanisms.IntakeWheels;
 import frc.robot.Mechanisms.Vaccum;
+import frc.robot.TractorToolbox.TractorParts.IRDistanceSensor;
 
 public class IntakeSubsystem extends SubsystemBase {
 
@@ -27,6 +28,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	private kIntakeStates currentIntakeState;
 
+	private IRDistanceSensor distanceSensor;
+
 	/** Creates a new IntakeSubsystem. */
 	public IntakeSubsystem() {
 
@@ -34,6 +37,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
 		centerDumpSolenoid = pneumaticHub.makeSolenoid(IntakeConstants.kCenterDumpSolenoidPort);
 		centerSealerSolenoid = pneumaticHub.makeSolenoid(IntakeConstants.kCenterSealerSolenoidPort);
+
+		distanceSensor = new IRDistanceSensor(0);
 
 		currentIntakeState = kIntakeStates.DISABLED;
 
@@ -55,6 +60,7 @@ public class IntakeSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Center Sucker Current Draw", centerSucker.getMotorCurrentDraw());
 		SmartDashboard.putBoolean("Has CUBE", getHasCube());
 		SmartDashboard.putBoolean("Has CONE", getHasCone()); 
+		SmartDashboard.putNumber("distance sensor", distanceSensor.getDistanceAsVolts());
 
 	}
 
@@ -139,6 +145,10 @@ public class IntakeSubsystem extends SubsystemBase {
 			return true;
 		}
 		return false;
+	}
+
+	public double getDistanceAsVolts() {
+		return distanceSensor.getDistanceAsVolts();
 	}
 
 

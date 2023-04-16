@@ -14,6 +14,8 @@ import frc.robot.Constants.ArmConstants.kArmPoses;
 import frc.robot.TractorToolbox.TractorParts.PIDGains;
 import frc.robot.commands.ArmPoseCommand;
 import frc.robot.commands.ArmSwitchCommand;
+import frc.robot.commands.LLAlignCommand;
+import frc.robot.commands.LLTargetCubeCommand;
 import frc.robot.commands.Autonomous.IntakeDownSequence;
 import frc.robot.commands.Autonomous.ScoreSequence;
 import frc.robot.commands.Autonomous.IntakeCommand;
@@ -70,10 +72,10 @@ public final class Constants {
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// Offset angle for absolute encoders (find this using CTRE client)
-		public static final double kFrontLeftAngleZero = 35.508;
-		public static final double kFrontRightAngleZero = 121.113;
-		public static final double kRearLeftAngleZero = 148.008;
-		public static final double kRearRightAngleZero = 60.557;
+		public static final double kFrontLeftAngleZero = 39.55;
+		public static final double kFrontRightAngleZero = 121.641;
+		public static final double kRearLeftAngleZero = 152.2;
+		public static final double kRearRightAngleZero = 60.47;
 
 		public static final PIDGains kModuleDriveGains = new PIDGains(.1, 0, 0);
 
@@ -131,15 +133,20 @@ public final class Constants {
 			public static final HashMap<String, Command> kPPEventMap = new HashMap<>() {
 				{
 					put("Tuck", new ArmPoseCommand(kArmPoses.TUCKED));
+					put("KickFront", new ArmPoseCommand(kArmPoses.KICK_FRONT));
+					put("KickBack", new ArmPoseCommand(kArmPoses.KICK_BACK));
 					put("ScoreHigh", new ScoreSequence(kArmPoses.HIGH_SCORE));
 					put("ArmHighCube", new ArmPoseCommand(kArmPoses.HIGH_INTAKE));
 					put("ScoreCubeHigh", new ScoreSequence(kArmPoses.HIGH_INTAKE));
-					put("ScoreMid", new ScoreSequence(kArmPoses.MID_SCORE));
+					put("ScoreMid", new ScoreSequence(kArmPoses.MID_INTAKE));
 					put("ScoreLow", new ScoreSequence(kArmPoses.LOW_SCORE));
 					put("IntakeDown", new IntakeDownSequence());
 					put("ToggleSide", new ArmSwitchCommand());
 					put("Suck", new IntakeCommand(true, 100));
 					put("Drop", new IntakeCommand(false, 350));
+					put("TargetCube", new LLTargetCubeCommand(2000));
+					put("TargetTape", new LLAlignCommand(false));
+					put("TargetTag", new LLAlignCommand(true));
 				}
 			};
 		}
@@ -211,8 +218,8 @@ public final class Constants {
 		public static final double kMajorPIDOutputLimit = 1;
 		public static final double kMinorPIDOutputLimit = 1;
 
-		public static final double kMaxMajorVelRadiansPerSec = (Math.PI * 8) * 60;
-		public static final double kMaxMajorAccelRadiansPerSec = (Math.PI * 6 * 60);
+		public static final double kMaxMajorVelRadiansPerSec = (Math.PI * 10) * 60;
+		public static final double kMaxMajorAccelRadiansPerSec = (Math.PI * 6.25 * 60);
 
 		
 		public static final double kMaxMinorVelRadiansPerSec = (Math.PI * 9) * 60;
@@ -235,7 +242,9 @@ public final class Constants {
 			LOW_INTAKE,
 			MID_INTAKE,
 			HIGH_INTAKE,
-			DRIVER_CONTROL
+			DRIVER_CONTROL,
+			KICK_FRONT,
+			KICK_BACK,
 		}
 
 		public static final HashMap<kArmPoses, double[]> kArmStatesMap = new HashMap<kArmPoses, double[]>() {
@@ -246,8 +255,10 @@ public final class Constants {
 				put(kArmPoses.HIGH_SCORE, new double[] { 100, 55 });
 				put(kArmPoses.LOW_INTAKE, new double[] { -10, 98 });
 				put(kArmPoses.MID_INTAKE, new double[] { 13, 33 });
-				put(kArmPoses.HIGH_INTAKE, new double[] { 105, 87 });
+				put(kArmPoses.HIGH_INTAKE, new double[] { 95, 80 });
 				put(kArmPoses.DRIVER_CONTROL, new double[] { 0, 0 });
+				put(kArmPoses.KICK_FRONT, new double[] { 35, 0 });
+				put(kArmPoses.KICK_BACK, new double[] { -35, 0 });
 			}
 
 		};
@@ -267,10 +278,10 @@ public final class Constants {
 		// NEO Sucker motor CAN ID's
 		public static final int kCenterSuckerPort = 18;
 
-		public static final int kCenterSuckerCurrentLimit = 8;
+		public static final int kCenterSuckerCurrentLimit = 6;
 
-		public static final double kCenterSuckerSetpoint = 0.75;
-		public static final int kHasConeThreshold = 2825;
+		public static final double kCenterSuckerSetpoint = 0.65;
+		public static final int kHasConeThreshold = 3530;
 
 		public static enum kIntakeStates {
 			IDLE,
@@ -287,8 +298,10 @@ public final class Constants {
 				put(kArmPoses.HIGH_SCORE, kIntakeStates.IDLE);
 				put(kArmPoses.LOW_INTAKE, kIntakeStates.INTAKE);
 				put(kArmPoses.MID_INTAKE, kIntakeStates.INTAKE);
-				put(kArmPoses.HIGH_INTAKE, kIntakeStates.INTAKE);
+				put(kArmPoses.HIGH_INTAKE, kIntakeStates.IDLE);
 				put(kArmPoses.DRIVER_CONTROL, kIntakeStates.INTAKE);
+				put(kArmPoses.KICK_FRONT, kIntakeStates.IDLE);
+				put(kArmPoses.KICK_BACK, kIntakeStates.IDLE);
 			}
 		};
 
@@ -297,8 +310,10 @@ public final class Constants {
 	public static class LimelightConstants {
 
 		// declare ID's of pipelines here
-		public static final int kRetroReflectivePipeline = 0;
-		public static final int kApriltagPipeline = 1;
+		public static final int kCubePipeline = 0;
+		public static final int kReflectivePipeline = 1;
+		public static final int kApriltagPipeline = 2;
+		
 
 		// Servo Constants
 		public static final int kServoPort = 2;
@@ -309,7 +324,7 @@ public final class Constants {
 		// piss values for limelight
 		public static final PIDGains kLLTargetGains = new PIDGains(0.008, 0, 0);
 
-		public static final PIDGains kLLPuppyTurnGains = new PIDGains(0.025, 0, 0); //.008
+		public static final PIDGains kLLPuppyTurnGains = new PIDGains(0.02, 0, 0); //.008
 		public static final PIDGains kLLPuppyDriveGains = new PIDGains(0.008, 0, 0);
 		public static final double kPuppyTurnMotionSmoothing = 0.3;
 		public static final double kPuppyDriveMotionSmoothing = 0.4;

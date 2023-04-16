@@ -182,4 +182,9 @@ public class SwerveModule {
 		absoluteEncoder.clearStickyFaults();
 	}
 
+	public void stopMotors() {
+		driveMotor.stopMotor();
+		turningMotor.stopMotor();
+	}
+
 }

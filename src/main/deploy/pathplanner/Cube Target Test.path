@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 7.838302894650902,
-        "y": 3.7670376092631894
+        "x": 3.7498114093972554,
+        "y": 4.651035768236951
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.235815860617013,
-        "y": 3.7661898554309303
+        "x": 4.7581923627314255,
+        "y": 4.651035768236951
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -17,22 +17,21 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "KickBack",
-          "Tuck"
+          "IntakeDown"
         ],
-        "executionBehavior": "sequential",
+        "executionBehavior": "parallel",
         "waitBehavior": "none",
-        "waitTime": 1.0
+        "waitTime": 0
       }
     },
     {
       "anchorPoint": {
-        "x": 7.838302894650902,
-        "y": 4.560626865614634
+        "x": 5.819170736085833,
+        "y": 3.445583733272731
       },
       "prevControl": {
-        "x": 8.732346487249364,
-        "y": 4.339627325871194
+        "x": 5.372899691736666,
+        "y": 5.166914904333807
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -41,8 +40,11 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "TargetCube",
+          "Tuck"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }

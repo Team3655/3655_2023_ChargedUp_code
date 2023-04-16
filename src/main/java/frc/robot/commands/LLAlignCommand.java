@@ -27,24 +27,29 @@ public class LLAlignCommand extends CommandBase {
 	DoubleSmoother driveOutputSmoother;
 	DoubleSmoother strafeOutputSmoother;
 
+	boolean targetTags;
+
 	/** Creates a new LLTargetCommand. */
-	public LLAlignCommand() {
+	public LLAlignCommand(boolean targetTags) {
 
 		driveSubsystem = RobotContainer.driveSubsystem;
 		limelightSubsystem = RobotContainer.limelightSubsystem;
+
 		limelight = limelightSubsystem.limelight;
 
+		this.targetTags = targetTags;
+
 		StrafePIDController = new PIDController(
-			LimelightConstants.kLLAlignStrafeGains.kP,
-			LimelightConstants.kLLAlignStrafeGains.kI,
-			LimelightConstants.kLLAlignStrafeGains.kD);
-		StrafePIDController.setTolerance(0.2);
+				LimelightConstants.kLLAlignStrafeGains.kP,
+				LimelightConstants.kLLAlignStrafeGains.kI,
+				LimelightConstants.kLLAlignStrafeGains.kD);
+		StrafePIDController.setTolerance(0.25);
 
 		DrivePIDController = new PIDController(
-			LimelightConstants.kLLAlignDriveGains.kP,
-			LimelightConstants.kLLAlignDriveGains.kI,
-			LimelightConstants.kLLAlignDriveGains.kD);
-		DrivePIDController.setTolerance(0.15);
+				LimelightConstants.kLLAlignDriveGains.kP,
+				LimelightConstants.kLLAlignDriveGains.kI,
+				LimelightConstants.kLLAlignDriveGains.kD);
+		DrivePIDController.setTolerance(0.5);
 
 		strafeOutputSmoother = new DoubleSmoother(LimelightConstants.kAlignStrafeMotionSmoothing);
 		driveOutputSmoother = new DoubleSmoother(LimelightConstants.kAlignDriveMotionSmoothing);
@@ -56,6 +61,15 @@ public class LLAlignCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
+
+		if (targetTags) {
+			limelight.setPipeline(LimelightConstants.kApriltagPipeline);
+
+		} else {
+			limelight.setPipeline(LimelightConstants.kReflectivePipeline);
+
+		}
+
 		limelight.setLedMode(3);
 	}
 
@@ -63,17 +77,16 @@ public class LLAlignCommand extends CommandBase {
 	@Override
 	public void execute() {
 
-
 		if (limelight.hasValidTarget()) {
 
 			SmartDashboard.putNumber("LL TX", limelight.getX());
 
-			double strafePIDOutput = StrafePIDController.calculate(limelight.getX(), -0);
-			double drivePIDOutput = DrivePIDController.calculate(limelight.getY(), -1);
-			
+			double strafePIDOutput = StrafePIDController.calculate(limelight.getX(), 0);
+			double drivePIDOutput = DrivePIDController.calculate(limelight.getY(), 0);
+
 			double strafeOutput = strafeOutputSmoother.smoothInput(strafePIDOutput);
 			double driveOutput = driveOutputSmoother.smoothInput(drivePIDOutput);
-			
+
 			driveSubsystem.drive(driveOutput, -strafeOutput, 0);
 
 		} else {
@@ -90,7 +103,6 @@ public class LLAlignCommand extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		// return LLTargetpidController.atSetpoint();
-		return false;
+		return DrivePIDController.atSetpoint() && StrafePIDController.atSetpoint();
 	}
 }

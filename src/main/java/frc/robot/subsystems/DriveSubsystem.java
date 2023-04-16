@@ -319,6 +319,13 @@ public class DriveSubsystem extends SubsystemBase {
 		fieldRelative = fieldCentric;
 	}
 
+	public void stopMotors() {
+		frontLeft.stopMotors();
+		frontRight.stopMotors();
+		rearLeft.stopMotors();
+		rearRight.stopMotors();
+	}
+
 	// endregion
 
 }

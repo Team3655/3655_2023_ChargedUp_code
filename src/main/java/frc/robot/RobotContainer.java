@@ -85,16 +85,21 @@ public class RobotContainer {
 		autoBuilder.addPath("1+2 Human Player");
 		autoBuilder.addPath("1+1.5 Human Player");
 		autoBuilder.addPath("Square");
+		autoBuilder.addPath("Cube Target Test");
 
 		autoChooser.setDefaultOption("ScoreHigh", new IntakeCommand(true, 100)
 				.andThen(new ScoreSequence(kArmPoses.HIGH_SCORE).andThen(new ArmPoseCommand(kArmPoses.TUCKED))));
+
 		autoChooser.addOption("Event Test", autoBuilder.getPathCommand("Event Test"));
 		autoChooser.addOption("Square", autoBuilder.getPathCommand("Square"));
+		autoChooser.addOption("Target Cube Test", autoBuilder.getPathCommand("Cube Target Test"));
+
 		autoChooser.addOption("1 Human Player", autoBuilder.getPathCommand("1 Human Player"));
 		autoChooser.addOption("1 Wall", autoBuilder.getPathCommand("1 Wall"));
 		autoChooser.addOption("1+1 Human Player", autoBuilder.getPathCommand("1+1 Human Player"));
 		autoChooser.addOption("1+2 Human Player", autoBuilder.getPathCommand("1+2 Human Player"));
 		autoChooser.addOption("1+1.5 Human Player", autoBuilder.getPathCommand("1+1.5 Human Player"));
+
 		autoChooser.addOption("1 Charge Mobility",
 				autoBuilder.getPathCommand("1 Charge Mobility").andThen(new BalanceCommand()));
 		autoChooser.addOption("1 Charge",
@@ -151,11 +156,11 @@ public class RobotContainer {
 		operatorController.button(21).onTrue(intakeSubsystem.disableCommand());
 
 		// region Targeting Commmands
-		driveJoystick.button(3).whileTrue(new LLAlignCommand());
-		driveJoystick.button(4).whileTrue(new TurnCommand(180));
+		driveJoystick.button(3).whileTrue(new LLAlignCommand(false));
+		driveJoystick.button(4).whileTrue(new LLAlignCommand(true));
 		driveJoystick.button(5).whileTrue(new BalanceCommand());
-		driveJoystick.button(6).whileTrue(new LLTargetCubeCommand());
-		programmerController.a().whileTrue(new LLAlignCommand());
+		driveJoystick.button(6).whileTrue(new LLTargetCubeCommand(1000));
+		programmerController.a().whileTrue(new LLAlignCommand(false));
 		programmerController.x().whileTrue(new TurnCommand(180));
 		// endregion
 
