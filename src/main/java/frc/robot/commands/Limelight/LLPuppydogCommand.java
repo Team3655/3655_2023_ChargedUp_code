@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Limelight;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -10,18 +10,14 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Constants.LimelightConstants;
-import frc.robot.Mechanisms.Limelight;
 import frc.robot.RobotContainer;
+import frc.robot.TractorToolbox.LimelightHelpers;
 import frc.robot.TractorToolbox.TractorParts.DoubleSmoother;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
 
 public class LLPuppydogCommand extends CommandBase {
 
-	private static LimelightSubsystem limelightSubsystem;
 	private static DriveSubsystem driveSubsystem;
-
-	Limelight limelight;
 
 	ProfiledPIDController LLTargetpidController;
 	PIDController LLDrivepidController;
@@ -33,8 +29,6 @@ public class LLPuppydogCommand extends CommandBase {
 	public LLPuppydogCommand() {
 		
 		driveSubsystem = RobotContainer.driveSubsystem;
-		limelightSubsystem = RobotContainer.limelightSubsystem;
-		limelight = limelightSubsystem.limelight;
 
 		LLTargetpidController = new ProfiledPIDController(
 				LimelightConstants.kLLPuppyTurnGains.kP,
@@ -51,21 +45,21 @@ public class LLPuppydogCommand extends CommandBase {
 		driveOutputSmoother = new DoubleSmoother(LimelightConstants.kPuppyDriveMotionSmoothing);
 
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(limelightSubsystem, driveSubsystem);
+		addRequirements(driveSubsystem);
 	}
 
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		limelight.setLedMode(0);
+		LimelightHelpers.setLEDMode_ForceOn("");
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		if (limelight.hasValidTarget()) {
-			double turnPIDOutput = LLTargetpidController.calculate(limelight.getX(), 0);
-			double drivePIDOutput = LLDrivepidController.calculate(limelight.getArea(), .5);
+		if (LimelightHelpers.getTV("")) {
+			double turnPIDOutput = LLTargetpidController.calculate(LimelightHelpers.getTX(""), 0);
+			double drivePIDOutput = LLDrivepidController.calculate(LimelightHelpers.getTY(""), .5);
 
 			double turnOutput = turnOutputSmoother.smoothInput(turnPIDOutput);
 			double driveOutput = driveOutputSmoother.smoothInput(drivePIDOutput);
@@ -79,7 +73,7 @@ public class LLPuppydogCommand extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		limelight.setLedMode(1);
+		LimelightHelpers.setLEDMode_PipelineControl("");
 	}
 
 	// Returns true when the command should end.
