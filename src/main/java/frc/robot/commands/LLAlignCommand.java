@@ -43,7 +43,7 @@ public class LLAlignCommand extends CommandBase {
 				LimelightConstants.kLLAlignStrafeGains.kP,
 				LimelightConstants.kLLAlignStrafeGains.kI,
 				LimelightConstants.kLLAlignStrafeGains.kD);
-		StrafePIDController.setTolerance(0.25);
+		StrafePIDController.setTolerance(0.5);
 
 		DrivePIDController = new PIDController(
 				LimelightConstants.kLLAlignDriveGains.kP,

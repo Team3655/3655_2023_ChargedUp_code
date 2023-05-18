@@ -72,7 +72,7 @@ public final class Constants {
 		public static final int kRearRightTurningEncoderPort = 12;
 
 		// Offset angle for absolute encoders (find this using CTRE client)
-		public static final double kFrontLeftAngleZero = 39.55;
+		public static final double kFrontLeftAngleZero = 36.475;
 		public static final double kFrontRightAngleZero = 121.641;
 		public static final double kRearLeftAngleZero = 152.2;
 		public static final double kRearRightAngleZero = 60.47;
@@ -138,7 +138,7 @@ public final class Constants {
 					put("ScoreHigh", new ScoreSequence(kArmPoses.HIGH_SCORE));
 					put("ArmHighCube", new ArmPoseCommand(kArmPoses.HIGH_INTAKE));
 					put("ScoreCubeHigh", new ScoreSequence(kArmPoses.HIGH_INTAKE));
-					put("ScoreMid", new ScoreSequence(kArmPoses.MID_INTAKE));
+					put("ScoreMid", new ScoreSequence(kArmPoses.MID_SCORE));
 					put("ScoreLow", new ScoreSequence(kArmPoses.LOW_SCORE));
 					put("IntakeDown", new IntakeDownSequence());
 					put("ToggleSide", new ArmSwitchCommand());
@@ -222,13 +222,13 @@ public final class Constants {
 		public static final double kMaxMajorAccelRadiansPerSec = (Math.PI * 6.25 * 60);
 
 		
-		public static final double kMaxMinorVelRadiansPerSec = (Math.PI * 9) * 60;
-		public static final double kMaxMinorAccelRadiansPerSec = (Math.PI * 8) * 60;
+		public static final double kMaxMinorVelRadiansPerSec = (Math.PI * 8) * 60;
+		public static final double kMaxMinorAccelRadiansPerSec = (Math.PI * 7) * 60;
 
 		// angle limits for the arms
 		public static final double kMajorArmConstraints = 110;
 		public static final double kMinorArmConstraints = 180;
-
+ 
 		// Arm PID constants
 		public static final PIDGains kMajorArmGains = new PIDGains(0.0035, 0.0000025, 0.002);
 
@@ -255,7 +255,7 @@ public final class Constants {
 				put(kArmPoses.HIGH_SCORE, new double[] { 100, 55 });
 				put(kArmPoses.LOW_INTAKE, new double[] { -10, 98 });
 				put(kArmPoses.MID_INTAKE, new double[] { 13, 33 });
-				put(kArmPoses.HIGH_INTAKE, new double[] { 95, 80 });
+				put(kArmPoses.HIGH_INTAKE, new double[] { 105, 87 });
 				put(kArmPoses.DRIVER_CONTROL, new double[] { 0, 0 });
 				put(kArmPoses.KICK_FRONT, new double[] { 35, 0 });
 				put(kArmPoses.KICK_BACK, new double[] { -35, 0 });
@@ -298,7 +298,7 @@ public final class Constants {
 				put(kArmPoses.HIGH_SCORE, kIntakeStates.IDLE);
 				put(kArmPoses.LOW_INTAKE, kIntakeStates.INTAKE);
 				put(kArmPoses.MID_INTAKE, kIntakeStates.INTAKE);
-				put(kArmPoses.HIGH_INTAKE, kIntakeStates.IDLE);
+				put(kArmPoses.HIGH_INTAKE, kIntakeStates.INTAKE);
 				put(kArmPoses.DRIVER_CONTROL, kIntakeStates.INTAKE);
 				put(kArmPoses.KICK_FRONT, kIntakeStates.IDLE);
 				put(kArmPoses.KICK_BACK, kIntakeStates.IDLE);

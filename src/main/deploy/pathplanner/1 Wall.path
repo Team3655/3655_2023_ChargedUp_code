@@ -3,12 +3,12 @@
     {
       "anchorPoint": {
         "x": 1.78,
-        "y": 1.0849068314677994
+        "y": 0.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.333405268314297,
-        "y": 0.8036346899761486
+        "x": 2.4128623183562157,
+        "y": 0.6808178052446332
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "ScoreCubeHigh"
+          "ScoreHigh"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -76,129 +76,24 @@
     },
     {
       "anchorPoint": {
-        "x": 6.652941726936085,
-        "y": 1.7077237161993137
+        "x": 6.813668664931316,
+        "y": 0.924179893472571
       },
       "prevControl": {
-        "x": 6.381715019069136,
-        "y": 1.3259972384606442
-      },
-      "nextControl": {
-        "x": 6.381715019069136,
-        "y": 1.3259972384606442
-      },
-      "holonomicAngle": 45.0,
-      "isReversal": true,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": true,
-      "stopEvent": {
-        "names": [
-          "TargetCube"
-        ],
-        "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 4.6438550019957185,
-        "y": 0.7634529554773404
-      },
-      "prevControl": {
-        "x": 5.115990382356705,
-        "y": 0.7534075218526392
-      },
-      "nextControl": {
-        "x": 4.1717196216347325,
-        "y": 0.7734983891020416
-      },
-      "holonomicAngle": 135.0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 3.1069036574163373,
-        "y": 0.76
-      },
-      "prevControl": {
-        "x": 3.55369965660744,
-        "y": 0.76
-      },
-      "nextControl": {
-        "x": 2.6601076582252348,
-        "y": 0.76
-      },
-      "holonomicAngle": 135.0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 1.25,
-        "y": 1.074861397843098
-      },
-      "prevControl": {
-        "x": 1.704668770071822,
-        "y": 0.917430698921549
-      },
-      "nextControl": {
-        "x": 1.704668770071822,
-        "y": 0.917430698921549
-      },
-      "holonomicAngle": 180.0,
-      "isReversal": true,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": true,
-      "stopEvent": {
-        "names": [
-          "TargetTag",
-          "ScoreMid"
-        ],
-        "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 6.060261143078677,
-        "y": 0.783543822726745
-      },
-      "prevControl": {
-        "x": 3.076767356542232,
-        "y": 0.6529531856056214
+        "x": 6.215298842599254,
+        "y": 0.924179893472571
       },
       "nextControl": null,
-      "holonomicAngle": 0,
+      "holonomicAngle": 0.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "TargetCube"
+          "IntakeDown"
         ],
-        "executionBehavior": "parallel",
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -209,24 +104,6 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 2.0,
-      "names": [
-        "IntakeDown"
-      ]
-    },
-    {
-      "position": 3.3,
-      "names": [
-        "Tuck"
-      ]
-    },
-    {
-      "position": 6.05,
-      "names": [
-        "Tuck"
-      ]
-    },
-    {
       "position": 0.01,
       "names": [
         "Tuck"
@@ -236,18 +113,6 @@
       "position": 0.01,
       "names": [
         "Tuck"
-      ]
-    },
-    {
-      "position": 0.02,
-      "names": [
-        "Tuck"
-      ]
-    },
-    {
-      "position": 6.55,
-      "names": [
-        "IntakeDown"
       ]
     }
   ]

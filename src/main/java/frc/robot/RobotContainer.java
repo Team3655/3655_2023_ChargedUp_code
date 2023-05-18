@@ -86,6 +86,7 @@ public class RobotContainer {
 		autoBuilder.addPath("1+1.5 Human Player");
 		autoBuilder.addPath("Square");
 		autoBuilder.addPath("Cube Target Test");
+		autoBuilder.addPath("1.5 Charge Mobility");
 
 		autoChooser.setDefaultOption("ScoreHigh", new IntakeCommand(true, 100)
 				.andThen(new ScoreSequence(kArmPoses.HIGH_SCORE).andThen(new ArmPoseCommand(kArmPoses.TUCKED))));
@@ -100,6 +101,8 @@ public class RobotContainer {
 		autoChooser.addOption("1+2 Human Player", autoBuilder.getPathCommand("1+2 Human Player"));
 		autoChooser.addOption("1+1.5 Human Player", autoBuilder.getPathCommand("1+1.5 Human Player"));
 
+		autoChooser.addOption("1.5 Charge Mobility",
+				autoBuilder.getPathCommand("1.5 Charge Mobility").andThen(new BalanceCommand()));
 		autoChooser.addOption("1 Charge Mobility",
 				autoBuilder.getPathCommand("1 Charge Mobility").andThen(new BalanceCommand()));
 		autoChooser.addOption("1 Charge",

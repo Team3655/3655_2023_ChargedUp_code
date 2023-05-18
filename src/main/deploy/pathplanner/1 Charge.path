@@ -18,7 +18,7 @@
       "stopEvent": {
         "names": [
           "Suck",
-          "ScoreHigh",
+          "ScoreCubeHigh",
           "Tuck"
         ],
         "executionBehavior": "sequential",
