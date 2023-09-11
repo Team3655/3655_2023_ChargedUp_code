@@ -4,54 +4,55 @@
 
 package frc.robot.commands.Autonomous;
 
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class TimedDriveCommand extends CommandBase {
+import frc.robot.RobotContainer;
+import frc.robot.Constants.IntakeConstants.kIntakeStates;
+import frc.robot.subsystems.IntakeSubsystem;
 
-	private static DriveSubsystem driveSubsystem;
-	Timer timer;
-	double ySpeed;
-	double xSpeed;
-	double rotSpeed;
-	double timeMilis;
+public class IntakeCommand extends CommandBase {
 
-	/** Creates a new TimedDriveCommand. */
-	public TimedDriveCommand(double xSpeed, double ySpeed, double rotSpeed, double timeMilis) {
+	private IntakeSubsystem intakeSubsystem;
+	private Timer timer;
 
-		driveSubsystem = RobotContainer.driveSubsystem;
+	private double timeMilis;
+	private boolean suck;
 
-		this.ySpeed = ySpeed;
-		this.xSpeed = xSpeed;
-		this.rotSpeed = rotSpeed;
-		this.timeMilis = timeMilis;
+	/** Creates a new SuckCommand. */
+	public IntakeCommand(boolean suck, double timeMilis) {
+
+		intakeSubsystem = RobotContainer.intakeSubsystem;
 
 		timer = new Timer();
+		this.timeMilis = timeMilis;
+		this.suck = suck;
 
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(driveSubsystem);
+		addRequirements(intakeSubsystem);
 	}
 
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
 		timer.restart();
-		
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		driveSubsystem.drive(xSpeed, ySpeed, rotSpeed);
+		if (suck) {
+			intakeSubsystem.setIntakeState(kIntakeStates.INTAKE);
+		} else {
+			intakeSubsystem.setIntakeState(kIntakeStates.OUTTAKE);
+		}
 	}
 
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		driveSubsystem.drive(0, 0, 0);
+		intakeSubsystem.startSucking();
 	}
 
 	// Returns true when the command should end.

@@ -376,32 +376,6 @@
               "_glyph": 148,
               "_showGlyph": false
             }
-          },
-          "8,5": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ArmState",
-              "_title": "/SmartDashboard/ArmState",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "8,7": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/forward speed from TelopDriveCommand",
-              "_title": "/SmartDashboard/forward speed from TelopDriveCommand",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
           }
         }
       }
@@ -498,54 +472,15 @@
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
-          },
-          "3,0": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/major power draw: ",
-              "_title": "SmartDashboard/major power draw: ",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "5,0": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/minor power draw: ",
-              "_title": "SmartDashboard/minor power draw: ",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "3,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/major real theta: ",
-              "_title": "SmartDashboard/major real theta: ",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
           }
         }
       }
     }
   ],
   "windowGeometry": {
-    "x": -7.199999809265137,
-    "y": -7.199999809265137,
-    "width": 1550.4000244140625,
-    "height": 878.4000244140625
+    "x": -6.400000095367432,
+    "y": 1.600000023841858,
+    "width": 1547.199951171875,
+    "height": 868.7999877929688
   }
 }

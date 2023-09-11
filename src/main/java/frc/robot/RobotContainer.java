@@ -14,12 +14,24 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.lib.TractorToolbox.TractorParts.PathBuilder;
+
+import frc.robot.Constants.ArmConstants.kArmPoses;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.TeleopDriveCommand;
+import frc.robot.TractorToolbox.JoystickUtils;
+import frc.robot.TractorToolbox.TractorParts.PathBuilder;
+import frc.robot.commands.ArmPoseCommand;
+import frc.robot.commands.ArmSwitchCommand;
+import frc.robot.commands.FloorIntakeCommand;
 import frc.robot.commands.TurnCommand;
+import frc.robot.commands.Autonomous.BalanceCommand;
+import frc.robot.commands.Autonomous.ScoreSequence;
 import frc.robot.commands.Limelight.LLAlignCommand;
+import frc.robot.commands.Limelight.LLTargetCubeCommand;
+import frc.robot.commands.Autonomous.IntakeCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -33,7 +45,10 @@ import frc.robot.subsystems.DriveSubsystem;
 public class RobotContainer {
 
 	// The robot's subsystems and commands are defined here...
+	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static final DriveSubsystem driveSubsystem = new DriveSubsystem();
+	public static final ArmSubsystem armSubsystem = new ArmSubsystem();
+	public static final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
 	public final static PathBuilder autoBuilder = new PathBuilder();
 
@@ -71,17 +86,25 @@ public class RobotContainer {
 		autoBuilder.addPath("Cube Target Test");
 		autoBuilder.addPath("1.5 Charge Mobility");
 
+		autoChooser.setDefaultOption("ScoreHigh", new IntakeCommand(true, 100)
+				.andThen(new ScoreSequence(kArmPoses.HIGH_SCORE).andThen(new ArmPoseCommand(kArmPoses.TUCKED))));
 
 		autoChooser.addOption("Event Test", autoBuilder.getPathCommand("Event Test"));
 		autoChooser.addOption("Square", autoBuilder.getPathCommand("Square"));
 		autoChooser.addOption("Target Cube Test", autoBuilder.getPathCommand("Cube Target Test"));
-		autoChooser.addOption("Odometry Hell", autoBuilder.getPathCommand("Odometry Hell"));
 
 		autoChooser.addOption("1 Human Player", autoBuilder.getPathCommand("1 Human Player"));
 		autoChooser.addOption("1 Wall", autoBuilder.getPathCommand("1 Wall"));
 		autoChooser.addOption("1+1 Human Player", autoBuilder.getPathCommand("1+1 Human Player"));
 		autoChooser.addOption("1+2 Human Player", autoBuilder.getPathCommand("1+2 Human Player"));
 		autoChooser.addOption("1+1.5 Human Player", autoBuilder.getPathCommand("1+1.5 Human Player"));
+
+		autoChooser.addOption("1.5 Charge Mobility",
+				autoBuilder.getPathCommand("1.5 Charge Mobility").andThen(new BalanceCommand()));
+		autoChooser.addOption("1 Charge Mobility",
+				autoBuilder.getPathCommand("1 Charge Mobility").andThen(new BalanceCommand()));
+		autoChooser.addOption("1 Charge",
+				autoBuilder.getPathCommand("1 Charge").andThen(new BalanceCommand()));
 		// endregion
 	}
 
@@ -98,15 +121,53 @@ public class RobotContainer {
 	 */
 	private void configureBindings() {
 
+		// region Arm Commands
+		// Schedule ArmPoseCommand when operator presses coresponding button.
+		// scoring commands
+		operatorController.button(1).onTrue(new FloorIntakeCommand(false));
+		operatorController.button(2).onTrue(new ArmPoseCommand(kArmPoses.MID_SCORE));
+		operatorController.button(3).onTrue(new ArmPoseCommand(kArmPoses.HIGH_SCORE));
 
-		operatorController.button(1).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
+		// intaking commands
+		operatorController.button(6).onTrue(new FloorIntakeCommand(true));
+		operatorController.button(7).onTrue(new ArmPoseCommand(kArmPoses.MID_INTAKE));
+		operatorController.button(8).onTrue(new ArmPoseCommand(kArmPoses.HIGH_INTAKE));
+		programmerController.b().onTrue(new FloorIntakeCommand(true));
+
+		// tuck arms
+		operatorController.button(4).onTrue(new ArmPoseCommand(kArmPoses.TUCKED));
+		programmerController.y().onTrue(new ArmPoseCommand(kArmPoses.TUCKED));
+
+		// Switches sides of the robot
+		operatorController.button(18).onTrue(new ArmSwitchCommand());
+
+		operatorController.button(11).onTrue(armSubsystem.toggleArmMotors());
+		operatorController.button(13).onTrue(armSubsystem.zeroArms());
+		// endregion
+
+		// Sucking is set to be the defaut state of the intake
+		operatorController.button(5).onTrue(
+				intakeSubsystem.outtakeCommand())
+				.onFalse(intakeSubsystem.idleCommand());
+
+		operatorController.button(10).onTrue(
+				intakeSubsystem.outtakeCommand())
+				.onFalse(intakeSubsystem.idleCommand());
+
+		operatorController.button(21).onTrue(intakeSubsystem.disableCommand());
 
 		// region Targeting Commmands
 		driveJoystick.button(3).whileTrue(new LLAlignCommand(false));
 		driveJoystick.button(4).whileTrue(new LLAlignCommand(true));
+		driveJoystick.button(5).whileTrue(new BalanceCommand());
+		driveJoystick.button(6).whileTrue(new LLTargetCubeCommand(1000));
 		programmerController.a().whileTrue(new LLAlignCommand(false));
 		programmerController.x().whileTrue(new TurnCommand(180));
 		// endregion
+
+		// programmerController.y().whileTrue(new BalanceCommand()); // TODO: stress
+		// test balance
+		operatorController.button(12).whileTrue(new BalanceCommand());
 
 		// region Drive Commands
 		driveJoystick.button(11).onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
@@ -122,14 +183,18 @@ public class RobotContainer {
 
 		// Swerve Drive method is set as default for drive subsystem
 		driveSubsystem.setDefaultCommand(
-				new TeleopDriveCommand(
-						() -> -driveJoystick.getY() -programmerController.getLeftY(),
-						() -> -driveJoystick.getX() -programmerController.getLeftX(),
-						() -> -turnJoystick.getX() -programmerController.getRightX(),
-						() -> driveJoystick.getHID().getRawButton(1)
-								|| programmerController.rightBumper().getAsBoolean(),
-						() -> driveJoystick.getHID().getRawButton(2)
-								|| programmerController.rightBumper().getAsBoolean()));
+				new RunCommand(
+						() -> driveSubsystem.drive(
+								-JoystickUtils.processJoystickInput(driveJoystick.getY())
+										- JoystickUtils.processJoystickInput(programmerController.getLeftY()), // x axis
+								-JoystickUtils.processJoystickInput(driveJoystick.getX())
+										- JoystickUtils.processJoystickInput(programmerController.getLeftX()), // y axis
+								-JoystickUtils.processJoystickInput(turnJoystick.getX())
+										- JoystickUtils.processJoystickInput(programmerController.getRightX()), // rot
+																												// axis
+								driveJoystick.getHID().getRawButton(1), // turbo boolean
+								driveJoystick.getHID().getRawButton(2)), // sneak boolean
+						driveSubsystem));
 		// endregion
 	}
 

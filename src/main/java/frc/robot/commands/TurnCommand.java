@@ -52,9 +52,9 @@ public class TurnCommand extends CommandBase {
 	public void execute() {
 		if (!turnPIDController.atSetpoint()) {
 			double turnOutput = turnPIDController.calculate(driveSubsystem.getHeading());
-			driveSubsystem.codeDrive(0, 0, turnOutput);
+			driveSubsystem.drive(0, 0, turnOutput);
 		} else {
-			driveSubsystem.codeDrive(0, 0, 0);
+			driveSubsystem.drive(0, 0, 0);
 		}
 	}
 
@@ -62,7 +62,7 @@ public class TurnCommand extends CommandBase {
 	@Override
 	public void end(boolean interrupted) {
 		// sets motors speeds back to zero when event is complete
-		driveSubsystem.codeDrive(0, 0, 0);
+		driveSubsystem.drive(0, 0, 0);
 	}
 
 	// Returns true when the command should end.

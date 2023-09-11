@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.lib.TractorToolbox.TractorParts;
+package frc.robot.TractorToolbox.TractorParts;
 
 import java.io.File;
 import java.util.HashMap;
@@ -32,8 +32,8 @@ public class PathBuilder {
 		driveSubsystem = RobotContainer.driveSubsystem;
 
 		autoBuilder = new SwerveAutoBuilder(
-				driveSubsystem::getPoseEstimatorPose2d,
-				driveSubsystem::resetPoseEstimator,
+				driveSubsystem::getPose,
+				driveSubsystem::resetOdometry,
 				DriveConstants.kDriveKinematics,
 				new PIDConstants(
 						PathPLannerConstants.kPPDriveGains.kP,

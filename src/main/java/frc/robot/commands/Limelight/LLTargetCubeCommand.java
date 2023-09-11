@@ -4,45 +4,45 @@
 
 package frc.robot.commands.Limelight;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Constants.LimelightConstants;
-import frc.robot.RobotContainer;
+import frc.robot.Constants.IntakeConstants.kIntakeStates;
 import frc.robot.TractorToolbox.LimelightHelpers;
-import frc.robot.TractorToolbox.TractorParts.DoubleSmoother;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
-public class LLPuppydogCommand extends CommandBase {
+public class LLTargetCubeCommand extends CommandBase {
 
+	private static IntakeSubsystem intakeSubsystem;
 	private static DriveSubsystem driveSubsystem;
 
 	ProfiledPIDController LLTargetpidController;
-	PIDController LLDrivepidController;
 
-	DoubleSmoother driveOutputSmoother;
-	DoubleSmoother turnOutputSmoother;
+	Timer timer;
+	
+	int failTimeMilis;
 
 	/** Creates a new LLTargetCommand. */
-	public LLPuppydogCommand() {
-		
+	public LLTargetCubeCommand(int failTimeMilis) {
+
 		driveSubsystem = RobotContainer.driveSubsystem;
+		intakeSubsystem = RobotContainer.intakeSubsystem;
+
+		timer = new Timer();
+
+		this.failTimeMilis = failTimeMilis;
 
 		LLTargetpidController = new ProfiledPIDController(
 				LimelightConstants.kLLPuppyTurnGains.kP,
 				LimelightConstants.kLLPuppyTurnGains.kI,
 				LimelightConstants.kLLPuppyTurnGains.kD,
 				new TrapezoidProfile.Constraints(40, 40));
-
-		LLDrivepidController = new PIDController(
-				LimelightConstants.kLLPuppyDriveGains.kP,
-				LimelightConstants.kLLPuppyDriveGains.kI,
-				LimelightConstants.kLLPuppyDriveGains.kD);
-
-		turnOutputSmoother = new DoubleSmoother(LimelightConstants.kPuppyTurnMotionSmoothing);
-		driveOutputSmoother = new DoubleSmoother(LimelightConstants.kPuppyDriveMotionSmoothing);
 
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(driveSubsystem);
@@ -51,22 +51,23 @@ public class LLPuppydogCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
+		LimelightHelpers.setPipelineIndex("", LimelightConstants.kCubePipeline);
 		LimelightHelpers.setLEDMode_ForceOn("");
+		intakeSubsystem.setIntakeState(kIntakeStates.INTAKE);
+		driveSubsystem.setFieldCentric(false);
+		timer.restart();
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
 		if (LimelightHelpers.getTV("")) {
-			double turnPIDOutput = LLTargetpidController.calculate(LimelightHelpers.getTX(""), 0);
-			double drivePIDOutput = LLDrivepidController.calculate(LimelightHelpers.getTY(""), .5);
 
-			double turnOutput = turnOutputSmoother.smoothInput(turnPIDOutput);
-			double driveOutput = driveOutputSmoother.smoothInput(drivePIDOutput);
+			double strafePIDOutput = LLTargetpidController.calculate(LimelightHelpers.getTX(""), 0);
+			driveSubsystem.drive(.2, strafePIDOutput, 0);
 
-			driveSubsystem.robotCentricDrive(driveOutput, 0, -turnOutput);
 		} else {
-			driveSubsystem.robotCentricDrive(0, 0, 0);
+			driveSubsystem.drive(0, 0, 0);
 		}
 	}
 
@@ -74,12 +75,13 @@ public class LLPuppydogCommand extends CommandBase {
 	@Override
 	public void end(boolean interrupted) {
 		LimelightHelpers.setLEDMode_PipelineControl("");
-	}
+		driveSubsystem.stopMotors();
+		driveSubsystem.setFieldCentric(true);
+	}	
 
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		// return LLTargetpidController.atSetpoint();
-		return false;
+		return intakeSubsystem.getDistanceAsVolts() > 1.9 || Units.secondsToMilliseconds(timer.get()) > failTimeMilis;
 	}
 }
