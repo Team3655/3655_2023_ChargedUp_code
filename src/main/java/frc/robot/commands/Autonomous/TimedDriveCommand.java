@@ -45,13 +45,13 @@ public class TimedDriveCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		driveSubsystem.drive(xSpeed, ySpeed, rotSpeed);
+		driveSubsystem.codeDrive(xSpeed, ySpeed, rotSpeed);
 	}
 
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		driveSubsystem.drive(0, 0, 0);
+		driveSubsystem.codeDrive(0, 0, 0);
 	}
 
 	// Returns true when the command should end.

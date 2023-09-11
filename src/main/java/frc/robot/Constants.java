@@ -10,15 +10,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.TractorToolbox.TractorParts.PIDGains;
+import frc.lib.TractorToolbox.TractorParts.SwerveConstants;
+import frc.lib.TractorToolbox.TractorParts.SwerveModuleConstants;
 import frc.robot.Constants.ArmConstants.kArmPoses;
-import frc.robot.TractorToolbox.TractorParts.PIDGains;
-import frc.robot.commands.ArmPoseCommand;
-import frc.robot.commands.ArmSwitchCommand;
-import frc.robot.commands.Autonomous.IntakeDownSequence;
-import frc.robot.commands.Autonomous.ScoreSequence;
 import frc.robot.commands.Limelight.LLAlignCommand;
-import frc.robot.commands.Limelight.LLTargetCubeCommand;
-import frc.robot.commands.Autonomous.IntakeCommand;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -33,65 +29,110 @@ public final class Constants {
 
 	public static class ModuleConstants {
 
-		// Current limits for the wheels
-		public static final int kTurnMotorCurrentLimit = 25;
-		public static final int kDriveMotorCurrentLimit = 35;
+		public static final int kMaxRezeroAttempts = 10;
 
-		// Constants set for the _SDS MK4i_
-		public static final double kdriveGearRatio = 1d / 6.75;
-		public static final double kturnGearRatio = 1d / (150d / 7d);
+		// gains set for R1 SDS mk4i using dual neo motors
+		public static final PIDGains kModuleDriveGains = new PIDGains(.075, 0, 0);
+		public static final PIDGains kModuleTurningGains = new PIDGains(.5, 0, 0.0);
 
-		public static final double kwheelCircumference = Units.inchesToMeters(4) * Math.PI;
+		public static final class GenericModuleConstants {
+			// Current limits for the wheels
+			public static final int kTurnMotorCurrentLimit = 25;
+			public static final int kDriveMotorCurrentLimit = 35;
 
-		// The max speed the modules are capable of
-		public static final double kMaxModuleSpeedMetersPerSecond = Units.feetToMeters(14.5);
+			// Constants set for the _SDS MK4i_
+			public static final double kTurnGearRatio = 1d / (150d / 7d);
+			public static final double kDriveGearRatio = 1d / (38250 / 6885);
+			public static final double kWheelCircumference = Units.inchesToMeters(4) * Math.PI;
 
-		public static final double ksVolts = .1;
-		public static final double kDriveFeedForward = .2;
+			// The max speeds the modules are capable of
+			public static final double kMaxModuleAccelMetersPerSecond = 5;
+			public static final double kMaxModuleSpeedMetersPerSecond = 5.35;
 
-		// TODO: Retune feedforward values for turning
-		public static final double kvTurning = .43205;
-		public static final double ksTurning = .17161; // Tuned February 2, 2023
+			// Retune feedforward values for turning
+			// public static final double kvTurning = .43205;
+			// public static final double ksTurning = .17161; // Tuned February 2, 2023
 
-		// NEO drive motor CAN ID's
-		public static final int kFrontLeftDriveMotorPort = 1;
-		public static final int kFrontRightDriveMotorPort = 2;
-		public static final int kRearLeftDriveMotorPort = 3;
-		public static final int kRearRightDriveMotorPort = 4;
+			public static final double kDriveFeedForward = .2;
 
-		// NEO turning motor CAN ID's
-		public static final int kFrontLeftTurningMotorPort = 5;
-		public static final int kFrontRightTurningMotorPort = 6;
-		public static final int kRearLeftTurningMotorPort = 7;
-		public static final int kRearRightTurningMotorPort = 8;
+			public static final SwerveConstants kSwerveConstants = new SwerveConstants(
+					kTurnMotorCurrentLimit,
+					kDriveMotorCurrentLimit,
+					kTurnGearRatio,
+					kDriveGearRatio,
+					kWheelCircumference,
+					kMaxModuleAccelMetersPerSecond,
+					kMaxModuleSpeedMetersPerSecond,
+					kDriveFeedForward);
+		}
 
-		// CANcoder CAN ID's
-		public static final int kFrontLeftTurningEncoderPort = 9;
-		public static final int kFrontRightTurningEncoderPort = 10;
-		public static final int kRearLeftTurningEncoderPort = 11;
-		public static final int kRearRightTurningEncoderPort = 12;
+		// module specific constants
+		public static final class FrontLeftModule {
+			public static final int kTurningMotorID = 10;
+			public static final int kLeaderDriveMotorID = 11;
+			public static final int kFollowerDriveMotorID = 12;
+			// public static final int kAbsoluteEncoderID = 9;
+			public static final double kAngleOffset = 26.325;
+			public static final SwerveModuleConstants kModuleConstants = new SwerveModuleConstants(
+					// kAbsoluteEncoderID,
+					kTurningMotorID,
+					kLeaderDriveMotorID,
+					kFollowerDriveMotorID,
+					kAngleOffset);
+		}
 
-		// Offset angle for absolute encoders (find this using CTRE client)
-		public static final double kFrontLeftAngleZero = 36.475;
-		public static final double kFrontRightAngleZero = 121.641;
-		public static final double kRearLeftAngleZero = 152.2;
-		public static final double kRearRightAngleZero = 60.47;
+		public static final class FrontRightModule {
+			public static final int kTurningMotorID = 13;
+			public static final int kLeaderDriveMotorID = 14;
+			public static final int kFollowerDriveMotorID = 15;
+			// public static final int kAbsoluteEncoderID = 10;
+			public static final double kAngleOffset = 311.163;
+			public static final SwerveModuleConstants kModuleConstants = new SwerveModuleConstants(
+					// kAbsoluteEncoderID,
+					kTurningMotorID,
+					kLeaderDriveMotorID,
+					kFollowerDriveMotorID,
+					kAngleOffset);
+		}
 
-		public static final PIDGains kModuleDriveGains = new PIDGains(.1, 0, 0);
+		public static final class BackLeftModule {
+			public static final int kTurningMotorID = 16;
+			public static final int kLeaderDriveMotorID = 17;
+			public static final int kFollowerDriveMotorID = 18;
+			// public static final int kAbsoluteEncoderID = 11;
+			public static final double kAngleOffset = 31.957;
+			public static final SwerveModuleConstants kModuleConstants = new SwerveModuleConstants(
+					// kAbsoluteEncoderID,
+					kTurningMotorID,
+					kLeaderDriveMotorID,
+					kFollowerDriveMotorID,
+					kAngleOffset);
+		}
 
-		public static final PIDGains kModuleTurningGains = new PIDGains(6.5, .25, .15);
+		public static final class BackRightModule {
+			public static final int kTurningMotorID = 19;
+			public static final int kLeaderDriveMotorID = 20;
+			public static final int kFollowerDriveMotorID = 21;
+			// public static final int kAbsoluteEncoderID = 12;
+			public static final double kAngleOffset = 44.571;
+			public static final SwerveModuleConstants kModuleConstants = new SwerveModuleConstants(
+					// kAbsoluteEncoderID,
+					kTurningMotorID,
+					kLeaderDriveMotorID,
+					kFollowerDriveMotorID,
+					kAngleOffset);
+		}
 	}
 
 	public static class DriveConstants {
 
 		public static final double kMaxSneakMetersPerSecond = 1.0;
-		public static final double kMaxSpeedMetersPerSecond = 4.5;
-		public static final double kMaxTurboMetersPerSecond = 8.0;
+		public static final double kMaxSpeedMetersPerSecond = 4;
 
-		// this sets turning speed (keep this low)
-		public static final double kMaxRPM = 10;
+		// this sets turning speed (keep this low) KsKs
+		public static final double kMaxRPM = 8;
 
-		public static final int kPigeonPort = 20;
+		public static final int kPigeonPort = 2;
 
 		public static final double kBumperToBumperWidth = Units.inchesToMeters(31);
 
@@ -106,12 +147,6 @@ public final class Constants {
 
 		public static final boolean kGyroReversed = true;
 		public static final boolean kFeildCentric = true;
-		public static final boolean kGyroTuring = false;
-
-		public static final PIDGains kGyroTurningGains = new PIDGains(.025, 0, 0);
-		public static final double kMaxTurningVelocityDegrees = 20;
-		public static final double kMaxTurningAcceleratonDegrees = 10;
-		public static final double kGyroTurnTolerance = 2;
 
 	}
 
@@ -128,23 +163,10 @@ public final class Constants {
 			public static final PIDGains kPPTurnGains = new PIDGains(3.5, 0, 0);
 
 			public static final double kPPMaxVelocity = 4.00;
-			public static final double kPPMaxAcceleration = 2.50;
+			public static final double kPPMaxAcceleration = 2.5;
 
 			public static final HashMap<String, Command> kPPEventMap = new HashMap<>() {
 				{
-					put("Tuck", new ArmPoseCommand(kArmPoses.TUCKED));
-					put("KickFront", new ArmPoseCommand(kArmPoses.KICK_FRONT));
-					put("KickBack", new ArmPoseCommand(kArmPoses.KICK_BACK));
-					put("ScoreHigh", new ScoreSequence(kArmPoses.HIGH_SCORE));
-					put("ArmHighCube", new ArmPoseCommand(kArmPoses.HIGH_INTAKE));
-					put("ScoreCubeHigh", new ScoreSequence(kArmPoses.HIGH_INTAKE));
-					put("ScoreMid", new ScoreSequence(kArmPoses.MID_SCORE));
-					put("ScoreLow", new ScoreSequence(kArmPoses.LOW_SCORE));
-					put("IntakeDown", new IntakeDownSequence());
-					put("ToggleSide", new ArmSwitchCommand());
-					put("Suck", new IntakeCommand(true, 100));
-					put("Drop", new IntakeCommand(false, 350));
-					put("TargetCube", new LLTargetCubeCommand(2000));
 					put("TargetTape", new LLAlignCommand(false));
 					put("TargetTag", new LLAlignCommand(true));
 				}
@@ -159,8 +181,8 @@ public final class Constants {
 		public static final double kTurnCommandToleranceDeg = 0.5;
 		public static final double kTurnCommandRateToleranceDegPerS = 0;
 
-		public static final double kBalnaceCommandDeadbandDeg = 2;
-		public static final PIDGains kBalanceCommandGains = new PIDGains(.006, 0, 0);
+		public static final double kBalnaceCommandDeadbandDeg = 10;
+		public static final PIDGains kBalanceCommandGains = new PIDGains(.003, 0, 0);
 		public static final double kMaxBalancingVelocity = 1000;
 		public static final double kMaxBalancingAcceleration = 5000;
 
@@ -186,22 +208,22 @@ public final class Constants {
 	public static class ArmConstants {
 
 		// NEO turning motor CAN ID's
-		public static final int kRightMajorArmPort = 13;
-		public static final int kLeftMajorArmPort = 14;
-		public static final int kRightMinorArmPort = 15;
-		public static final int kLeftMinorArmPort = 16;
+		public static final int kRightMajorArmPort = 30;
+		public static final int kLeftMajorArmPort = 31;
+		public static final int kRightMinorArmPort = 32;
+		public static final int kLeftMinorArmPort = 33;
 
-		public static final int kMajorArmGearBoxRatio = 100;
-		public static final int kMinorArmGearBoxRatio = 100;
+		public static final double kMajorArmGearBoxRatio = 100;
+		public static final double kMinorArmGearBoxRatio = 100;
 
-		public static final int kMajorArmBeltRatio = 2 / 1;
-		public static final int kMinorArmBeltRatio = 1;
+		public static final double kMajorArmBeltRatio = 2d / 1d;
+		public static final double kMinorArmBeltRatio = 115d / 70d;
 
 		/**
 		 * the total number of motor rotations for one 360 degree rotation of the arm
 		 */
-		public static final int kMajorArmTicks = kMajorArmGearBoxRatio * kMajorArmBeltRatio;
-		public static final int kMinorArmTicks = kMinorArmGearBoxRatio * kMinorArmBeltRatio;
+		public static final double kMajorArmTicks = kMajorArmGearBoxRatio * kMajorArmBeltRatio;
+		public static final double kMinorArmTicks = kMinorArmGearBoxRatio * kMinorArmBeltRatio;
 
 		/**
 		 * The radius of each arms rotation in inches (from center of rotation to next
@@ -219,16 +241,15 @@ public final class Constants {
 		public static final double kMinorPIDOutputLimit = 1;
 
 		public static final double kMaxMajorVelRadiansPerSec = (Math.PI * 10) * 60;
-		public static final double kMaxMajorAccelRadiansPerSec = (Math.PI * 6.25 * 60);
+		public static final double kMaxMajorAccelRadiansPerSec = (Math.PI * 6.25) * 60;
 
-		
-		public static final double kMaxMinorVelRadiansPerSec = (Math.PI * 8) * 60;
-		public static final double kMaxMinorAccelRadiansPerSec = (Math.PI * 7) * 60;
+		public static final double kMaxMinorVelRadiansPerSec = (Math.PI * 10) * 60;
+		public static final double kMaxMinorAccelRadiansPerSec = (Math.PI * 8) * 60;
 
 		// angle limits for the arms
 		public static final double kMajorArmConstraints = 110;
 		public static final double kMinorArmConstraints = 180;
- 
+
 		// Arm PID constants
 		public static final PIDGains kMajorArmGains = new PIDGains(0.0035, 0.0000025, 0.002);
 
@@ -251,11 +272,11 @@ public final class Constants {
 			{
 				put(kArmPoses.TUCKED, new double[] { 0, 0 });
 				put(kArmPoses.LOW_SCORE, new double[] { 0, 80 });
-				put(kArmPoses.MID_SCORE, new double[] { 20, 36 });
-				put(kArmPoses.HIGH_SCORE, new double[] { 100, 55 });
-				put(kArmPoses.LOW_INTAKE, new double[] { -10, 98 });
+				put(kArmPoses.MID_SCORE, new double[] { 70, 60 });
+				put(kArmPoses.HIGH_SCORE, new double[] { 100, 75 });
+				put(kArmPoses.LOW_INTAKE, new double[] { 10, -98 });
 				put(kArmPoses.MID_INTAKE, new double[] { 13, 33 });
-				put(kArmPoses.HIGH_INTAKE, new double[] { 105, 87 });
+				put(kArmPoses.HIGH_INTAKE, new double[] { 100, 100 });
 				put(kArmPoses.DRIVER_CONTROL, new double[] { 0, 0 });
 				put(kArmPoses.KICK_FRONT, new double[] { 35, 0 });
 				put(kArmPoses.KICK_BACK, new double[] { -35, 0 });
@@ -276,7 +297,7 @@ public final class Constants {
 		public static final int kCenterSealerSolenoidPort = 1;
 
 		// NEO Sucker motor CAN ID's
-		public static final int kCenterSuckerPort = 18;
+		public static final int kCenterSuckerID = 1;
 
 		public static final int kCenterSuckerCurrentLimit = 6;
 
@@ -292,7 +313,7 @@ public final class Constants {
 
 		public static final HashMap<kArmPoses, kIntakeStates> kArmStateToIntakeStateMap = new HashMap<kArmPoses, kIntakeStates>() {
 			{
-				put(kArmPoses.TUCKED, kIntakeStates.INTAKE);
+				put(kArmPoses.TUCKED, kIntakeStates.IDLE);
 				put(kArmPoses.LOW_SCORE, kIntakeStates.IDLE);
 				put(kArmPoses.MID_SCORE, kIntakeStates.IDLE);
 				put(kArmPoses.HIGH_SCORE, kIntakeStates.IDLE);
@@ -313,7 +334,6 @@ public final class Constants {
 		public static final int kCubePipeline = 0;
 		public static final int kReflectivePipeline = 1;
 		public static final int kApriltagPipeline = 2;
-		
 
 		// Servo Constants
 		public static final int kServoPort = 2;
@@ -324,7 +344,7 @@ public final class Constants {
 		// piss values for limelight
 		public static final PIDGains kLLTargetGains = new PIDGains(0.008, 0, 0);
 
-		public static final PIDGains kLLPuppyTurnGains = new PIDGains(0.02, 0, 0); //.008
+		public static final PIDGains kLLPuppyTurnGains = new PIDGains(0.02, 0, 0); // .008
 		public static final PIDGains kLLPuppyDriveGains = new PIDGains(0.008, 0, 0);
 		public static final double kPuppyTurnMotionSmoothing = 0.3;
 		public static final double kPuppyDriveMotionSmoothing = 0.4;
@@ -336,8 +356,10 @@ public final class Constants {
 
 	}
 
+	public static final String kRobotName = "Final Competition Bot";
+
 	public static final String kRioCANBusName = "rio";
 
-	public static final String kCanivoreCANBusName = "canivore";
+	public static final String kCTRECANBusName = "rio";
 
 }

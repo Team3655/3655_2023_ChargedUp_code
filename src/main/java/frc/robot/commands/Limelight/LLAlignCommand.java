@@ -7,10 +7,10 @@ package frc.robot.commands.Limelight;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
+import frc.lib.TractorToolbox.TractorParts.DoubleSmoother;
+import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants.LimelightConstants;
-import frc.robot.TractorToolbox.LimelightHelpers;
-import frc.robot.TractorToolbox.TractorParts.DoubleSmoother;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class LLAlignCommand extends CommandBase {
@@ -80,10 +80,10 @@ public class LLAlignCommand extends CommandBase {
 			double strafeOutput = strafeOutputSmoother.smoothInput(strafePIDOutput);
 			double driveOutput = driveOutputSmoother.smoothInput(drivePIDOutput);
 
-			driveSubsystem.drive(driveOutput, -strafeOutput, 0);
+			driveSubsystem.codeDrive(driveOutput, -strafeOutput, 0);
 
 		} else {
-			driveSubsystem.drive(0, 0, 0);
+			driveSubsystem.codeDrive(0, 0, 0);
 		}
 	}
 
